@@ -9,9 +9,9 @@
   of a window for an R session. 
 }
 \usage{
-addVig2Menu(itemName, menuName = "Vignettes", doThis = "vExplorer()")
-addVig4Win(menuName, itemName, doThis)
-addVig4Unix(menuName, itemName, doThis)
+addVig2Menu(itemName, menuName = "Vignettes", itemAction = "vExplorer()")
+addVig4Win(menuName, itemName, itemAction)
+addVig4Unix(menuName, itemName, itemAction)
 }
 
 \arguments{
@@ -19,8 +19,8 @@ addVig4Unix(menuName, itemName, doThis)
     menu that appears in the menu bar of the window of an R session}
   \item{itemName}{\code{itemName} - a character string for the name of
     the item in the menu defined by \code{menuName}}
-  \item{doThis}{\code{doThis} a character string for the action(s) to be
-  taken when menu item \code{itemName} is selected}
+  \item{itemAction}{\code{itemAction} a character string for the
+    action(s) to be taken when menu item \code{itemName} is selected}
 }
 \details{
   The code checks to see if a menu already exists and adds an item to
@@ -28,7 +28,7 @@ addVig4Unix(menuName, itemName, doThis)
   item add.
 }
 \value{
-  The functions do not return any value
+  The functions do not return any value.
 }
 
 \author{Jianhua Zhang}
