@@ -26,7 +26,9 @@
 
 \begin{document}
 <<paranoia>>=
+curWarn <- getOption("warn")
 options(warn=2)
+on.exit(options(warn=curWarn), add=TRUE)
 @
 \title{What is Bioconductor}
 \maketitle
