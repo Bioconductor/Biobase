@@ -42,7 +42,7 @@
 \examples{
   sym  = list(AUTHOR="W. Shakespeare", COMPOSER="G. Verdi", VERSION="1.0")
   dest = tempdir()
-  res  = createPackage("macbeth",
+  res  = createPackage("ExampleCreatePackage",
           destinationDir = dest,
           originDir      = file.path(.path.package("Biobase"), "Code"),
           symbolValues   = sym,
