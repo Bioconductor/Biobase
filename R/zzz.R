@@ -60,7 +60,7 @@ dumpPackTxt <- function (package)
     # I added this to add "Vignettes" to the menu bar. JZ
     if(interactive()){
         if(require(tcltk, quietly = TRUE)){ 
-            addVig2Menu("vExplorer", doThis = "vExplorer()")
+            addVig2Menu("vExplorer", itemAction = "vExplorer()")
             addVig2Menu("Biobase")
         }
     }
