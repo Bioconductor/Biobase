@@ -8,7 +8,7 @@
   get/assign all of the objects inside of an environment
 }
 \usage{
-copyEnv(oldEnv, newEnv = new.env(parent = parent.env(oldEnv)), recurse = FALSE)
+copyEnv(oldEnv, newEnv = new.env(hash=TRUE, parent = parent.env(oldEnv)), recurse = FALSE)
 env2list(envir, recurse=FALSE)
 list2env(vals, envir, recurse=FALSE)
 }
