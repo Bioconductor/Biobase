@@ -35,7 +35,6 @@ require(methods)
       if( missing(drop) ) drop<-FALSE
       vL <- varLabels(x)
       if( missing(j) ) {
-          print(i)
           if( missing(i) )
               pD <- x@pData
           else
@@ -104,7 +103,6 @@ require(methods)
      row.names(object@exprs), where=where )
 
  setMethod("[", "exprSet", function(x, i, j, ..., drop=TRUE) {
-     browser()
 
      pdata <- x@phenoData[j,, ..., drop=FALSE]
      if(missing(j) ) {
