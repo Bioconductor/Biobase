@@ -41,8 +41,8 @@ functions $f(y;x)$ where $y$ is an $N$-vector of
 expression results for a specific gene and $x$ is
 an $N$-dimensional structure, coordinated with $y$, that
 distinguishes elements of $y$ for processing in the function $f$.
-(A basic problem is to guarantee that the $j$th element
-of $y$ is correctly associated with the $j$th component of $x$.)
+A basic problem is to guarantee that the $j$th element
+of $y$ is correctly associated with the $j$th component of $x$.
 
 <<R.hide>>=
 library(Biobase)
@@ -92,32 +92,23 @@ for the definition of the statistical
 function to be applied.
 
 <<R>>=
-medContr1 <- function( y, x ) {
- cov1 <- pData(x)[["cov1"]]
+medContr1 <- function(y) {
  ys <- split(y,cov1)
  median(ys[[1]]) - median(ys[[2]])
  }
 
-print(esApply( eset, medContr1 )[1])
+print(esApply( eset, 1, medContr1 )[1])
 @
 The manual page on {\tt esApply} has a number of
 additional examples that show how applicable functions
 can be constructed and used.  The important thing to
-note is that the applicable functions 'know' the names of
+note is that the applicable functions {\em know} the names of
 the covariates in the {\tt pData} dataframe.
-The function can 'attach' that dataframe to work
-directly with the variables in the dataframe:
 
-<<R>>=
-medContr2 <- function( y, x ) {
- attach(pData(x))
- on.exit(detach("pData(x)"))
- ys <- split(y,cov1)
- median(ys[[1]]) - median(ys[[2]])
- }
+This is achieved by having an environment populated with all the
+variables in the \verb+phenoData+ component of the \verb+exprSet+ put
+in as the environment of the function that will be applied. If that 
+function already has an environment we retain that but in the second
+position. Thus, there is some potential for variable shadowing.
 
-print(esApply( eset, medContr2 )[1])
- 
-@
-The detachment action is essential.
 \end{document}
