@@ -13,7 +13,7 @@
 # it appears that the covariates slot is a list of labels
 # giving details on elements of phenodata
 
-# A class for miame information is also defined.
+# A class for MIAME information is also defined.
 #we try to cover all 6 MIAME entries
 # 1. Experimental design 2. Array design 3. Samples 4. Hybridizations
 # 5. Measurements 6. Normalization controls
@@ -95,8 +95,8 @@
   }
   setValidity("phenoData", validphenoData)
 
-##data class for miame information
-  setClass("miame", representation(name="character",
+##data class for MIAME information
+  setClass("MIAME", representation(name="character",
                                    lab="character",
                                    contact="character",
                                    title="character",
@@ -114,7 +114,7 @@
            where=where)
 
   ##show method
-  setMethod("show", "miame",
+  setMethod("show", "MIAME",
             function(object) {
               tmp <- c("samples","hybridizations","normalization controls","preprocessing")
               Index <-c(length(object@samples)>0,
@@ -140,49 +140,49 @@
     setGeneric("abstract", function(object)
                standardGeneric("abstract"), where=where)
 
-  setMethod("abstract","miame",function(object) object@abstract,where=where)
+  setMethod("abstract","MIAME",function(object) object@abstract,where=where)
 
    ##samples method
   if( !isGeneric("samples") )
     setGeneric("samples", function(object)
                standardGeneric("samples"), where=where)
 
-  setMethod("samples","miame",function(object) object@samples,where=where)
+  setMethod("samples","MIAME",function(object) object@samples,where=where)
 
    ##hybridizations method
   if( !isGeneric("hybridizations") )
     setGeneric("hybridizations", function(object)
                standardGeneric("hybridizations"), where=where)
 
-  setMethod("hybridizations","miame",function(object) object@hybridizations,where=where)
+  setMethod("hybridizations","MIAME",function(object) object@hybridizations,where=where)
 
    ##normControls method
   if( !isGeneric("normControls") )
     setGeneric("normControls", function(object)
                standardGeneric("normControls"), where=where)
 
-  setMethod("normControls","miame",function(object) object@normControls,where=where)
+  setMethod("normControls","MIAME",function(object) object@normControls,where=where)
 
    ##preproc method
   if( !isGeneric("preproc") )
     setGeneric("preproc", function(object)
                standardGeneric("preproc"), where=where)
 
-  setMethod("preproc","miame",function(object) object@preprocessing,where=where)
+  setMethod("preproc","MIAME",function(object) object@preprocessing,where=where)
 
   ##otherInfo method
   if( !isGeneric("otherInfo") )
     setGeneric("otherInfo", function(object)
                standardGeneric("otherInfo"), where=where)
 
-  setMethod("otherInfo","miame",function(object) object@other,where=where)
+  setMethod("otherInfo","MIAME",function(object) object@other,where=where)
 
   ##expinfo method
   if( !isGeneric("expinfo") )
     setGeneric("expinfo", function(object)
                standardGeneric("expinfo"), where=where)
 
-  setMethod("expinfo","miame",function(object){
+  setMethod("expinfo","MIAME",function(object){
     tmp <- c(object@name,
              object@lab,
              object@contact,
@@ -193,35 +193,35 @@
   },where=where)
 
   ##trick so that the old exprSet and Plobs works
-  setClass("characterORmiame", where=where)
-  setIs("character", "characterORmiame", where=where)
-  setIs("miame", "characterORmiame", where=where)
+  setClass("characterORMIAME", where=where)
+  setIs("character", "characterORMIAME", where=where)
+  setIs("MIAME", "characterORMIAME", where=where)
 
   ##data class for expression arrays
   setClass("exprSet", representation(exprs="matrix",
                                      se.exprs = "matrix",
                                      phenoData="phenoData",
-                                     description="characterORmiame",
+                                     description="characterORMIAME",
                                      annotation="character",
                                      notes="character") ,
            prototype=list(exprs=matrix(nr=0,nc=0),
              se.exprs = matrix(nr=0,nc=0),
-             description=new("miame"),
+             description=new("MIAME"),
              annotation="",
              notes=""), where=where)
 
   ##define a method to update exprsSet from previous versions
-  if( !isGeneric("updateObject") )
-    setGeneric("updateObject", function(object)
-  standardGeneric("updateObject"), where=where )
+  if( !isGeneric("update2MIAME") )
+    setGeneric("update2MIAME", function(object)
+  standardGeneric("update2MIAME"), where=where )
 
-  setMethod("updateObject", "exprSet",
+  setMethod("update2MIAME", "exprSet",
             function(object){
-              if(class(object@description)=="miame")
+              if(class(object@description)=="MIAME")
                 cat("This object is up to date.\n")
               else{
-                cat("For now we will keep old description in the experiment title.\nConsider defining an object of class miame with more information\n")
-                object@description <- new("miame",title=object@description)
+                cat("For now we will keep old description in the experiment title.\nConsider defining an object of class MIAME with more information\n")
+                object@description <- new("MIAME",title=object@description)
               }
               object
             },where=where)
@@ -238,7 +238,7 @@
   setMethod("se.exprs", "exprSet", function(object) object@se.exprs,
            where=where)
 
-  ##method for miame description
+  ##method for MIAME description
   if( !isGeneric("description") )
     setGeneric("description", function(object)
                standardGeneric("description"), where=where)
