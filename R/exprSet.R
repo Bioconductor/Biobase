@@ -217,11 +217,11 @@
 
   setMethod("update2MIAME", "exprSet",
             function(object){
-              if(class(object@description)=="MIAME")
+              if(class(description(object))=="MIAME")
                 cat("This object is up to date.\n")
               else{
                 cat("For now we will keep old description in the experiment title.\nConsider defining an object of class MIAME with more information\n")
-                object@description <- new("MIAME",title=object@description)
+                description(object) <- new("MIAME",title=description(object))
               }
               object
             },where=where)
@@ -231,12 +231,23 @@
     setGeneric("exprs", function(object) standardGeneric("exprs"),
                where=where )
   setMethod("exprs", "exprSet", function(object) object@exprs, where=where)
+
   ##RI: define a genric for obtaining the se's
   if( !isGeneric("se.exprs") )
     setGeneric("se.exprs", function(object) standardGeneric("se.exprs"),
                 where=where )
   setMethod("se.exprs", "exprSet", function(object) object@se.exprs,
            where=where)
+
+  if( !isGeneric("exprs<-") )
+    setGeneric("exprs<-", function(object, value)
+               standardGeneric("exprs<-"), where=where)
+  
+  setReplaceMethod("exprs", signature="exprSet",
+                   function(object, value) {
+                     object@exprs <- value
+                   },
+                   where = where)
 
   ##RI: Added this so i can access notes
   ##method for notes (accessor and replacement)
@@ -274,7 +285,7 @@
 
   ##method for abstract
   setMethod("abstract", "exprSet",
-            function(object) abstract(object@description), where=where)
+            function(object) abstract(description(object)), where=where)
 
   ##method for phenoData
   if( !isGeneric("phenoData") )
@@ -296,7 +307,7 @@
 
   ##method for pData
   setMethod("pData", "exprSet",
-            function(object) pData(object@phenoData), where=where)
+            function(object) pData(phenoData(object)), where=where)
 
 
   ##replace method for pData
@@ -305,17 +316,17 @@
                standardGeneric("pData<-"), where=where)
 
   setReplaceMethod("pData", "exprSet", function(object, value) {
-    ph<-object@phenoData
-    ph@pData <- value
-    object@phenoData <- ph
+    ph<-phenoData(object)
+    pData(ph) <- value
+    phenoData(object) <- ph
     object
   }, where=where)
 
   ##[[ method
   setReplaceMethod("[[", "exprSet", function(x, i, j, ..., value) {
-    pD <- x@phenoData
+    pD <- phenoData(x)
     pD@pData[[i]] <- value
-    x@phenoData <- pD
+    phenoData(x) <- pD
     x}, where=where)
 
 
@@ -341,7 +352,7 @@
     setGeneric("geneNames", function(object)
                standardGeneric("geneNames"), where=where)
   setMethod("geneNames", "exprSet", function(object)
-            row.names(object@exprs), where=where )
+            row.names(exprs(object)), where=where )
 
   if( !isGeneric("geneNames<-") )
     setGeneric("geneNames<-", function(object, value)
@@ -350,13 +361,13 @@
   setReplaceMethod("geneNames", "exprSet", function(object, value) {
     es <- exprs(object)
     row.names(es) <- value
-    object@exprs <- es
+    exprs(object) <- es
     object
   }, where=where)
 
   ##a varLabels method for exprSets
   setMethod("varLabels", "exprSet",
-            function(object) object@phenoData@varLabels, where=where)
+            function(object) phenoData(object)@varLabels, where=where)
 
   if( !isGeneric("annotation") )
     setGeneric("annotation", function(object)
@@ -369,7 +380,7 @@
 	pdata <- phenoData(x)
     else
         pdata <- phenoData(x)[j,, ..., drop=FALSE]
-    haveSES <- nrow(x@se.exprs) > 0
+    haveSES <- nrow(se.exprs(x)) > 0
     if(missing(j) ) {
         if( missing(i) ) {
             nexprs <- exprs(x)
@@ -394,19 +405,20 @@
               nses <- se.exprs(x)[i, j, drop=FALSE]
       }
     }
-    x@exprs=nexprs
+    exprs(x) <- nexprs
     if( haveSES )
-        x@se.exprs= nses
-    x@phenoData = pdata
-    x}, where=where)
+        se.exprs(x) <- nses
+    phenoData(x) <- pdata
+    x
+  }, where=where)
 
   setMethod("show", "exprSet", function(object ) {
-    dm <-dim(object@exprs)
+    dm <-dim(exprs(object))
     ngenes <- dm[1]
     nsamples <- dm[2]
     cat("Expression Set (exprSet) with \n\t", ngenes, " genes\n\t", sep="")
     cat(nsamples, "samples\n\t")
-    show(object@phenoData)
+    show(phenoData(object))
   }, where=where)
 
   setGeneric("iter", function(object, covlab, f) standardGeneric("iter"),
@@ -422,7 +434,7 @@
             function(object,covlab,f) {
               flist <- f
               llen <- length(flist)
-              out <- matrix(NA,nr=nrow(object@exprs), nc=llen )
+              out <- matrix(NA,nr=nrow(exprs(object)), nc=llen )
               lnames <- names(flist)
               if(is.null(lnames)) lnames <- paste("l",1:llen,sep="")
               for (i in 1:llen)
@@ -437,11 +449,11 @@
               ## f assumed to be a function of two arguments,
               ## first is a stratum identifier to be used
               ## in evaluating a statistical contrast by f
-              varnames <- names(object@phenoData@pData)
+              varnames <- names(phenoData(object)@pData)
               if (!(any(match(covlab,varnames))))
                 stop("the requested covariate is not in the exprSet")
               fc <- function(x) function(y) f(x,y)
-              f2app <- fc(object@phenoData@pData[[covlab]])
+              f2app <- fc(phenoData(object)@pData[[covlab]])
               iter(object,f=f2app)
             }, where=where)
 
