@@ -1,6 +1,5 @@
 \name{esApply}
 \alias{esApply}
-%- Also NEED an `\alias' for EACH other topic documented here.
 \title{ iterate over an exprSet }
 \description{
 esApply is a wrapper to apply for use with exprSets.
@@ -13,7 +12,6 @@ is that of a call to apply(exprs(es),1,f).
 \usage{
 esApply(es, f)
 }
-%- maybe also `usage' for other objects documented here.
 \arguments{
   \item{es}{ an instance of the exprSet class of the Biobase package.
 In the sequel it is assumed that \code{es} has information

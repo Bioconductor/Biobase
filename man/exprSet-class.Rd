@@ -4,7 +4,9 @@
 \alias{$.exprSet}
 \alias{exprs}
 \alias{geneNames}
+\alias{geneNames<-}
 \alias{pData}
+\alias{pData<-}
 \alias{varLabels}
 \alias{sampleNames}
 \alias{phenoData}
@@ -53,6 +55,8 @@
     
     \item{geneNames}{(exprSet): Obtain the gene names (row names) of
       \code{exprs}. }
+    \item{geneNames<-}{(exprSet): Set the gene names (row names) of
+      \code{exprs}. }
     
     \item{iter}{(exprSet, missing, function): an iterator over genes.
 Returns the result of applying \code{function} to the matrix
@@ -71,6 +75,9 @@ gene expression values will be iteratively bound to y}
       \code{phenoData} instance from the \code{exprSet}.}
 
    \item{pData}{(exprSet): An accessor function for the \code{pData}
+     slot of the \code{phenoData} contained in the instance.}
+
+   \item{pData<-}{(exprSet): A replacement method for the \code{pData}
      slot of the \code{phenoData} contained in the instance.}
 
      \item{sampleNames}{(exprSet): An accessor function for sample

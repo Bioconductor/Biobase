@@ -128,6 +128,17 @@ require(methods)
  setMethod("geneNames", "exprSet", function(object)
      row.names(object@exprs), where=where )
 
+  if( !isGeneric("geneNames<-") )
+      setGeneric("geneNames<-", function(object, value)
+          standardGeneric("geneNames<-"), where=where)
+
+  setReplaceMethod("geneNames", "exprSet", function(object, value) {
+      es <- exprs(object)
+      row.names(es) <- value
+      object@exprs <- es
+      object
+  }, where=where)
+
 ##a varLabels method for exprSets
   setMethod("varLabels", "exprSet",
             function(object) object@phenoData@varLabels, where=where)
