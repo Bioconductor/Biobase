@@ -21,17 +21,17 @@ multiget <- function(x, pos=-1, envir=as.environment(pos), mode =
             ans[[i]] <- try(get(x[i],pos,envir, mode, inherits))
     options(show.error.messages = TRUE)
     on.exit(NULL)
-    if( !missing(iffail) ) {
-        failfun <- function(x) {
-            cx <- class(x)
-            if( !is.null(cx) && cx == "try-error")
-                TRUE
-            else
-                FALSE
-        }
-        failed <- sapply(ans, failfun)
-        ans[failed] <- iffail
+
+    failfun <- function(x) {
+        cx <- class(x)
+        if( !is.null(cx) && cx == "try-error")
+            TRUE
+        else
+            FALSE
     }
+    failed <- sapply(ans, failfun)
+    ans[failed] <- iffail
+
     names(ans) <- x
     ans
 }
