@@ -143,10 +143,6 @@ dumpPackTxt <- function (package)
 
     checkPkgDeps(pkgname)
 
-    ### While we're still telling ppl to use openVignette, need
-    ### to have DynDoc available
-    require(DynDoc) || stop("DynDoc required for openVignette usage")
-
     where <- match(paste("package:", pkgname, sep=""), search())
     .initContainer(where)
     where <- match(paste("package:", pkgname, sep=""), search())
@@ -165,6 +161,7 @@ dumpPackTxt <- function (package)
 
     ##set up repository management
     require(reposTools, quietly=TRUE) || stop ("Package reposTools required")
+
 
     ##set up menus -- windows only for now
     if( .Platform$OS.type == "windows" ) {
