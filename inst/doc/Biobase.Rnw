@@ -194,46 +194,6 @@ Basically we are using this as a form of updating hash table.
 At the same time we are slightly subverting R's usual pass--by--value
 semantics.
 
-\section{Aggregate Vignette}
-
-The function given below performs k--nearest neighbour classification
-using leave--one--out cross--validation.
-At the same time it aggregates the genes that were selected. The
-function returns the predicted classifications as its returned
-value. However, there is an additional side effect. The number of
-times that each gene was used (provided it was at least one) are
-recorded and stored in the environment of the aggregator \verb+Agg+.
-These can subsequently be retrieved and used for other purposes.
-
-<<aggregate>>=
-
- knnCV <- function(EXPR, selectfun, cov, Agg, pselect = 0.01, Scale=FALSE) {
-   nc <- ncol(EXPR)
-   outvals <- rep(NA, nc)
-   for(i in 1:nc) {
-      v1 <- EXPR[,i]
-      expr <- EXPR[,-i]
-      glist <- selectfun(expr, cov[-i], p=pselect)
-      expr <- expr[glist,]
-      if( Scale ) {
-        expr <- scale(expr)
-        v1 <- as.vector(scale(v1[glist]))
-      }
-      else
-         v1 <- v1[glist]
-      out <- paste("iter ",i, " num genes= ", sum(glist), sep="")
-      print(out)
-      Aggregate(row.names(expr), Agg)
-      if( length(v1) == 1)
-         outvals[i] <- knn(expr, v1, cov[-i], k=5)
-      else
-          outvals[i] <- knn(t(expr), v1, cov[-i], k=5)
-    }
-    return(outvals)
-  }
-@
-%$
-
 
 
 %\section*{Resampling exprSet's}
