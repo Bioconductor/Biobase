@@ -4,6 +4,7 @@
 #
 
 addVig2Menu <- function(itemName, menuName = "Vignettes", itemAction = ""){
+    .Deprecated("addVigs2WinMenu")
     os <- .Platform$OS.type
     switch(os,
            "windows" = addVig4Win(menuName, itemName,itemAction ),
@@ -13,6 +14,7 @@ addVig2Menu <- function(itemName, menuName = "Vignettes", itemAction = ""){
 }
 # Add menu for windows
 addVig4Win <- function(menuName, itemName, itemAction){
+    .Deprecated("addVigs2WinMenu")
     options(show.error.messages = FALSE)
     tryMe <- try(winMenuAddItem(menuName, itemName, itemAction))
     options(show.error.messages = TRUE)
@@ -25,11 +27,15 @@ addVig4Win <- function(menuName, itemName, itemAction){
 
 # Add menu for a window in Unix
 addVig4Unix <- function(menuName, itemName, itemAction){
-    # "Do not know what to do yet"
+    .Deprecated("addVigs2WinMenu")
+
+                                        # "Do not know what to do yet"
 }
 
 # Find and add all the non-existing menu elelments
 addNonExisting <- function(menuName){
+    .Deprecated("addVigs2WinMenu")
+
     temp <- menuName
     menus <- unlist(strsplit(menuName, "/"))
     counter <- 1
@@ -58,6 +64,8 @@ addNonExisting <- function(menuName){
 
 # Add click-able menu items to view the pdf files of a package
 addPDF2Vig <- function(pkgName){
+    .Deprecated("addVigs2WinMenu")
+
     pdfs <- getPkgVigs(pkgName)
     for(i in pdfs){
         item <- sub(".pdf", "", basename(i))
