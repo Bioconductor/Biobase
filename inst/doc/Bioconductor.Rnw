@@ -5,7 +5,7 @@
 % \VignetteIndexEntry{Howto Bioconductor}
 %\VignetteDepends{}
 %\VignetteKeywords{Documentation}
-
+%\VignettePackage{Biobase}
 \documentclass[12pt]{article}
 
 \usepackage{times}

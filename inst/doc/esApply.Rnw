@@ -7,7 +7,7 @@
 % \VignetteIndexEntry{esApply Introduction}
 %\VignetteDepends{Biobase}
 %\VignetteKeywords{Expression Analysis}
-
+%\VignettePackage{Biobase}
 \documentclass[12pt]{article}
 
 \usepackage{amsmath,pstricks}

@@ -5,7 +5,7 @@
 %\VignetteIndexEntry{Biobase Primer}
 %\VignetteDepends{Biobase, genefilter, class, annotate, hgu95a}
 %\VignetteKeywords{Expression Analysis}
-
+%\VignettePackage{Biobase}
 \documentclass{article}
 
 \usepackage{hyperref}
