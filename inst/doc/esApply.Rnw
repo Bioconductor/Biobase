@@ -121,8 +121,10 @@ position. Thus, there is some potential for variable shadowing.
 
 The version number of R and packages loaded for generating the vignette were:
 
+\begin{verbatim}
 <<echo=FALSE,results=tex>>=
 sessionInfo()
 @
+\end{verbatim}
 
 \end{document}
