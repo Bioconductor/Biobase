@@ -1,5 +1,22 @@
 # temporarily store this utility here
 
+.buildBiobaseOpts <- function() {
+    if (is.null(getOption("BioC"))) {
+        BioC <- list()
+        class(BioC) <- "BioCOptions"
+        options("BioC"=BioC)
+    }
+
+    Base <- list()
+    class(Base) <- "BioCPkg"
+    Base$urls <- list()
+    Base$urls$bioc <- "http://www.bioconductor.org"
+
+    BioC <- getOption("BioC")
+    BioC$Base <- Base
+    options("BioC"=BioC)
+}
+
 dumpPackTxt <- function (package)
 {
 # stolen from "library" to get descriptive
