@@ -74,7 +74,7 @@ addVigs2WinMenu <- function(pkgName) {
     if (file.exists(vigFile)) {
         vigMtrx <- .readRDS(vigFile)
         vigs <- file.path(.find.package(pkgName),
-                                  pkgName, "doc", vigMtrx[,"PDF"])
+                                  "doc", vigMtrx[,"PDF"])
         names(vigs) <- vigMtrx[,"Title"]
     }
 
