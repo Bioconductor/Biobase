@@ -160,23 +160,39 @@ require(methods)
 # and doc needs to be written
 ## these are new functions completely
 #
-#setGeneric("iter", function(object)standardGeneric("iter"))
-#setGeneric("iter", function(object,f)standardGeneric("iter"))
+setGeneric("iter", function(object,covlab,f)standardGeneric("iter"), where=where)
 #
-#setMethod("iter", c("exprSet", "function"), function(object,f)
-# apply(exprs(object),1,f))
+setMethod("iter", signature(object="exprSet", covlab="missing", f= "function"), 
+ function(object,covlab,f)
+   apply(exprs(object),1,f), where=where)
 #
-#setMethod("iter", c("exprSet", "list"), function(object,f)
-# {
-# flist <- f
-# out <- matrix(NA,nr=nrow(object@exprs),nc=llen <- length(flist))
-# lnames <- names(flist)
-# if(is.null(lnames)) lnames <- paste("l",1:llen,sep="")
-# for (i in 1:llen)
-#   out[,i] <- apply(exprs(object),1,flist[[i]])
-# dimnames(out) <- list(row.names(exprs(object)),lnames)
-# out
-# })
+setMethod("iter", signature(object="exprSet", covlab="missing", f="list"), 
+function(object,covlab,f)
+ {
+ flist <- f
+ out <- matrix(NA,nr=nrow(object@exprs),nc=llen <- length(flist))
+ lnames <- names(flist)
+ if(is.null(lnames)) lnames <- paste("l",1:llen,sep="")
+ for (i in 1:llen)
+   out[,i] <- apply(exprs(object),1,flist[[i]])
+ dimnames(out) <- list(row.names(exprs(object)),lnames)
+ out
+ }, where=where)
+
+setMethod("iter", signature(object="exprSet", covlab="character", f="function"),
+ function(object,covlab,f) {
+  # f assumed to be a function of two arguments,
+  # first is a stratum identifier to be used
+  # in evaluating a statistical contrast by f
+  varnames <- names(object@phenoData@pData)
+  if (!(any(match(covlab,varnames)))) stop("the requested covariate is not in the exprSet")
+  fc <- function(x) function(y) f(x,y)
+  f2app <- fc(object@phenoData@pData[[covlab]])
+  iter(object,f=f2app)
+  }, where=where)
+
+#
+# the following stuff will go to genefilter
 #
 ## this function already exists, would not need invocation of
 ## standardGeneric except that we are changing arg list
@@ -206,4 +222,12 @@ require(methods)
 
 
 }
+
+#mytt <- function(x,y) {
+# chkdich(x)
+# d <- split(y,x)
+# t.test(d[[1]],d[[2]])$p.val
+# }
+
+#chkdich <- function(x) if(length(unique(x))!=2) stop("x not dichotomous")
 
