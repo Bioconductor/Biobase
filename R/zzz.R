@@ -143,7 +143,10 @@ dumpPackTxt <- function (package)
 
     checkPkgDeps(pkgname)
 
-    require(methods, quietly=TRUE)
+    ### While we're still telling ppl to use openVignette, need
+    ### to have DynDoc available
+    require(DynDoc) || stop("DynDoc required for openVignette usage")
+
     where <- match(paste("package:", pkgname, sep=""), search())
     .initContainer(where)
     where <- match(paste("package:", pkgname, sep=""), search())
