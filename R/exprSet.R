@@ -95,11 +95,14 @@ require(methods)
  setMethod("phenoData", "exprSet", function(object)
          object@phenoData, where=where )
 
+ setMethod("pData", "exprSet",
+           function(object) pData(object@phenoData), where=where)
+
  if( !isGeneric("sampleNames") )
      setGeneric("sampleNames", function(object)
                 standardGeneric("sampleNames"), where=where)
  setMethod("sampleNames", "exprSet",
-           function(object) row.names(phenoData), where=where)
+           function(object) row.names(pData(object)), where=where)
 
  if( !isGeneric("geneNames") )
      setGeneric("geneNames", function(object)
@@ -117,34 +120,12 @@ require(methods)
   setMethod("annotation", "exprSet", function(object)
             object@annotation, where=where)
 
-#<<<<<<< exprSet.R
-# if( !isGeneric("covariates") )
-#     setGeneric("covariates", function(object)
-#                standardGeneric("covariates"), where=where)
-# setMethod("covariates", "exprSet", function(object)
-#           object@covariates, where=where)
-#
-# setMethod("[", "exprSet", function(x, i, j, ..., drop=TRUE)
-#     {
-#     if (!missing(j))
-#          {
-#          newc <- list()
-#          cn <- names(x@covariates)
-#          for (cl in j)
-#            newc[[cn[cl]]] <- covariates[[cl]]
-#          }
-#     else newc <- x@covariates
-#     if (missing(j)) j <- 1:nrow(x@phenodata)
-#     new("exprSet", exprs=x@exprs[i,j], phenodata = x@phenodata[j,,drop=FALSE],
-#     description=x@description,
-#      covariates=x@covariates)}, where=where)
-#
-# setMethod("print", "exprSet", function(x, ...) {
-#     ngenes <- nrow(x@exprs)
-#     dmp <- dim(x@phenodata)
-#     nsamples <- dmp[1]
-#     ncovs <- dmp[2]
-#=======
+##not quite the right semantics
+##but it is a start
+"$.exprSet" <- function(eset, val)
+    (pData(eset))[[as.character(val)]]
+
+
  setMethod("[", "exprSet", function(x, i, j, ..., drop=TRUE) {
 # why drop=TRUE? VC 12/21/01
      pdata <- phenoData(x)[j,, ..., drop=FALSE]
@@ -173,35 +154,6 @@ require(methods)
      show(object@phenoData)
  }, where=where)
 
-# if( !isGeneric("plot") )
-#    setGeneric("plot")
-
-# setMethod("plot", "uarray", function(object, ...) {
-#     expr <- as.matrix(uexpr(object))
-#     #scale
-#     expr <- sweep(expr, 1, apply(expr, 1, mean, na.rm = TRUE))
-#     f <- function(v) {
-#         v <- v[!is.na(v)]
-#         sqrt(sum(v^2)/max(1, length(v) - 1))
-#     }
-#     expr <- sweep(expr, 1, apply(expr, 1, f), "/")
-#     breaks <- seq(-3,3,by=.2)
-#     colors<- GetColor(breaks)
-#     breaks <- c(-100,breaks,100)
-#     colors <- c(colors[1], colors)
-#     opar<-par(mar=c(1,1,4,10))
-#     on.exit(par(mar=opar))
-#     image(1:ncol(expr), 1:nrow(expr), z = t(expr), axes = F,
-#     col=colors, breaks=breaks, xlab="", ylab="")
-#     axis(3, at=1:ncol(expr), labels=samplenames(object),tick=FALSE)
-#     axis(4, at=1:nrow(expr), labels=genenames(object), tick=FALSE, las=1)
-# })
-
-
-# this material is probably ready to go in
-# but where statements need to be added
-# and doc needs to be written
-#
   setGeneric("iter", function(object, covlab, f) standardGeneric("iter"),
              where=where)
                                         #
@@ -238,43 +190,9 @@ require(methods)
                 iter(object,f=f2app)
             }, where=where)
 
-#
-# the following stuff will go to genefilter
-#
-## this function already exists, would not need invocation of
-## standardGeneric except that we are changing arg list
-#
-#rank.default <- get("rank", "package:base")
-#setGeneric("rank", function(object,f) standardGeneric("rank"))
-#setMethod("rank", c("exprSet", "function"), function(object,f) {
-# rank.default(iter(object,f)) })
-#
-#setGeneric("tissueResamp", function(object) standardGeneric("tissueResamp"))
-#setMethod("tissueResamp", "exprSet", function(object) {
-# nsamp <- ncol(object@exprs)
-# sel <- sample(1:nsamp, replace=T)
-# object[,sel]
-# })
-#
-#setGeneric("rankDistn",
-#   function(object,f,B) standardGeneric("rankDistn"))
-#setMethod("rankDistn",
-# c("exprSet","function", "numeric") ,function(object,f,B) {
-# ng <- nrow(object@exprs)
-# out <- matrix(NA,nr=ng,nc=B)
-# for (i in 1:B)
-#  out[,i] <- rank(tissueResamp(object),f)
-# out
-# })
-
-
-#
 
 
 }
-
-#with.exprSet <- function(data, expr, ...) eval(substitute(expr),
-#  data@phenoData@pData, enclos=parent.frame())
 
 
 esApply <- function( es, f ) {

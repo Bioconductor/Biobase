@@ -1,6 +1,9 @@
 \name{aggregator-class}
 \docType{class}
 \alias{aggregator-class}
+\alias{aggenv}
+\alias{aggfun}
+\alias{initfun}
 \title{Class aggregator, a class of aggregators }
 \description{ A class of objects designed to help aggregate
    calculations over an iterative computation. The aggregator consists

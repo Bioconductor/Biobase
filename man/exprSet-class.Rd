@@ -2,9 +2,13 @@
 \docType{class}
 \alias{exprSet-class}
 \alias{$.exprSet}
+\alias{exprs}
 \alias{geneNames}
 \alias{pData}
 \alias{varLabels}
+\alias{sampleNames}
+\alias{phenoData}
+\alias{annotation}
 \title{Class exprSet, a class for microarray data, and methods for
   processing them } 
 \description{ This is class representation for Microarray Data}
@@ -43,32 +47,45 @@
 \section{Methods}{
   \describe{
     \item{[}{(exprSet): A subset operator. Ensures that both \code{exprs}
-    and \code{phenoData} are subset properly. }
+      and \code{phenoData} are subset properly. }
+    
     \item{exprs}{(exprSet): An accessor function for \code{exprs}. }
+    
     \item{geneNames}{(exprSet): Obtain the gene names (row names) of
-    \code{exprs}. }
+      \code{exprs}. }
+    
     \item{iter}{(exprSet, missing, function): an iterator over genes.
 Returns the result of applying \code{function} to the matrix
 of expressions on margin 1 (see \code{apply}) }
+
     \item{iter}{(exprSet, missing, list): a multi-iterator over genes.
 Concatenates result of applying each function in the list \code{list}
 in a matrix (assumes result of each function evaluation is a scalar). }
+
     \item{iter}{(exprSet, covlab=character, function): a iterator over
 genes: \code{function} is assumed to have arguments x and y;
 the pData element named by covlab will be bound to x, the
 gene expression values will be iteratively bound to y}
-    \item{phenoData}{(exprSet): An accessor function that returns the
-    column names from \code{exprs}. These should correspond to the
-    sample names and should be the same as the row names of
-    \code{phenoData}. }
-    \item{sampleNames}{(exprSet): An accessor function for the covariate
-    descriptions. }
+
+    \item{phenoData}{(exprSet): An accessor function returns the
+      \code{phenoData} instance from the \code{exprSet}.}
+
+   \item{pData}{(exprSet): An accessor function for the \code{pData}
+     slot of the \code{phenoData} contained in the instance.}
+
+     \item{sampleNames}{(exprSet): An accessor function for sample
+       labels. These are the column labels of \code{exprs} and the row
+       labels from \code{pData}.
+     }
+     
     \item{show}{(exprSet): renders information about the exprSet
       in a concise way on stdout. }
+
     \item{annotation}{(exprSet): An accessor function for the annotation
       information.}
+    
     \item{\$}{An old-style method.
-      It is \code{((eset@phenoData)@pData)[[as.character(val)]]} which
+      It is \code{pData(eset)[[as.character(val)]]} which
       does not quite have the right semantics but it is close. This
       operator extracts the named component of the \code{pData} slot in
       \code{phenoData}.}

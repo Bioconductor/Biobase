@@ -45,7 +45,7 @@ data(eset)
 mytt.demo <- function( y, x ) {
 # obtain the p value of t-test across strata
 # defined by cov1
- myd <- pData(phenoData(x))[["cov1"]]
+ myd <- pData(x)[["cov1"]]
  ys <- split( y, myd )
  t.test( ys[[1]], ys[[2]] )$p.value
  }
@@ -54,7 +54,7 @@ mytt.alt <- function(y, x) {
 # here we allow the user to refer directly
 # to variables in the pData dataframe
 # but you need to do a cleanup!
- att <- attach(pData(phenoData(x)))
+ att <- attach(pData(x))
  attnm <- attr(att,"name")
 # cleanup phase
  rpos <- match(attnm,search())
@@ -70,8 +70,8 @@ myreg.demo <- function( y, x ) {
 # (if we were concerned with sign we could
 # save the z statistic instead at coef[3,3]
 #
- myx1 <- pData(phenoData(x))[["cov1"]]
- myx2 <- pData(phenoData(x))[["cov2"]]
+ myx1 <- pData(x)[["cov1"]]
+ myx2 <- pData(x)[["cov2"]]
  summary(lm(y~myx1+myx2))$coef[3,4]
  }
 
@@ -100,4 +100,4 @@ rest <- esApply( { bool <- q3g100filt(resamp(eset)); eset[bool,] }, mytt.demo )
 set.seed(123)
 resta <- esApply( { bool <- q3g100filt(resamp(eset)); eset[bool,] }, mytt.alt )
 }
-\keyword{ models }% at least one, from doc/KEYWORDS
+\keyword{ models }

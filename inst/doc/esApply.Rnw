@@ -57,7 +57,7 @@ some covariate data:
 <<R>>=
 print(eset)
 print(exprs(eset)[1,])
-print(pData(phenoData(eset))[1:2,1:3])
+print(pData(eset)[1:2,1:3])
 
 @
 
@@ -66,7 +66,7 @@ and a covariate are related:
 
 <<R>>=
 print( rbind(exprs(eset[1,]),
-cov1=t(pData(phenoData(eset)))[1,]))
+cov1=t(pData(eset))[1,]))
 @
 A function that evaluates the
 difference in
@@ -83,7 +83,7 @@ We can apply this to a small
 {\tt exprSet} that gives back the data listed above:
 <<R>>=
 print(apply(exprs(eset[1,,drop=F]),1,
-  medContr, pData(phenoData(eset))[["cov1"]]))
+  medContr, pData(eset)[["cov1"]]))
 @
 That's a bit clumsy.  This is where
 {\tt esApply} comes in.  We pay for some
@@ -93,7 +93,7 @@ function to be applied.
 
 <<R>>=
 medContr1 <- function( y, x ) {
- cov1 <- pData(phenoData(x))[["cov1"]]
+ cov1 <- pData(x)[["cov1"]]
  ys <- split(y,cov1)
  median(ys[[1]]) - median(ys[[2]])
  }
@@ -110,8 +110,8 @@ directly with the variables in the dataframe:
 
 <<R>>=
 medContr2 <- function( y, x ) {
- attach(pData(phenoData(x)))
- on.exit(detach("pData(phenoData(x))"))
+ attach(pData(x))
+ on.exit(detach("pData(x)"))
  ys <- split(y,cov1)
  median(ys[[1]]) - median(ys[[2]])
  }
