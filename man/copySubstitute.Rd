@@ -1,41 +1,54 @@
 \name{copySubstitute}
 \alias{copySubstitute}
-\title{copy from one file or connection to another, with configure-like name-value substitution}
+\title{Copy files, directory trees or between connections with configure-like name-value substitution}
 \description{
-  Given a named list of character strings, a read and a write
-  connection, replace all occurences of a SYMBOL by the corresponding
-  value. (see example).
+  Copy files, directory trees or between connections and
+  replace all occurences of a SYMBOL by the corresponding value. 
 }
-\usage{copySubstitute(cin, cout, symbolValues, symbol.delimiter="@", allow.unresolved.symbols=FALSE)}
+\usage{copySubstitute(src, dest, symbolValues, symbolDelimiter="@",
+allowUnresolvedSymbols=FALSE, removeExtension = "\\.in$")}
 \arguments{
-  \item{cin}{A connection object or a character string.}
-  \item{cout}{A connection object or a character string.}
+  \item{src}{Source: either a character vector with filenames and/or
+    directory names, or a connection object.}
+  \item{dest}{Destination: either a character vector of length 1
+    with the name of an existing, writeable directory, or a connection
+    object. The type of the \code{dest} argrument must match that of the
+    \code{src} argument.}
   \item{symbolValues}{A named list of character strings.}
-  \item{symbol.delimiter}{A character string of with a single character
+  \item{symbolDelimiter}{A character string of with a single character
     in it.}
-  \item{allow.unresolved.symbols}{If not \code{TRUE}, then the function
-    will execute \code{\link{stop}} if it comes across SYMBOLs that are
+  \item{allowUnresolvedSymbols}{If not \code{TRUE}, then the function
+    will execute \code{\link[base:stop]{stop}} if it comes across SYMBOLs that are
     not defined in \code{symbolValues}.}
+  \item{removeExtension}{Matches to this regular expression are removed
+    from filenames and directory names.}
 }
 
-\details{One use of this function is in \code{\link{createPackage}} for
-  the automatic generation of packages, where template files for
-  \code{.R}, \code{.Rd}, \code{.c} and \code{DESCRIPTION}
-  files may be customized by substituting placeholders by values.
+\details{
+  If \code{src} is a connection or a character vector of length 1 with a
+  filename, the text is read through the function
+  \code{\link[base:readLines]{readLines}}. Symbols are replaced by their
+  values (see below) and the result is written to \code{dest}
+  through the function \code{\link[base:readLines]{writeLines}}. 
   
-  A SYMBOL is any text between a pair of symbol delimiters. By
-  default the symbol delimiter is \code{@}.
+  Symbol substitution: this is best explained with an example. If the list
+  \code{symbolValues} contains an element with name \code{FOO} and value
+  \code{bar}, and symbolDelimiter is \code{@}, then any occurence of
+  \code{@FOO@} is replaced by \code{bar}. This applies both the text
+  contents of the files in \code{src} as well as to the filenames. See examples.
+  
+  If \code{src} is a character vector with multiple filenames or
+  contains directory names,
+  \code{\link[Biobase:copySubstitute]{copySubstitute}} is called on each
+  file in turn and descends into the directories recursively.
 
-  \code{cin} is passed on to \code{\link{readLines}}, 
-  \code{cout} to \code{\link{writeLines}}.
-  If \code{cin} (\code{cout}) is a connection,
-  it must be open for read (write). If it is a character string,
-  \code{\link{readLines}} (\code{\link{writeLines}}) opens a
-  file with that name, using \code{\link{file}}.
+  One use of this function is in
+  \code{\link[Biobase:createPackage]{createPackage}}
+  for the automatic generation of packages from a template package directory.
 }
+
 \value{
-  The function returns the return value of the \code{\link{writeLines}}
-  function that it calls.
+  None. The function is called for its side effect.
 }
 
 \author{Wolfgang Huber \url{http://www.dkfz.de/mga/whuber}}
@@ -44,22 +57,22 @@
 
 \examples{
 ## create an example file
-fin  = tempfile()
-fout = tempfile()
+thedir  = tempdir()
+thefile = file.path(thedir, "macbeth.txt.in")
 
 writeLines(text=c("We will perform in @WHAT@:",
   "So, thanks to @WHOM@ at once and to each one,",
   "Whom we invite to see us crown'd at @WHERE@."),
-  con=fin) 
+  con = thefile) 
 
 ## create the symbol table
 z = list(WHAT="measure, time and place", WHOM="all", WHERE="Scone")
 
 ## run copySubstitute
-copySubstitute(fin, fout, z)
+copySubstitute(thefile, thedir, z)
 
 ## display the results
-readLines(fout)
+readLines(file.path(thedir, "macbeth.txt"))
 
 }
 

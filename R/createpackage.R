@@ -41,20 +41,19 @@ createPackage <- function(pkgname, destinationDir, originDir, symbolValues,
   
   ## DESCRIPTION
   copySubstitute(file.path(originDir, "DESCRIPTION"),
-                 file.path(pkgdir,    "DESCRIPTION"),
-                 symbolValues,)
+                 pkgdir, symbolValues)
     
   ## R files
   for (fn in list.files(originDir, pattern="*\\.R$"))
-    copySubstitute(file.path(originDir, fn), file.path(pkgdir, "R", fn), symbolValues)
+    copySubstitute(file.path(originDir, fn), file.path(pkgdir, "R"), symbolValues)
   
   ## C files
   for (fn in list.files(originDir, pattern="*\\.c$"))
-    copySubstitute(file.path(originDir, fn), file.path(pkgdir, "src", fn), symbolValues)
+    copySubstitute(file.path(originDir, fn), file.path(pkgdir, "src"), symbolValues)
   
   ## man files
   for (fn in list.files(originDir, pattern="*\\.Rd$"))
-    copySubstitute(file.path(originDir, fn), file.path(pkgdir, "man", fn), symbolValues)
+    copySubstitute(file.path(originDir, fn), file.path(pkgdir, "man"), symbolValues)
   
   return(list(pkgdir=pkgdir))
 }
