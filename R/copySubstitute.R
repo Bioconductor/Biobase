@@ -19,7 +19,7 @@ copySubstitute = function(src, dest, symbolValues,
     stop(mess)
 
   ##----------------------------------------------------------------------
-  ## Local function: here the actual subsitution and copying work is done
+  ## Here the actual subsitution and copying work is done
   ## cin and cout are single files or connections
   ##----------------------------------------------------------------------
   cpSubsCon = function(cin, cout) {
@@ -45,7 +45,7 @@ copySubstitute = function(src, dest, symbolValues,
   }
 
   ##------------------------------------------------------------
-  ## substitution on filenames
+  ## Substitution on filenames
   ##------------------------------------------------------------
   subsFileName = function(x) {
     res = gsub(removeExtension, "", x)
@@ -55,14 +55,14 @@ copySubstitute = function(src, dest, symbolValues,
   }
   
   ##----------------------------------------------------------------------
-  ## Local function: iterate over character vectors of filenames and
+  ## Iterate over character vectors of filenames and
   ## recursively descend into directories
   ##----------------------------------------------------------------------
   cpSubs = function(src, dest) {
     usage = paste("\n* Usage:",
       "\n* with recursive=FALSE:",
-      "\n* 'src' a connection open for reading and 'dest' a connection open for writing OR",
-      "\n* 'src' a file name and 'dest' a file name OR",
+      "\n* 'src' a connection open for reading or a file name AND",
+      "\n* 'dest' a connection open for writing or a file name",
       "\n* with recursive=TRUE:",
       "\n* 'src' a vector of file and directory names and 'dest' a directory name\n\n")
     if (!recursive) {
