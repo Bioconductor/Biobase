@@ -1,4 +1,4 @@
-strbreak <- function(x, width=getOption("width"), exdent=2, breakchar="\n") {
+strbreak <- function(x, width=getOption("width"), exdent=2, collapse="\n") {
   width <- as.integer(width)
   if(is.na(width) || width<=1)
     stop("invalid argument 'width'")
@@ -6,7 +6,7 @@ strbreak <- function(x, width=getOption("width"), exdent=2, breakchar="\n") {
   if(is.na(exdent) || exdent>width)
     stop("invalid argument 'exdent'")
   ww <- width-exdent
-  lb <- paste(breakchar, paste(rep(" ", exdent), collapse=""), sep="")
+  lb <- paste(collapse, paste(rep(" ", exdent), collapse=""), sep="")
   rv <- character(length(x))
   
   for(i in seq(along=x)) {

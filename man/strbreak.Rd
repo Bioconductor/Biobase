@@ -2,22 +2,20 @@
 \alias{strbreak}
 \title{Break Character Strings to Fit Width}
 \description{
-  Inserts line breaks (\code{breakchar}) into input character strings.
+  Inserts line breaks (\code{collapse}) into input character strings.
   The main intention of this
   function is to prepare long strings for printing, so the output 
   is not wider than \code{width}.
 }
 \usage{
-  strbreak(x, width=getOption("width"), exdent=5, breakchar="\n")
+  strbreak(x, width=getOption("width"), exdent=2, collapse="\n")
 }
 \arguments{
   \item{x}{a character vector}
   \item{width}{a positive integer giving the width of the output.}
   \item{exdent}{a positive integer specifying the indentation of
      subsequent lines after the first line.}
-  \item{breakchar}{a character.  This is inserted to break lines. The
-    default value contains 5 spaces, so that subsequent lines after the
-    furst line are indented.}
+  \item{collapse}{a character.  This is inserted to break lines.}
 }
 \details{
  No details.
