@@ -55,7 +55,7 @@ distinguishes elements of $y$ for processing in the function $f$.
 A basic problem is to guarantee that the $j$th element
 of $y$ is correctly associated with the $j$th component of $x$.
 
-<<R.hide, echo=FALSE>>=
+<<R.hide, results=hide, echo=FALSE>>=
 library(Biobase)
 data(eset)
 @
