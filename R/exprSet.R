@@ -19,10 +19,10 @@
 # 5. Measurements 6. Normalization controls
 # the class will contain experimenter name, laboratory, contact
 # information, a single-sentence experiment title,
-#an abstract describing the experiment, and URLs  and slots that are lists for 
+#an abstract describing the experiment, and URLs  and slots that are lists for
 #"Samples", "Hybridizations", "Normalization controls",
 #the remaing two are already covered.
-# we add a slot (also a list) to keep track of pre-processing 
+# we add a slot (also a list) to keep track of pre-processing
 #
 #more info: http://www.mged.org/Workgroups/MIAME/miame_1.1.html
 
@@ -34,7 +34,7 @@ require(methods)
   setClass("phenoData", representation(pData="data.frame",
                                        varLabels="list"),
            prototype=list(pData=data.frame(matrix(nr=0,nc=0)),
-             varLabels=NULL),
+             varLabels=list()),
            where=where)
 
   if( !isGeneric("pData") )
@@ -114,7 +114,7 @@ require(methods)
              samples=list(),hybridizations=list(),normControls=list(),
              preprocessing=list(),other=list()),
            where=where)
-  
+
   ##show method
   setMethod("show", "miame",
             function(object) {
@@ -141,49 +141,49 @@ require(methods)
   if( !isGeneric("abstract") )
     setGeneric("abstract", function(object)
                standardGeneric("abstract"), where=where)
-  
+
   setMethod("abstract","miame",function(object) object@abstract,where=where)
 
    ##samples method
   if( !isGeneric("samples") )
     setGeneric("samples", function(object)
                standardGeneric("samples"), where=where)
-  
+
   setMethod("samples","miame",function(object) object@samples,where=where)
 
    ##hybridizations method
   if( !isGeneric("hybridizations") )
     setGeneric("hybridizations", function(object)
                standardGeneric("hybridizations"), where=where)
-  
+
   setMethod("hybridizations","miame",function(object) object@hybridizations,where=where)
 
    ##normControls method
   if( !isGeneric("normControls") )
     setGeneric("normControls", function(object)
                standardGeneric("normControls"), where=where)
-  
+
   setMethod("normControls","miame",function(object) object@normControls,where=where)
 
    ##preproc method
   if( !isGeneric("preproc") )
     setGeneric("preproc", function(object)
                standardGeneric("preproc"), where=where)
-  
+
   setMethod("preproc","miame",function(object) object@preprocessing,where=where)
 
   ##otherInfo method
   if( !isGeneric("otherInfo") )
     setGeneric("otherInfo", function(object)
                standardGeneric("otherInfo"), where=where)
-  
+
   setMethod("otherInfo","miame",function(object) object@other,where=where)
 
   ##expinfo method
   if( !isGeneric("expinfo") )
     setGeneric("expinfo", function(object)
                standardGeneric("expinfo"), where=where)
-  
+
   setMethod("expinfo","miame",function(object){
     tmp <- c(object@name,
              object@lab,
@@ -214,7 +214,9 @@ require(methods)
 
   ##define a method to update exprsSet from previous versions
   if( !isGeneric("updateObject") )
-    setGeneric("updateObject", function(object) standardGeneric("updateObject"), where=where )
+    setGeneric("updateObject", function(object)
+  standardGeneric("updateObject"), where=where )
+
   setMethod("updateObject", "exprSet",
             function(object){
               if(class(object@description)=="miame")
@@ -225,7 +227,7 @@ require(methods)
               }
               object
             },where=where)
-  
+
   ##define a generic for obtaining the data
   if( !isGeneric("exprs") )
     setGeneric("exprs", function(object) standardGeneric("exprs"),
@@ -237,7 +239,7 @@ require(methods)
                 where=where )
   setMethod("se.exprs", "exprSet", function(object) object@se.exprs,
            where=where)
-  
+
   ##method for miame description
   if( !isGeneric("description") )
     setGeneric("description", function(object)
@@ -249,7 +251,7 @@ require(methods)
   if( !isGeneric("description<-") )
     setGeneric("description<-", function(object, value)
                standardGeneric("description<-"), where=where)
-  
+
   setReplaceMethod("description", "exprSet", function(object, value) {
     object@description <- value
     object
@@ -265,39 +267,50 @@ require(methods)
                standardGeneric("phenoData"), where=where)
   setMethod("phenoData", "exprSet", function(object)
             object@phenoData, where=where )
-  
+
+  if( !isGeneric("phenoData<-") )
+    setGeneric("phenoData<-", function(object, value)
+               standardGeneric("phenoData<-"), where=where)
+
+
+  setReplaceMethod("phenoData", c("exprSet", "phenoData"),
+                   function(object, value) {
+                       object@phenoData <- value
+                       object },
+                   where=where)
+
   ##method for pData
   setMethod("pData", "exprSet",
             function(object) pData(object@phenoData), where=where)
-  
+
 
   ##replace method for pData
   if( !isGeneric("pData<-") )
     setGeneric("pData<-", function(object, value)
                standardGeneric("pData<-"), where=where)
-  
+
   setReplaceMethod("pData", "exprSet", function(object, value) {
     ph<-object@phenoData
     ph@pData <- value
     object@phenoData <- ph
     object
   }, where=where)
-  
+
   ##[[ method
   setReplaceMethod("[[", "exprSet", function(x, i, j, ..., value) {
     pD <- x@phenoData
     pD@pData[[i]] <- value
     x@phenoData <- pD
     x}, where=where)
-  
-  
+
+
 ###RI: this is a simple a pData replace for phenoData. i need it for affy.
   setReplaceMethod("pData", "phenoData", function(object, value){
     object@pData <- value
     object
   }, where=where)
-  
-  
+
+
   if( !isGeneric("sampleNames") )
     setGeneric("sampleNames", function(object)
                standardGeneric("sampleNames"), where=where)
@@ -314,28 +327,28 @@ require(methods)
                standardGeneric("geneNames"), where=where)
   setMethod("geneNames", "exprSet", function(object)
             row.names(object@exprs), where=where )
-  
+
   if( !isGeneric("geneNames<-") )
     setGeneric("geneNames<-", function(object, value)
                standardGeneric("geneNames<-"), where=where)
-  
+
   setReplaceMethod("geneNames", "exprSet", function(object, value) {
     es <- exprs(object)
     row.names(es) <- value
     object@exprs <- es
     object
   }, where=where)
-  
+
   ##a varLabels method for exprSets
   setMethod("varLabels", "exprSet",
             function(object) object@phenoData@varLabels, where=where)
-  
+
   if( !isGeneric("annotation") )
     setGeneric("annotation", function(object)
                standardGeneric("annotation"), where=where)
   setMethod("annotation", "exprSet", function(object)
             object@annotation, where=where)
-  
+
   setMethod("[", "exprSet", function(x, i, j, ..., drop=FALSE) {
     pdata <- phenoData(x)[j,, ..., drop=FALSE]
     if(missing(j) ) {
@@ -353,7 +366,7 @@ require(methods)
     new("exprSet", exprs=nexprs, phenoData = pdata,
         description=x@description,
         notes=x@notes)}, where=where)
-  
+
   setMethod("show", "exprSet", function(object ) {
     dm <-dim(object@exprs)
     ngenes <- dm[1]
@@ -362,7 +375,7 @@ require(methods)
     cat(nsamples, "samples\n\t")
     show(object@phenoData)
   }, where=where)
-  
+
   setGeneric("iter", function(object, covlab, f) standardGeneric("iter"),
              where=where)
                                         #
@@ -384,7 +397,7 @@ require(methods)
               dimnames(out) <- list(row.names(exprs(object)),lnames)
               out
             }, where=where)
-  
+
   setMethod("iter", signature(object="exprSet", covlab="character",
                               f="function"),
             function(object, covlab, f) {
@@ -398,12 +411,12 @@ require(methods)
               f2app <- fc(object@phenoData@pData[[covlab]])
               iter(object,f=f2app)
             }, where=where)
-  
+
 
   ##split
   if( !isGeneric("split") )
     setGeneric("split", where=where)
-  
+
   setMethod("split", signature(x="exprSet", f="vector"),
             function(x, f) {
               lenf <- length(f)
@@ -436,8 +449,8 @@ require(methods)
               else
                 stop("could not split")
             }, where=where)
-  
-  
+
+
   setMethod("split", signature(x="phenoData", f="vector"),
             function(x, f) {
               lenf <- length(f)
@@ -454,7 +467,7 @@ require(methods)
               else
                 stop("could not split")
             }, where=where)
-  
+
 ###write table for exprSet. makes a table with gene names in first column
 ###chip names in first row
 ###apart from quote=FALSE and sep="\t"
@@ -472,7 +485,7 @@ require(methods)
                         sep = sep,eol = eol, na = na, dec = dec,
                         row.names = row.names, col.names = col.names,
                         qmethod = qmethod),where=where)
-  
+
 
 }
 
