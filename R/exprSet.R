@@ -50,7 +50,7 @@ require(methods)
       new("phenoData", pData=pD, varLabels=vL)}, where=where)
 
   setMethod("show", "phenoData",
-            function(object, printTo=stdout(), oldMethods = TRUE) {
+            function(object) {
                 dm <- dim(object@pData)
                 cat("\t phenoData object with ", dm[2], " variables",
             sep="")
@@ -121,8 +121,7 @@ require(methods)
      description=x@description,
      notes=x@notes)}, where=where)
 
- setMethod("show", "exprSet", function(object, printTo = stdout(),
-     oldMethods = TRUE ) {
+ setMethod("show", "exprSet", function(object ) {
      dm <-dim(object@exprs)
      ngenes <- dm[1]
      nsamples <- dm[2]

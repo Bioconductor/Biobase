@@ -43,7 +43,7 @@ setMethod("[[", "container", function(x, i,...) {
     x@x[[i]]
 }, where=where)
 
-setMethod("show", "container", function(object, printTo) {
+setMethod("show", "container", function(object) {
     cat("Container of ", content(object), "\n", sep="")
     print(object@x)
 }, where=where)
