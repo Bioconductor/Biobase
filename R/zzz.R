@@ -146,12 +146,6 @@ dumpPackTxt <- function (package)
     require(methods, quietly=TRUE) || stop("Requires package methods")
 
 
-    where <- match(paste("package:", pkgname, sep=""), search())
-    .initContainer(where)
-    where <- match(paste("package:", pkgname, sep=""), search())
-    .initAgg(where)
-    where <- match(paste("package:", pkgname, sep=""), search())
-    .initExprset(where)
     .buildBiobaseOpts()
     .getPDFOption()
 
