@@ -9,6 +9,10 @@
 #  * character slot description: unconstrained string with information about
 # the exprSet
 
+#
+# it appears that the covariates slot is a list of labels
+# giving details on elements of phenodata
+
 require(methods)
 
 .initExprset <- function(where) {
@@ -102,6 +106,34 @@ require(methods)
  setMethod("geneNames", "exprSet", function(object)
      row.names(object@exprs), where=where )
 
+#<<<<<<< exprSet.R
+# if( !isGeneric("covariates") )
+#     setGeneric("covariates", function(object)
+#                standardGeneric("covariates"), where=where)
+# setMethod("covariates", "exprSet", function(object)
+#           object@covariates, where=where)
+#
+# setMethod("[", "exprSet", function(x, i, j, ..., drop=TRUE)
+#     {
+#     if (!missing(j)) 
+#          {
+#          newc <- list()
+#          cn <- names(x@covariates)
+#          for (cl in j)
+#            newc[[cn[cl]]] <- covariates[[cl]]
+#          }
+#     else newc <- x@covariates
+#     if (missing(j)) j <- 1:nrow(x@phenodata)
+#     new("exprSet", exprs=x@exprs[i,j], phenodata = x@phenodata[j,,drop=FALSE],
+#     description=x@description, 
+#      covariates=x@covariates)}, where=where)
+#
+# setMethod("print", "exprSet", function(x, ...) {
+#     ngenes <- nrow(x@exprs)
+#     dmp <- dim(x@phenodata)
+#     nsamples <- dmp[1]
+#     ncovs <- dmp[2]
+#=======
  setMethod("[", "exprSet", function(x, i, j, ..., drop=TRUE) {
 
      pdata <- x@phenoData[j,, ..., drop=FALSE]
@@ -125,6 +157,7 @@ require(methods)
      dm <-dim(object@exprs)
      ngenes <- dm[1]
      nsamples <- dm[2]
+#>>>>>>> 1.12
      cat("Expression Set (exprSet) with \n\t", ngenes, " genes\n\t", sep="")
      cat(nsamples, "samples\n\t")
      show(object@phenoData)
@@ -211,7 +244,8 @@ setMethod("iter", signature(object="exprSet", covlab="character", f="function"),
 #
 #setGeneric("rankDistn", 
 #   function(object,f,B) standardGeneric("rankDistn"))
-#setMethod("rankDistn", c("exprSet","function", "numeric") ,function(object,f,B) {
+#setMethod("rankDistn", 
+# c("exprSet","function", "numeric") ,function(object,f,B) {
 # ng <- nrow(object@exprs)
 # out <- matrix(NA,nr=ng,nc=B)
 # for (i in 1:B)
@@ -222,12 +256,3 @@ setMethod("iter", signature(object="exprSet", covlab="character", f="function"),
 
 
 }
-
-#mytt <- function(x,y) {
-# chkdich(x)
-# d <- split(y,x)
-# t.test(d[[1]],d[[2]])$p.val
-# }
-
-#chkdich <- function(x) if(length(unique(x))!=2) stop("x not dichotomous")
-
