@@ -11,7 +11,7 @@
 \alias{sampleNames}
 \alias{phenoData}
 \alias{annotation}
-\alias{split}
+\alias{split-methods}
 \title{Class exprSet, a class for microarray data, and methods for
   processing them } 
 \description{ This is class representation for Microarray Data}
