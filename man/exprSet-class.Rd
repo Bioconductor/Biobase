@@ -124,9 +124,10 @@ gene expression values will be iteratively bound to y}
       is made on this.}
     \item{annotation}{(exprSet): An accessor function for the annotation
       information.}
-    \item{write.exprs}{(exprSet,...): Sends \code{exprs(exprSet)} to
-      \code{\link{write.table}}. One can send \code{write.table}
-      arguments.}
+    \item{write.exprs}{(exprSet,...): Writes the expression levels to
+      file. It takes the same arguments as \code{\link{write.table}}. If
+      called with no arguments it is equivalent to
+      write.table(exprs(exprSet),file="tmp.txt",quote=FALSE,sep="\t").} 
     \item{exprs2excel}{(exprSet,...): 
       Writes the expression levels to \code{csv}
       file. This file will open nicely in excel. It takes the same
