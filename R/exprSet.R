@@ -528,14 +528,14 @@
 #                }  ##split the expressions
               if( (nrow(pData(x)) %% lenf ==0) ) {
                 npD <- split(pD, f)
-                nEx <- lapply(split(1:ncol(exs), f),
-                              function(ind) exs[,ind,drop=FALSE])
+                nEx <- split(1:ncol(exs), f)
+                
                 nsplit <- length(npD)
                 for( i in 1:nsplit) {
                   ## Create the new exprSet with the same class as
                   ## the original one - SDR
                   tmp <- x
-                  exprs(tmp) <- nEx[[i]]
+                  exprs(tmp) <- {function(ind) exs[,ind,drop=FALSE]} (nEx[[i]])
                   phenoData(tmp) <- npD[[i]]
                   annotation(tmp) <- aN
                   npD[[i]] <- tmp
