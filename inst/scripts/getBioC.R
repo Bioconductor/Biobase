@@ -35,11 +35,11 @@ getBioC <- function (libName = "exprs", destdir = NULL, isDevel = FALSE,
         packs <- libName
     }
 
-    for(i in packs){
-        sourceUrl <- getUrl(PLATFORM, i, isDevel)
-        print(sourceUrl)
-        fileName <- getFName(PLATFORM, DESTDIR, i)
+    repository <- getPkgDisc(isDevel)
 
+    for(i in packs){
+        sourceUrl <- getDLURL(i, repository, PLATFORM)
+        fileName <- getFileName(sourceUrl)
         # check the connection instead of downloading directly which
         # will write files of 0 size in the directory even when
         # the connection is not there.
@@ -64,7 +64,7 @@ getBioC <- function (libName = "exprs", destdir = NULL, isDevel = FALSE,
         }
     }
     if(is.null(messages))
-        messages <- "Successful"
+        messages <- "Download was successful"
     if(verbose)
         print(messages)
     return(invisible(messages))
@@ -81,60 +81,10 @@ getPackNames <- function (libName){
     switch(libName,
            "all" = return(c(EXPRS, AFFY, CDNA)),
            "exprs" = return(EXPRS),
-           "affy" = return(EXPRS, AFFY),
+           "affy" = return(c(EXPRS, AFFY)),
            "cdna" =,
            "CDNA" = return(c(EXPRS, CDNA)),
            stop(error))
-}
-
-getLibName <- function (platform, lib){
-     # .Platform$file.sep returns "/" under windows. Hard code for now
-     switch(platform,
-            "unix" = return (paste(pack, "_", getVersion(),
-            ".tar.gz", sep = "")),
-            "windows" = return(paste(pack, ".zip", sep = "")),
-            stop("The OS system is not supported"))
-}
-
-getDLUrl <- function(platform, isDevel = FALSE){
-    if(isDevel)
-        tempUrl <-
-            "http://www.bioconductor.org/packages/devel/distrib/"
-    else
-        tempUrl <-
-            "http://www.bioconductor.org/packages/release/distrib/"
-    switch(platform,
-            "unix" = return (paste(tempUrl, "Source", sep = "")),
-            "windows" = return(paste(tempUrl,"Win32", sep = "")),
-            stop("The OS system is not supported"))
-}
-
-getUrl <- function(platform, pack, isDevel = FALSE){
-     switch(platform,
-            "unix" = return (paste(getDLUrl(platform, isDevel),
-            "/", pack, "_",
-            ifelse(pack == tolower("affy"), getAffyVersion(isDevel),
-     getVersion(isDevel)), ".tar.gz", sep = "")),
-            "windows" = return(paste(getDLUrl(platform, isDevel),
-            "/", pack, if (isDevel) ".zip" else ".zip", sep = "")))
-}
-
-getFName <- function(platform, destdir, pack, isDevel=FALSE){
-     # .Platform$file.sep returns "/" under windows. Hard code for now
-     switch(platform,
-            "unix" = return (paste(destdir, .Platform$file.sep,
-            pack, "_", getVersion(), ".tar.gz", sep = "")),
-            "windows" = return(paste(destdir, "\\",
-            pack, if (isDevel) ".zip" else ".zip", sep = "")),
-            stop("The OS system is not supported"))
-}
-
-getVersion <- function(isDevel = FALSE){
-    if(isDevel){
-        return("1.0")
-    }else{
-        return("1.0")
-    }
 }
 
 getMode <- function(platform){
@@ -156,13 +106,65 @@ installPack <- function(platform, fileName){
     }
 }
 
-# affy needs special treatment
-getAffyVersion <- function (isDevel = FALSE){
-    if(isDevel)
-        return("1.1.0")
-    else
-        return("1.0.1")
+getDLURL <- function(pakName, rep, platform){
+    sourceURL <- NULL
+    isPkg <- FALSE
+    version <- 0
+    higherV <- FALSE
+
+    for(i in rep){
+        if(gsub("^Package: *(.*)", "\\1", i) == pakName){
+            isPkg <- TRUE
+        }
+        if(isPkg && regexpr("^Version:", i)[1] > 0){
+            if(gsub("^Version: *(.*)", "\\1", i) > version)
+                higherV <- TRUE
+            else
+                higherV <- FALSE
+        }
+        if(platform == "windows"){
+            if(isPkg && higherV && regexpr("Win32URL", i)[1] > 0){
+                sourceURL <- gsub("^Win32URL: *(.*)", "\\1", i)
+                isPkg = FALSE
+            }
+        }else{
+            if(isPkg && higherV && regexpr("/Source/", i)[1] > 0){
+                sourceURL <- gsub("^SourceURL: *(.*)", "\\1", i)
+                isPkg <- FALSE
+            }
+        }
+    }
+    return(sourceURL)
 }
+
+getPkgDisc <- function (isDevel){
+    on.exit(options(show.error.messages = TRUE))
+
+    if(isDevel)
+        URL <-
+            "http://www.bioconductor.org/packages/devel/distrib/PACKAGES"
+    else
+        URL <-
+            "http://www.bioconductor.org/packages/release/distrib/PACKAGES"
+
+    con <- url(URL)
+    options(show.error.messages = FALSE)
+    tryMe <- try(readLines(con))
+    options(show.error.messages = TRUE)
+
+    if(inherits(tryMe, "try-error"))
+       stop("The url for BioC PACKAGES is incorrect")
+
+    close(con)
+    return(tryMe)
+}
+
+getFileName <- function(url){
+    temp <- unlist(strsplit(url, "/"))
+    return(temp[length(temp)])
+}
+
+
 
 
 
