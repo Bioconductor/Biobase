@@ -190,9 +190,12 @@
   ##trick so that the old exprSet and Plobs works
   setClassUnion("characterORMIAME", c("MIAME", "character"))
 
+
+  ## Class union for the exprs and se.exprs slots of exprSet
+  setClassUnion("exprMatrix", "matrix")
   ##data class for expression arrays
-  setClass("exprSet", representation(exprs="matrix",
-                                     se.exprs = "matrix",
+  setClass("exprSet", representation(exprs="exprMatrix",
+                                     se.exprs = "exprMatrix",
                                      phenoData="phenoData",
                                      description="characterORMIAME",
                                      annotation="character",
