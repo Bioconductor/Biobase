@@ -74,3 +74,27 @@ addPDF2Vig <- function(pkgName){
                     as.character(i), "\")", sep = ""))
     }
 }
+
+addVigs2WinMenu <- function(pkgName) {
+    vigFile <- system.file("Meta", "vignette.rds", package=pkgName)
+    if (file.exists(vigFile)) {
+        vigMtrx <- .readRDS(vigFile)
+        vigs <- file.path(.find.package(pkgName),
+                                  pkgName, "doc", vigMtrx[,"PDF"])
+        names(vigs) <- vigMtrx[,"Title"]
+    }
+
+    if (! "Vignettes" %in% winMenuNames())
+        winMenuAdd("Vignettes")
+
+    pkgMenu <- paste("Vignettes", pkgName, sep="/")
+    winMenuAdd(pkgMenu)
+
+    for (i in vigs) {
+        item <- sub(".pdf", "", basename(i))
+        winMenuAddItem(pkgMenu, item, paste("shell.exec(\"",
+                                            as.character(i),
+                                            "\")", sep = ""))
+    }
+}
+
