@@ -115,7 +115,7 @@ require(methods)
 #
 # setMethod("[", "exprSet", function(x, i, j, ..., drop=TRUE)
 #     {
-#     if (!missing(j)) 
+#     if (!missing(j))
 #          {
 #          newc <- list()
 #          cn <- names(x@covariates)
@@ -125,7 +125,7 @@ require(methods)
 #     else newc <- x@covariates
 #     if (missing(j)) j <- 1:nrow(x@phenodata)
 #     new("exprSet", exprs=x@exprs[i,j], phenodata = x@phenodata[j,,drop=FALSE],
-#     description=x@description, 
+#     description=x@description,
 #      covariates=x@covariates)}, where=where)
 #
 # setMethod("print", "exprSet", function(x, ...) {
@@ -193,13 +193,15 @@ require(methods)
 # and doc needs to be written
 ## these are new functions completely
 #
-setGeneric("iter", function(object,covlab,f)standardGeneric("iter"), where=where)
+setGeneric("iter", function(object,covlab,f)standardGeneric("iter"),
+     where=where)
 #
-setMethod("iter", signature(object="exprSet", covlab="missing", f= "function"), 
+setMethod("iter", signature(object="exprSet", covlab="missing",
+                            f="function"),
  function(object,covlab,f)
    apply(exprs(object),1,f), where=where)
 #
-setMethod("iter", signature(object="exprSet", covlab="missing", f="list"), 
+setMethod("iter", signature(object="exprSet", covlab="missing", f="list"),
 function(object,covlab,f)
  {
  flist <- f
@@ -242,9 +244,9 @@ setMethod("iter", signature(object="exprSet", covlab="character", f="function"),
 # object[,sel]
 # })
 #
-#setGeneric("rankDistn", 
+#setGeneric("rankDistn",
 #   function(object,f,B) standardGeneric("rankDistn"))
-#setMethod("rankDistn", 
+#setMethod("rankDistn",
 # c("exprSet","function", "numeric") ,function(object,f,B) {
 # ng <- nrow(object@exprs)
 # out <- matrix(NA,nr=ng,nc=B)
@@ -252,7 +254,12 @@ setMethod("iter", signature(object="exprSet", covlab="character", f="function"),
 #  out[,i] <- rank(tissueResamp(object),f)
 # out
 # })
+
+
 #
 
 
 }
+
+with.exprSet <- function(data, expr, ...) eval(substitute(expr),
+  data@pData)
