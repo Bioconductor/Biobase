@@ -61,8 +61,8 @@
            symbolValues   = sym,
            force = TRUE, quiet = FALSE)
 
-  muses = c("Polyhymnia", "Terpsichore", "Thalia", "Urania",
-            "Calliope", "Clio", "Erato", "Euterpe", "Melpomene")
+  muses = c("Calliope", "Clio", "Erato", "Euterpe", "Melpomene",
+            "Polyhymnia", "Terpsichore", "Thalia", "Urania")
   save(muses, file = file.path(res$pkgdir, "data", "muses.rda"))
 
   res$pkgdir
