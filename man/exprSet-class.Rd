@@ -8,6 +8,8 @@
 \alias{description<-}
 \alias{exprs}
 \alias{se.exprs}
+\alias{notes}
+\alias{notes<-}
 \alias{geneNames}
 \alias{geneNames<-}
 \alias{pData}
@@ -65,9 +67,13 @@
     \item{se.exprs}{(exprSet): An accessor function for \code{se.exprs}. }
     
     
-    \item{description}{(exprSet): Obtain the description (MIAME class) of  \code{exprs}. }
+    \item{description}{(exprSet): Obtain the description (MIAME class) of  \code{exprSet}. }
     \item{description<-}{(exprSet): Set the description (MIAME class) of
-      \code{exprs}. }
+      \code{exprSet}. }
+
+    \item{notes}{(exprSet): Obtain the notes of  \code{exprSet}. }
+    \item{notes<-}{(exprSet): Set the notes of
+      \code{exprSet}. }
 
     \item{geneNames}{(exprSet): Obtain the gene names (row names) of
       \code{exprs}. }

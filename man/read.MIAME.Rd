@@ -37,6 +37,7 @@ read.MIAME(filename = NULL, widget = getOption("BioC")$Base$use.widgets, ...)
 
 \examples{
 miame <- read.MIAME(widget=FALSE) ##creates an empty instance
+show(miame)
 }
 \keyword{file}
 
