@@ -119,7 +119,57 @@ varMetadata container.
 An informally reserved attribute name is \verb+varName+.
 This is used to name the column that holds the names of
 variables in the phenoData pData component.  The attribute name
-verb+
+verb+units+ is recognized by a helper method ``getUnits''.
+
+Any legacy \Rclass{exprSet} instance can be converted
+to one with a varMetadata container using the
+convertVarLabels helper method.  This places the
+phenoData varLabels content in a data.frame column
+named \verb+varLabel+.  Ultimately the varLabels
+component of phenoData may be eliminated in favor
+of varMetadata conventions.
+
+\section{Details on the eMetadata container
+for \Rclass{eSet} objects}
+
+The \Rclass{exprSet} class has proven useful for
+affymetrix data representation.  A new class,
+\Rclass{eSet}, allows more complex data representation.
+<<lkEset>>=
+getSlots("eSet")
+getSlots("exprList")
+getClass("exprListNM")
+@
+The \Rclass{exprListNM} class has some legacy (under
+the name ``exprList'') in
+Biobase, and is extended by the metadata-equipped
+exprList class.  The \verb+eMetadata+ slot is for a container
+for metadata about the various components of the exprList.
+The current container class is \Rclass{data.frame}.
+For a standard exprSet like \Robject{golubTrain},
+this data.frame would have one row.  An informally
+privileged attribute is ``name''. 
+The \Rmethod{getExpData} method looks for an exprList
+component named \verb+exprs+, so the ``name'' attribute
+should have value \verb+exprs+ for this component.
+
+The following shows the basic manipulations currently
+available; see the eSet class man page for additional
+methods.
+<<lkEs>>=
+data(eset)
+md <- data.frame(name="exprs", etype="random numbers")
+newe <- new("exprList", .Data=list(exprs=exprs(eset)),
+        eMetadata=md)
+es1 <- new("eSet", eList=newe, phenoData=phenoData(eset))
+es1
+eMetadata(es1)
+eList(es1)
+@
+
+Additional conventions should be established for
+multicolor arrays and other platforms.
+
 
 @
 \end{document}
