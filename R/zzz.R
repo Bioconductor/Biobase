@@ -63,4 +63,6 @@ dumpPackTxt <- function (package)
   cat("\t to see the available vignettes\n")
   cat("\t To read a vignette see the openVignette help page for details\n")
     cacheMetaData(as.environment(where))
+
+    .initChunkClasses(where)
 }
