@@ -2,6 +2,7 @@ read.phenoData <- function(filename = NULL, sampleNames = NULL,
                            widget = getOption("BioC")$Base$use.widgets,...){
 
     if(widget){
+        require("tkWidgets") || stop("Package tkWidgets unavailable")
         if(!is.null(filename)){
             phenoD <- importPhenoData(fileName = filename,
                                sampleNames = sampleNames, from = "file")
