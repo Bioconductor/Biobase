@@ -8,10 +8,10 @@ getPkgVigs <- function(package=NULL) {
         rows <- match(package, pkgs)
         if( all(is.na(rows)) )
             stop("packages: ", paste(package,collapse=", "),
-                 " are not installed")
+                 " are not loaded")
         if( any(is.na(rows)) )
             warning("packages ", paste(package[is.na(rows)], collapse=", "),
-                    " are not installed")
+                    " are not loaded")
         pkgs <- pkgs[rows[!is.na(rows)]]
     }
     vigDirs <- file.path(.find.package(pkgs), "doc/00Index.dcf")
