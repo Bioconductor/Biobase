@@ -250,6 +250,17 @@
                    },
                    where = where)
 
+  if( !isGeneric("se.exprs<-") )
+    setGeneric("se.exprs<-", function(object, value)
+               standardGeneric("se.exprs<-"), where=where)
+  
+  setReplaceMethod("se.exprs", "exprSet",
+                   function(object, value) {
+                     object@se.exprs <- value
+                     return(object)
+                   },
+                   where = where)
+  
   ##RI: Added this so i can access notes
   ##method for notes (accessor and replacement)
   if( !isGeneric("notes") )

@@ -9,6 +9,7 @@
 \alias{exprs}
 \alias{exprs<-}
 \alias{se.exprs}
+\alias{se.exprs<-}
 \alias{notes}
 \alias{notes<-}
 \alias{geneNames}
