@@ -104,9 +104,9 @@ dumpPackTxt <- function (package)
     }
 
     ##set up menus -- windows only for now
-    if( .Platform$OS.type == "windows" ) {
-        addVig2Menu("vExplorer", itemAction = "vExplorer()")
-        addVig2Menu("Biobase")
-    }
+#    if( .Platform$OS.type == "windows" ) {
+#        addVig2Menu("vExplorer", itemAction = "vExplorer()")
+#        addVig2Menu("Biobase")
+#    }
 
 }
