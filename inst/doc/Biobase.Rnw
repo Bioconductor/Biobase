@@ -284,28 +284,28 @@ test statistic and {\em p--value}.
   }
 @
 
-I also needed to add the next two helper functions. These should get
-fixed and placed into the library.
+%I also needed to add the next two helper functions. These should get
+%fixed and placed into the library.
 
 <<HTML>>=
 
- HTtable <- function(content, caption ) {
-    head <- paste("<TABLE BORDER=4>", "<CAPTION>", caption, "</CAPTION>")
-    tail <- paste("</TABLE>")
-    c(head, content, tail)
- }
-
- HTpage <- function(filename, content, title="BioConductor Gene Listing",
-   center=TRUE)  {
-  outfile <- file(filename, "w")
-  cat("<html>", "<head>", "<TITLE>BioConductor Gene Listing</TITLE>",
-  "</head>", "<body bgcolor=#708090 >",
-  "<H1 ALIGN=CENTER > BioConductor Gene Listing </H1>",
-            file = outfile, sep = "\n")
-  cat(content, file=outfile, sep="\n")
-   cat("</body>", "</html>", sep = "\n", file = outfile)
-    close(outfile)
-  }
+# HTtable <- function(content, caption ) {
+#    head <- paste("<TABLE BORDER=4>", "<CAPTION>", caption, "</CAPTION>")
+#    tail <- paste("</TABLE>")
+#    c(head, content, tail)
+# }
+#
+# HTpage <- function(filename, content, title="BioConductor Gene Listing",
+#   center=TRUE)  {
+#  outfile <- file(filename, "w")
+#  cat("<html>", "<head>", "<TITLE>BioConductor Gene Listing</TITLE>",
+#  "</head>", "<body bgcolor=#708090 >",
+#  "<H1 ALIGN=CENTER > BioConductor Gene Listing </H1>",
+#            file = outfile, sep = "\n")
+#  cat(content, file=outfile, sep="\n")
+#   cat("</body>", "</html>", sep = "\n", file = outfile)
+#    close(outfile)
+#  }
 
 @
 
@@ -326,23 +326,37 @@ fixed and placed into the library.
  llnames <- as.character(llnames)
  names(llnames) <- dimnames(outvals)[[1]]
 
- ## now we need to set up the functions to create the HTML page
-
- LLAnch <- function(x) simpleAnchor(x, hMethod=
- "http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?l=")
-
- anch.llnames<- LLAnch(llnames)
-
- pvals <- HTwrap(round(outvals[,2],3))
- tstats <- HTwrap(round(outvals[,1],3))
- anch.ll <- HTwrap(anch.llnames)
- allvals <- paste(anch.ll, pvals, tstats, sep="\n")
- inlist <- HTwrap(allvals, "TR")
- header<- HTwrap(paste(HTwrap("Locus Link"), HTwrap("p-values"),
- HTwrap("t-stats")), "TR")
- tbl <- HTtable(c(header, inlist), "Genes")
- HTpage("test.html", tbl, "Hello")
-
+print(llnames)
+@
+Now this data can be used to generate a web page.  The {\tt ll.htmlpage}
+function of the {\tt annotate} package will accept the
+{\tt llnames} vector
+and a target filename.
+<<>>=
+ll.htmlpage(llnames,file="demoLL.html")
+@
+At this point you can point a browser to {\tt demoLL.html}
+to have convenient access to the LL ids and the NCBI
+metadata on them.
+Don't forget to remove the {\tt demoLL.html} file if
+you do not want to keep it.
+% ## now we need to set up the functions to create the HTML page
+%
+%# LLAnch <- function(x) simpleAnchor(x, hMethod=
+%# "http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?l=")
+%#
+%# anch.llnames<- LLAnch(llnames)
+%#
+%# pvals <- HTwrap(round(outvals[,2],3))
+%# tstats <- HTwrap(round(outvals[,1],3))
+%# anch.ll <- HTwrap(anch.llnames)
+%# allvals <- paste(anch.ll, pvals, tstats, sep="\n")
+%# inlist <- HTwrap(allvals, "TR")
+%# header<- HTwrap(paste(HTwrap("Locus Link"), HTwrap("p-values"),
+%# HTwrap("t-stats")), "TR")
+%# tbl <- HTtable(c(header, inlist), "Genes")
+%# HTpage("test.html", tbl, "Hello")
+%
 @
 
 \section*{Resampling exprSet's}
