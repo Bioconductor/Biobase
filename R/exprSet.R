@@ -14,6 +14,7 @@ require(methods)
 .initExprset <- function(where) {
  setClass("exprSet", representation(exprs="matrix",
                                    phenodata="data.frame",
+                                    covariates="list",
                                     description="character") , where=where)
 
 #define a generic for obtaining the data
@@ -40,7 +41,11 @@ require(methods)
  setMethod("geneNames", "exprSet", function(object)
      row.names(object@exprs), where=where )
 
-
+ if( !isGeneric("covariates") )
+     setGeneric("covariates", function(object)
+                standardGeneric("covariates"), where=where)
+ setMethod("covariates", "exprSet", function(object)
+           object@covariates, where=where)
 
  setMethod("[", "exprSet", function(x, i, j, ..., drop=TRUE)
      new("exprSet", exprs=x@exprs[i,j], phenodata = x@phenodata[j,,drop=FALSE],
@@ -48,11 +53,18 @@ require(methods)
 
  setMethod("print", "exprSet", function(x, ...) {
      ngenes <- nrow(x@exprs)
-     nsamples <- ncol(x@exprs)
+     dmp <- dim(x@phenodata)
+     cat(dmp,"\n")
+     nsamples <- dmp[1]
+     ncovs <- dmp[2]
      cat("Expression Set (exprSet) with \n\t", ngenes, " genes\n\t", sep="")
-     cat(nsamples, "samples\n")
+     cat(nsamples, "samples\n\t")
+     cat(ncovs, "covariates\n")
      cat("\tCovariates\n")
-     cat("\t\t", names(x@phenodata), "\n", sep="")
+     nm <- names(x@covariates)
+     covs <- x@covariates
+     for(i in 1:length(covs) )
+         cat("\t\t", nm[[i]], ": ", covs[[i]], "\n", sep="")
  }, where=where)
 
 # if( !isGeneric("plot") )
