@@ -33,14 +33,17 @@ getPkgVigs <- function(package=NULL) {
 
 openVignette <- function(package=NULL) {
     vigFiles <- getPkgVigs(package)
-    names <- names(vigFiles)
-    ##indent a little
-    names <- paste("",names)
-    ##FIXME: why set names to NULL?
-    names(vigFiles) <- NULL
-    index <- menu(names, title="Please select (by number) a vignette")
-
-    if (index > 0) {
+    if(is.null(vigFiles)) {
+      warning(package, " contains no vignettes")
+    } else {
+      names <- names(vigFiles)
+      ##indent a little
+      names <- paste("",names)
+      ##FIXME: why set names to NULL?
+      names(vigFiles) <- NULL
+      index <- menu(names, title="Please select (by number) a vignette")
+      
+      if (index > 0) {
         ## Need to switch on the file extension
         ext <- strsplit(vigFiles[index],"\\.")[[1]]
         switch(ext[length(ext)],
@@ -48,5 +51,6 @@ openVignette <- function(package=NULL) {
                "html"= browseURL(paste("file://",vigFiles[index],sep="")),
                stop("Don't know how to handle this vignette")
                )
+      }
     }
 }
