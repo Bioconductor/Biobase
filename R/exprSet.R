@@ -13,7 +13,9 @@ require(methods)
 
 .initExprset <- function(where) {
 
-  setClass("phenoData", representation(pData="data.frame"),
+##data class for accompanying data
+  setClass("phenoData", representation(pData="data.frame",
+                                       varLabels="list"),
   where=where)
 
   if( !isGeneric("pData") )
@@ -22,10 +24,58 @@ require(methods)
  setMethod("pData", "phenoData",
            function(object) object@pData, where=where)
 
+  if( !isGeneric("varLabels") )
+      setGeneric("varLabels", function(object)
+      standardGeneric("varLabels"), where=where)
+
+  setMethod("varLabels", "phenoData",
+            function(object) object@varLabels, where=where)
+
+  setMethod("[", "phenoData", function(x, i, j, ..., drop=FALSE) {
+      if( missing(drop) ) drop<-FALSE
+      vL <- varLabels(x)
+      if( missing(j) ) {
+          print(i)
+          if( missing(i) )
+              pD <- x@pData
+          else
+              pD <- x@pData[i, ]
+     }
+      else {
+          vL <- vL[j]
+          if(missing(i) )
+              pD <- x@pData[,j,drop=drop]
+         else
+             pD <- x@pData[i, j]
+      }
+      new("phenoData", pData=pD, varLabels=vL)}, where=where)
+
+  setMethod("show", "phenoData",
+            function(object, printTo=stdout(), oldMethods = TRUE) {
+                dm <- dim(object@pData)
+                cat("\t phenoData object with ", dm[2], " variables",
+            sep="")
+                cat(" and ", dm[1], " cases\n", sep="")
+                vL <- object@varLabels
+                cat("\t varLabels\n")
+                nm <- names(vL)
+                  for(i in 1:length(vL) )
+                    cat("\t\t", nm[[i]], ": ", vL[[i]], "\n", sep="")
+            }, where=where)
+
+  validphenoData <- function(object) {
+      dm <- dim(object@pData)
+      if(dm[2] != length(object@pheonLabels) )
+          return(FALSE)
+      return(TRUE)
+  }
+  setValidity("phenoData", validphenoData)
+
+##data class for expression arrays
+
   setClass("exprSet", representation(exprs="matrix",
                                    se.exprs = "matrix",
                                    phenoData="phenoData",
-                                   covariates="list",
                                    description="character",
                                    notes="character") , where=where)
 
@@ -53,42 +103,34 @@ require(methods)
  setMethod("geneNames", "exprSet", function(object)
      row.names(object@exprs), where=where )
 
- if( !isGeneric("covariates") )
-     setGeneric("covariates", function(object)
-                standardGeneric("covariates"), where=where)
- setMethod("covariates", "exprSet", function(object)
-           object@covariates, where=where)
-
  setMethod("[", "exprSet", function(x, i, j, ..., drop=TRUE) {
-     pdata <- x@phenoData
+     browser()
+
+     pdata <- x@phenoData[j,, ..., drop=FALSE]
      if(missing(j) ) {
-         nexprs <- x@exprs[i, ]
+         if( missing(i) )
+             nexprs <- x@exprs
+         else
+             nexprs <- x@exprs[i, ]
      }
      else {
-         npheno <- pData(x@phenoData)[j,,drop=FALSE]
-         pdata <- new("phenoData", pData=npheno)
-         if(missing(i) )
+         if( missing(i) )
              nexprs <- x@exprs[,j]
          else
              nexprs <- x@exprs[i, j]
      }
      new("exprSet", exprs=nexprs, phenoData = pdata,
-     description=x@description, covariates=x@covariates,
+     description=x@description,
      notes=x@notes)}, where=where)
 
- setMethod("print", "exprSet", function(x, ...) {
-     ngenes <- nrow(x@exprs)
-     dmp <- dim(pData(x@phenoData))
-     nsamples <- dmp[1]
-     ncovs <- dmp[2]
+ setMethod("show", "exprSet", function(object, printTo = stdout(),
+     oldMethods = TRUE ) {
+     dm <-dim(object@exprs)
+     ngenes <- dm[1]
+     nsamples <- dm[2]
      cat("Expression Set (exprSet) with \n\t", ngenes, " genes\n\t", sep="")
      cat(nsamples, "samples\n\t")
-     cat(ncovs, "covariates\n")
-     cat("\tCovariates\n")
-     nm <- names(x@covariates)
-     covs <- x@covariates
-     for(i in 1:length(covs) )
-         cat("\t\t", nm[[i]], ": ", covs[[i]], "\n", sep="")
+     show(object@phenoData)
  }, where=where)
 
 # if( !isGeneric("plot") )
