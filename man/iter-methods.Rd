@@ -3,6 +3,9 @@
 \title{ Methods for the generic iter.}
 \alias{iter-methods}
 \alias{iter}
+\alias{iter,exprSet,missing,function-method}
+\alias{iter,exprSet,missing,list-method}
+\alias{iter,exprSet,character,function-method}
 \description{
   This is a set of methods to iterate over different types of
   objects. The behaviour of the methods is similar to that of the

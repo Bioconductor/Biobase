@@ -2,8 +2,12 @@
 \docType{class}
 \alias{aggregator-class}
 \alias{aggenv}
+\alias{aggenv,aggregator-method}
+\alias{aggfun,aggregator-method}
 \alias{aggfun}
 \alias{initfun}
+\alias{initfun,aggregator-method}
+
 \title{Class aggregator, a class of aggregators }
 \description{ A class of objects designed to help aggregate
    calculations over an iterative computation. The aggregator consists

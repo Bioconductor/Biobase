@@ -2,8 +2,15 @@
 \docType{class}
 \alias{phenoData-class}
 \alias{$.phenoData}
-\alias{phenoData<-}
+\alias{phenoData<-,pheno}
 \alias{[,phenoData-method}
+\alias{pData,phenoData-method}
+\alias{pData<-,phenoData-method}
+\alias{show,phenoData-method}
+\alias{split,phenoData,vector-method}
+\alias{varLabels,phenoData-method}
+\alias{[[,phenoData-method}
+\alias{[[<-,phenoData-method}
 \title{Class phenoData, a class for patient or experiment level data. }
 \description{ The class consists of a \code{data.frame} and some
   accompanying methods suited to handle patient level data for microarrays.}

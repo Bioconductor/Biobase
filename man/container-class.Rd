@@ -2,8 +2,14 @@
 \docType{class}
 \alias{container-class}
 \alias{[,container-method}
+\alias{length,container-method}
+\alias{content,container-method}
 \alias{content}
 \alias{locked}
+\alias{locked,container-method}
+\alias{[[<-,container-method}
+\alias{[[,container-method}
+\alias{show,container-method}
 
  \title{container: a class that specializes the list construct of R
    to provide content and access control }
@@ -20,10 +26,11 @@
 \section{Methods}{
  \item{\code{content}}{returns \code{content} slot of argument}
  \item{\code{locked}}{returns \code{locked} slot of argument}
- \item{\code{Print}}{prints container}
- \item{\code{[[}(replace)}{container element op }
- \item{\code{[[}(access)}{ container element op}
- \item{\code{[}(access)}{ container element op}
+ \item{\code{show}}{prints container}
+ \item{\code{[[}(replace)}{replace elements in the container }
+ \item{\code{[[}(access)}{access elements in a container}
+ \item{\code{[}(access)}{make a subset of a container (which will itself
+ be a container)}
  }
 \examples{
   x1 <- new("container", x=vector("list", length=3), content="lm")

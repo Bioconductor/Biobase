@@ -6,12 +6,18 @@
 \alias{abstract,MIAME-method}
 \alias{abstract,exprSet-method}
 \alias{expinfo}
+\alias{expinfo,MIAME-method}
 \alias{hybridizations}
+\alias{hybridizations,MIAME-method}
 \alias{normControls}
+\alias{normControls,MIAME-method}
 \alias{preproc}
+\alias{preproc,MIAME-method}
 \alias{samples}
+\alias{samples,MIAME-method}
 \alias{otherInfo}
-
+\alias{otherInfo,MIAME-method}
+\alias{show,MIAME-method}
 
 \title{Class MIAME, a class for storing microarray experiment information}
 \description{We try to cover the MIAME entries that are not covered by
