@@ -1,52 +1,70 @@
 \name{createPackage}
 \alias{createPackage}
-\title{Create the raw structure of a package from a collection of
-  template files and a symbol-value table}
+\title{Create a package directory from a template, with symbol-value substitution}
 \description{
-  Create the raw structure of a package from a collection of
-  template files (.R, .c, .Rd, DESCRIPTION) and a symbol-value table}
+  Create a package directory from a template, with symbol-value substitution
+}
 \usage{createPackage(pkgname, destinationDir, originDir, symbolValues,
                      force=FALSE, quiet=FALSE)}
 \arguments{
-  \item{pkgname}{The name of the package to be written.}
-  \item{destinationDir}{The path to a directory where the package is to be written.}
-  \item{originDir}{A directory that contains template files. These are files
-    with extensions \code{.R}, \code{.Rd}, \code{.c} will be copied into the
-    package subdirectories \code{R}, \code{man}, \code{src}
-    respectively, and a file named \code{DESCRIPTION}.
-    In all files, symbols are replaced by their respectives values, see
-    the parameter \code{symbolValues} and the function \code{\link{copySubstitute}}.}
-  \item{symbolValues}{A named list of character strings, the symbol-to-value
-    mapping. See \code{\link{copySubstitute}} for details.}
-  \item{force}{If the destinationDir already contains a file or
-    directory with the name pkgname directA named list of character
-    strings, the symbol-to-value mapping. See
-    \code{\link{copySubstitute}} for details.}
-  \item{quiet}{If TRUE, do not print information messages on the console.}
+  \item{pkgname}{Character. The name of the package to be written.}
+  \item{destinationDir}{Character. The path to a directory where the
+    package is to be written.}
+  \item{originDir}{Character. The path to a directory that contains
+    the template package. Usually, this will contain a file named
+    \code{DESCRIPTION}, and subdirectories \code{R}, \code{man},
+    \code{data}. In all files and filenames, symbols will be replaced
+    by their respectives values, see the parameter \code{symbolValues}.}
+  \item{symbolValues}{Named list of character strings. The symbol-to-value
+    mapping. See 
+    \code{\link[Biobase:copySubstitute]{copySubstitute}} for details.}
+  \item{force}{Logical. If \code{TRUE}, and \code{destinationDir}
+    already contains a file or directory with the name \code{pkgname},
+    try to remove it.}
+  \item{quiet}{Logical. If \code{TRUE}, do not print information
+    messages.}
 }
 
-\details{No syntactic or other checking of the package is
-  performed. For this, use R CMD check.
+\details{The intended use of this function is for the automated mass
+  production of data packages, such as the microarray annotation,
+  CDF, and probe sequence packages. An example is in the function 
+  \code{\link[matchprobes:makeProbePackage]{makeProbePackage}}.
+  
+  No syntactic or other checking of the package is performed. For this,
+  use R CMD check.
 
-  The symbols \code{@PKGNAME@} and \code{@DATE@} are automatically defined with the
-  values of \code{pkgname} and \code{\date()}, respectively.
+  The symbols \code{@PKGNAME@} and \code{@DATE@} are automatically
+  defined with the values of \code{pkgname} and \code{\date()}, respectively.
 }
+
 \value{
   The function returns a \code{list} with one element
-  \code{pkgdir}: the path to the package
+  \code{pkgdir}: the path to the package.
 }
 
+\seealso{\code{\link[Biobase:copySubstitute]{copySubstitute}},
+  \code{\link[matchprobes:makeProbePackage]{makeProbePackage}},
+  the reference manual \emph{Writing R extensions}.}
+
 \author{Wolfgang Huber \url{http://www.dkfz.de/mga/whuber}}
+
 \keyword{programming}
 
 \examples{
-  sym  = list(AUTHOR="W. Shakespeare", COMPOSER="G. Verdi", VERSION="1.0")
-  dest = tempdir()
-  res  = createPackage("ExampleCreatePackage",
-          destinationDir = dest,
-          originDir      = file.path(.path.package("Biobase"), "Code"),
-          symbolValues   = sym,
-          force          = TRUE)
-  dir(res$pkgdir)
+  sym  = list(AUTHOR = "Hesiod", VERSION = "1.0",
+         TITLE = "the nine muses",
+         FORMAT = "Character vector containg the names of the 9 muses.")
+
+  res  = createPackage("muses",
+           destinationDir = tempdir(),
+           originDir      = file.path(.path.package("Biobase"), "Code"),
+           symbolValues   = sym,
+           force = TRUE, quiet = FALSE)
+
+  muses = c("Polyhymnia", "Terpsichore", "Thalia", "Urania",
+            "Calliope", "Clio", "Erato", "Euterpe", "Melpomene")
+  save(muses, file = file.path(res$pkgdir, "data", "muses.rda"))
+
+  res$pkgdir
 }
 

@@ -1,7 +1,7 @@
 Package: @PKGNAME@
-Title: When shall we three meet again, in thunder, lightning, or in rain?
+Title: Greek mythology package
 Version: @VERSION@
 Author: @AUTHOR@
-Description: This package has been composed by @COMPOSER@ on @TODAY@.
-Maintainer: Some One <some@where.co.uk>
+Description: Package automatically created on @TODAY@.
+Maintainer: Some One <@AUTHOR@@mtolympus.gr>
 License:  GPL 2

@@ -1,6 +1,7 @@
 \name{copySubstitute}
 \alias{copySubstitute}
-\title{Copy between connections or from an to files with configure-like name-value substitution}
+\title{Copy between connections or from an to files with configure-like
+  name-value substitution}
 \description{
   Copy files, directory trees or between connections and
   replace all occurences of a symbol by the corresponding value. 
@@ -8,9 +9,9 @@
 \usage{copySubstitute(src, dest, symbolValues, symbolDelimiter="@",
 allowUnresolvedSymbols=FALSE, recursive = FALSE, removeExtension = "\\.in$")}
 \arguments{
-  \item{src}{Source: either a character vector with filenames and/or
+  \item{src}{Source, either a character vector with filenames and/or
     directory names, or a connection object.}
-  \item{dest}{Destination: either a character vector of length 1
+  \item{dest}{Destination, either a character vector of length 1
     with the name of an existing, writeable directory, or a connection
     object. The class of the \code{dest} argument must match that of the
     \code{src} argument.}
@@ -18,11 +19,11 @@ allowUnresolvedSymbols=FALSE, recursive = FALSE, removeExtension = "\\.in$")}
   \item{symbolDelimiter}{A character string of length one with a single
     character in it.}
   \item{allowUnresolvedSymbols}{Logical. If \code{FALSE}, then the function
-    will execute \code{\link[base:stop]{stop}} if it comes across symbols that are
-    not defined in \code{symbolValues}.}
+    will execute \code{\link[base:stop]{stop}} if it comes across
+    symbols that are not defined in \code{symbolValues}.}
   \item{recursive}{Logical. If \code{TRUE}, the function
     works recursively down a directory tree (see details).}
-  \item{removeExtension}{Matches to this regular expression are removed
+  \item{removeExtension}{Character. Matches to this regular expression are removed
     from filenames and directory names.}
 }
 
