@@ -20,10 +20,13 @@
     furst line are indented.}
 }
 \details{
-
+ No details.
 }
+\author{Wolfgang Huber \url{http://www.ebi.ac.uk/huber}}
+\seealso{\code{\link{strwrap}}, \code{\link{substring}}} 
+
 \examples{
 longString = paste(rep(LETTERS, 10), collapse="", sep="")
-strbreak(longString)
+cat(strbreak(longString))
 }
 \keyword{character}
