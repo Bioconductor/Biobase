@@ -11,6 +11,12 @@
 \usepackage{times}
 \usepackage{hyperref}
 
+\newcommand{\Rfunction}[1]{{\texttt{#1}}}
+\newcommand{\Robject}[1]{{\texttt{#1}}}
+\newcommand{\Rpackage}[1]{{\textit{#1}}}
+\newcommand{\Rmethod}[1]{{\texttt{#1}}}
+\newcommand{\Rfunarg}[1]{{\texttt{#1}}}
+\newcommand{\Rclass}[1]{{\textit{#1}}}
 
 \textwidth=6.2in
 \textheight=8.5in
@@ -25,7 +31,7 @@
 \bibliographystyle{plainnat}
 
 \begin{document}
-<<paranoia>>=
+<<paranoia, echo=FALSE>>=
 options(warn=2)
 @
 
@@ -44,23 +50,21 @@ cases we would like to document the overall purpose of an R package
 rather than the individual functions. In this document we provide some
 advice on how to construct a document to describe how to perform a task.
 
-In most cases HowTo's will be written using \verb+Sweave+ a tool
-designed and implemented by F. Leisch. \verb+Sweave+ has been
-available in R since R version 1.5.0.
-
+In most cases HowTo's will be written using \Rfunction{Sweave} in the
+\Rpackage{tools} package.
 In this document we give some general advice on how to write a HowTo.
-Of courese there is no {\em right} way to do this but we feel that we
+Of courese there is no \textit{right} way to do this but we feel that we
 can provide a few design principles that will help authors write
 better HowTo's.
 
 
-These design principles are listed below
+These design principles are listed below:
 \begin{itemize}
 \item It should be short (2 pages at most) and explicit.
 \item It should be about a single topic.
 \item It should contain runnable code and rely on data that are
   available in R or the libraries needed to carry out the task being
-  documented. 
+  documented.
 \item HowTo's should not be about single functions. The function
   documentation is the right place to document that. HowTo's should
   document a process or task and will typically involve several functions.
@@ -71,10 +75,12 @@ These design principles are listed below
   not know how to do the specific task at hand.
 
 \item Make use of the indexing system. The title of the document should
-be included in the \verb+% \VignetteIndexEntry+. It should
+be included in the \verb+% \VignetteIndexEntry+.
+It should
 contain the word \verb+HowTo+ to easily allow for programmatic
 manipulation and sorting of the HowTo's.
-
 \end{itemize}
+
+
 
 \end{document}
