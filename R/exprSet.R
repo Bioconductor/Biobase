@@ -52,6 +52,31 @@
   setMethod("varLabels", "phenoData",
             function(object) object@varLabels)
 
+   if( !isGeneric("varLabels<-") )
+    setGeneric("varLabels<-", function(object, value)
+               standardGeneric("varLabels<-"), where=where)
+
+  setReplaceMethod("varLabels", "phenoData",
+                   function(object, value) {
+                       cvL <- varLabels(object)
+                       if(length(value) != length(cvL) )
+                           stop("wrong length for varLabels")
+                       if(any(is.na(match(names(cvL), names(value)))) )
+                           stop("names must match")
+                     object@varLabels <- value
+                     return(object)
+                   },
+                   where = where)
+
+  setReplaceMethod("varLabels", "exprSet",
+                   function(object, value) {
+                       pD <- phenoData(object)
+                       varLabels(pD) <- value
+                       phenoData(object) <- pD
+                       return(object)
+                   },
+                   where = where)
+
   setMethod("[", "phenoData", function(x, i, j, ..., drop=FALSE) {
       if( missing(drop) ) drop<-FALSE
       vL <- varLabels(x)
@@ -112,7 +137,8 @@
   ##show method
   setMethod("show", "MIAME",
             function(object) {
-              tmp <- c("samples","hybridizations","normalization controls","preprocessing")
+              tmp <- c("samples","hybridizations","normalization controls",
+                       "preprocessing")
               Index <-c(length(object@samples)>0,
                         length(object@hybridizations)>0,
                         length(object@normControls)>0,
@@ -149,21 +175,36 @@
     setGeneric("hybridizations", function(object)
                standardGeneric("hybridizations"))
 
+<<<<<<< exprSet.R
+  setMethod("hybridizations","MIAME",function(object) object@hybridizations,
+            where=where) 
+=======
   setMethod("hybridizations","MIAME",function(object) object@hybridizations)
+>>>>>>> 1.58
 
    ##normControls method
   if( !isGeneric("normControls") )
     setGeneric("normControls", function(object)
                standardGeneric("normControls"))
 
+<<<<<<< exprSet.R
+  setMethod("normControls","MIAME",function(object) object@normControls,
+            where=where)
+=======
   setMethod("normControls","MIAME",function(object) object@normControls)
+>>>>>>> 1.58
 
    ##preproc method
   if( !isGeneric("preproc") )
     setGeneric("preproc", function(object)
                standardGeneric("preproc"))
 
+<<<<<<< exprSet.R
+  setMethod("preproc","MIAME",function(object) object@preprocessing,
+            where=where)
+=======
   setMethod("preproc","MIAME",function(object) object@preprocessing)
+>>>>>>> 1.58
 
   ##otherInfo method
   if( !isGeneric("otherInfo") )
@@ -327,6 +368,8 @@
     phenoData(x) <- pD
     x})
 
+  setMethod("[[", "exprSet", function(x, i, j, ...) 
+      phenoData(x)[[i]] )
 
 ###RI: this is a simple a pData replace for phenoData. i need it for affy.
   setReplaceMethod("pData", "phenoData", function(object, value){
