@@ -161,25 +161,7 @@ dumpPackTxt <- function (package)
     cat("\t the openVignette help page.\n")
 
     ##set up repository management
-    if( require(reposTools, quietly=TRUE) ) {
-        if (!("CRAN" %in% names(getOption("repositories2")))) {
-            bioCOpt <- "http://www.bioconductor.org/CRANrepository"
-            names(bioCOpt) <- "CRAN"
-            options("repositories2"=c(getOption("repositories2"),bioCOpt))
-        }
-
-        if (!("BIOCRelease1.1" %in% names(getOption("repositories2")))) {
-            bioROpt <- "http://www.bioconductor.org/repository/release1.1/package"
-            names(bioROpt) <- "BIOCRel1.1"
-            options("repositories2"=c(getOption("repositories2"),bioROpt))
-        }
-
-        if (!("BIOCDevel" %in% names(getOption("repositories")))) {
-            bioDOpt <- "http://www.bioconductor.org/repository/devel/package"
-            names(bioDOpt) <- "BIOCDevel"
-            options("repositories2"=c(getOption("repositories2"),bioDOpt))
-        }
-    }
+    require(reposTools, quietly=TRUE) || stop ("Package reposTools required")
 
     ##set up menus -- windows only for now
     if( .Platform$OS.type == "windows" ) {
