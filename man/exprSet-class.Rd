@@ -3,6 +3,7 @@
 \alias{exprSet-class}
 \alias{$.exprSet}
 \alias{exprs}
+\alias{se.exprs}
 \alias{geneNames}
 \alias{geneNames<-}
 \alias{pData}
@@ -54,6 +55,8 @@
       and \code{phenoData} are subset properly. }
     
     \item{exprs}{(exprSet): An accessor function for \code{exprs}. }
+    
+    \item{se.exprs}{(exprSet): An accessor function for \code{se.exprs}. }
     
     \item{geneNames}{(exprSet): Obtain the gene names (row names) of
       \code{exprs}. }
