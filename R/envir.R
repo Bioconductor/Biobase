@@ -18,7 +18,7 @@ env2list <- function(envir, recurse=FALSE) {
 }
 
 listLen <- function(list)
-    .Call("listLen", list)
+    .Call("listLen", list, PACKAGE="Biobase")
 
 ##see if we can speed things up
 
