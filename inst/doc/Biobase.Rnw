@@ -360,6 +360,7 @@ specific criterion. The criterion will be encapsulated in the
 \item Next the function \verb+ifun+ is applied to the result of the
 filtering criterion. In some cases \verb+ifun+ will need to depend on
 covariates or other features of the \classdef{exprSet}.
+\end{enumerate}
 
 Code demonstrating a couple of simple examples is given next.
 In the first example genefiltering will extract those genes for which
