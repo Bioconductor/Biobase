@@ -89,8 +89,7 @@ query.packages <- function (pkgName, pkgVersion = NULL, type = "unix",
                        "SourceURL" = tempSUrl <-
                        sub("^.*(http://.*)","\\1",j),
                        "Win32URL" = tempZUrl <- sub("^.*(http://.*)","\\1",j),
-                       "Depends" = tempDep <-
-                       getDepends(sub("^.*: *(.*)","\\1",j)))
+                       "Depends" = tempDep <- getDepends(j))
             }
         }
         # do list again in case the match is the last one
@@ -144,14 +143,22 @@ isPak <- function(aLine){
 }
 
 getDepends <- function(dep){
+    on.exit(options(show.error.messages = TRUE))
     depList <- NULL
-    founter <- 1
 
-    deps <- unlist(strsplit(dep, ","))
-    for(i in 1:length(deps)){
-        depList[[i]] <- deps[i]
+    options(show.error.messages = FALSE)
+    tryMe <- try(sub("^.*: *(.*)","\\1",dep))
+    options(show.error.messages = TRUE)
+
+    if(tryMe == "" || is.null(tryMe) || is.na(tryMe)){
+        depList <- NULL
+    }else{
+        dep <- sub("^.*: *(.*)","\\1",dep)
+        deps <- unlist(strsplit(dep, ","))
+        for(i in 1:length(deps)){
+            depList[[i]] <- deps[i]
+        }
     }
-
     return(depList)
 }
 
@@ -184,6 +191,11 @@ avlCheck <- function(pkgName){
         return("Unavailable")
     }
 }
+
+
+
+
+
 
 
 
