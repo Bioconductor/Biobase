@@ -1,4 +1,4 @@
-# Functions that add vignetts to the menu bar of a window.
+# Functions that add vignetts or other elements to the menu bar of a window.
 #
 # Copyright 2002 J. Zhang, all rights reserved
 #
@@ -17,18 +17,47 @@ addVig2Menu <- function(itemName, menuName = "Vignettes",
 addVig4Win <- function(menuName, itemName, itemAction){
     # tkWidgets will be loaded to make vExplorer available
     if(require(tkWidgets)){
-        # Try to see if the menu already exists
+        # First try to add the menu item
         options(show.error.messages = FALSE)
         tryMe <- try(winMenuAddItem(menuName, itemName, itemAction))
         options(show.error.messages = TRUE)
-        # No existing menu yet, add one
         if(inherits(tryMe, "try-error")){
-            winMenuAdd(menuName)
+            # Menu does not exist for the item. Add menus
+            addNonExisting(menuName)
             winMenuAddItem(menuName, itemName, itemAction)
         }
     }
 }
+
 # Add menu for a window in Unix
 addVig4Unix <- function(menuName, itemName, itemAction){
     # "Do not know what to do yet"
+}
+
+# Find and add all the non-existing menu elelments
+addNonExisting <- function(menuName){
+    temp <- menuName
+    menus <- unlist(strsplit(menuName, "/"))
+    counter <- 1
+
+    # Find and add the first missing menu along the menu tree
+    repeat{
+        options(show.error.messages = FALSE)
+        tryMe <- try(winMenuAdd(temp))
+        options(show.error.messages = TRUE)
+        if(inherits(tryMe, "try-error")){
+            temp <- paste(menus[1:(length(menus) - counter)], sep = "",
+                          collapse = "/")
+            counter <- counter + 1
+        }else{
+            break
+        }
+    }
+    # Add the rest menus
+    if(counter > 1){
+        for(i in ((length(menus) - counter + 2):length(menus))){
+            temp <-  paste(menus[1:i], sep = "", collapse = "/")
+            winMenuAdd(temp)
+        }
+    }
 }
