@@ -6,9 +6,10 @@
         class(BioC) <- "BioCOptions"
         options("BioC"=BioC)
     }
-    
+
     # I added this to add "Vignettes" to the menu bar. JZ
-    addVigs2Menu("Vignettes", "Biobase")
+    addVigs2Menu("vExplorer", doThis = "vExplorer()")
+    addVigs2Menu("Biobase")
 
     Base <- list()
     class(Base) <- "BioCPkg"
