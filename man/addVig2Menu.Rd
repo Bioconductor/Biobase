@@ -11,7 +11,7 @@
   of a window for an R session. 
 }
 \usage{
-addVig2Menu(itemName, menuName = "Vignettes", itemAction = "vExplorer()")
+addVig2Menu(itemName, menuName = "Vignettes", itemAction = "")
 addVig4Win(menuName, itemName, itemAction)
 addVig4Unix(menuName, itemName, itemAction)
 addNonExisting(menuName)
@@ -43,11 +43,10 @@ addPDF2Vig(pkgName)
 \note{The functions are part of the Bioconductor project at Dana-Farber
   Cancer Institute to provide Bioinformatics functionalities through R}
 
-\seealso{\code{\link{vExplorer}}}
 \examples{
     # Only works for windows now
     if(interactive()){
-        addVig2Menu("Biobase")
+        addPDF2Menu("Biobase")
     }
 }
 \keyword{interface}

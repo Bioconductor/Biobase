@@ -167,7 +167,7 @@ dumpPackTxt <- function (package)
 
 
     ##set up menus -- windows only for now
-    if( .Platform$OS.type == "windows" ) {
+    if( .Platform$OS.type == "windows" && .Platform$GUI == "Rgui" ) {
         addPDF2Vig("Biobase")
     }
 
