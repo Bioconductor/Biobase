@@ -44,5 +44,6 @@ dumpPackTxt <- function (package)
     .initContainer(where)
     .initAgg(where)
     .initExprset(where)
+    .buildBiobaseOpts()
     cacheMetaData(as.environment(where))
 }
