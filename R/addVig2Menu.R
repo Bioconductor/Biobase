@@ -3,9 +3,7 @@
 # Copyright 2002 J. Zhang, all rights reserved
 #
 
-addVig2Menu <- function(itemName, menuName = "Vignettes",
-                         itemAction = paste("vExplorer(pkgName = \"",
-                               itemName, "\")", sep = "")){
+addVig2Menu <- function(itemName, menuName = "Vignettes", itemAction = ""){
     os <- .Platform$OS.type
     switch(os,
            "windows" = addVig4Win(menuName, itemName,itemAction ),
