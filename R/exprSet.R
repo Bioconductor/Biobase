@@ -275,6 +275,10 @@
     object
   })
 
+  setReplaceMethod("$", "exprSet", function(x, name, value) {
+        x@phenoData[[name]] = value
+        x})
+
   ##method for MIAME description
   if( !isGeneric("description") )
     setGeneric("description", function(object)
