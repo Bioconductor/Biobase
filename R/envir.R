@@ -24,9 +24,12 @@ list2env <- function(vals, envir, recurse=FALSE) {
     if (!is.list(vals))
         stop("vals argument is not a list")
 
+    if (length(vals) == 0)
+        return(envir)
+
     names <- names(vals)
     ## !!! Does this work the way it is intended when recurse=TRUE?
-    for (i in seq(length(vals)))
+    for (i in 1:length(vals))
         assign(names[i], vals[[i]], envir=envir, inherits=recurse)
 
     envir
