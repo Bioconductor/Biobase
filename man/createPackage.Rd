@@ -45,7 +45,8 @@
   res  = createPackage("macbeth",
           destinationDir = dest,
           originDir      = file.path(.path.package("Biobase"), "Code"),
-          symbolValues   = sym)
+          symbolValues   = sym,
+          force          = TRUE)
   dir(res$pkgdir)
 }
 
