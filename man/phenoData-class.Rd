@@ -11,6 +11,17 @@
 \alias{varLabels,phenoData-method}
 \alias{[[,phenoData-method}
 \alias{[[<-,phenoData-method}
+\alias{convertVarLabels,phenoData-method}
+\alias{getUnits,phenoData,character-method}
+\alias{getVarMetadata,phenoData,character,character-method}
+\alias{addVarMetadataEntry,phenoData,character,character-method}
+\alias{getVarMetadata,phenoData,character,missing-method}
+\alias{varMetadata,phenoData-method}
+\alias{addVarMetadataEntry}
+\alias{convertVarLabels}
+\alias{getUnits} 
+\alias{getVarMetadata}
+\alias{varMetadata}
 \title{Class phenoData, a class for patient or experiment level data. }
 \description{ The class consists of a \code{data.frame} and some
   accompanying methods suited to handle patient level data for microarrays.}
@@ -18,12 +29,16 @@
 \code{  new('phenoData',}\cr
 \code{    pData     = ...., # Object of class \code{data.frame}}\cr
 \code{    varLabels = ...., # Object of class \code{list}}\cr
+\code{    varMetadata = ...., # Object of class \code{data.frame}}\cr
 \code{  )}}
 \section{Slots}{
   \describe{
     \item{\code{pData}:}{Object of class "data.frame". The data. }
     \item{\code{varLabels}:}{Object of class "list". Obtional long
       labels for the different variables. }
+    \item{\code{varMetadata}:}{Object of class "data.frame". A
+		data frame with a column named varNames and
+		arbitrarily many additional columns. }
   }
 }
 
@@ -48,5 +63,13 @@
     \item{phenoData<-}{(exprSet): A replacement method for the
       \code{phenoData} slot.}
   }
+}
+\examples{
+data(eset)
+pes <- phenoData(eset)
+pes <- convertVarLabels(pes)
+varMetadata(pes)
+pes <- addVarMetadataEntry(pes, "cov1", "units", "inches")
+getUnits(pes, "cov1")
 }
 \keyword{methods}
