@@ -3,7 +3,7 @@
 % Biobase.tex file will get overwritten.
 %
 %\VignetteIndexEntry{Biobase Primer}
-%\VignetteDepends{Biobase, genefilter, class, annotate, hgu95a}
+%\VignetteDepends{Biobase, class, annotate, hgu95a}
 %\VignetteKeywords{Expression Analysis}
 %\VignettePackage{Biobase}
 \documentclass{article}
@@ -234,47 +234,6 @@ These can subsequently be retrieved and used for other purposes.
 @
 %$
 
-Next we provide a simple gene filtering function (this requires the
-genefilter library).
-
-<<aggregate>>=
- gfun <- function(expr, cov, p=0.05) {
-    f2 <- ttest(cov, p=p)
-    ffun <- filterfun(f2)
-    which <- genefilter(expr, ffun)
-  }
-
-@
-
-Next we show how to use this function on the system dataset,
-\verb+geneData+.
-
-<<aggregate>>=
-  library(genefilter)
-  library(class)
-
-  data(eset)
-
-  ##scale the genes
-  ##genescale is a slightly more flexible "scale"
-  ##work on a subset -- for speed only
-  geneData <- genescale(exprs(eset)[1:75,], 1)
-
-  Agg <- new("aggregator")
-
-  testcase <- knnCV(geneData, gfun, eset$cov2, Agg, pselect=0.05)
-
-  genes.used <- multiget(ls(env=aggenv(Agg)), env=aggenv(Agg))
-  genes.counts <- as.numeric(genes.used)
-  names(genes.counts) <- names(genes.used)
-  sort(genes.counts)
-@
-%$
-  The variable \verb+genes.counts+ now contains, for each gene,
-  the number of times it was selected in the cross-validation.
-
-  One may also compare testcase with geneCov to see how well the
-  procedure worked at predicting.
 
 
 %\section*{Resampling exprSet's}
