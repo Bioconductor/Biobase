@@ -37,6 +37,13 @@ query.packages <- function (pkgName, pkgVersion = NULL, type = "unix",
     doList <- function(){
 
         if(is.null(pkgVersion)){
+            if(tempRep == paste(getOption("repositories"),
+               "/PACKAGES", sep = "")){
+                tempSUrl <<- paste(getOption("repositories"), "/",
+                                   pkgName, "_", tempVer, ".tar.gz",
+                                   sep = "")
+                tempZUrl <<- avlCheck(pkgName)
+            }
             if(tempVer > returnList$version){
                 returnList$repository <<- tempRep
                 if(!is.null(tempSUrl) && !is.null(tempZUrl))
@@ -151,6 +158,27 @@ formatLine <- function(aLine){
     return(gsub("^ *(.*)", "\\1", aLine))
 }
 
+avlCheck <- function(pkgName){
+    on.exit(options(show.error.message = TRUE))
+
+    options(show.error.messages = FALSE)
+    tryMe <- try(url(paste("http://cran.r-project.org/bin/",
+                                   "windows/contrib/", pkgName,
+                                   ".zip", sep = ""), "r"))
+    if(!inherits(tryMe, "try-error"))
+        return(paste("http://cran.r-project.org/bin/",
+                                   "windows/contrib/", pkgName,
+                                   ".zip", sep = ""))
+    tryMe <- try(url(paste("http://cran.r-project.org/bin/",
+                                   "windows/base/", pkgName,
+                                   ".zip", sep = ""), "r"))
+    if(!inherits(tryMe, "try-error"))
+        return(paste("http://cran.r-project.org/bin/",
+                                   "windows/base/", pkgName,
+                                   ".zip", sep = ""))
+    else
+        return("Unavailable")
+}
 
 
 
