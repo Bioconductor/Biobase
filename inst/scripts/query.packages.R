@@ -165,19 +165,23 @@ avlCheck <- function(pkgName){
     tryMe <- try(url(paste("http://cran.r-project.org/bin/",
                                    "windows/contrib/", pkgName,
                                    ".zip", sep = ""), "r"))
-    if(!inherits(tryMe, "try-error"))
+    if(!inherits(tryMe, "try-error")){
+        close(tryMe)
         return(paste("http://cran.r-project.org/bin/",
                                    "windows/contrib/", pkgName,
                                    ".zip", sep = ""))
+    }
     tryMe <- try(url(paste("http://cran.r-project.org/bin/",
                                    "windows/base/", pkgName,
                                    ".zip", sep = ""), "r"))
-    if(!inherits(tryMe, "try-error"))
+    if(!inherits(tryMe, "try-error")){
+        close(tryMe)
         return(paste("http://cran.r-project.org/bin/",
                                    "windows/base/", pkgName,
                                    ".zip", sep = ""))
-    else
+    }else{
         return("Unavailable")
+    }
 }
 
 

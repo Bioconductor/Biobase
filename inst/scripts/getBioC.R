@@ -18,6 +18,7 @@ getBioC <- function (libName = "exprs", destdir = NULL, isDevel = FALSE,
 
     on.exit(options(show.error.messages = TRUE))
 
+
     PLATFORM <- .Platform$OS.type
     DESTDIR <- ifelse(is.null(destdir), getwd(), destdir)
     messages <- NULL
@@ -41,8 +42,8 @@ getBioC <- function (libName = "exprs", destdir = NULL, isDevel = FALSE,
 #           download.packages(i,destdir, contriburl = getReposit())
 #           install.packages(i, lib = .libPaths(),contriburl = getReposit(),
 #                             destdir = destdir)
-
-           download.file(sourceUrl, fileName,
+            close(tryMe)
+            download.file(sourceUrl, fileName,
                          mode = getMode(PLATFORM), quiet = TRUE)
 #           temp <- packageStatus(repositories = getReposit())
 #           print(temp)
@@ -72,7 +73,7 @@ getPackNames <- function (libName){
     CDNA <- c("marrayInput", "marrayClasses", "marrayNorm",
            "marrayPlots")
     EXPRS <-c("Biobase", "annotate", "genefilter", "geneplotter",
-              "edd", "Roc", "tkWidgets")
+              "edd", "ROC", "tkWidgets")
     switch(libName,
            "all" = return(c(EXPRS, AFFY, CDNA)),
            "exprs" = return(EXPRS),
@@ -139,19 +140,15 @@ getMode <- function(platform){
 
 installPack <- function(platform, fileName){
     if(platform == "unix"){
-        tt <- system(paste("R CMD INSTALL ", fileName, sep = ""), TRUE)
+        system(paste("R CMD INSTALL ", fileName, sep = ""), TRUE)
     }else{
         if(platform == "windows"){
-            tt <- install.packages(fileName, .libPaths()[1], CRAN = NULL)
+            install.packages(fileName, .libPaths()[1], CRAN = NULL)
         }else{
             stop("The OS system is not supported")
         }
     }
 }
-
-#getReposit <- function(){
-#    return("http://www.bioconductor.org/packages/distrib")
-#}
 
 
 
