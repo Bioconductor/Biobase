@@ -1,35 +1,46 @@
 # This function gets and installs the required Bioconductor libraries.
 #
-# libName: a character string for the name of the library to be
+# libName: a vector of character string for the name of the library to be
 # installed. Valid names include "all" - all the released packages,
 # "affy" - packages "affy" plus exprs, "CDNA" - packages "CDNA" plus
 # exprs, and "exprs" - packages "Biobase", "annotate", "genefilter",
 # "geneploter", "edd", "Roc", and "tkWidgets".
 # destdir: a character string for the directory where the downloaded
 # packages will be stored.
-# isDevel: a boolean indicating whether the released (FALSE) and
+# isDevel: a boolean indicating whether the released (FALSE) or
 # developer (TRUE) version will be downloaded and installed.
 # verbose: a boolean indicating whether any error related to the
 # downloading process will be (TRUE) printed. Error messages will
-# still be returned but invisible is berbose is set to FALSE.
+# still be returned but invisible if berbose is set to FALSE.
+# bundle: a boolean indicating whether packages will be downloaded as
+# bundles (TRUE) or individual packages (FALSE). Valid bundle
+# (e. g. "all", "exprs") or package ("tkWidgets", "annotate") have to
+# be used in each case.
 #
 getBioC <- function (libName = "exprs", destdir = NULL, isDevel = FALSE,
-                     verbose = TRUE){
+                     verbose = TRUE, bundle = TRUE){
 
     on.exit(options(show.error.messages = TRUE))
-
 
     PLATFORM <- .Platform$OS.type
     DESTDIR <- ifelse(is.null(destdir), getwd(), destdir)
     messages <- NULL
+    packs <- NULL
 
-    packs <- getPackNames(libName)
+    if(bundle){
+        for(i in libName){
+            packs <- c(packs, getPackNames(i))
+        }
+    }else{
+        packs <- libName
+    }
+
     for(i in packs){
         sourceUrl <- getUrl(PLATFORM, i, isDevel)
         fileName <- getFName(PLATFORM, DESTDIR, i)
 
         # check the connection instead of downloading directly which
-        # will write files of 0 size in the directory even when the
+        # will write files of 0 size in the directory even when
         # the connection is not there.
         options(show.error.messages = FALSE)
         tryMe <- try(url(sourceUrl, "r"))
@@ -80,7 +91,7 @@ getLibName <- function (platform, lib){
      switch(platform,
             "unix" = return (paste(pack, "_", getVersion(),
             ".tar.gz", sep = "")),
-            "windows" = return(paste(pack, "-snapshot.zip", sep = "")),
+            "windows" = return(paste(pack, ".zip", sep = "")),
             stop("The OS system is not supported"))
 }
 
@@ -102,7 +113,7 @@ getUrl <- function(platform, pack, isDevel = FALSE){
             "unix" = return (paste(getDLUrl(platform, isDevel),
             "/", pack, "_", getVersion(), ".tar.gz", sep = "")),
             "windows" = return(paste(getDLUrl(platform, isDevel),
-            "/", pack, if (isDevel) "-snapshot.zip" else ".zip", sep = "")))
+            "/", pack, if (isDevel) ".zip" else ".zip", sep = "")))
 }
 
 getFName <- function(platform, destdir, pack, isDevel=FALSE){
@@ -111,7 +122,7 @@ getFName <- function(platform, destdir, pack, isDevel=FALSE){
             "unix" = return (paste(destdir, .Platform$file.sep,
             pack, "_", getVersion(), ".tar.gz", sep = "")),
             "windows" = return(paste(destdir, "\\",
-            pack, if (isDevel) "-snapshot.zip" else ".zip", sep = "")),
+            pack, if (isDevel) ".zip" else ".zip", sep = "")),
             stop("The OS system is not supported"))
 }
 
