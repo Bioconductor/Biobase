@@ -20,6 +20,8 @@
 \newcommand{\classdef}[1]{%
   {\em #1}
 }
+%%FIXME: Jianhua, can you go through the current class definitions for
+%%exprSet and phenoData etc and update the documentation here accordingly.
 
 \begin{document}
 \title{Textual Description of Biobase}
@@ -60,13 +62,23 @@ documentation. The \verb+exprSet+ class represents an initial attempt
 by the Bioconductor project to provide better tools for documenting
 and handling these large and complex data sets.
 
-Biologically relevant data will be availabe through the
-{\em annotation} package. Special modules containing information
-(such as gene name, symbol, chromosomal location) can be constructed.
-These data can then be linked to the \verb+exprSet+ via the
+The expression data represent experimentally derived data. In most
+cases these data will benefit from making use of biologically relevant
+meta-data. The meta-data are very large and diverse. In order to
+facilitate interactions and explorations we have taken the approach
+of constructing a specialized meta-data package for each chip or instrument.
+Many of these packages are available from the Bioconductor web site.
+These packages contain information such as the gene name, symbol and
+chromosomal location. There are other meta-data packages that contain
+the information that is provided by other initiatives such as GO and
+KEGG. These data can then be linked to the \verb+exprSet+ via the
 \verb+annotation+ slot.
 
-The \verb+phenoData+ class has the following slots:
+The \textit{annotate} package provides basic data manipulation tools
+for the meta-data packages.
+
+%%FIXME: Jianhua, update please
+The \texttt{phenoData} class has the following slots:
 \begin{description}
 \item[pData] A dataframe where the rows are cases and the columns are
   variables.
@@ -115,13 +127,14 @@ patients. The data can be accessed with the command
 There are three artificial covariates provided as well.
 These can be accessed using \verb+data(geneCov)+ once the Biobase
 library is attached.
+
+%%FIXME: is there a better way to do this?
 The following vignette shows how to read in these data and to create
 an instance of the \verb+exprSet+ class using those data.
 
-<<R.hide, echo=F>>=
+<<R.hide, echo=F, results=hide>>=
 library(Biobase)
 @
-%junk
 
 <<R>>=
 data(geneCov)

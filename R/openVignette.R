@@ -6,7 +6,14 @@ getPkgVigs <- function(package=NULL) {
         if( !is.character(package) )
             stop("package list must be a character vector")
         rows <- match(package, pkgs)
-        pkgs <- pkgs[rows]
+        if( all(is.na(rows)) ) 
+            stop(paste("packages:", paste(package,collapse=", "),
+                       "are not installed"))
+        if( any(is.na(rows)) ) 
+            warning(paste("packages", paste(package[is.na(rows)],
+                                            collapse=", "),
+                          "are not installed"))
+        pkgs <- pkgs[rows[!is.na(rows)]]
     }
     vigDirs <- file.path(.find.package(pkgs), "doc/00Index.dcf")
 
@@ -33,7 +40,9 @@ getPkgVigs <- function(package=NULL) {
 openVignette <- function(package=NULL) {
     vigFiles <- getPkgVigs(package)
     names <- names(vigFiles)
+    ##indent a little
     names <- paste("",names)
+    ##FIXME: why set names to NULL?
     names(vigFiles) <- NULL
     index <- menu(names, title="Please select (by number) a vignette")
 
