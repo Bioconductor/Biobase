@@ -10,7 +10,9 @@
     Base <- list()
     class(Base) <- "BioCPkg"
     Base$urls <- list( bioc = "http://www.bioconductor.org")
-
+    ##RI: I added this to make my life easier. Should it be TRUE?
+    Base$use.widgets=FALSE
+    
     BioC <- getOption("BioC")
     BioC$Base <- Base
     options("BioC"=BioC)
@@ -66,3 +68,24 @@ dumpPackTxt <- function (package)
 
     .initChunkClasses(where)
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
