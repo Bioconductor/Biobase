@@ -18,7 +18,14 @@
 \alias{phenoData,eSet-method}
 \alias{phenoData<-,eSet,phenoData-method}
 \alias{show,eSet-method}
-
+\alias{eMetadata}
+\alias{exprListNM-class}
+\alias{eMetadata<-}
+\alias{eMetadata<-,eSet,data.frame-method}
+\alias{eMetadata,exprList-method}
+\alias{eMetadata,eSet-method}
+\alias{show,exprListNM-method}
+\alias{show,exprList-method}
 \title{Class "eSet": a new exprSet class }
 \description{A second attempt at a universal definition of experimental
   data, combined with phenotypic data and in some cases probe data.}
@@ -75,5 +82,25 @@ gene expression data, array CGH data or SELD-TOF/MALDI-TOF data.
 \code{\link{exprSet-class}}}
 \examples{
 ##---- Should be DIRECTLY executable !! ----
+data(eset)
+newe <- new("exprList", .Data=list(exprs=exprs(eset)),
+	eMetadata=data.frame())
+es1 <- new("eSet", eList=newe, phenoData=phenoData(eset))  
+es1
+dim(exprs(es1))
+md <- data.frame(name="exprs", etype="random numbers")
+eMetadata(es1) <- md
+eList(es1)
+newe <- new("exprList", .Data=list(exprs=exprs(eset), se=exprs(eset)/1.96),
+	eMetadata=data.frame(name=c("exprs", "se"),
+		etype=c("RNG output", "S.E. of expression"),
+                method=c("rnorm", "scaling")))
+es2 <- new("eSet", eList=newe, phenoData=phenoData(eset))
+es2
+eList(es2)
+phenoData(es2)@varMetadata <- 
+   	data.frame(varName=c("cov1", "cov2", "cov3"),
+		units=c("cm", "in", NA))
+getUnits(phenoData(es2), "cov1")
 }
 \keyword{classes}

@@ -6,12 +6,55 @@
 ##there are K labeled samples. For Affy this is the same as K arrays
 ##but for cDNA it is different.
 
+if (!isClass("exprListNM"))  # no metadata
+    setClassUnion("exprListNM", c("list", "environment"))
+
 if (!isClass("exprList"))
-    setClassUnion("exprList", c("list", "environment"))
+    setClass("exprList", representation(eMetadata="data.frame"),
+		contains="exprListNM")
+
+if(!isGeneric("eMetadata")) setGeneric("eMetadata",
+	function(object) standardGeneric("eMetadata"))
+setMethod("eMetadata", "exprList", function(object)
+	object@eMetadata)
+
+setMethod("show", "exprListNM", function(object) {
+ cat("metadata-free exprList; use object@eList@.Data to view") })
+setMethod("show", "exprList", function(object) {
+ cat("exprList object with ")
+ if (is.list(object@.Data)) cat(length(object@.Data), " list element(s).")
+ else if (is.environment(object@.Data)) 
+	cat(length(ls(object@.Data)), "environment elements.")
+ cat("\nexprList level metadata:\n ")
+ show(eMetadata(object))
+})
+
+if (!isGeneric("eMetadata")) setGeneric("eMetadata",
+	function(object) standardGeneric("eMetadata"))
+setMethod("eMetadata", c("eSet"), function(object) {
+	object@eList@eMetadata })
 
 ##just the two slots, everyone else extends this class
 setClass("eSet", representation(eList="exprList",
                                 phenoData="phenoData"))
+
+
+#
+# some concepts: getExpData will look for a component named
+# "exprs" in the list or environment, and this is central
+# to the show/exprs method
+#
+
+
+if( !isGeneric("eMetadata<-") )
+    setGeneric("eMetadata<-", function(object, value)
+               standardGeneric("eMetadata<-"))
+
+setReplaceMethod("eMetadata", c("eSet", "data.frame"),
+		function(object, value) {
+			object@eList@eMetadata <- value
+			object
+		})
 
 if (!isGeneric("eList"))
  setGeneric("eList", function(object)standardGeneric("eList"))
