@@ -27,7 +27,7 @@ require(methods)
                where=where )
   setMethod("pData", "phenoData",
             function(object) object@pData, where=where)
-  
+
   if( !isGeneric("varLabels") )
       setGeneric("varLabels", function(object)
       standardGeneric("varLabels"), where=where)
@@ -214,8 +214,63 @@ require(methods)
             }, where=where)
 
 
+  ##split
+  if( !isGeneric("split") )
+        setGeneric("split", where=where)
+
+  setMethod("split", signature(x="exprSet", f="vector"),
+            function(x, f) {
+                lenf <- length(f)
+                exs <- exprs(x)
+                pD <- phenoData(x)
+                aN <- annotation(x)
+                if( (nrow(exs) %% lenf == 0 ) ) {
+                    splitexprs <- lapply(split(1:nrow(exs), f),
+                                         function(ind) exs[ind, , drop =
+                                                           FALSE])
+                    nsplit<-length(splitexprs)
+                    for(i in 1:nsplit) {
+                        splitexprs[[i]] <- new("exprSet",
+                                               exprs=splitexprs[[i]],
+            phenoData = pD, annotation= aN )
+                    }
+                    return(splitexprs)
+                }  ##split the expressions
+                if( (nrow(pData(x)) %% lenf ==0) ) {
+                    npD <- split(pD, f)
+                    nEx <- lapply(split(1:ncol(exs), f),
+                                  function(ind) exs[,ind,drop=FALSE])
+                    nsplit <- length(npD)
+                    for( i in 1:nsplit)
+                        npD[[i]] <- new("exprSet", exprs=nEx[[i]],
+                                        phenoData=npD[[i]],
+            annotation=aN)
+                    return(npD)
+                }
+                else
+                    stop("could not split")
+            }, where=where)
+
+
+  setMethod("split", signature(x="phenoData", f="vector"),
+            function(x, f) {
+                lenf <- length(f)
+                pD <- pData(x)
+                vL <- varLabels(x)
+                if( (nrow(pD) %% lenf ==0) ) {
+                    npD <- split(pD, f)
+                    nsplit <- length(npD)
+                    for( i in 1:nsplit)
+                        npD[[i]] <- new("phenoData", pData = npD[[i]],
+                                        varLabels=vL)
+                    return(npD)
+                }
+                else
+                    stop("could not split")
+            }, where=where)
 
 }
+
 
 
 ##not quite the right semantics
@@ -227,12 +282,19 @@ require(methods)
 "$.phenoData" <- function(x, val, ...)
     (pData(x))[[as.character(val)]]
 
-esApply <- function( es, f ) {
- # assumes f is of the form f(arg1,arg2) and
- # arg2 is es
- if (class(es) != "exprSet") stop("arg1 must be of class exprSet")
- if (length(formals(f)) != 2) warning("f should be a function of two arguments...")
- apply( exprs(es), 1, f, es )
- }
+#esApply <- function( es, f ) {
+# # assumes f is of the form f(arg1,arg2) and
+# # arg2 is es
+# if (class(es) != "exprSet") stop("arg1 must be of class exprSet")
+# if (length(formals(f)) != 2) warning("f should be a function of two arguments#...")
+# apply( exprs(es), 1, f, es )
+# }
 
+esApply <- function(X, MARGIN, FUN, ...) {
+    if (class(X) != "exprSet") stop("arg1 must be of class exprSet")
+    e1 <- new.env(parent=environment(FUN))
+    multiassign(names(pData(X)), pData(X), env=e1)
+    environment(FUN) <- e1
+    apply(exprs(X), MARGIN, FUN, ...)
+  }
 

@@ -25,6 +25,10 @@
     \item{show}{(phenoData): A method to display the data in a nice manner. }
     \item{varLabels}{(phenoData): A method to display the variable
       labels. }
+    \item{split}{(phenoData, vector): A method to \code{split}
+      \code{pData} and return a list of \code{phenoData} objects. Unlike
+      \code{split} this function requires the number of rows of
+      \code{pData} to be a multiple of the length of \code{vector}.}
     \item{\$}{An old-style method.
       It is \code{pData(object)[[as.character(val)]]} which
       does not quite have the right semantics but it is close. This

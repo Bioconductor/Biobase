@@ -11,6 +11,7 @@
 \alias{sampleNames}
 \alias{phenoData}
 \alias{annotation}
+\alias{split}
 \title{Class exprSet, a class for microarray data, and methods for
   processing them } 
 \description{ This is class representation for Microarray Data}
@@ -88,9 +89,15 @@ gene expression values will be iteratively bound to y}
     \item{show}{(exprSet): renders information about the exprSet
       in a concise way on stdout. }
 
+    \item{split}{(exprSet, vector): splits the exprSet. The returned
+      value is a list, each component of which is an \code{exprSet}.
+      If the length of \code{vector} is a divisor of the number of rows
+      in the expression array then the expression array is
+      split. Subsequently, if the length of \code{vector} is a divisor
+      of the number of rows of the phenoData data frame then the split
+      is made on this.}
     \item{annotation}{(exprSet): An accessor function for the annotation
       information.}
-    
     \item{\$}{An old-style method.
       It is \code{pData(eset)[[as.character(val)]]} which
       does not quite have the right semantics but it is close. This
@@ -125,5 +132,8 @@ gene expression values will be iteratively bound to y}
   }
   
   Tpvals <- iter(eset, "cov1", mytt )
+
+  sp1 <- split(eset, c(1,2))
+  sp2 <- split(eset, c(rep(1,6), rep(2,7)))
 }
 \keyword{methods}
