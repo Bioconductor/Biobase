@@ -87,7 +87,8 @@ gene expression values will be iteratively bound to y}
 
      \item{sampleNames}{(exprSet): An accessor function for sample
        labels. These are the column labels of \code{exprs} and the row
-       labels from \code{pData}.
+       labels from \code{pData}. The function takes preferably the
+       column labels of \code{exprs} (if any).
      }
      
     \item{show}{(exprSet): renders information about the exprSet

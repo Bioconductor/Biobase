@@ -130,20 +130,25 @@ require(methods)
 
   
   if( !isGeneric("sampleNames") )
-     setGeneric("sampleNames", function(object)
-                standardGeneric("sampleNames"), where=where)
- setMethod("sampleNames", "exprSet",
-           function(object) row.names(pData(object)), where=where)
-
- if( !isGeneric("geneNames") )
-     setGeneric("geneNames", function(object)
-                standardGeneric("geneNames"), where=where)
- setMethod("geneNames", "exprSet", function(object)
-     row.names(object@exprs), where=where )
-
+    setGeneric("sampleNames", function(object)
+               standardGeneric("sampleNames"), where=where)
+  setMethod("sampleNames", "exprSet",
+            function(object) {
+              if (! is.null(colnames(expr(object))))
+                colnames(expr(object))
+              else
+                row.names(pData(object))
+            }, where=where)
+  
+  if( !isGeneric("geneNames") )
+    setGeneric("geneNames", function(object)
+               standardGeneric("geneNames"), where=where)
+  setMethod("geneNames", "exprSet", function(object)
+            row.names(object@exprs), where=where )
+  
   if( !isGeneric("geneNames<-") )
-      setGeneric("geneNames<-", function(object, value)
-          standardGeneric("geneNames<-"), where=where)
+    setGeneric("geneNames<-", function(object, value)
+               standardGeneric("geneNames<-"), where=where)
 
   setReplaceMethod("geneNames", "exprSet", function(object, value) {
       es <- exprs(object)
