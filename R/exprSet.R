@@ -54,7 +54,6 @@ require(methods)
  setMethod("print", "exprSet", function(x, ...) {
      ngenes <- nrow(x@exprs)
      dmp <- dim(x@phenodata)
-     cat(dmp,"\n")
      nsamples <- dmp[1]
      ncovs <- dmp[2]
      cat("Expression Set (exprSet) with \n\t", ngenes, " genes\n\t", sep="")
