@@ -39,9 +39,9 @@ query.packages <- function (pkgName, pkgVersion = NULL, type = "unix",
         if(is.null(pkgVersion)){
             if(tempVer > returnList$version){
                 returnList$repository <<- tempRep
-                returnList$packUrl <<- ifelse(type == "unix",
-                                              formatLine(tempSUrl),
-                                              formatLine(tempZUrl))
+                if(!is.null(tempSUrl) && !is.null(tempZUrl))
+                    returnList$packUrl <<- ifelse(type == "unix",
+                                                  tempSUrl, tempZUrl)
                 returnList$version <<- tempVer
                 if(is.null(tempDep))
                     returnList$depends <<- "NULL"
@@ -53,9 +53,9 @@ query.packages <- function (pkgName, pkgVersion = NULL, type = "unix",
         }else{
             if(tempVer == returnList$version){
                 returnList$repository <<- tempRep
-                returnList$packUrl <<- ifelse(type == "unix",
-                                              formatLine(tempSUrl),
-                                              formatLine(tempZUrl))
+                if(!is.null(tempSUrl) && !is.null(tempZUrl))
+                    returnList$packUrl <<- ifelse(type == "unix",
+                                                  tempSUrl, tempZUrl)
                 returnList$version <<- tempVer
                 if(is.null(tempDep))
                     returnList$depends <<- "NULL"
@@ -117,17 +117,17 @@ getDefaultRep <- function (){
 getRep <- function(rep){
     on.exit(options(show.error.messages = TRUE))
 
-#    con <- url(rep)
+    con <- url(rep)
     options(show.error.messages = FALSE)
-#    tryMe <- try(readLines(con))
+    tryMe <- try(readLines(con))
     #for testing using a local file only
-    tryMe <- try(readLines("PACKAGES"))
+    #tryMe <- try(readLines("PACKAGES"))
     options(show.error.messages = TRUE)
 
     if(inherits(tryMe, "try-error"))
        stop(paste("Invalid repository url", rep))
 
-#    close(con)
+    close(con)
     return(tryMe)
 }
 
