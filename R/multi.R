@@ -6,7 +6,7 @@
 #the on.exit kludge
 
 multiget <- function(x, pos=-1, envir=as.environment(pos), mode =
-                     "any",inherits = TRUE, iffail)
+                     "any",inherits = TRUE, iffail=NA)
 {
     lenx <- length(x)
     ans <- vector("list", length=lenx)
