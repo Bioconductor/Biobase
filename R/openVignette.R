@@ -1,4 +1,3 @@
-
 getPkgPDFs <- function(package=NULL) {
     pkgs <- installed.packages()[,"Package"]
     libs <- installed.packages()[,"LibPath"]
