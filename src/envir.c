@@ -57,9 +57,9 @@ SEXP listToEnv(SEXP x, SEXP env)
   return(env);
 }
 
-/* fast computation of rowMedians */
+/* fast computation of row order statistics */
 
-SEXP rowMeds(SEXP inmat)
+SEXP rowQ(SEXP inmat, SEXP which)
 {
   SEXP ans;
   int i, j,  nrow, ncol, medval;
@@ -69,11 +69,20 @@ SEXP rowMeds(SEXP inmat)
   if( !isMatrix(inmat) || !isReal(inmat) )
     error("argument must be a numeric matrix");
 
+  /* FIXME: should check for FINITE/NA */
+  if( !isNumeric(which) || length(which) != 1 )
+    error("which must be numeric");
+
+  /* subtract one here, since rPsort does zero based addressing*/
+  medval = asInteger(which) - 1;
+
   PROTECT(ans = getAttrib(inmat, R_DimSymbol));
   nrow = INTEGER(ans)[0];
   ncol = INTEGER(ans)[1];
-  /* subtract one here, since rPsort does zero based addressing*/
-  medval = ((ncol+1)/2) - 1;
+
+  /* sanity check */
+  if( medval < 0 || medval >= ncol )
+    error("which  is larger than the number of rows");
 
   PROTECT(ans = allocVector(REALSXP, nrow));
   

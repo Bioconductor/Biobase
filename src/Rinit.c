@@ -5,7 +5,7 @@
 
 SEXP listToEnv(SEXP, SEXP);
 SEXP listLen(SEXP);
-SEXP rowMeds(SEXP);
+SEXP rowQ(SEXP, SEXP);
 
 /* Automate using sed or something. */
 #if _MSC_VER >= 1000
@@ -15,7 +15,7 @@ __declspec(dllexport)
     static const R_CallMethodDef R_CallDef[] = {
         {"listToEnv", (DL_FUNC)&listToEnv, 2},
 	{"listLen", (DL_FUNC)&listLen, 1},
-	{"rowMeds", (DL_FUNC)&rowMeds, 1},
+	{"rowQ", (DL_FUNC)&rowQ, 2},
         {NULL, NULL, 0},
     };
 
