@@ -218,7 +218,7 @@ require(methods)
   setMethod("updateObject", "exprSet",
             function(object){
               if(class(object@description)=="miame")
-                cat("This object is up to data.\n")
+                cat("This object is up to date.\n")
               else{
                 cat("For now we will keep old description in the experiment title.\nConsider defining an object of class miame with more information\n")
                 object@description <- new("miame",title=object@description)
