@@ -1,4 +1,4 @@
-getPkgPDFs <- function(package=NULL) {
+getPkgVigs <- function(package=NULL) {
     pkgs <- installed.packages()[,"Package"]
     libs <- installed.packages()[,"LibPath"]
 
@@ -12,7 +12,7 @@ getPkgPDFs <- function(package=NULL) {
     }
     vigDirs <- file.path(libs, pkgs, "doc/00Index.dcf")
 
-    pdfFiles <- lapply(vigDirs, function(x){
+    vigFiles <- lapply(vigDirs, function(x){
         if (file.exists(x)) {
             vigs <- read.dcf(x)
             if (nrow(vigs) > 0) {
@@ -26,19 +26,26 @@ getPkgPDFs <- function(package=NULL) {
         }
         else NULL
     })
-    pdfFiles <- unlist(pdfFiles[sapply(pdfFiles,function(x){
+    vigFiles <- unlist(vigFiles[sapply(vigFiles,function(x){
         if ((!is.null(x))&&(length(x) > 0)) TRUE else FALSE})])
 
-    pdfFiles
+    vigFiles
 }
 
 openVignette <- function(package=NULL) {
-    pdfFiles <- getPkgPDFs(package)
-    names <- names(pdfFiles)
+    vigFiles <- getPkgVigs(package)
+    names <- names(vigFiles)
     names <- paste("",names)
-    names(pdfFiles) <- NULL
+    names(vigFiles) <- NULL
     index <- menu(names, title="Please select (by number) a vignette")
 
-    if (index > 0)
-        openPDF(pdfFiles[index])
+    if (index > 0) {
+        ## Need to switch on the file extension
+        ext <- strsplit(vigFiles[index],"\\.")[[1]]
+        switch(ext[length(ext)],
+               "pdf"=openPDF(vigFiles[index]),
+               "html"=browseURL(paste("file://",vigFiles[index],sep="")),
+               stop("Don't know how to handle this vignette")
+               )
+    }
 }
