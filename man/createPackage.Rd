@@ -63,6 +63,9 @@
 
   muses = c("Calliope", "Clio", "Erato", "Euterpe", "Melpomene",
             "Polyhymnia", "Terpsichore", "Thalia", "Urania")
+
+  dir.create(file.path(res$pkgdir, "data"))
+
   save(muses, file = file.path(res$pkgdir, "data", "muses.rda"))
 
   res$pkgdir

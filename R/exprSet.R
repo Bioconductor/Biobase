@@ -30,7 +30,14 @@
   setClass("phenoData", representation(pData="data.frame",
                                        varLabels="list"),
            prototype=list(pData=data.frame(matrix(nr=0,nc=0)),
-             varLabels=list()))
+             varLabels=list()),
+           validity =  function(object) {
+                                dm <- dim(object@pData)
+                                if(dm[2] != length(object@varLabels) )
+                                   return(FALSE)
+                                return(TRUE)
+                       }
+           )
 
   if( !isGeneric("pData") )
     setGeneric("pData", function(object) standardGeneric("pData"))
@@ -84,14 +91,6 @@
             })
 
 
-validphenoData <- function(object) {
-    dm <- dim(object@pData)
-    if(dm[2] != length(object@varLabels) )
-        return(FALSE)
-    return(TRUE)
-}
-
-setValidity("phenoData", validphenoData)
 
 ##data class for MIAME information
   setClass("MIAME", representation(name="character",
@@ -189,9 +188,7 @@ setValidity("phenoData", validphenoData)
   })
 
   ##trick so that the old exprSet and Plobs works
-  setClass("characterORMIAME")
-  setIs("character", "characterORMIAME")
-  setIs("MIAME", "characterORMIAME")
+  setClassUnion("characterORMIAME", c("MIAME", "character"))
 
   ##data class for expression arrays
   setClass("exprSet", representation(exprs="matrix",

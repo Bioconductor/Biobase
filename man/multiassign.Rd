@@ -10,12 +10,9 @@ multiassign(x, value, envir = parent.frame(), inherits=FALSE)
 \arguments{
   \item{x}{A vector or list of names, represented by strings.}
   \item{value}{a vector or list of values to be assigned.}
-  \item{pos}{where to do the assignment.  By default, assigns into the
-    current environment.  See the details for other possibilities.}
   \item{envir}{the \code{\link{environment}} to use. See the details section.}
   \item{inherits}{should the enclosing frames of the environment be
     inspected?}
-  \item{immediate}{an ignored compatibility feature.}
 }
 \details{
   The \code{pos} argument can specify the  environment in which to assign
