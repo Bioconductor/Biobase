@@ -1,12 +1,12 @@
-copySubstitute = function(x, cin, cout, symbol.delimiter="@", allow.unresolved.symbols=FALSE) {
+copySubstitute = function(symbolValues, cin, cout, symbol.delimiter="@", allow.unresolved.symbols=FALSE) {
   ## check integrity of arguments (...lots of bureaucracy)
   mess = NULL
-  if (!is.list(x) && !is.vector(x))
-    mess = "Argument \"x\" of this function must be a list or vector."
-  if (!all(sapply(x, is.character)))
-    mess = "Argument \"x\" of this function must only contain characters."
-  if (is.null(names(x)) || any(names(x)==""))
-    mess = "Argument \"x\" of this function must have non-empty names."
+  if (!is.list(symbolValues) && !is.vector(symbolValues))
+    mess = "Argument \"symbolValues\" of this function must be a list or vector."
+  if (!all(sapply(symbolValues, is.character)))
+    mess = "Argument \"symbolValues\" of this function must only contain characters."
+  if (is.null(names(symbolValues)) || any(names(symbolValues)==""))
+    mess = "Argument \"symbolValues\" of this function must have non-empty names."
   if (!(("connection" %in% class(cin)  && isOpen(cin, rw="r")) || is.character(cin)))
     mess = "Argument \"cin\" of this function must be a read connection or a file name."
   if (!(("connection" %in% class(cout) && isOpen(cout, rw="w"))|| is.character(cout)))
@@ -21,9 +21,9 @@ copySubstitute = function(x, cin, cout, symbol.delimiter="@", allow.unresolved.s
   
   ## here the actual work is done
   txt = readLines(cin)
-  nm  = paste(symbol.delimiter, names(x), symbol.delimiter, sep="")
-  for (i in 1:length(x))
-    txt = gsub(nm[i], x[[i]], txt)
+  nm  = paste(symbol.delimiter, names(symbolValues), symbol.delimiter, sep="")
+  for (i in 1:length(symbolValues))
+    txt = gsub(nm[i], symbolValues[[i]], txt)
 
   ## check for unresolved symbols
   if(!allow.unresolved.symbols){

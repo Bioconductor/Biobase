@@ -6,20 +6,21 @@
   connection, replace all occurences of a SYMBOL by the corresponding
   value. (see example).
 }
-\usage{copySubstitute(x, cin, cout, symbol.delimiter="@", allow.unresolved.symbols=FALSE)}
+\usage{copySubstitute(symbolValues, cin, cout, symbol.delimiter="@", allow.unresolved.symbols=FALSE)}
 \arguments{
-  \item{x}{A named list of character strings.}
+  \item{symbolValues}{A named list of character strings.}
   \item{cin}{A connection object or a character string.}
   \item{cout}{A connection object or a character string.}
   \item{symbol.delimiter}{A character string of with a single character
     in it.}
   \item{allow.unresolved.symbols}{If not \code{TRUE}, then the function
     will execute \code{\link{stop}} if it comes across SYMBOLs that are
-    not defined in \code{x}.}
+    not defined in \code{symbolValues}.}
 }
 
-\details{One use of this function is in the automatic generation of
-  packages, where template files for .R, .c, .Rd and DESCRIPTION
+\details{One use of this function is in \code{\link{createPackage}} for
+  the automatic generation of packages, where template files for
+  \code{.R}, \code{.Rd}, \code{.c} and \code{DESCRIPTION}
   files may be customized by substituting placeholders by values.
   
   A SYMBOL is any text between a pair of symbol delimiters. By
@@ -42,20 +43,24 @@
 \keyword{programming}
 
 \examples{
+## create an example file
 writeLines(text=
   "This is a @FOO@ file. It has the meaning of @BAR@.\n\n\t\tAnd the rest is @DADA@.",
-  con = "test1.txt")
+  con = "cstest1.txt")
 
-conn1 = file("test1.txt", open="rt")
-conn2 = file("test2.txt", open="wt")
-
+## create the symbol table
 z = list(FOO="test",
          DADA="silence",
          BAR="dada")
 
-copySubstitute(z, conn1, conn2)
+## run copySubstitute
+copySubstitute(z, "cstest1.txt", "cstest2.txt")
 
-close(conn1)
-close(conn2)
+## display the results
+cat(readLines("cstest2.txt"))
+
+## clean up
+file.remove(c("cstest1.txt", "cstest2.txt"))
+
 }
 
