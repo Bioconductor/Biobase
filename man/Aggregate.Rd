@@ -2,17 +2,15 @@
 \alias{Aggregate}
 \title{ A simple aggregation mechanism.  }
 \description{
- Given an environment and two functions \code{initfun} and \code{agfun}
- simple Aggregations are made.
+ Given an environment and an aggregator (an object of class \code{aggregate}
+ simple aggregations are made.
 }
 \usage{
-Aggregate(x, env, agfun, initfun)
+Aggregate(x, agg)
 }
 \arguments{
   \item{x}{ The data to be aggregated. }
-  \item{env}{An environment. }
-  \item{agfun}{The aggregate function. }
-  \item{initfun}{The initialize function. }
+  \item{agg}{The aggregator to be used. }
 }
 \details{
   Given some data, \code{x} the user can accumulate (or aggregate)
@@ -30,15 +28,11 @@ Aggregate(x, env, agfun, initfun)
 \seealso{ \code{\link{new.env}} }
 
 \examples{
-  agfun1 <- function(name, current, val) current+1
-  initfun1 <- function(name, val) 1
-
-  env1 <- new.env(hash=TRUE, parent=NULL)
-
-  Aggregate(letters[1:10], env1, agfun1, initfun1)
+  agg1 <- new("aggregator")
+  Aggregate(letters[1:10], agg1)
   #the first 10 letters should be symbols in env1 with values
   # of 1
-  Aggregate(letters[5:11], env1, agfun1, initfun1)
+  Aggregate(letters[5:11], agg1)
   ## now letters[5:10] should have value 2
   bb <- multiget(letters[1:11], env=env1)
   t1 <- as.numeric(bb); names(t1) <- names(bb)

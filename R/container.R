@@ -6,22 +6,25 @@
 
 require(methods)
 
+.initContainer <- function(where) {
 setClass("container", representation( x = "list", content =
                                      "character", locked = "logical"),
          prototype = list(x=vector("list", 0), content="object",
-                                     locked=FALSE))
+                                     locked=FALSE), where=where)
 
 if( !isGeneric("content") )
     setGeneric("content", function(object)
- standardGeneric("content"))
+ standardGeneric("content"), where=where)
 
-setMethod("content", "container", function(object) object@content)
+setMethod("content", "container", function(object) object@content,
+          where=where )
 
 if( !isGeneric("locked") )
     setGeneric("locked", function(object)
- standardGeneric("locked"))
+ standardGeneric("locked"), where=where)
 
-setMethod("locked", "container", function(object) object@locked)
+setMethod("locked", "container", function(object) object@locked,
+          where=where )
 
 if( !isGeneric("[[<-") )
     setGeneric("[[<-")
@@ -38,24 +41,19 @@ setReplaceMethod("[[", "container", function(x, i, ..., value) {
     object@x[[i]] <- value
 })
 
-if( !isGeneric("[[") )
-    setGeneric("[[")
-
 setMethod("[[", "container", function(x, i,...) {
     x@x[[i]]
-})
+}, where=where)
 
 setMethod("print", "container", function(x, ...) {
     cat("Container of ", content(x), "\n", sep="")
     print(x@x)
-})
-
-if( !isGeneric("[") )
-    setGeneric("[")
+}, where=where)
 
 setMethod("[", "container",
     def = function(x, i, j, ..., drop = F){
       new("container", content = content(x), x = x@x[i],
           locked = locked(x))
-})
+}, where=where)
 
+}

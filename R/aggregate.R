@@ -40,26 +40,34 @@ Aggregate <- function(x, agg)
    else stop("bad type for Aggregate")
  }
 
+.initAgg <- function(where) {
 setClass("aggregator", representation( aggenv = "environment",
                                       initfun = "function",
                                       aggfun = "function"),
          prototype = list(aggenv = new.env(hash=TRUE), initfun =
                                      function(name, val) 1,
-         aggfun =  function(name, current, val) current+1 ) )
+         aggfun =  function(name, current, val) current+1 ) , where=where)
 
 
 if( !isGeneric("aggenv") )
-    setGeneric("aggenv", function(object) standardGeneric("aggenv"))
+    setGeneric("aggenv", function(object) standardGeneric("aggenv"),
+    where=where)
 
-setMethod("aggenv", "aggregator", function(object) object@aggenv)
+setMethod("aggenv", "aggregator", function(object) object@aggenv,
+          where=where)
 
 if( !isGeneric("initfun") )
-    setGeneric("initfun", function(object) standardGeneric("initfun"))
+    setGeneric("initfun", function(object) standardGeneric("initfun"),
+    where=where)
 
-setMethod("initfun", "aggregator", function(object) object@initfun)
+setMethod("initfun", "aggregator", function(object) object@initfun,
+          where=where )
 
 if( !isGeneric("aggfun") )
-    setGeneric("aggfun", function(object) standardGeneric("aggfun"))
+    setGeneric("aggfun", function(object) standardGeneric("aggfun"),
+    where=where )
 
-setMethod("aggfun", "aggregator", function(object) object@aggfun)
+setMethod("aggfun", "aggregator", function(object) object@aggfun,
+          where=where)
 
+}

@@ -11,39 +11,40 @@
 
 require(methods)
 
+.initExprset <- function(where) {
  setClass("exprSet", representation(exprs="matrix",
                                    phenodata="data.frame",
-                                    description="character") )
+                                    description="character") , where=where)
 
 #define a generic for obtaining the data
  if( !isGeneric("exprs") )
-     setGeneric("exprs", function(object) standardGeneric("exprs"))
- setMethod("exprs", "exprSet", function(object) object@exprs)
+     setGeneric("exprs", function(object) standardGeneric("exprs"),
+ where=where )
+ setMethod("exprs", "exprSet", function(object) object@exprs, where=where)
 
  if( !isGeneric("phenodata") )
      setGeneric("phenodata", function(object)
-                standardGeneric("phenodata"))
+                standardGeneric("phenodata"), where=where)
  setMethod("phenodata", "exprSet", function(object)
-         object@phenodata )
+         object@phenodata, where=where )
 
  if( !isGeneric("sampleNames") )
      setGeneric("sampleNames", function(object)
-                standardGeneric("sampleNames"))
+                standardGeneric("sampleNames"), where=where)
  setMethod("sampleNames", "exprSet",
-           function(object) row.names(phenodata))
+           function(object) row.names(phenodata), where=where)
 
  if( !isGeneric("geneNames") )
      setGeneric("geneNames", function(object)
-                standardGeneric("geneNames"))
- setMethod("geneNames", "exprSet", function(object) row.names(object@exprs) )
+                standardGeneric("geneNames"), where=where)
+ setMethod("geneNames", "exprSet", function(object)
+     row.names(object@exprs), where=where )
 
 
-# if( !isGeneric("[") )
-#     setGeneric("[")
 
  setMethod("[", "exprSet", function(x, i, j, ..., drop=TRUE)
      new("exprSet", exprs=x@exprs[i,j], phenodata = x@phenodata[j,,drop=FALSE],
-     description=x@description))
+     description=x@description), where=where)
 
 
 # if( !isGeneric("plot") )
@@ -73,5 +74,5 @@ require(methods)
 
 
 
-#}
+}
 
