@@ -36,9 +36,10 @@ copySubstitute = function(cin, cout, symbolValues, symbol.delimiter="@", allow.u
     re = regexpr(paste(symbol.delimiter, ".+", symbol.delimiter, sep=""), txt)
     wh = which(re>0)
     if(length(wh)>0) {
+      ml   = attr(re, "match.length")
       mess = "UNRESOLVED SYMBOLS:\n"
       mess = paste(mess, paste(sapply(wh, function(i)
-        paste("Line", i, ":", substr(txt[i], re[i], re[i] + re@match.length[i]))), collapse="\n"),
+        paste("Line", i, ":", substr(txt[i], re[i], re[i] + ml[i]))), collapse="\n"),
              sep="")
       stop(mess)
     }
