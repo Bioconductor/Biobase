@@ -159,6 +159,9 @@ dumpPackTxt <- function (package)
     cat("\t For details on reading vignettes, see\n")
     cat("\t the openVignette help page.\n")
 
+    ## still need methods for 1.6.x users
+    require(methods, quietly=TRUE) || stop("Requires package methods")
+
     ##set up repository management
     require(reposTools, quietly=TRUE) || stop ("Package reposTools required")
 
