@@ -23,6 +23,6 @@ writes to stdout
 \seealso{  }
 
 \examples{
-dumpPackTxt("ctest")
+dumpPackTxt("stats")
 }
 \keyword{ models }
