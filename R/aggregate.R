@@ -7,8 +7,6 @@
 ##initfun, if they are there they get aggregated with
 ##agfun
 
-require("methods")
-
 Aggregate <- function(x, agg)
 {
     if( !inherits(agg, "aggregator") )

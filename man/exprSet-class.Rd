@@ -2,6 +2,9 @@
 \docType{class}
 \alias{exprSet-class}
 \alias{$.exprSet}
+\alias{geneNames}
+\alias{pData}
+\alias{varLabels}
 \title{Class exprSet, a class for microarray data, and methods for
   processing them } 
 \description{ This is class representation for Microarray Data}
