@@ -77,6 +77,10 @@
       x@pData[[i]] <- value
       x})
 
+  setReplaceMethod("$", "phenoData", function(x, name, value) {
+	x@pData[[name]] = value
+        x})
+
   setMethod("show", "phenoData",
             function(object) {
                 dm <- dim(object@pData)
