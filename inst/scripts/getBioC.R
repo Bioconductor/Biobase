@@ -41,12 +41,16 @@ getBioC <- function (libName = "exprs", destdir = NULL, isDevel = FALSE,
                 messages <- paste(messages, paste("Get", i, "failed"),
                                   sep = "\n")
         }else{
+# Can not use the existing functions since they are all specific to CRAN
 #            download.packages(getLibName(PLATFORM, i),destdir,
 #                       contriburl = getBioCUrl(PLATFORM, isDevel))
 #            install.packages(getLibName(PLATFORM, i), lib = .libPaths(),
 #                      contriburl = getDLUrl(PLATFORM, isDevel),
 #                             destdir = destdir)
+
             download.file(sourceUrl, fileName, quiet = TRUE)
+#           temp <- packageStatus(repositories = fileName)
+#           upgrade(temp)
             installPack(PLATFORM, fileName)
         }
     }
@@ -108,8 +112,12 @@ getFName <- function(platform, destdir, pack){
             stop("The OS system is not supported"))
 }
 
-getVersion <- function(){
-    return("1.0")
+getVersion <- function(isDevel = FALSE){
+    if(isDevel){
+        return("1.0")
+    }else{
+        return("1.0")
+    }
 }
 
 installPack <- function(platform, fileName){
