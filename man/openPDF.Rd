@@ -5,20 +5,23 @@
 Displays the specified PDF file.
 }
 \usage{
-openPDF(file)
+openPDF(file, bg=TRUE)
 }
 \arguments{
   \item{file}{A character string, indicating the file to view}
+  \item{bg}{Should the pdf viewer be opened in the background.}
 }
 \details{
   Currently this function works on Windows and Unix platforms.  Under
   Windows, whatever program is associated with the file extension will
   be used.  Under Unix, the function will use the program named in the
   option "pdfViewer" (default is 'acroread').
+
+  The \code{bg} argument is only interpreted on Unix.
 }
 \value{
 This function is executed for its side effects.  The specified PDF file
-is opened in the PDF viewer and 'NULL' is returned.
+is opened in the PDF viewer and \code{TRUE} is returned.
 }
 \author{ Jeff Gentry}
 
