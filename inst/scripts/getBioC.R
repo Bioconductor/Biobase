@@ -37,6 +37,7 @@ getBioC <- function (libName = "exprs", destdir = NULL, isDevel = FALSE,
 
     for(i in packs){
         sourceUrl <- getUrl(PLATFORM, i, isDevel)
+        print(sourceUrl)
         fileName <- getFName(PLATFORM, DESTDIR, i)
 
         # check the connection instead of downloading directly which
@@ -111,7 +112,9 @@ getDLUrl <- function(platform, isDevel = FALSE){
 getUrl <- function(platform, pack, isDevel = FALSE){
      switch(platform,
             "unix" = return (paste(getDLUrl(platform, isDevel),
-            "/", pack, "_", getVersion(), ".tar.gz", sep = "")),
+            "/", pack, "_",
+            ifelse(pack == tolower("affy"), getAffyVersion(isDevel),
+     getVersion(isDevel)), ".tar.gz", sep = "")),
             "windows" = return(paste(getDLUrl(platform, isDevel),
             "/", pack, if (isDevel) ".zip" else ".zip", sep = "")))
 }
@@ -153,7 +156,13 @@ installPack <- function(platform, fileName){
     }
 }
 
-
+# affy needs special treatment
+getAffyVersion <- function (isDevel = FALSE){
+    if(isDevel)
+        return("1.1.0")
+    else
+        return("1.0.1")
+}
 
 
 
