@@ -71,5 +71,4 @@ dumpPackTxt <- function (package)
     cat("\t the openVignette help page.")
     cacheMetaData(as.environment(where))
 
-    .initChunkClasses(where)
 }
