@@ -4,6 +4,8 @@
 #These are simply lists where the list can contain only
 #objects of the specified class
 
+require(methods)
+
 
 setClass("container", representation( x = "list", content =
                                      "character", locked = "logical"),
