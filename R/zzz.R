@@ -57,13 +57,6 @@ dumpPackTxt <- function (package)
 ##we need to be more careful about the where argument. If any of these
 ##function calls load a library, where is wrong from there on...
 .First.lib <- function(libname, pkgname, where) {
-    # I added this to add "Vignettes" to the menu bar. JZ
-    if(interactive()){
-        if(require(tcltk, quietly = TRUE)){ 
-            addVig2Menu("vExplorer", itemAction = "vExplorer()")
-            addVig2Menu("Biobase")
-        }
-    }
 
     require(methods, quietly=TRUE)
     where <- match(paste("package:", pkgname, sep=""), search())
@@ -104,9 +97,8 @@ dumpPackTxt <- function (package)
     }
 
     ##set up menus -- windows only for now
-#    if( .Platform$OS.type == "windows" ) {
-#        addVig2Menu("vExplorer", itemAction = "vExplorer()")
-#        addVig2Menu("Biobase")
-#    }
+    if( .Platform$OS.type == "windows" ) {
+        addPDF2Vig("Biobase")
+    }
 
 }
