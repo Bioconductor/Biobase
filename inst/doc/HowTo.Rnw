@@ -31,9 +31,6 @@
 \bibliographystyle{plainnat}
 
 \begin{document}
-<<paranoia, echo=FALSE>>=
-options(warn=2)
-@
 
 \section*{How to write a HowTo}
 
