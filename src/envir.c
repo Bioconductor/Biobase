@@ -11,6 +11,23 @@
 
 */
 
+SEXP listLen(SEXP x)
+{
+  SEXP ans;
+  int i;
+
+  if( !Rf_isNewList(x) )
+    error("require a list");
+
+  PROTECT(ans = allocVector(REALSXP, length(x)));
+
+  for(i=0; i<length(x); i++)
+    REAL(ans)[i] = length(VECTOR_ELT(x, i));
+  UNPROTECT(1);
+  return(ans);
+}
+
+
 SEXP listToEnv(SEXP x, SEXP env)
 {
   SEXP name, nm, s;

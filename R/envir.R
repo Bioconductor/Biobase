@@ -17,6 +17,9 @@ env2list <- function(envir, recurse=FALSE) {
     ans
 }
 
+listLen <- function(list)
+    .Call("listLen", list)
+
 ##see if we can speed things up
 
 l2e <- function(vals, envir) {
