@@ -1,6 +1,6 @@
 \name{exprSet-class}
 \docType{class}
-\alias{updateObject}
+\alias{update2MIAME}
 \alias{exprSet-class}
 \alias{exprSet}
 \alias{$.exprSet}
@@ -27,7 +27,7 @@
 \code{    se.exprs    = ...., # Object of class matrix}\cr
 \code{    phenoData   = ...., # Object of class phenoData}\cr
 \code{    annotation  = ...., # Object of class character}\cr
-\code{    description = ...., # Object of class miame}\cr
+\code{    description = ...., # Object of class MIAME}\cr
 \code{    notes       = ...., # Object of class character}\cr
 \code{  )}}
 \section{Slots}{
@@ -46,9 +46,9 @@
     variables and the rows represent patients or cases. }
     \item{\code{annotation}}{A character string identifying the
       annotation that may be used for the \code{exprSet} instance.}
-    \item{\code{description}:}{Object of class "miame". For
+    \item{\code{description}:}{Object of class "MIAME". For
       compatibility with previous version of this class description can
-      also be a "character". The clase \code{characterOrmiame} has been
+      also be a "character". The clase \code{characterOrMIAME} has been
       defined just for this.} 
     \item{\code{notes}:}{Object of class "character" Vector of
       explanatory text }
@@ -65,8 +65,8 @@
     \item{se.exprs}{(exprSet): An accessor function for \code{se.exprs}. }
     
     
-    \item{description}{(exprSet): Obtain the description (miame class) of  \code{exprs}. }
-    \item{description<-}{(exprSet): Set the description (miame class) of
+    \item{description}{(exprSet): Obtain the description (MIAME class) of  \code{exprs}. }
+    \item{description<-}{(exprSet): Set the description (MIAME class) of
       \code{exprs}. }
 
     \item{geneNames}{(exprSet): Obtain the gene names (row names) of
@@ -123,11 +123,11 @@ gene expression values will be iteratively bound to y}
       does not quite have the right semantics but it is close. This
       operator extracts the named component of the \code{pData} slot in
       \code{phenoData}.}
-    \item{updateOjbect}{(exprSet,...): Converts \code{exprSet}s from
+    \item{update2MIAME}{(exprSet,...): Converts \code{exprSet}s from
       previous versions, that have a \code{character} in description to
-      an object that has an instance of the class \code{miame} in
+      an object that has an instance of the class \code{MIAME} in
       the description slot. The old description is stored in the
-      \code{title} slot. If the object already has a \code{miame}
+      \code{title} slot. If the object already has a \code{MIAME}
       description the same object is returned.}
     } 
   }
@@ -163,5 +163,5 @@ gene expression values will be iteratively bound to y}
   sp1 <- split(eset, c(1,2))
   sp2 <- split(eset, c(rep(1,6), rep(2,7)))
 }
-\seealso{miame-class}
+\seealso{MIAME-class}
 \keyword{methods}

@@ -1,7 +1,7 @@
-\name{miame-class}
+\name{MIAME-class}
 \docType{class}
-\alias{miame-class}
-\alias{miame}
+\alias{MIAME-class}
+\alias{MIAME}
 \alias{abstract}
 \alias{expinfo}
 \alias{hybridizations}
@@ -11,7 +11,7 @@
 \alias{otherInfo}
 
 
-\title{Class miame, a class for storing microarray experiment information}
+\title{Class MIAME, a class for storing microarray experiment information}
 \description{We try to cover the MIAME entries that are not covered by
   other classes in Bioconductor. Namely, experimental design, samples,
   hybridizations, normalization controls, and pre-processing information.}
@@ -44,20 +44,20 @@
 
 \section{Methods}{
   \describe{
-    \item{abstract}{\code{signature(object = "miame")}: An accesor
+    \item{abstract}{\code{signature(object = "MIAME")}: An accesor
       funciton for \code{abstract}}
-    \item{expinfo}{\code{signature(object = "miame")}: An accesor
+    \item{expinfo}{\code{signature(object = "MIAME")}: An accesor
       funciton for \code{name}, \code{lab}, \code{contact}, \code{title},
       and \code{url},}
-    \item{hybridizations}{\code{signature(object = "miame")}: An accesor
+    \item{hybridizations}{\code{signature(object = "MIAME")}: An accesor
       funciton for \code{hybridizations} }
-    \item{normControls}{\code{signature(object = "miame")}: An accesor
+    \item{normControls}{\code{signature(object = "MIAME")}: An accesor
       funciton for \code{normControls} }
-    \item{otherInfo}{\code{signature(object = "miame")}: An accesor
+    \item{otherInfo}{\code{signature(object = "MIAME")}: An accesor
       funciton for \code{other} }
-    \item{samples}{\code{signature(object = "miame")}: An accesor
+    \item{samples}{\code{signature(object = "MIAME")}: An accesor
       funciton for \code{samples} }
-    \item{show}{\code{signature(object = "miame")}: renders information
+    \item{show}{\code{signature(object = "MIAME")}: renders information
       about the MIAME information }
   }
 }
