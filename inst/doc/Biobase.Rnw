@@ -3,7 +3,7 @@
 % Biobase.tex file will get overwritten.
 %
 %\VignetteIndexEntry{Biobase Primer}
-%\VignetteDepends{Biobase, genefilter, class, annotate}
+%\VignetteDepends{Biobase, genefilter, class, annotate, hgu95a}
 %\VignetteKeywords{Expression Analysis}
 
 \documentclass{article}
@@ -237,7 +237,6 @@ Next we show how to use this function on the system dataset,
 \verb+geneData+.
 
 <<aggregate>>=
-  library(Biobase)
   library(genefilter)
   library(class)
 
