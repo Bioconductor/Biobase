@@ -503,26 +503,29 @@
               exs <- exprs(x)
               pD <- phenoData(x)
               aN <- annotation(x)
-                if( (nrow(exs) %% lenf == 0 ) ) {
-                  splitexprs <- lapply(split(1:nrow(exs), f),
-                                         function(ind) exs[ind, , drop =
-                                                           FALSE])
-                  nsplit<-length(splitexprs)
-                  for(i in 1:nsplit) {
-                    ## Create the new exprSet with the same class as
-                    ## the original one - SDR
-                    tmp <- x
-                    exprs(tmp) <- splitexprs[[i]]
-                    phenoData(tmp) <- pD
-                    annotation(tmp) <- aN
-                    se.exprs(tmp) <- matrix(nr=0,nc=0)
-                    description(tmp) <- new("MIAME")
-                    notes(tmp) <- ""
-                    splitexprs[[i]] <- tmp
-                    rm(tmp)
-                  }
-                  return(splitexprs)
-                }  ##split the expressions
+##FIXME: I have commented this out and I think it is a bad idea
+##  we should not be splitting on the rows of the exprs, only on
+##the  rows of the pData - ie. only on cases
+#                if( (nrow(exs) %% lenf == 0 ) ) {
+#                  splitexprs <- lapply(split(1:nrow(exs), f),
+#                                         function(ind) exs[ind, , drop =
+#                                                           FALSE])
+#                  nsplit<-length(splitexprs)
+#                  for(i in 1:nsplit) {
+#                    ## Create the new exprSet with the same class as
+#                    ## the original one - SDR
+#                    tmp <- x
+#                    exprs(tmp) <- splitexprs[[i]]
+#                    phenoData(tmp) <- pD
+#                    annotation(tmp) <- aN
+#                    se.exprs(tmp) <- matrix(nr=0,nc=0)
+#                    description(tmp) <- new("MIAME")
+#                    notes(tmp) <- ""
+#                    splitexprs[[i]] <- tmp
+#                    rm(tmp)
+#                  }
+#                  return(splitexprs)
+#                }  ##split the expressions
               if( (nrow(pData(x)) %% lenf ==0) ) {
                 npD <- split(pD, f)
                 nEx <- lapply(split(1:ncol(exs), f),
