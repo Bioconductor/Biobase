@@ -53,6 +53,13 @@ require(methods)
       }
       new("phenoData", pData=pD, varLabels=vL)}, where=where)
 
+  setMethod("[[", "phenoData", function(x, i, j)
+      x@pData[[i]], where=where)
+
+  setReplaceMethod("[[", "phenoData", function(x, i, j, ..., value) {
+      x@pData[[i]] <- value
+      x}, where=where)
+
   setMethod("show", "phenoData",
             function(object) {
                 dm <- dim(object@pData)
@@ -97,6 +104,17 @@ require(methods)
 
  setMethod("pData", "exprSet",
            function(object) pData(object@phenoData), where=where)
+
+  if( !isGeneric("pData<-") )
+      setGeneric("pData<-", function(object, value)
+               standardGeneric("pData<-"), where=where)
+
+ setReplaceMethod("pData", "exprSet", function(object, value) {
+     ph<-object@phenoData
+     ph@pData <- value
+     object@phenoData <- ph
+     object
+ }, where=where)
 
  if( !isGeneric("sampleNames") )
      setGeneric("sampleNames", function(object)
@@ -194,6 +212,9 @@ require(methods)
 
 "$.exprSet" <- function(eset, val)
     (pData(eset))[[as.character(val)]]
+
+"$.phenoData" <- function(x, val, ...)
+    (pData(x))[[as.character(val)]]
 
 esApply <- function( es, f ) {
  # assumes f is of the form f(arg1,arg2) and
