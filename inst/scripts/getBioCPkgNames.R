@@ -41,5 +41,12 @@ getBioCPkgNames <- function(){
 }
 
 getBioCBundle <- function(){
-    return(c("expr", "affy", "cdna"))
+    return(c("exprs", "affy", "cdna"))
 }
+
+
+
+
+
+
+

@@ -15,7 +15,7 @@
 # searched. The default is bioconductor and then CRAN.
 #
 query.packages <- function (pkgName, pkgVersion = NULL, type = "unix",
-                            repositories = getDefaultRep()){
+                            repositories = getDefaultRep(bioCOnly = FALSE)){
 
     on.exit(options(show.error.messages = TRUE))
 
@@ -111,8 +111,12 @@ query.packages <- function (pkgName, pkgVersion = NULL, type = "unix",
     }
 }
 
-getDefaultRep <- function (){
-    return(list(BioC =
+getDefaultRep <- function (bioCOnly = FALSE){
+    if(bioCOnly)
+        return(list(BioC =
+           "http://www.bioconductor.org/packages/release/distrib/PACKAGES"))
+    else
+        return(list(BioC =
            "http://www.bioconductor.org/packages/release/distrib/PACKAGES",
            CRAN = paste(getOption("repositories"), "/PACKAGES", sep = "")))
 }
