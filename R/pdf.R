@@ -1,19 +1,22 @@
 setOptionPdfViewer <- function(viewer,verbose=FALSE) {
     if (missing(viewer)) {
-        for (x in c("xpdf","acroread","acroread4")) {
-            viewer<-system(paste("which",x),intern=TRUE,
-                                   ignore.stderr=TRUE)
-            if( length(viewer) > 0 && file.exists(viewer) )
-                break
-            ## It is important to break here due to an OSX problem
-            viewer <- character()
+        viewer <- getOption("pdfviewer")
+        if (is.null(viewer)) {
+            for (x in c("xpdf","acroread","acroread4")) {
+                viewer<-system(paste("which",x),intern=TRUE,
+                               ignore.stderr=TRUE)
+                if( length(viewer) > 0 && file.exists(viewer) )
+                    break
+                ## It is important to break here due to an OSX problem
+                viewer <- character()
+            }
+            if (length(viewer) == 0) {
+                warning("No available PDF viewer found on system")
+                return(FALSE)
+            }
+            if (verbose == TRUE)
+                note(paste("Selecting PDF viewer",viewer))
         }
-        if (length(viewer) == 0) {
-            warning("No available PDF viewer found on system")
-            return(FALSE)
-        }
-        if (verbose == TRUE)
-            note(paste("Selecting PDF viewer",viewer))
     }
 
     ## Probably can get away with a few less steps here
