@@ -46,6 +46,14 @@ require(methods)
      new("exprSet", exprs=x@exprs[i,j], phenodata = x@phenodata[j,,drop=FALSE],
      description=x@description), where=where)
 
+ setMethod("print", "exprSet", function(x, ...) {
+     ngenes <- nrow(x@exprs)
+     nsamples <- ncol(x@exprs)
+     cat("Expression Set (exprSet) with \n\t", ngenes, " genes\n\t", sep="")
+     cat(nsamples, "samples\n")
+     cat("\tCovariates\n")
+     cat("\t\t", names(x@phenodata), "\n", sep="")
+ }, where=where)
 
 # if( !isGeneric("plot") )
 #    setGeneric("plot")
