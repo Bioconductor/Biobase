@@ -46,9 +46,12 @@ dumpPackTxt <- function (package)
 ##we need to be more careful about the where argument. If any of these
 ##function calls load a library, where is wrong from there on...
 .First.lib <- function(libname, pkgname, where) {
+    library.dynam("Biobase", pkgname, libname)
+
     ## Define the function inside of .First.lib, as other packages
     ## might be defining this function and we don't want to cause mask
     ## messages.
+
     checkPkgDeps <- function(pkg) {
         reqVers <- function(req)
             return(gsub("(>)|(<)|(=)|([[:space:]])","",req))

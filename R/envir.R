@@ -17,6 +17,14 @@ env2list <- function(envir, recurse=FALSE) {
     ans
 }
 
+##see if we can speed things up
+
+l2e <- function(vals, envir) {
+    if(missing(envir)) envir <- new.env(hash=TRUE)
+    .Call("listToEnv", vals, envir)
+}
+
+##FIXME: not sure that recurse makes sense here
 list2env <- function(vals, envir, recurse=FALSE) {
     if (!is.environment(envir))
         stop("envir argument is not an environment")
