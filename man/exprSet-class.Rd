@@ -13,7 +13,6 @@
 \alias{notes<-}
 \alias{pData}
 \alias{pData<-}
-\alias{phenoData}
 \alias{phenoData<-}
 \alias{sampleNames}
 \alias{sampleNames<-}
@@ -214,5 +213,5 @@ gene expression values will be iteratively bound to y}
   sampleNames(eset)
   sampleNames(eset) <- letters
 }
-\seealso{MIAME-class}
+\seealso{\code{\link{MIAME-class}}, \code{\link{phenoData-class}}}
 \keyword{methods}

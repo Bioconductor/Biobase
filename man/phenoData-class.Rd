@@ -1,6 +1,7 @@
 \name{phenoData-class}
 \docType{class}
 \alias{phenoData-class}
+\alias{phenoData}
 \alias{$.phenoData}
 \alias{phenoData<-,pheno}
 \alias{[,phenoData-method}
