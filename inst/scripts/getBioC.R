@@ -102,7 +102,7 @@ getUrl <- function(platform, pack, isDevel = FALSE){
             "unix" = return (paste(getDLUrl(platform, isDevel),
             "/", pack, "_", getVersion(), ".tar.gz", sep = "")),
             "windows" = return(paste(getDLUrl(platform, isDevel),
-            "/", pack, ".zip", sep = ""))) ## if development version, make -snapshot.zip
+            "/", pack, if (isDevel) "-snapshot.zip" else ".zip", sep = "")))
 }
 
 getFName <- function(platform, destdir, pack, isDevel=FALSE){
@@ -111,7 +111,7 @@ getFName <- function(platform, destdir, pack, isDevel=FALSE){
             "unix" = return (paste(destdir, .Platform$file.sep,
             pack, "_", getVersion(), ".tar.gz", sep = "")),
             "windows" = return(paste(destdir, "\\",
-            pack, ".zip", sep = "")),  ## if development version, make -snapshot.zip
+            pack, if (isDevel) "-snapshot.zip" else ".zip", sep = "")),
             stop("The OS system is not supported"))
 }
 
