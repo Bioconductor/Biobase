@@ -6,3 +6,4 @@ Description: Functions that are needed by many other packages or which replace R
 Depends: R (>= 1.8.0),reposTools
 Maintainer: R. Gentleman <rgentlem@hsph.harvard.edu>
 License: LGPL 
+Collate: addVig2Menu.R aggregate.R as.data.frame.exprSet.R container.R copySubstitute.R createpackage.R envir.R exprSet.R eset.R multi.R netTools.R openVignette.R pdf.R pkgVersion.R read.MIAME.R read.exprSet.R read.phenoData.R MLexprSet.R zzz.R

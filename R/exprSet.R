@@ -587,7 +587,8 @@
     (pData(x))[[as.character(val)]]
 
 esApply <- function(X, MARGIN, FUN, ...) {
-    if (class(X) != "exprSet") stop("arg1 must be of class exprSet")
+    if (class(X) != "exprSet" && class(X) != "eSet")
+        stop("arg1 must be of class exprSet")
     e1 <- new.env(parent=environment(FUN))
     multiassign(names(pData(X)), pData(X), env=e1)
     environment(FUN) <- e1
