@@ -28,9 +28,10 @@
 
 ##data class for accompanying data
   setClass("phenoData", representation(pData="data.frame",
-                                       varLabels="list"),
+                                       varLabels="list",
+					varMetadata="data.frame"),
            prototype=list(pData=data.frame(matrix(nr=0,nc=0)),
-             varLabels=list()),
+             varLabels=list(), varMetadata=data.frame(matrix(nr=0,nc=0))),
            validity =  function(object) {
                                 dm <- dim(object@pData)
                                 if(dm[2] != length(object@varLabels) )
