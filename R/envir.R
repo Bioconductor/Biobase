@@ -32,9 +32,9 @@ list2env <- function(vals, envir, recurse=FALSE) {
     envir
 }
 
-copyEnv <- function(oldEnv, recurse=FALSE) {
+copyEnv <- function(oldEnv, newEnv=new.env(parent=parent.env(oldEnv)),
+                    recurse=FALSE) {
     oldVals <- env2list(oldEnv, recurse)
-    newEnv <- new.env(parent=parent.env(oldEnv))
     newEnv <- list2env(oldVals, newEnv)
     return(newEnv)
 }
