@@ -269,6 +269,24 @@ require(methods)
                     stop("could not split")
             }, where=where)
 
+###write table for exprSet. makes a table with gene names in first column
+###chip names in first row
+###apart from quote=FALSE and sep="\t"
+###everything else is the same as write.table
+  if( !isGeneric("write.exprs") )
+    setGeneric("write.exprs", function(x,...) standardGeneric("write.exprs"),
+              where=where )
+  setMethod("write.exprs", signature(x="exprSet"),
+            function(x,file = "tmp.txt",
+                     append = FALSE, quote = FALSE, sep = "\t",
+                     eol = "\n", na = "NA", dec = ".", row.names = TRUE,
+                     col.names = TRUE, qmethod = c("escape", "double")) 
+            write.table(exprs(x),file = file, append = append,
+                        quote = quote,
+                        sep = sep,eol = eol, na = na, dec = dec,
+                        row.names = row.names, col.names = col.names,
+                        qmethod = qmethod),where=where)
+
 }
 
 
@@ -297,4 +315,5 @@ esApply <- function(X, MARGIN, FUN, ...) {
     environment(FUN) <- e1
     apply(exprs(X), MARGIN, FUN, ...)
   }
+
 
