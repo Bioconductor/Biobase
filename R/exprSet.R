@@ -2,19 +2,15 @@
 
 # in this representation we think of the data set being comprised of
 #  * matrix slot exprs: a collection of array results organized as a matrix, with
-# genes defining rows and samples defining columns. 
+# genes defining rows and samples defining columns.
 #  * data.frame slot phenodata: in the customary organization of samples
-# defining rows and variables or features defining columns.  thus 
+# defining rows and variables or features defining columns.  thus
 # if x is an exprSet, nrow(x@phenodata) == ncol(x@exprs)
 #  * character slot description: unconstrained string with information about
 # the exprSet
 
-# for plotting we have dendrogram on each axis,
-# phenotypic data -- associated with sample labels
-
 require(methods)
 
-.initClasses <- function(where) {
  setClass("exprSet", representation(exprs="matrix",
                                    phenodata="data.frame",
                                     description="character") )
@@ -42,8 +38,8 @@ require(methods)
  setMethod("geneNames", "exprSet", function(object) row.names(object@exprs) )
 
 
- if( !isGeneric("[") )
-     setGeneric("[")
+# if( !isGeneric("[") )
+#     setGeneric("[")
 
  setMethod("[", "exprSet", function(x, i, j, ..., drop=TRUE)
      new("exprSet", exprs=x@exprs[i,j], phenodata = x@phenodata[j,,drop=FALSE],
@@ -77,5 +73,5 @@ require(methods)
 
 
 
-}
+#}
 
