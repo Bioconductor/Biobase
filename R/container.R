@@ -23,10 +23,10 @@ if( !isGeneric("locked") )
 
 setMethod("locked", "container", function(object) object@locked)
 
+if( !isGeneric("[[<-") )
+    setGeneric("[[<-")
 
-setGeneric("[[<-")
-
-setReplaceMethod("[[", "container", function(x, i, j, ..., value) {
+setReplaceMethod("[[", "container", function(x, i, ..., value) {
     if( locked(x) )
         stop("cannot assign into a locked container")
     cv <- class(value)
@@ -38,9 +38,10 @@ setReplaceMethod("[[", "container", function(x, i, j, ..., value) {
     object@x[[i]] <- value
 })
 
-setGeneric("[[")
+if( !isGeneric("[[") )
+    setGeneric("[[")
 
-setMethod("[[", "container", function(x, i, j,...) {
+setMethod("[[", "container", function(x, i,...) {
     x@x[[i]]
 })
 
@@ -49,7 +50,8 @@ setMethod("print", "container", function(x, ...) {
     print(x@x)
 })
 
-setGeneric("[")
+if( !isGeneric("[") )
+    setGeneric("[")
 
 setMethod("[", "container",
     def = function(x, i, j, ..., drop = F){
