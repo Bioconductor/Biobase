@@ -11,6 +11,11 @@ l2e <- function(vals, envir) {
     .Call("listToEnv", vals, envir, PACKAGE="Biobase")
 }
 
+rowMedians <- function(imat) {
+    if( any(is.na(imat) ) )
+      stop("cannot handle missing values - yet")
+    .Call("rowMeds", imat, PACKAGE="Biobase")
+}
 
 copyEnv <- function(oldEnv, newEnv=new.env(hash=TRUE,
                     parent=parent.env(oldEnv)), all.names=FALSE) {

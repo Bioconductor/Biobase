@@ -2,7 +2,7 @@
 
 #include <Rinternals.h>
 #include <R_ext/RConverters.h>
-
+#include <R_ext/Utils.h>
 
 /* 
    speed up the conversion, this could become as.environment at some
@@ -57,6 +57,37 @@ SEXP listToEnv(SEXP x, SEXP env)
   return(env);
 }
 
+/* fast computation of rowMedians */
+
+SEXP rowMeds(SEXP inmat)
+{
+  SEXP ans;
+  int i, j,  nrow, ncol, medval;
+  double *rowData;
+
+  /* we can do integers later */
+  if( !isMatrix(inmat) || !isReal(inmat) )
+    error("argument must be a numeric matrix");
+
+  PROTECT(ans = getAttrib(inmat, R_DimSymbol));
+  nrow = INTEGER(ans)[0];
+  ncol = INTEGER(ans)[1];
+  /* subtract one here, since rPsort does zero based addressing*/
+  medval = ((ncol+1)/2) - 1;
+
+  PROTECT(ans = allocVector(REALSXP, nrow));
+  
+  rowData = (double *) R_alloc(ncol, sizeof(double));
+
+  for( i=0; i<nrow; i++) {
+    for(j=0; j<ncol; j++) 
+      rowData[j] = REAL(inmat)[i+j*nrow];
+    rPsort(rowData, ncol, medval);
+    REAL(ans)[i] = rowData[medval];
+  }
+  UNPROTECT(2);
+  return(ans);
+}
 
 #ifdef ALLDONENOW
 ##looks like we need to either expose some of the ls functionality 
