@@ -243,9 +243,10 @@
     setGeneric("exprs<-", function(object, value)
                standardGeneric("exprs<-"), where=where)
   
-  setReplaceMethod("exprs", signature="exprSet",
+  setReplaceMethod("exprs", "exprSet",
                    function(object, value) {
                      object@exprs <- value
+                     return(object)
                    },
                    where = where)
 
@@ -298,7 +299,6 @@
     setGeneric("phenoData<-", function(object, value)
                standardGeneric("phenoData<-"), where=where)
 
-
   setReplaceMethod("phenoData", c("exprSet", "phenoData"),
                    function(object, value) {
                        object@phenoData <- value
@@ -316,7 +316,7 @@
                standardGeneric("pData<-"), where=where)
 
   setReplaceMethod("pData", "exprSet", function(object, value) {
-    ph<-phenoData(object)
+    ph <- phenoData(object)
     pData(ph) <- value
     phenoData(object) <- ph
     object
