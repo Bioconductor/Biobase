@@ -7,7 +7,7 @@ as.data.frame.exprSet <- function(x, row.names=NA, optional=NA) {
     gn.eset <- rep(NA, nr.eset)
   i.pdata <- rep(seq(1, nc.eset), rep(nr.eset, nc.eset))
 
-  pexp <- c(exprs(x))
+  pexp <- as.vector(exprs(x))
   
   
   rv <- do.call("data.frame", c(list(exprs=pexp, genenames=rep(gn.eset, nc.eset)),
