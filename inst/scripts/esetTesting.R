@@ -30,3 +30,10 @@ esApply(v1, 1, mean)
 
 esApply(v2, 1, mean)
 
+#c0 <- try( combine(v1,v2) ) # error
+c1 <- combine(v2,v2)
+
+v3 <- v2
+pData(v3)$var3 <- 1:10
+v3@phenoData@varLabels$var3 <- "var 3 label"
+c2 <- combine(v2,v3)
