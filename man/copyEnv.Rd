@@ -1,16 +1,17 @@
 \name{copyEnv}
 \alias{copyEnv}
-\alias{list2env}
-\alias{env2list}
-\title{Functionality to copy environments}
+\alias{l2e}
+\alias{listLen}
+\title{List-Environment interactions}
 \description{
   These functions can be used to make copies of environments, or to
-  get/assign all of the objects inside of an environment
+  get/assign all of the objects inside of an environment.
 }
 \usage{
-copyEnv(oldEnv, newEnv = new.env(hash=TRUE, parent = parent.env(oldEnv)), recurse = FALSE)
-env2list(envir, recurse=FALSE)
-list2env(vals, envir, recurse=FALSE)
+copyEnv(oldEnv, newEnv = new.env(hash=TRUE, parent =
+parent.env(oldEnv)), all.names=FALSE) 
+listLen(list)
+l2e(vals, envir)
 }
 \arguments{
   \item{oldEnv}{An environment to copy from}
@@ -18,20 +19,21 @@ list2env(vals, envir, recurse=FALSE)
   with the same parent environment as oldEnv.}
   \item{envir}{An environment to get/set values to}
   \item{vals}{A named list of objects to assign into an environment}
-  \item{recurse}{Whether to recurse upwards through the environment hierarchy}
+  \item{all.names}{Whether to retrieve objects with names that start
+    with a dot.}
+  \item{list}{A list}
 }
 \details{
-  \code{env2list}:  This function will retrieve the objects from an
-  environment and return them in a named list (names being the names of
-  the objects).
-  \code{list2env}:  This function will take a named list and assign all
+  \code{listLen}:  This function returns a vector of the same lenght as
+  the list containng the lengths of each element of the supplied argument.
+  \code{l2e}:  This function takes a named list and assigns all
   of its elements into the environment (using the names to name the
   objects).
   \code{copyEnv}:  This function will make a copy of the contents from
   \code{oldEnv} and place them into \code{newEnv}.
 }
-\author{Jeff Gentry}
-\seealso{\code{\link{environment}}}
+\author{Jeff Gentry and R. Gentleman}
+\seealso{\code{\link{environment}}, \code{\link{as.list}}}
 \examples{
    z <- new.env()
    multiassign(c("a","b","c"),c(1,2,3),z)
@@ -39,9 +41,9 @@ list2env(vals, envir, recurse=FALSE)
    a <- copyEnv(z)
    ls(a)
 
-   q <- env2list(z)
+   q <- as.list(z)
    g <- new.env()
-   g <- list2env(q,g)   
+   g <- l2e(q,g)   
    ls(g)
 }
 \keyword{utilities}

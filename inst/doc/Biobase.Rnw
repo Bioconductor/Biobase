@@ -3,7 +3,7 @@
 % Biobase.tex file will get overwritten.
 %
 %\VignetteIndexEntry{Biobase Primer}
-%\VignetteDepends{Biobase, class, annotate, hgu95a}
+%\VignetteDepends{}
 %\VignetteKeywords{Expression Analysis}
 %\VignettePackage{Biobase}
 \documentclass{article}
