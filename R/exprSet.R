@@ -1,7 +1,14 @@
-# A class of for microarray data
+# A class for microarray data
 
 # in this representation we think of the data set being comprised of
-# an expression array, uexpr, the sample names, the gene names
+#  * matrix slot exprs: a collection of array results organized as a matrix, with
+# genes defining rows and samples defining columns. 
+#  * data.frame slot phenodata: in the customary organization of samples
+# defining rows and variables or features defining columns.  thus 
+# if x is an exprSet, nrow(x@phenodata) == ncol(x@exprs)
+#  * character slot description: unconstrained string with information about
+# the exprSet
+
 # for plotting we have dendrogram on each axis,
 # phenotypic data -- associated with sample labels
 
@@ -27,7 +34,7 @@ require(methods)
      setGeneric("sampleNames", function(object)
                 standardGeneric("sampleNames"))
  setMethod("sampleNames", "exprSet",
-           function(object) names(phenodata))
+           function(object) row.names(phenodata))
 
  if( !isGeneric("geneNames") )
      setGeneric("geneNames", function(object)
