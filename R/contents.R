@@ -1,12 +1,13 @@
-  if( !isGeneric("contents") && !exists("contents", mode="function") )
-       setGeneric("contents", function(object, all.names)
-                  standardGeneric("contents"))
+.initContents <- function(where) {
+    if( !isGeneric("contents") && !exists("contents", mode="function") )
+        setGeneric("contents", function(object, all.names)
+                   standardGeneric("contents"), where=where)
 
   setMethod("contents", "environment",
      function(object, all.names) {
          if (missing(all.names))
              all.names <- FALSE
          as.list(object, all.names=all.names)
-     })
-
+     }, where=where)
+}
 

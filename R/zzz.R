@@ -48,6 +48,9 @@ dumpPackTxt <- function (package)
 .First.lib <- function(libname, pkgname, where) {
     library.dynam("Biobase", pkgname, libname)
 
+    ##need contents to load at library attach - not at build time
+    where <- match(paste("package:", pkgname, sep=""), search())
+    .initContents(where)
     ## Define the function inside of .First.lib, as other packages
     ## might be defining this function and we don't want to cause mask
     ## messages.
