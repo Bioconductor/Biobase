@@ -10,6 +10,8 @@ multiget <- function(x, pos=-1, envir=as.environment(pos), mode =
 {
     lenx <- length(x)
     ans <- vector("list", length=lenx)
+    if( ! is.environment(envir) )
+        stop("envir argument is not an environment")
     options(show.error.messages = FALSE)
     on.exit(options(show.error.messages = TRUE))
     for(i in 1:lenx)
@@ -37,6 +39,8 @@ multiget <- function(x, pos=-1, envir=as.environment(pos), mode =
 multiassign <- function (x, value, envir = parent.frame(), inherits =
                          FALSE)
 {
+    if( ! is.environment(envir) )
+        stop("envir argument is not an environment")
     if( missing(value) ) {
         nx <- names(x)
         if( any(nchar(nx) == 0) )
