@@ -215,13 +215,13 @@
 
   setMethod("update2MIAME", "exprSet",
             function(object){
-              if(class(description(object))=="MIAME")
-                cat("This object is up to date.\n")
-              else{
-                cat("For now we will keep old description in the experiment title.\nConsider defining an object of class MIAME with more information\n")
-                description(object) <- new("MIAME",title=description(object))
-              }
-              object
+                if (is(description(object), "MIAME"))
+                    cat("This object is up to date.\n")
+                else{
+                    cat("For now we will keep old description in the experiment title.\nConsider defining an object of class MIAME with more information\n")
+                    description(object) <- new("MIAME",title=description(object))
+                }
+                object
             })
 
   ##define a generic for obtaining the data
@@ -605,7 +605,7 @@
     (pData(x))[[as.character(val)]]
 
 esApply <- function(X, MARGIN, FUN, ...) {
-    if (class(X) != "exprSet" && class(X) != "eSet")
+    if ((!is(X, "exprSet")) && (!is(X, "eSet")))
         stop("arg1 must be of class exprSet")
     e1 <- new.env(parent=environment(FUN))
     multiassign(names(pData(X)), pData(X), env=e1)

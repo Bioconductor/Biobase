@@ -9,7 +9,7 @@
 
 Aggregate <- function(x, agg)
 {
-    if( !inherits(agg, "aggregator") )
+    if( !is(agg, "aggregator") )
         stop("second argument must be an aggregator")
     if( is.null(x) || length(x) == 0 )
         return()
