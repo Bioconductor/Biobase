@@ -41,6 +41,11 @@ getBioC <- function (libName = "exprs", destdir = NULL, isDevel = FALSE,
                 messages <- paste(messages, paste("Get", i, "failed"),
                                   sep = "\n")
         }else{
+#            download.packages(getLibName(PLATFORM, i),destdir,
+#                       contriburl = getBioCUrl(PLATFORM, isDevel))
+#            install.packages(getLibName(PLATFORM, i), lib = .libPaths(),
+#                      contriburl = getDLUrl(PLATFORM, isDevel),
+#                             destdir = destdir)
             download.file(sourceUrl, fileName, quiet = TRUE)
             installPack(PLATFORM, fileName)
         }
@@ -63,19 +68,34 @@ getPackNames <- function (libName){
            stop("The library is not valid"))
 }
 
-getUrl <- function(platform, pack, isDevel = FALSE){
+getLibName <- function (platform, lib){
+     # .Platform$file.sep returns "/" under windows. Hard code for now
+     switch(platform,
+            "unix" = return (paste(pack, "_", getVersion(),
+            ".tar.gz", sep = "")),
+            "windows" = return(paste(pack, "-snapshot.zip", sep = "")),
+            stop("The OS system is not supported"))
+}
+
+getDLUrl <- function(platform, isDevel = FALSE){
     if(isDevel)
         tempUrl <-
             "http://www.bioconductor.org/packages/distrib//devel/"
     else
         tempUrl <-
             "http://www.bioconductor.org/packages/distrib//release/"
-     switch(platform,
-            "unix" = return (paste(tempUrl, "Source/",
-            pack, "_", getVersion(), ".tar.gz", sep = "")),
-            "windows" = return(paste(tempUrl,"Win32/",
-            pack, "-snapshot.zip", sep = "")),
+    switch(platform,
+            "unix" = return (paste(tempUrl, "Source", sep = "")),
+            "windows" = return(paste(tempUrl,"Win32", sep = "")),
             stop("The OS system is not supported"))
+}
+
+getUrl <- function(platform, pack, isDevel = FALSE){
+     switch(platform,
+            "unix" = return (paste(getDLUrl(platform, isDevel),
+            "/", pack, "_", getVersion(), ".tar.gz", sep = "")),
+            "windows" = return(paste(getDLUrl(platform, isDevel),
+            "/", pack, "-snapshot.zip", sep = "")))
 }
 
 getFName <- function(platform, destdir, pack){
