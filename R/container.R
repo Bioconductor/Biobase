@@ -6,7 +6,6 @@
 
 require(methods)
 
-
 setClass("container", representation( x = "list", content =
                                      "character", locked = "logical"),
          prototype = list(x=vector("list", 0), content="object",
