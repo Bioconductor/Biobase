@@ -8,6 +8,7 @@
 multiget <- function(x, pos=-1, envir=as.environment(pos), mode =
                      "any",inherits = TRUE, iffail=NA)
 {
+    .Deprecated("mget", "base")
     lenx <- length(x)
     ans <- vector("list", length=lenx)
     if( ! is.environment(envir) )
