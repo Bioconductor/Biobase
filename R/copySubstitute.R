@@ -1,90 +1,51 @@
-copySubstitute = function(src, dest, symbolValues,
-                          symbolDelimiter = "@",
-                          allowUnresolvedSymbols = FALSE,
-                          removeExtension = "\\.in$") {
+copySubstitute = function(cin, cout, symbolValues, symbol.delimiter="@", allow.unresolved.symbols=FALSE) {
   ## check integrity of arguments (...lots of bureaucracy)
   mess = NULL
   if (!is.list(symbolValues) && !is.vector(symbolValues))
-    mess = "'symbolValues' must be a list or vector."
+    mess = "Argument \"symbolValues\" of this function must be a list or vector."
   if (!all(sapply(symbolValues, is.character)))
-    mess = "'symbolValues' must only contain characters."
+    mess = "Argument \"symbolValues\" of this function must only contain characters."
   if (is.null(names(symbolValues)) || any(names(symbolValues)==""))
-    mess = "'symbolValues' must have non-empty names."
-  if (!(is.character(symbolDelimiter) && length(symbolDelimiter)==1 && all(nchar(symbolDelimiter)==1)))
-    mess = "'symbolDelimiter' must be a single character."
-  if (!is.logical(allowUnresolvedSymbols))
-    mess = "'allowUnresolvedSymbols' must be of type logical."
+    mess = "Argument \"symbolValues\" of this function must have non-empty names."
+  if (!(("connection" %in% class(cin)  && isOpen(cin, rw="r")) || is.character(cin)))
+    mess = "Argument \"cin\" of this function must be a read connection or a file name."
+  if (!(("connection" %in% class(cout) && isOpen(cout, rw="w"))|| is.character(cout)))
+    mess = "Argument \"cout\" of this function must be a write connection or a file name."
+  if (!is.logical(allow.unresolved.symbols))
+    mess = "Argument \"allow.unresolved.symbols\" must be of type logical."
+  if (!(is.character(symbol.delimiter) && nchar(symbol.delimiter)==1))
+    mess = "Argument \"symbol.delimiter\" must be a single character."
+
   if(!is.null(mess))
     stop(mess)
+  
+  ## here the actual work is done
+  txt = readLines(cin)
+  nm  = paste(symbol.delimiter, names(symbolValues), symbol.delimiter, sep="")
+  for (i in 1:length(symbolValues))
+    txt = gsub(nm[i], symbolValues[[i]], txt)
 
-  ##----------------------------------------------------------------------
-  ## Local function: here the actual subsitution and copying work is done
-  ## cin and cout are single files or connections
-  ##----------------------------------------------------------------------
-  cpSubsCon = function(cin, cout) {
-    txt = readLines(cin)
-    for (i in seq(along=symbolValues))
-      txt = gsub(nm[i], symbolValues[[i]], txt)
-
-    ## check for unresolved symbols
-    if(!allowUnresolvedSymbols){
-      re = regexpr(paste(symbolDelimiter, ".+", symbolDelimiter, sep=""), txt)
-      wh = which(re>0)
-      if(length(wh)>0) {
-        ml   = attr(re, "match.length")
-        mess = "UNRESOLVED SYMBOLS:\n"
-        mess = paste(mess, paste(sapply(wh, function(i)
-          paste("Line", i, ":", substr(txt[i], re[i], re[i] + ml[i]))), collapse="\n"),
-          sep="")
-        stop(mess)
-      }
-    }
-    ## finito
-    writeLines(text=txt, con=cout)
+  ## If the destination is a filename, also substitute that
+  if(is.character(cout)) {
+    for (i in 1:length(symbolValues))
+      cout = gsub(nm[i], symbolValues[[i]], cout)
   }
-
-  ##----------------------------------------------------------------------
-  ## Local function: iterate over character vectors of filenames and
-  ## recursively descend into directories
-  ##----------------------------------------------------------------------
-  cpSubs = function(src, dest) {
-    if (is.character(src)) {
-      if (!is.character(dest) || length(dest) != 1)
-        stop("'dest' must be a character vector of length 1.'")
-      if (file.access(dest) != 0)
-        stop(paste("'dest' does not exist:", dest))
-      if (file.info(dest)$isdir != TRUE)
-        stop(paste("'dest' must be a directory:", dest))
-
-      ## directories: recursively descend
-      isdir = file.info(src)$isdir
-      for (k in seq(along=src)) {
-        ## symbol substitution also in directory names and filenames
-        tmp      = unlist(strsplit(src[k], .Platform$file.sep))
-        destname = gsub(removeExtension, "", tmp[length(tmp)])
-        for (i in seq(along=symbolValues))
-          destname = gsub(nm[i], symbolValues[[i]], destname)
-        fulldestname = file.path(dest, destname)
-        if(isdir[k]) {
-          dir.create(fulldestname)
-          cpSubs(dir(src[k], full.names=TRUE), fulldestname)
-        } else {
-          cpSubsCon(src[k], fulldestname)
-        }
-      } ## for k
-    } else {
-      if (!("connection" %in% class(src))  || !isOpen(src, rw="r"))
-        stop("'src' must be a connection open for reading.")
-      if (!("connection" %in% class(dest)) || !isOpen(dest, rw="w"))
-        stop("'dest' must be a connection open for writing.")
-      cpSubsCon(src, dest)
+  
+  ## check for unresolved symbols
+  if(!allow.unresolved.symbols){
+    re = regexpr(paste(symbol.delimiter, ".+", symbol.delimiter, sep=""), txt)
+    wh = which(re>0)
+    if(length(wh)>0) {
+      ml   = attr(re, "match.length")
+      mess = "UNRESOLVED SYMBOLS:\n"
+      mess = paste(mess, paste(sapply(wh, function(i)
+        paste("Line", i, ":", substr(txt[i], re[i], re[i] + ml[i]))), collapse="\n"),
+             sep="")
+      stop(mess)
     }
   }
 
-  ##------------------------------------------------------------
-  ## Do it!
-  ##------------------------------------------------------------
-  nm  = paste(symbolDelimiter, names(symbolValues), symbolDelimiter, sep="")
-  cpSubs(src, dest)
+  # finito
+  writeLines(text=txt, con=cout)
 }
 
