@@ -142,6 +142,9 @@ dumpPackTxt <- function (package)
     }
 
     checkPkgDeps(pkgname)
+    ## still need methods for 1.6.x users
+    require(methods, quietly=TRUE) || stop("Requires package methods")
+
 
     where <- match(paste("package:", pkgname, sep=""), search())
     .initContainer(where)
@@ -158,9 +161,6 @@ dumpPackTxt <- function (package)
     ##        cat("\t to see the available vignettes\n")
     cat("\t For details on reading vignettes, see\n")
     cat("\t the openVignette help page.\n")
-
-    ## still need methods for 1.6.x users
-    require(methods, quietly=TRUE) || stop("Requires package methods")
 
     ##set up repository management
     require(reposTools, quietly=TRUE) || stop ("Package reposTools required")
