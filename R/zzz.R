@@ -50,12 +50,17 @@ dumpPackTxt <- function (package)
 }
 
 .First.lib <- function(libname, pkgname, where) {
-    require(methods)
+    require(methods, quietly=TRUE)
     where <- match(paste("package:", pkgname, sep=""), search())
     .initContainer(where)
     .initAgg(where)
     .initExprset(where)
     .buildBiobaseOpts()
     .getPDFOption()
+  cat("Welcome to Bioconductor \n")
+  cat("\t To view some introductory material -- look at our vignettes\n")
+  cat("\t Simply type: vignette() \n")
+  cat("\t to see the available vignettes\n")
+  cat("\t To read a vignette see the openVignette help page for details\n")
     cacheMetaData(as.environment(where))
 }

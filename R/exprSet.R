@@ -26,8 +26,6 @@
 #
 #more info: http://www.mged.org/Workgroups/MIAME/miame_1.1.html
 
-require(methods)
-
 .initExprset <- function(where) {
 
 ##data class for accompanying data
