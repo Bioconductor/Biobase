@@ -1,8 +1,8 @@
 Package: Biobase
 Title: Biobase: Base functions for Bioconductor
-Version: 1.3.29
+Version: 1.3.30
 Author: R. Gentleman, V. Carey
 Description: Functions that are needed by many other packages or which replace R functions.
-Depends: R (>= 1.6.0),reposTools, tkWidgets, genefilter
+Depends: R (>= 1.8.0),reposTools, tkWidgets, genefilter
 Maintainer: R. Gentleman <rgentlem@hsph.harvard.edu>
 License: LGPL 
