@@ -1,32 +1,37 @@
 \name{esApply}
 \alias{esApply}
-\title{ iterate over an exprSet }
+\title{ Apply for the expression data in an exprSet }
 \description{
 esApply is a wrapper to apply for use with exprSets.
-Given a function f of two arguments with a specific structure
-(see details), evaluate
-f, which may involve use of phenotypic data, on all
-gene expression vectors in an exprSet.  The value returned
-is that of a call to apply(exprs(es),1,f).
+Because the application of a function to the rows of the expression
+array usually involves variables in the \code{phenoData} slot we have
+used a special evaluation paradigm here.
+The function \code{FUN} may reference any data in phenoData by name.
 }
 \usage{
-esApply(es, f)
+esApply(X, MARGIN, FUN, ...)
 }
 \arguments{
-  \item{es}{ an instance of the exprSet class of the Biobase package.
-In the sequel it is assumed that \code{es} has information
+  \item{X}{ an instance of the exprSet class of the Biobase package.
+It is assumed that \code{X} has information
 on gene expression for G genes in N tissue samples. }
-  \item{f}{ an R function of two arguments: the first is assumed to
-be an N-vector of expression values for a single gene, the
-second is the exprSet \code{es} }
+  \item{MARGIN}{ The margin to apply to, either 1 for rows or 2 for columns.}
+  \item{FUN}{ any function }
+  \item{...}{additional parameters for FUN.}
 }
 \details{
-See the comments of the examples for further explanation.
+ The \code{phenoData} from \code{X} is installed in an
+ environment. This environment is installed as the environment of
+ \code{FUN}. This will then provide bindings for any symbols in \code{FUN}
+ that are the same as the names of the \code{phenoData} of \code{X}.
+ If \code{FUN} has an environment already it is retained but placed after
+ the newly created environment. Some variable shadowing could occur
+ under these circumstances.
 }
 \value{
-The result of apply(exprs(es),1,f,es).
+The result of \code{apply(exprs(X),MARGIN, FUN, ...)}.
 }
-\author{ VJ Carey <stvjc@channing.harvard.edu> }
+\author{ VJ Carey <stvjc@channing.harvard.edu>, R. Gentleman }
 
 \seealso{ \code{\link{apply}} }
 
@@ -37,52 +42,36 @@ data(eset)
 # we know that eset has covariates in
 # the pData called "cov1" and "cov2"
 #
-# here are three functions conforming to the esApply
+# here are two functions conforming to the esApply
 # protocol
 
-mytt.demo <- function( y, x ) {
-# obtain the p value of t-test across strata
-# defined by cov1
- myd <- pData(x)[["cov1"]]
- ys <- split( y, myd )
- t.test( ys[[1]], ys[[2]] )$p.value
- }
+##here cov1 is an unbound value, it will be resolved
+##by using the pData
 
-mytt.alt <- function(y, x) {
-# here we allow the user to refer directly
-# to variables in the pData dataframe
-# but you need to do a cleanup!
- att <- attach(pData(x))
- attnm <- attr(att,"name")
-# cleanup phase
- rpos <- match(attnm,search())
- on.exit(detach(pos=rpos))
-# actual program
+mytt.demo <- function(y) {
  ys <- split( y, cov1 )
  t.test( ys[[1]], ys[[2]] )$p.value
  }
 
-myreg.demo <- function( y, x ) {
+myreg.demo <- function( y ) {
 # obtain the p value of the slope
 # associated with cov2, adjusting for cov1
 # (if we were concerned with sign we could
 # save the z statistic instead at coef[3,3]
 #
- myx1 <- pData(x)[["cov1"]]
- myx2 <- pData(x)[["cov2"]]
- summary(lm(y~myx1+myx2))$coef[3,4]
+ summary(lm(y~cov1+cov2))$coef[3,4]
  }
 
 # let's try it out
 
-newt <- esApply( eset, mytt.demo )
+newt <- esApply( eset, 1, mytt.demo )
 
 # here's a resampling method 
 
-resamp <- function( eset ) {
- ntiss <- ncol(exprs(eset))
- newind <- sample(1:ntiss,size=ntiss,replace=T)
- eset[newind,]
+resamp <- function( ESET ) {
+ ntiss <- ncol(exprs(ESET))
+ newind <- sample(1:ntiss, size=ntiss, replace=TRUE)
+ ESET[newind,]
  }
 
 # here's a filter
@@ -94,8 +83,8 @@ q3g100filt <- function( eset ) {
 # want to filter after resampling and then apply
 
 set.seed(123)
-rest <- esApply( { bool <- q3g100filt(resamp(eset)); eset[bool,] }, mytt.demo )
-set.seed(123)
-resta <- esApply( { bool <- q3g100filt(resamp(eset)); eset[bool,] }, mytt.alt )
+rest <- esApply( { bool <- q3g100filt(resamp(eset)); eset[bool,] }, 1,
+mytt.demo ) 
+ 
 }
 \keyword{ models }
