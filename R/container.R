@@ -45,3 +45,9 @@ setMethod("print", "container", function(x, ...) {
     print(x@x)
 })
 
+setMethod("[", "container",
+    def = function(x, i, j, ..., drop = F){
+      new("container", content = content(x), x = x@x[i],
+          locked = locked(x))
+})
+
