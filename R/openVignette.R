@@ -1,23 +1,22 @@
 getPkgVigs <- function(package=NULL) {
     pkgs <- .packages()
 
-    if( !is.null(package) )
-    {
+    if( !is.null(package) ) {
         if( !is.character(package) )
-            stop("package list must be a character vector")
+            stop("`package' must be a character vector of package names")
+
         rows <- match(package, pkgs)
-        if( all(is.na(rows)) ) 
-            stop(paste("packages:", paste(package,collapse=", "),
-                       "are not installed"))
-        if( any(is.na(rows)) ) 
-            warning(paste("packages", paste(package[is.na(rows)],
-                                            collapse=", "),
-                          "are not installed"))
+        if( all(is.na(rows)) )
+            stop("packages: ", paste(package,collapse=", "),
+                 " are not installed")
+        if( any(is.na(rows)) )
+            warning("packages ", paste(package[is.na(rows)], collapse=", "),
+                    " are not installed")
         pkgs <- pkgs[rows[!is.na(rows)]]
     }
     vigDirs <- file.path(.find.package(pkgs), "doc/00Index.dcf")
 
-    vigFiles <- lapply(vigDirs, function(x){
+    vigs <- lapply(vigDirs, function(x){
         if (file.exists(x)) {
             vigs <- read.dcf(x)
             if (nrow(vigs) > 0) {
@@ -25,16 +24,11 @@ getPkgVigs <- function(package=NULL) {
                 vigNames <- as.character(vigs)
                 names(vigPaths) <- vigNames
                 vigPaths
-            }
-            else
-                NULL
-        }
-        else NULL
+            } # else NULL
+        }# else NULL
     })
-    vigFiles <- unlist(vigFiles[sapply(vigFiles,function(x){
-        if ((!is.null(x))&&(length(x) > 0)) TRUE else FALSE})])
 
-    vigFiles
+    unlist(vigs[sapply(vigs, function(x) !is.null(x) && (length(x) > 0))])
 }
 
 openVignette <- function(package=NULL) {
@@ -50,8 +44,8 @@ openVignette <- function(package=NULL) {
         ## Need to switch on the file extension
         ext <- strsplit(vigFiles[index],"\\.")[[1]]
         switch(ext[length(ext)],
-               "pdf"=openPDF(vigFiles[index]),
-               "html"=browseURL(paste("file://",vigFiles[index],sep="")),
+               "pdf" = openPDF(vigFiles[index]),
+               "html"= browseURL(paste("file://",vigFiles[index],sep="")),
                stop("Don't know how to handle this vignette")
                )
     }
