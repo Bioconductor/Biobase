@@ -3,7 +3,7 @@
 \title{Copy files, directory trees or between connections with configure-like name-value substitution}
 \description{
   Copy files, directory trees or between connections and
-  replace all occurences of a SYMBOL by the corresponding value. 
+  replace all occurences of a symbol by the corresponding value. 
 }
 \usage{copySubstitute(src, dest, symbolValues, symbolDelimiter="@",
 allowUnresolvedSymbols=FALSE, removeExtension = "\\.in$")}
@@ -12,30 +12,30 @@ allowUnresolvedSymbols=FALSE, removeExtension = "\\.in$")}
     directory names, or a connection object.}
   \item{dest}{Destination: either a character vector of length 1
     with the name of an existing, writeable directory, or a connection
-    object. The type of the \code{dest} argrument must match that of the
+    object. The class of the \code{dest} argument must match that of the
     \code{src} argument.}
   \item{symbolValues}{A named list of character strings.}
-  \item{symbolDelimiter}{A character string of with a single character
-    in it.}
-  \item{allowUnresolvedSymbols}{If not \code{TRUE}, then the function
-    will execute \code{\link[base:stop]{stop}} if it comes across SYMBOLs that are
+  \item{symbolDelimiter}{A character string of length one with a single
+    character in it.}
+  \item{allowUnresolvedSymbols}{Logical. If \code{FALSE}, then the function
+    will execute \code{\link[base:stop]{stop}} if it comes across symbols that are
     not defined in \code{symbolValues}.}
   \item{removeExtension}{Matches to this regular expression are removed
     from filenames and directory names.}
 }
 
 \details{
-  If \code{src} is a connection or a character vector of length 1 with a
-  filename, the text is read through the function
-  \code{\link[base:readLines]{readLines}}. Symbols are replaced by their
-  values (see below) and the result is written to \code{dest}
-  through the function \code{\link[base:readLines]{writeLines}}. 
-  
   Symbol substitution: this is best explained with an example. If the list
   \code{symbolValues} contains an element with name \code{FOO} and value
   \code{bar}, and symbolDelimiter is \code{@}, then any occurence of
   \code{@FOO@} is replaced by \code{bar}. This applies both the text
   contents of the files in \code{src} as well as to the filenames. See examples.
+  
+  If \code{src} is a connection or a character vector of length 1 with a
+  filename, the text is read through the function
+  \code{\link[base:readLines]{readLines}}. Symbols are replaced by their
+  values and the result is written to \code{dest}
+  through the function \code{\link[base:readLines]{writeLines}}. 
   
   If \code{src} is a character vector with multiple filenames or
   contains directory names,

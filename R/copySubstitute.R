@@ -10,7 +10,7 @@ copySubstitute = function(src, dest, symbolValues,
     mess = "'symbolValues' must only contain characters."
   if (is.null(names(symbolValues)) || any(names(symbolValues)==""))
     mess = "'symbolValues' must have non-empty names."
-  if (!(is.character(symbolDelimiter) && nchar(symbolDelimiter)==1))
+  if (!(is.character(symbolDelimiter) && length(symbolDelimiter)==1 && all(nchar(symbolDelimiter)==1)))
     mess = "'symbolDelimiter' must be a single character."
   if (!is.logical(allowUnresolvedSymbols))
     mess = "'allowUnresolvedSymbols' must be of type logical."
@@ -62,15 +62,14 @@ copySubstitute = function(src, dest, symbolValues,
         ## symbol substitution also in directory names and filenames
         tmp      = unlist(strsplit(src[k], .Platform$file.sep))
         destname = gsub(removeExtension, "", tmp[length(tmp)])
-        
         for (i in seq(along=symbolValues))
           destname = gsub(nm[i], symbolValues[[i]], destname)
+        fulldestname = file.path(dest, destname)
         if(isdir[k]) {
-          newdir = file.path(dest, destname)
-          dir.create(newdir)
-          cpSubs(dir(src[k], full.names=TRUE), newdir)
+          dir.create(fulldestname)
+          cpSubs(dir(src[k], full.names=TRUE), fulldestname)
         } else {
-          cpSubsCon(src[k], file.path(dest, destname))
+          cpSubsCon(src[k], fulldestname)
         }
       } ## for k
     } else {
