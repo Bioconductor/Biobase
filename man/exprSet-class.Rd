@@ -1,7 +1,8 @@
 \name{exprSet-class}
 \docType{class}
 \alias{exprSet-class}
-\title{Class exprSet, a class for microarray data, and methods for processing them }
+\title{Class exprSet, a class for microarray data, and methods for
+  processing them } 
 \description{ This is class representation for Microarray Data}
 \section{Creating Objects}{
 \code{  new('exprSet',}\cr
@@ -13,18 +14,22 @@
 \code{  )}}
 \section{Slots}{
   \describe{
-    \item{\code{exprs}:}{Object of class "matrix" The observed expression levels. This is
+    \item{\code{exprs}:}{Object of class "matrix" The observed
+      expression levels. This is 
      a matrix with columns representing patients or cases and rows
      representing genes. }
     \item{\code{se.exprs}:}{Object of class "matrix" This is
      a matrix of the same dimensions as \code{exprs} which contains
      standard error estimates for the estimated expression levels. }
-    \item{\code{phenoData}:}{Object of class "phenoData" This is an instance of class \code{phenoData}
-    containing the patient (or case) level data. The columns of the pData slot of
-            this entity represent
+    \item{\code{phenoData}:}{Object of class "phenoData" This is an
+      instance of class \code{phenoData} 
+    containing the patient (or case) level data. The columns of the
+    pData slot of this entity represent
     variables and the rows represent patients or cases. }
-    \item{\code{description}:}{Object of class "character" Vector of covariate labels}
-    \item{\code{notes}:}{Object of class "character" Vector of explanatory text }
+    \item{\code{description}:}{Object of class "character" Vector of
+      covariate labels} 
+    \item{\code{notes}:}{Object of class "character" Vector of
+      explanatory text } 
   }
 }
 
