@@ -203,10 +203,12 @@ semantics.
 
 The version number of R and packages loaded for generating the vignette were:
 
+\begin{verbatim}
 <<echo=FALSE,results=tex>>=
 sessionInfo()
 @
 
+\end{verbatim}
 \end{document}
 
 
