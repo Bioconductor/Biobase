@@ -26,8 +26,8 @@ if( !isGeneric("locked") )
 setMethod("locked", "container", function(object) object@locked,
           where=where )
 
-if( !isGeneric("[[<-") )
-    setGeneric("[[<-")
+#if( !isGeneric("[[<-") )
+#    setGeneric("[[<-")
 
 setReplaceMethod("[[", "container", function(x, i, ..., value) {
     if( locked(x) )
@@ -39,7 +39,7 @@ setReplaceMethod("[[", "container", function(x, i, ..., value) {
                    "the object is class", cv, "cannot assign",
                    sep=" "))
     object@x[[i]] <- value
-})
+}, where=where)
 
 setMethod("[[", "container", function(x, i,...) {
     x@x[[i]]
