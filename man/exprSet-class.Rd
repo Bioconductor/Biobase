@@ -31,6 +31,7 @@
 \alias{se.exprs,exprSet-method}
 \alias{[,exprSet-method}
 \alias{[[<-,exprSet-method}
+\alias{[[,exprSet-method}
 \alias{se.exprs<-}
 \alias{se.exprs<-,exprSet-method}
 \alias{notes,exprSet-method}
@@ -90,7 +91,8 @@
   \describe{
     \item{[}{(exprSet): A subset operator. Ensures that both \code{exprs}
       and \code{phenoData} are subset properly. }
-    
+    \item{[[}{(exprSet): Extract the named variable from the
+      \code{phenoData} component. }    
     \item{exprs}{(exprSet): An accessor function for \code{exprs}. }
     
     \item{se.exprs}{(exprSet): An accessor function for \code{se.exprs}. }
