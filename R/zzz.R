@@ -57,6 +57,10 @@ dumpPackTxt <- function (package)
 ##we need to be more careful about the where argument. If any of these
 ##function calls load a library, where is wrong from there on...
 .First.lib <- function(libname, pkgname, where) {
+    # I added this to add "Vignettes" to the menu bar. JZ
+    addVig2Menu("vExplorer", doThis = "vExplorer()")
+    addVig2Menu("Biobase")
+
     require(methods, quietly=TRUE)
     where <- match(paste("package:", pkgname, sep=""), search())
     .initContainer(where)
@@ -73,8 +77,4 @@ dumpPackTxt <- function (package)
     ##        cat("\t to see the available vignettes\n")
     cat("\t For details on reading vignettes, see\n")
     cat("\t the openVignette help page.\n")
-
-    # I added this to add "Vignettes" to the menu bar. JZ
-#    addVig2Menu("vExplorer", doThis = "vExplorer()")
-#    addVig2Menu("Biobase")
 }

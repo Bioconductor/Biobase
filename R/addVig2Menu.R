@@ -6,11 +6,10 @@
 addVig2Menu <- function(itemName, menuName = "Vignettes",
                          doThis = paste("vExplorer(pkgName = \"",
                                itemName, "\")", sep = "")){
-    require(tkWidgets) || stop("here")
     os <- .Platform$OS.type
     switch(os,
            "windows" = addVig4Win(menuName, itemName, doThis),
-           "unix" = addVigsUnix(menuName, itemName, doThis),
+           "unix" = addVig4Unix(menuName, itemName, doThis),
            stop("Unknown operating system"))
 
 }
