@@ -11,6 +11,9 @@
     class(Base) <- "BioCPkg"
     Base$urls <- list( bioc = "http://www.bioconductor.org")
     ##RI: I added this to make my life easier. Should it be TRUE?
+    ##AJR: NO.  I've run across a few cases when it would completely
+    ##     break functionality, i.e. when tcltk isn't part of the R
+    ##     package (on weird, and development-based machines
     Base$use.widgets=FALSE
 
     BioC <- getOption("BioC")
@@ -60,34 +63,13 @@ dumpPackTxt <- function (package)
     .buildBiobaseOpts()
     .getPDFOption()
 
-        cat("Welcome to Bioconductor \n")
-        cat("\t To view some introductory material -- look at our vignettes\n")
-        cat("\t Simply type: openVignette() \n")
-        cat("\t to see the available vignettes\n")
-        cat("\t To read a vignette see the openVignette help page",
-            "for details\n")
+    cat("Welcome to Bioconductor \n")
+    cat("\t Vignettes contain introductory material.  To view, \n")
+    cat("\t simply type: openVignette() \n")
+    ##        cat("\t to see the available vignettes\n")
+    cat("\t For details on reading vignettes, see\n")
+    cat("\t the openVignette help page.")
     cacheMetaData(as.environment(where))
 
     .initChunkClasses(where)
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
