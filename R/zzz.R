@@ -57,11 +57,15 @@ dumpPackTxt <- function (package)
 #    file.show(outFile, delete.file = TRUE)
 }
 
+##we need to be more careful about the where argument. If any of these 
+##function calls load a library, where is wrong from there on...
 .First.lib <- function(libname, pkgname, where) {
     require(methods, quietly=TRUE)
     where <- match(paste("package:", pkgname, sep=""), search())
     .initContainer(where)
+    where <- match(paste("package:", pkgname, sep=""), search())
     .initAgg(where)
+    where <- match(paste("package:", pkgname, sep=""), search())
     .initExprset(where)
     .buildBiobaseOpts()
     .getPDFOption()
@@ -72,6 +76,4 @@ dumpPackTxt <- function (package)
     ##        cat("\t to see the available vignettes\n")
     cat("\t For details on reading vignettes, see\n")
     cat("\t the openVignette help page.\n")
-    cacheMetaData(as.environment(where))
-
 }
