@@ -13,14 +13,14 @@ require(methods)
 
 .initExprset <- function(where) {
 
-  setClass("phenoData", representation(phenoData="data.frame"),
+  setClass("phenoData", representation(pData="data.frame"),
   where=where)
 
-  if( !isGeneric("phenoData") )
-      setGeneric("phenoData", function(object) standardGeneric("phenoData"),
+  if( !isGeneric("pData") )
+      setGeneric("pData", function(object) standardGeneric("pData"),
                  where=where )
- setMethod("phenoData", "phenoData",
-           function(object) object@phenoData, where=where)
+ setMethod("pData", "phenoData",
+           function(object) object@pData, where=where)
 
   setClass("exprSet", representation(exprs="matrix",
                                    se.exprs = "matrix",
@@ -59,13 +59,26 @@ require(methods)
  setMethod("covariates", "exprSet", function(object)
            object@covariates, where=where)
 
- setMethod("[", "exprSet", function(x, i, j, ..., drop=TRUE)
-     new("exprSet", exprs=x@exprs[i,j], phenoData = x@phenoData[j,,drop=FALSE],
-     description=x@description), where=where)
+ setMethod("[", "exprSet", function(x, i, j, ..., drop=TRUE) {
+     pdata <- x@phenoData
+     if(missing(j) ) {
+         nexprs <- x@exprs[i, ]
+     }
+     else {
+         npheno <- pData(x@phenoData)[j,,drop=FALSE]
+         pdata <- new("phenoData", pData=npheno)
+         if(missing(i) )
+             nexprs <- x@exprs[,j]
+         else
+             nexprs <- x@exprs[i, j]
+     }
+     new("exprSet", exprs=nexprs, phenoData = pdata,
+     description=x@description, covariates=x@covariates,
+     notes=x@notes)}, where=where)
 
  setMethod("print", "exprSet", function(x, ...) {
      ngenes <- nrow(x@exprs)
-     dmp <- dim(x@phenoData)
+     dmp <- dim(pData(x@phenoData))
      nsamples <- dmp[1]
      ncovs <- dmp[2]
      cat("Expression Set (exprSet) with \n\t", ngenes, " genes\n\t", sep="")
