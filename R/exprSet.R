@@ -242,7 +242,7 @@
   if( !isGeneric("exprs<-") )
     setGeneric("exprs<-", function(object, value)
                standardGeneric("exprs<-"), where=where)
-  
+
   setReplaceMethod("exprs", "exprSet",
                    function(object, value) {
                      object@exprs <- value
@@ -379,13 +379,13 @@
   if(!isGeneric("annotation<-") )
     setGeneric("annotation<-", function(object, value)
                standardGeneric("annotation<-"), where=where)
-  
+
   setReplaceMethod("annotation", signature="exprSet", where = where,
      definition =  function(object, value) {
                      object@annotation <- value
                      return(object)
                    })
-  
+
   ## [
   setMethod("[", "exprSet", function(x, i, j, ..., drop=FALSE) {
     if( missing(j) )
@@ -556,14 +556,6 @@
 
 "$.phenoData" <- function(x, val, ...)
     (pData(x))[[as.character(val)]]
-
-#esApply <- function( es, f ) {
-# # assumes f is of the form f(arg1,arg2) and
-# # arg2 is es
-# if (class(es) != "exprSet") stop("arg1 must be of class exprSet")
-# if (length(formals(f)) != 2) warning("f should be a function of two arguments#...")
-# apply( exprs(es), 1, f, es )
-# }
 
 esApply <- function(X, MARGIN, FUN, ...) {
     if (class(X) != "exprSet") stop("arg1 must be of class exprSet")

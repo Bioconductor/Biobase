@@ -15,17 +15,13 @@ addVig2Menu <- function(itemName, menuName = "Vignettes",
 }
 # Add menu for windows
 addVig4Win <- function(menuName, itemName, itemAction){
-    # tkWidgets will be loaded to make vExplorer available
-    if(require(tkWidgets)){
-        # First try to add the menu item
-        options(show.error.messages = FALSE)
-        tryMe <- try(winMenuAddItem(menuName, itemName, itemAction))
-        options(show.error.messages = TRUE)
-        if(inherits(tryMe, "try-error")){
-            # Menu does not exist for the item. Add menus
-            addNonExisting(menuName)
-            winMenuAddItem(menuName, itemName, itemAction)
-        }
+    options(show.error.messages = FALSE)
+    tryMe <- try(winMenuAddItem(menuName, itemName, itemAction))
+    options(show.error.messages = TRUE)
+    if(inherits(tryMe, "try-error")){
+        # Menu does not exist for the item. Add menus
+        addNonExisting(menuName)
+        winMenuAddItem(menuName, itemName, itemAction)
     }
 }
 
@@ -61,6 +57,7 @@ addNonExisting <- function(menuName){
         }
     }
 }
+
 # Add click-able menu items to view the pdf files of a package
 addPDF2Vig <- function(pkgName){
     path <- .path.package(pkgName)

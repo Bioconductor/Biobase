@@ -42,10 +42,11 @@ The \classdef{exprSet} class has the following slots:
 \begin{description}
 \item[exprs] A matrix of expression levels. Arrays are columns and
   genes are rows.
-\item[se.exprs] A matrix of standard errors for expressions (may be
-  \verb+NULL+) if they are available.
+\item[se.exprs] A matrix of standard errors for expressions if they
+                          are available. It will have length 0 if they
+                          are not.
 \item[phenoData] An object of class \verb+phenoData+ that contains
-  phenotypic or experimental data.
+  phenotypic and/or experimental data.
 \item[description] A description of the experiment (object of class MIAME)
 \item[annotation] A character string indicating the base name for the
   associated annotation.
@@ -64,7 +65,6 @@ Biologically relevant data will be availabe through the
 (such as gene name, symbol, chromosomal location) can be constructed.
 These data can then be linked to the \verb+exprSet+ via the
 \verb+annotation+ slot.
-
 
 The \verb+phenoData+ class has the following slots:
 \begin{description}
@@ -256,172 +256,17 @@ Next we show how to use this function on the system dataset,
   names(genes.counts) <- names(genes.used)
   sort(genes.counts)
 @
-
+%$
   The variable \verb+genes.counts+ now contains, for each gene,
   the number of times it was selected in the cross-validation.
 
   One may also compare testcase with geneCov to see how well the
   procedure worked at predicting.
 
-\section{HTML page Vignette}
 
-In this section we give a simple example of how to produce a HTML web
-page with links to Locus Link etc.
+%\section*{Resampling exprSet's}
+%need to fill this in again
 
-First we have a small helper function that can be used to create two
-sample tests suitable for applying (or other things). It returns the
-test statistic and {\em p--value}.
-
-<<HTML>>=
-  mk2samp<- function(cov, testfun) {
-      function(x) {
-          nas <- is.na(x)
-          if( length(levels(factor(cov[!nas]))) != 2 )
-              return(c(NA,NA))
-          tmp <- testfun(x~cov)
-          return(c(tmp$statistic, tmp$p.value))
-      }
-  }
-@
-
-%I also needed to add the next two helper functions. These should get
-%fixed and placed into the library.
-
-<<HTML>>=
-
-# HTtable <- function(content, caption ) {
-#    head <- paste("<TABLE BORDER=4>", "<CAPTION>", caption, "</CAPTION>")
-#    tail <- paste("</TABLE>")
-#    c(head, content, tail)
-# }
-#
-# HTpage <- function(filename, content, title="BioConductor Gene Listing",
-#   center=TRUE)  {
-#  outfile <- file(filename, "w")
-#  cat("<html>", "<head>", "<TITLE>BioConductor Gene Listing</TITLE>",
-#  "</head>", "<body bgcolor=#708090 >",
-#  "<H1 ALIGN=CENTER > BioConductor Gene Listing </H1>",
-#            file = outfile, sep = "\n")
-#  cat(content, file=outfile, sep="\n")
-#   cat("</body>", "</html>", sep = "\n", file = outfile)
-#    close(outfile)
-#  }
-
-@
-
-
-<<HTML>>=
-
- library(Biobase)
- library(annotate)
- data(eset)
-
- sub1<- exprs(eset)[140:150,]
- ttfun <- mk2samp(eset$cov1, t.test)
- outvals <- t(apply(sub1, 1, ttfun))
-
- ##set up a translator
- library(hgu95a)
- llnames <- multiget(dimnames(outvals)[[1]], env=hgu95aLOCUSID)
- llnames <- as.character(llnames)
- names(llnames) <- dimnames(outvals)[[1]]
-
-print(llnames)
-@
-Now this data can be used to generate a web page.  The {\tt ll.htmlpage}
-function of the {\tt annotate} package will accept the
-{\tt llnames} vector
-and a target filename.
-<<>>=
-ll.htmlpage(llnames,file="demoLL.html")
-@
-At this point you can point a browser to {\tt demoLL.html}
-to have convenient access to the LL ids and the NCBI
-metadata on them.
-Don't forget to remove the {\tt demoLL.html} file if
-you do not want to keep it.
-% ## now we need to set up the functions to create the HTML page
-%
-%# LLAnch <- function(x) simpleAnchor(x, hMethod=
-%# "http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?l=")
-%#
-%# anch.llnames<- LLAnch(llnames)
-%#
-%# pvals <- HTwrap(round(outvals[,2],3))
-%# tstats <- HTwrap(round(outvals[,1],3))
-%# anch.ll <- HTwrap(anch.llnames)
-%# allvals <- paste(anch.ll, pvals, tstats, sep="\n")
-%# inlist <- HTwrap(allvals, "TR")
-%# header<- HTwrap(paste(HTwrap("Locus Link"), HTwrap("p-values"),
-%# HTwrap("t-stats")), "TR")
-%# tbl <- HTtable(c(header, inlist), "Genes")
-%# HTpage("test.html", tbl, "Hello")
-%
-@
-
-\section*{Resampling exprSet's}
-
-There are many examples of situations where resampling
-(eg. cross--validation or bootstrapping) of \classdef{exprSet}'s is an
-important part of the analysis.
-In this section we consider some tools designed to simplify the
-operation of resampling \classdef{exprSet}'s.
-
-The general strategy for an analysis is
-\begin{enumerate}
-\item Filter the genes in the \classdef{exprSet} according to a
-specific criterion. The criterion will be encapsulated in the
-\verb+filterB+ function.
-\item Next the function \verb+ifun+ is applied to the result of the
-filtering criterion. In some cases \verb+ifun+ will need to depend on
-covariates or other features of the \classdef{exprSet}.
-\end{enumerate}
-
-Code demonstrating a couple of simple examples is given next.
-In the first example genefiltering will extract those genes for which
-at least 5 of the samples have expression levels over 250 and where a
-t--test (using \verb+cov2+ from the data set) has a $p$--value of less
-than 0.1.
-Intermediate functions are stored in the variable \verb+fb1+.
-
-The function \verb+fbuilder+ takes the necessary information to build
-a set of filter functions from any \classdef{exprSet}.
-The argument \verb+sub="m"+ indicates the name of the variable that we
-will do substitution on (we need to replace that variables symbol with
-the name \verb+cov2+.
-
-In this first example the updating function does nothing and while it
-is required it simply returns \verb+NULL+ given any \classdef{exprSet}
-and any filtering function.
-
-
-<<cvExprset>>=
-library(Biobase)
-library(genefilter)
-
-data(eset)
-fb1 <- fbuilder(list(
-     list(funname="ttest", args=list(m="cov2", p=.1), sub="m"),
-     list(funname="kOverA", args=list(k=5, A=250))))
-
-##updating function doesn't need to do anything
-upd1 <- function(ESET, fun) NULL
-
-test1 <- filtertheniter(eset, fb1, mean, upd1)
-
-afun<-AnovaF(cov3)
-
-updf <- function(ESET, fun) assign("cov", ESET$cov3, env=environment(fun))
-
-test2 <- filtertheniter(eset, fb1, afun, updf)
-
-assign("cov", eset$cov3, env=environment(afun))
-
-fb2<- fbuilder(list(
-    list(funname="kOverA", args=list(A=250))))
-@
-
-%$
 
 \end{document}
 
