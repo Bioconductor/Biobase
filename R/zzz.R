@@ -21,17 +21,6 @@
     options("BioC"=BioC)
 }
 
-.getPDFOption <- function() {
-    OS <- .Platform$OS.type
-    if (OS == "unix") {
-        if (setOptionPdfViewer() == FALSE) {
-            note(paste("To manually set your viewer, run the",
-                       "command 'setOptionPdfViewer(<path>),",
-                       "where <path> is a path to a valid PDF",
-                       "viewer program."))
-        }
-    }
-}
 
 dumpPackTxt <- function (package)
 {
@@ -146,7 +135,6 @@ dumpPackTxt <- function (package)
 
 
     .buildBiobaseOpts()
-    .getPDFOption()
 
     cat("Welcome to Bioconductor \n")
     cat("\t Vignettes contain introductory material.  To view, \n")
