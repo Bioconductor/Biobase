@@ -83,5 +83,12 @@ package provides access to various genomic annotation data.
 This package makes use of various web resources and precompiled data
 packages to provide tools for exploring biological data.
 
+\section{Session Information}
+
+The version number of R and packages loaded for generating the vignette were:
+
+<<echo=FALSE,results=tex>>=
+sessionInfo()
+@
 
 \end{document}

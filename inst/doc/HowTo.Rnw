@@ -78,6 +78,12 @@ contain the word \verb+HowTo+ to easily allow for programmatic
 manipulation and sorting of the HowTo's.
 \end{itemize}
 
+\section{Session Information}
 
+The version number of R and packages loaded for generating the vignette were:
+
+<<echo=FALSE,results=tex>>=
+sessionInfo()
+@
 
 \end{document}

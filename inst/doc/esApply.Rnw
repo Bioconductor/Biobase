@@ -117,4 +117,12 @@ in as the environment of the function that will be applied. If that
 function already has an environment we retain that but in the second
 position. Thus, there is some potential for variable shadowing.
 
+\section{Session Information}
+
+The version number of R and packages loaded for generating the vignette were:
+
+<<echo=FALSE,results=tex>>=
+sessionInfo()
+@
+
 \end{document}

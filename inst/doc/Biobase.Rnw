@@ -199,6 +199,13 @@ semantics.
 %\section*{Resampling exprSet's}
 %need to fill this in again
 
+\section{Session Information}
+
+The version number of R and packages loaded for generating the vignette were:
+
+<<echo=FALSE,results=tex>>=
+sessionInfo()
+@
 
 \end{document}
 
