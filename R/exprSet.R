@@ -350,7 +350,10 @@ require(methods)
             object@annotation, where=where)
 
   setMethod("[", "exprSet", function(x, i, j, ..., drop=FALSE) {
-    pdata <- phenoData(x)[j,, ..., drop=FALSE]
+    if( missing(j) )
+	pdata <- phenoData(x)
+    else
+        pdata <- phenoData(x)[j,, ..., drop=FALSE]
     if(missing(j) ) {
       if( missing(i) )
         nexprs <- exprs(x)

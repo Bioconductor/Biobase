@@ -322,8 +322,8 @@ fixed and placed into the library.
  outvals <- t(apply(sub1, 1, ttfun))
 
  ##set up a translator
- hgu95ll <- read.annotation("hgu95All")
- llnames <- multiget(dimnames(outvals)[[1]], env=hgu95ll)
+ library(hgu95a)
+ llnames <- multiget(dimnames(outvals)[[1]], env=hgu95aLOCUSID)
  llnames <- as.character(llnames)
  names(llnames) <- dimnames(outvals)[[1]]
 
