@@ -70,7 +70,7 @@ require(methods)
                 vL <- object@varLabels
                 cat("\t varLabels\n")
                 nm <- names(vL)
-                  for(i in 1:length(vL) )
+                  for(i in seq(along=vL) )
                     cat("\t\t", nm[[i]], ": ", vL[[i]], "\n", sep="")
             }, where=where)
 
