@@ -5,6 +5,6 @@ Author: R. Gentleman, V. Carey
 Description: Functions that are needed by many other packages or which replace R functions.
 Depends: R (>= 1.6.0), DynDoc
 Maintainer: R. Gentleman <rgentlem@hsph.harvard.edu>
-License: GPL2.0
+License: LGPL 
 
 
