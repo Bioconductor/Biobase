@@ -1,6 +1,5 @@
 getPkgVigs <- function(package=NULL) {
-    pkgs <- installed.packages()[,"Package"]
-    libs <- installed.packages()[,"LibPath"]
+    pkgs <- .packages()
 
     if( !is.null(package) )
     {
@@ -8,9 +7,8 @@ getPkgVigs <- function(package=NULL) {
             stop("package list must be a character vector")
         rows <- match(package, pkgs)
         pkgs <- pkgs[rows]
-        libs <- libs[rows]
     }
-    vigDirs <- file.path(libs, pkgs, "doc/00Index.dcf")
+    vigDirs <- file.path(.find.package(pkgs), "doc/00Index.dcf")
 
     vigFiles <- lapply(vigDirs, function(x){
         if (file.exists(x)) {
