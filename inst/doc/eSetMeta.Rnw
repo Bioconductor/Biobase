@@ -1,0 +1,125 @@
+%
+% NOTE -- ONLY EDIT THE .Rnw FILE!!!  The .tex file is
+% likely to be overwritten.
+%
+% \VignetteIndexEntry{eSet metadata structures}
+%\VignetteDepends{Biobase}
+%\VignetteKeywords{Expression Analysis}
+%\VignettePackage{Biobase}
+\documentclass[12pt]{article}
+
+\usepackage{amsmath,pstricks}
+\usepackage[authoryear,round]{natbib}
+\usepackage{hyperref}
+
+
+\textwidth=6.2in
+\textheight=8.5in
+%\parskip=.3cm
+\oddsidemargin=.1in
+\evensidemargin=.1in
+\headheight=-.3in
+
+\newcommand{\scscst}{\scriptscriptstyle}
+\newcommand{\scst}{\scriptstyle}
+
+\newcommand{\Rfunction}[1]{{\texttt{#1}}}
+\newcommand{\Robject}[1]{{\texttt{#1}}}
+\newcommand{\Rpackage}[1]{{\textit{#1}}}
+\newcommand{\Rmethod}[1]{{\texttt{#1}}}
+\newcommand{\Rfunarg}[1]{{\texttt{#1}}}
+\newcommand{\Rclass}[1]{{\textit{#1}}}
+
+
+
+\bibliographystyle{plainnat}
+
+\begin{document}
+\title{eSet metadata structures}
+\author{VJ Carey $<$\url{stvjc@channing.harvard.edu}$>$}
+\maketitle
+
+\section{Introduction}
+
+Metadata is data about data.  In bioinformatics there
+are many roles for the metadata concept.  This document
+describes management of metadata on the central
+data objects of downstream analysis of high-throughput
+data structures in Bioconductor.  Specifically,
+the \Rclass{exprSet} and  \Rclass{eSet} classes
+provide data structure conventions
+for collections of microarray
+experiments.  These classes can be used to deal
+with data from other experimental paradigms.
+For this to occur, metadata conventions will
+be required so that the different components of the
+experimental data are identifiable programatically.
+
+As a simple example, consider the recording of
+patient age.  Information on age will be
+stored in a \Rclass{phenoData} variable.
+For some studies, age is recorded in months;
+for others, age is recorded in years; and in
+others, age must be coarsened, and is recorded
+as a categorical response.  It is not sufficient
+to record the age as a numeric variable named ``age''.
+One may encode the units of age in the variable name,
+but a convention for decoding the name may be hard
+to specify conveniently.
+
+Metadata structures and conventions can help to
+achieve standards for representation and decoding
+of data.  To continue with the example, we use
+the eset example data.
+<<loades,results=hide>>=
+library(Biobase)
+data(eset)
+<<lkGol>>=
+eset
+@
+We will extract the \Rclass{phenoData} component:
+<<getPheno>>=
+pes <- phenoData(eset)
+@
+A utility called \Rfunction{convertVarLabels}
+will upgrade the \Rclass{phenoData} component
+so that a general metadata container is present.
+<<conv>>=
+pes <- convertVarLabels(pes)
+varMetadata(pes)
+@
+Arbitrarily many metadata entries may be added for
+any variable.
+<<addUn>>=
+pes <- addVarMetadataEntry(pes, "cov1", "units", "inches")
+@
+The specific metadata attribute ``units'' can be
+ascertained at the \Rclass{phenoData} level:
+<<lkUn>>=
+getUnits(pes, "cov1")
+@
+The metadata container is currently a data.frame.
+For very general programmatic manipulation of metadata,
+XML or RDF representations may be desirable.  Conversion
+from data.frame to XML may use the \Rpackage{StatDataML} package
+or other routines.
+
+\section{Details on \Rclass{phenoData} metadata}
+At the \Rclass{phenoData} level, a slot called
+varMetadata holds a data.frame instance.  Currently
+there is no validation, but it seems reasonable that
+a varMetadata data.frame should have one row for each
+\Rclass{phenoData} variable.  Note that the typical
+reference of the term ``variable'' is a column of
+a data frame.  For metadata, the variables define
+rows of the varMetadata container, and variable
+attributes or properties define the columns of the
+varMetadata container.
+
+An informally reserved attribute name is \verb+varName+.
+This is used to name the column that holds the names of
+variables in the phenoData pData component.  The attribute name
+verb+
+
+@
+\end{document}
