@@ -3,6 +3,8 @@
 \alias{MIAME-class}
 \alias{MIAME}
 \alias{abstract}
+\alias{abstract,MIAME-method}
+\alias{abstract,exprSet-method}
 \alias{expinfo}
 \alias{hybridizations}
 \alias{normControls}
@@ -22,8 +24,8 @@
     \item{\code{lab}:}{Object of class \code{"character"} containing the
       laboratory where the experiment was conducted}
     \item{\code{contact}:}{Object of class \code{"character"} containing
-      contacct information for lab and/or experimenter}
-  \item{\code{title}:}{Object of class \code{"character"} containing a single-sentence experiment title }
+      contact information for lab and/or experimenter}
+    \item{\code{title}:}{Object of class \code{"character"} containing a single-sentence experiment title }
     \item{\code{abstract}:}{Object of class \code{"character"}
       containing an abstract describing the experiment}
     \item{\code{url}:}{Object of class \code{"character"} containing
@@ -45,18 +47,18 @@
 \section{Methods}{
   \describe{
     \item{abstract}{\code{signature(object = "MIAME")}: An accesor
-      funciton for \code{abstract}}
+      function for \code{abstract}}
     \item{expinfo}{\code{signature(object = "MIAME")}: An accesor
-      funciton for \code{name}, \code{lab}, \code{contact}, \code{title},
+      function for \code{name}, \code{lab}, \code{contact}, \code{title},
       and \code{url},}
     \item{hybridizations}{\code{signature(object = "MIAME")}: An accesor
-      funciton for \code{hybridizations} }
+      function for \code{hybridizations} }
     \item{normControls}{\code{signature(object = "MIAME")}: An accesor
-      funciton for \code{normControls} }
+      function for \code{normControls} }
     \item{otherInfo}{\code{signature(object = "MIAME")}: An accesor
-      funciton for \code{other} }
+      function for \code{other} }
     \item{samples}{\code{signature(object = "MIAME")}: An accesor
-      funciton for \code{samples} }
+      function for \code{samples} }
     \item{show}{\code{signature(object = "MIAME")}: renders information
       about the MIAME information }
   }

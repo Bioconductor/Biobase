@@ -1,6 +1,7 @@
 \name{container-class}
 \docType{class}
 \alias{container-class}
+\alias{[,container-method}
 \alias{content}
 \alias{locked}
 
