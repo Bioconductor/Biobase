@@ -52,8 +52,9 @@ dumpPackTxt <- function (package)
 }
 
 .First.lib <- function(libname, pkgname, where) {
-    origCall <- strsplit(sys.status()$sys.calls[[1]],"[[:punct:]]")[[1]]
-    if (origCall == "require")
+    ## Determine if this came from library or require
+    origLoad <- as.character(sys.status()$sys.calls)
+    if (any(grep("require",origLoad)))
         quietly <- TRUE
     else
         quietly <- FALSE
