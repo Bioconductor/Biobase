@@ -4,4 +4,4 @@ Version: @VERSION@
 Author: @AUTHOR@
 Description: Package automatically created on @TODAY@.
 Maintainer: Some One <@AUTHOR@@mtolympus.gr>
-License:  GPL 2
+License:  LGPL
