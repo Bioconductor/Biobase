@@ -46,7 +46,7 @@ The \classdef{exprSet} class has the following slots:
   \verb+NULL+) if they are available.
 \item[phenoData] An object of class \verb+phenoData+ that contains
   phenotypic or experimental data.
-\item[description] A description of the experiment (object of class miame)
+\item[description] A description of the experiment (object of class MIAME)
 \item[annotation] A character string indicating the base name for the
   associated annotation.
 \item[notes] A set of notes describing aspects or features of the data,
