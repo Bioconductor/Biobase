@@ -30,5 +30,5 @@ addVig4Win <- function(menuName, itemName, itemAction){
 }
 # Add menu for a window in Unix
 addVig4Unix <- function(menuName, itemName, itemAction){
-    warning("Do not know what to do yet")
+    # "Do not know what to do yet"
 }
