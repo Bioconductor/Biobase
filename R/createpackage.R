@@ -1,5 +1,5 @@
 createPackage <- function(pkgname, destinationDir, originDir, symbolValues,
-                          force=FALSE, quiet=FALSE)
+                          unlink=FALSE, quiet=FALSE)
 {
   ## check arguments 
   for (a in c("pkgname", "destinationDir", "originDir"))
@@ -17,7 +17,7 @@ createPackage <- function(pkgname, destinationDir, originDir, symbolValues,
     cat("Creating package in", pkgdir, "\n")
   
   if (file.exists(pkgdir)) {
-    if (force) {
+    if (unlink) {
       unlink(pkgdir, recursive=TRUE)
       if (file.exists(pkgdir)) {
         stop(paste("Directory", pkgdir, "exists and could not be removed.",
@@ -27,9 +27,9 @@ createPackage <- function(pkgname, destinationDir, originDir, symbolValues,
           cat(paste("Existing", pkgdir, "was removed.\n"))
       }
     } else {
-      stop(paste("Directory", pkgdir, "exists. Please use force=TRUE to remove it",
+      stop(paste("Directory", pkgdir, "exists. Please use unlink=TRUE to remove it",
                  "or choose another destination directory."))
-    } ## if (force) else 
+    } ## if (unlink) else 
   }  ## if (file.exists)
 
   ## predefined symbols

@@ -5,7 +5,7 @@
   Create a package directory from a template, with symbol-value substitution
 }
 \usage{createPackage(pkgname, destinationDir, originDir, symbolValues,
-                     force=FALSE, quiet=FALSE)}
+                     unlink=FALSE, quiet=FALSE)}
 \arguments{
   \item{pkgname}{Character. The name of the package to be written.}
   \item{destinationDir}{Character. The path to a directory where the
@@ -18,9 +18,9 @@
   \item{symbolValues}{Named list of character strings. The symbol-to-value
     mapping. See 
     \code{\link[Biobase:copySubstitute]{copySubstitute}} for details.}
-  \item{force}{Logical. If \code{TRUE}, and \code{destinationDir}
+  \item{unlink}{Logical. If \code{TRUE}, and \code{destinationDir}
     already contains a file or directory with the name \code{pkgname},
-    try to remove it.}
+    try to unlink (remove) it.}
   \item{quiet}{Logical. If \code{TRUE}, do not print information
     messages.}
 }
@@ -59,7 +59,7 @@
            destinationDir = tempdir(),
            originDir      = file.path(.path.package("Biobase"), "Code"),
            symbolValues   = sym,
-           force = TRUE, quiet = FALSE)
+           unlink = TRUE, quiet = FALSE)
 
   muses = c("Calliope", "Clio", "Erato", "Euterpe", "Melpomene",
             "Polyhymnia", "Terpsichore", "Thalia", "Urania")
