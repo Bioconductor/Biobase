@@ -3,7 +3,7 @@ Title: Biobase: Base functions for Bioconductor
 Version: 1.4.8
 Author: R. Gentleman, V. Carey
 Description: Functions that are needed by many other packages or which replace R functions.
-Depends: R (>= 1.8.0),reposTools
+Depends: R (>= 1.8.0),reposTools,tools
 Maintainer: R. Gentleman <rgentlem@hsph.harvard.edu>
 License: LGPL 
 Collate: addVig2Menu.R aggregate.R as.data.frame.exprSet.R container.R contents.R copySubstitute.R createpackage.R envir.R exprSet.R eset.R multi.R netTools.R openVignette.R pdf.R pkgVersion.R read.MIAME.R read.exprSet.R read.phenoData.R zzz.R

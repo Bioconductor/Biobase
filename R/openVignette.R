@@ -1,4 +1,6 @@
 getPkgVigs <- function(package=NULL) {
+    require("tools", quietly=TRUE) || stop("Requires the tools package")
+
     pkgs <- .packages()
 
     if( !is.null(package) ) {
@@ -14,15 +16,15 @@ getPkgVigs <- function(package=NULL) {
                     " are not loaded")
         pkgs <- pkgs[rows[!is.na(rows)]]
     }
-    vigDirs <- file.path(.find.package(pkgs), "doc/00Index.dcf")
+    vigDirs <- file.path(.find.package(pkgs), "Meta", "vignette.rds")
 
     vigs <- lapply(vigDirs, function(x){
         if (file.exists(x)) {
-            vigs <- read.dcf(x)
+            vigs <- .readRDS(x)
             if (nrow(vigs) > 0) {
-                vigPaths <- file.path(dirname(x),colnames(vigs))
-                vigNames <- as.character(vigs)
-                names(vigPaths) <- vigNames
+                vigPaths <- file.path(dirname(x),"..", "doc",
+        vigs[,"PDF"])
+                names(vigPaths) <- vigs[,"Title"]
                 vigPaths
             } # else NULL
         }# else NULL
@@ -42,7 +44,7 @@ openVignette <- function(package=NULL) {
       ##FIXME: why set names to NULL?
       names(vigFiles) <- NULL
       index <- menu(names, title="Please select (by number) a vignette")
-      
+
       if (index > 0) {
         ## Need to switch on the file extension
         ext <- strsplit(vigFiles[index],"\\.")[[1]]
