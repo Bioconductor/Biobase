@@ -42,14 +42,14 @@ require(methods)
           if( missing(i) )
               pD <- x@pData
           else
-              pD <- x@pData[i, ]
+              pD <- x@pData[i, ,drop=FALSE]
      }
       else {
           vL <- vL[j]
           if(missing(i) )
               pD <- x@pData[,j,drop=drop]
          else
-             pD <- x@pData[i, j]
+             pD <- x@pData[i, j,drop=FALSE]
       }
       new("phenoData", pData=pD, varLabels=vL)}, where=where)
 
