@@ -43,9 +43,6 @@ multiassign(x, value, envir = parent.frame(), inherits=FALSE)
   initial frame of \code{envir}.
 }
 
-\seealso{
-  \code{\link{multiget}} }
-
 \examples{
 #-- Create objects  'r1', 'r2', ... 'r6' --
 nam <- paste("r",1:6, sep=".")
