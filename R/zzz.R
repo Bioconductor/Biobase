@@ -16,6 +16,18 @@
     options("BioC"=BioC)
 }
 
+.getPDFOption <- function() {
+    OS <- .Platform$OS.type
+    if (OS == "unix") {
+        if (setOptionPdfViewer() == FALSE) {
+            note(paste("To manually set your viewer, run the",
+                       "command 'setOptionPdfViewer(<path>),",
+                       "where <path> is a path to a valid PDF",
+                       "viewer program."))
+        }
+    }
+}
+
 dumpPackTxt <- function (package)
 {
 # stolen from "library" to get descriptive
@@ -44,5 +56,6 @@ dumpPackTxt <- function (package)
     .initAgg(where)
     .initExprset(where)
     .buildBiobaseOpts()
+    .getPDFOption()
     cacheMetaData(as.environment(where))
 }
