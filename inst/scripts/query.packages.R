@@ -114,7 +114,7 @@ query.packages <- function (pkgName, pkgVersion = NULL, type = "unix",
 
 getDefaultRep <- function (){
     return(list(BioC =
-                "http://www.bioconductor.org/packages/distrib/PACKAGES",
+           "http://www.bioconductor.org/packages/release/distrib/PACKAGES",
            CRAN = paste(getOption("repositories"), "/PACKAGES", sep = "")))
 }
 
