@@ -120,12 +120,6 @@ require(methods)
   setMethod("annotation", "exprSet", function(object)
             object@annotation, where=where)
 
-##not quite the right semantics
-##but it is a start
-"$.exprSet" <- function(eset, val)
-    (pData(eset))[[as.character(val)]]
-
-
  setMethod("[", "exprSet", function(x, i, j, ..., drop=TRUE) {
 # why drop=TRUE? VC 12/21/01
      pdata <- phenoData(x)[j,, ..., drop=FALSE]
@@ -194,6 +188,12 @@ require(methods)
 
 }
 
+
+##not quite the right semantics
+##but it is a start
+
+"$.exprSet" <- function(eset, val)
+    (pData(eset))[[as.character(val)]]
 
 esApply <- function( es, f ) {
  # assumes f is of the form f(arg1,arg2) and
