@@ -23,6 +23,7 @@
 \alias{annotation<-}
 \alias{split-methods}
 \alias{write.exprs}
+\alias{exprs2excel}
 \title{Class exprSet, a class for microarray data, and methods for
   processing them } 
 \description{ This is class representation for Microarray Data}
@@ -123,10 +124,15 @@ gene expression values will be iteratively bound to y}
       is made on this.}
     \item{annotation}{(exprSet): An accessor function for the annotation
       information.}
-     \item{write.exprs}{(exprSet,...): Writes the expression levels to
-      file. It takes the same arguments as \code{\link{write.table}}. If
+    \item{write.exprs}{(exprSet,...): Sends \code{exprs(exprSet)} to
+      \code{\link{write.table}}. One can send \code{write.table}
+      arguments.}
+    \item{exprs2excel}{(exprSet,...): 
+      Writes the expression levels to \code{csv}
+      file. This file will open nicely in excel. It takes the same
+      arguments as \code{\link{write.table}}. If 
       called with no arguments it is equivalent to
-      write.table(exprs(exprSet),file="tmp.txt",quote=FALSE,sep="\t").} 
+      \code{write.table(exprs(exprSet),file="tmp.csv", sep = ",", col.names = NA)}.}
     \item{\$}{An old-style method.
       It is \code{pData(eset)[[as.character(val)]]} which
       does not quite have the right semantics but it is close. This
