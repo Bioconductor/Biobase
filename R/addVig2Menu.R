@@ -66,13 +66,7 @@ addNonExisting <- function(menuName){
 addPDF2Vig <- function(pkgName){
     .Deprecated("addVigs2WinMenu")
 
-    pdfs <- getPkgVigs(pkgName)
-    for(i in pdfs){
-        item <- sub(".pdf", "", basename(i))
-        addVig2Menu(item, menuName = paste("Vignettes/", pkgName, sep = ""),
-                    itemAction = paste("shell.exec(\"",
-                    as.character(i), "\")", sep = ""))
-    }
+    addVigs2WinMenu(pkgName)
 }
 
 addVigs2WinMenu <- function(pkgName) {
