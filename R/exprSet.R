@@ -20,6 +20,8 @@ require(methods)
 ##data class for accompanying data
   setClass("phenoData", representation(pData="data.frame",
                                        varLabels="list"),
+           prototype=list(pData=data.frame(matrix(nr=0,nc=0)),
+             varLabels=NULL),
            where=where)
 
   if( !isGeneric("pData") )
@@ -89,7 +91,11 @@ require(methods)
                                    phenoData="phenoData",
                                    description="character",
                                    annotation="character",
-                                     notes="character") , where=where)
+                                     notes="character") ,
+           prototype=list(exprs=matrix(nr=0,nc=0),
+                          se.exprs = matrix(nr=0,nc=0),
+                          annotation="",
+                          notes=""), where=where)
 
 #define a generic for obtaining the data
  if( !isGeneric("exprs") )
@@ -100,8 +106,9 @@ require(methods)
   if( !isGeneric("se.exprs") )
      setGeneric("se.exprs", function(object) standardGeneric("se.exprs"),
  where=where )
- setMethod("se.exprs", "exprSet", function(object) object@se.exprs, where=where)
-   
+ setMethod("se.exprs", "exprSet", function(object) object@se.exprs,
+ where=where)
+
  if( !isGeneric("phenoData") )
      setGeneric("phenoData", function(object)
                 standardGeneric("phenoData"), where=where)
@@ -116,7 +123,7 @@ require(methods)
                standardGeneric("pData<-"), where=where)
 
   setReplaceMethod("pData", "exprSet", function(object, value) {
-    ph<-object@phenoData
+      ph<-object@phenoData
      ph@pData <- value
      object@phenoData <- ph
      object
@@ -128,7 +135,7 @@ require(methods)
     object
   }, where=where)
 
-  
+
   if( !isGeneric("sampleNames") )
     setGeneric("sampleNames", function(object)
                standardGeneric("sampleNames"), where=where)
@@ -139,13 +146,13 @@ require(methods)
               else
                 row.names(pData(object))
             }, where=where)
-  
+
   if( !isGeneric("geneNames") )
     setGeneric("geneNames", function(object)
                standardGeneric("geneNames"), where=where)
   setMethod("geneNames", "exprSet", function(object)
             row.names(object@exprs), where=where )
-  
+
   if( !isGeneric("geneNames<-") )
     setGeneric("geneNames<-", function(object, value)
                standardGeneric("geneNames<-"), where=where)
@@ -298,7 +305,7 @@ require(methods)
             function(x,file = "tmp.txt",
                      append = FALSE, quote = FALSE, sep = "\t",
                      eol = "\n", na = "NA", dec = ".", row.names = TRUE,
-                     col.names = TRUE, qmethod = c("escape", "double")) 
+                     col.names = TRUE, qmethod = c("escape", "double"))
             write.table(exprs(x),file = file, append = append,
                         quote = quote,
                         sep = sep,eol = eol, na = na, dec = dec,
