@@ -1,7 +1,7 @@
 \name{phenoData-class}
+\docType{class}
 \alias{phenoData-class}
 \title{Class phenoData, a class for patient or experiment level data. }
-\non_function
 \description{ The class consists of a \code{data.frame} and some
   accompanying methods suited to handle patient level data for microarrays.}
 \section{Creating Objects}{
