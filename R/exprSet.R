@@ -155,6 +155,54 @@ require(methods)
 # })
 
 
+# this material is probably ready to go in
+# but where statements need to be added
+# and doc needs to be written
+## these are new functions completely
+#
+#setGeneric("iter", function(object)standardGeneric("iter"))
+#setGeneric("iter", function(object,f)standardGeneric("iter"))
+#
+#setMethod("iter", c("exprSet", "function"), function(object,f)
+# apply(exprs(object),1,f))
+#
+#setMethod("iter", c("exprSet", "list"), function(object,f)
+# {
+# flist <- f
+# out <- matrix(NA,nr=nrow(object@exprs),nc=llen <- length(flist))
+# lnames <- names(flist)
+# if(is.null(lnames)) lnames <- paste("l",1:llen,sep="")
+# for (i in 1:llen)
+#   out[,i] <- apply(exprs(object),1,flist[[i]])
+# dimnames(out) <- list(row.names(exprs(object)),lnames)
+# out
+# })
+#
+## this function already exists, would not need invocation of
+## standardGeneric except that we are changing arg list
+#
+#rank.default <- get("rank", "package:base")
+#setGeneric("rank", function(object,f) standardGeneric("rank"))
+#setMethod("rank", c("exprSet", "function"), function(object,f) {
+# rank.default(iter(object,f)) })
+#
+#setGeneric("tissueResamp", function(object) standardGeneric("tissueResamp"))
+#setMethod("tissueResamp", "exprSet", function(object) {
+# nsamp <- ncol(object@exprs)
+# sel <- sample(1:nsamp, replace=T)
+# object[,sel]
+# })
+#
+#setGeneric("rankDistn", 
+#   function(object,f,B) standardGeneric("rankDistn"))
+#setMethod("rankDistn", c("exprSet","function", "numeric") ,function(object,f,B) {
+# ng <- nrow(object@exprs)
+# out <- matrix(NA,nr=ng,nc=B)
+# for (i in 1:B)
+#  out[,i] <- rank(tissueResamp(object),f)
+# out
+# })
+#
 
 
 }
