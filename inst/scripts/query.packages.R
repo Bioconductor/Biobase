@@ -26,7 +26,7 @@ query.packages <- function (pkgName, pkgVersion = NULL, type = "unix",
                        packUrl = NULL,
                        version = ifelse(is.null(pkgVersion), -1, pkgVersion),
                        type = ifelse(is.null(type), .Platform$OS.type, type),
-                       depends = list())
+                       depends = NULL)
     tempRep <- NULL
     tempSUrl <- NULL
     tempZUrl <- NULL
@@ -43,9 +43,7 @@ query.packages <- function (pkgName, pkgVersion = NULL, type = "unix",
                     returnList$packUrl <<- ifelse(type == "unix",
                                                   tempSUrl, tempZUrl)
                 returnList$version <<- tempVer
-                if(is.null(tempDep))
-                    returnList$depends <<- "NULL"
-                else
+                if(!is.null(tempDep))
                     returnList$depends <<- formatLine(tempDep)
                 listReady <<- TRUE
                 pkgFound <<- FALSE
@@ -57,9 +55,7 @@ query.packages <- function (pkgName, pkgVersion = NULL, type = "unix",
                     returnList$packUrl <<- ifelse(type == "unix",
                                                   tempSUrl, tempZUrl)
                 returnList$version <<- tempVer
-                if(is.null(tempDep))
-                    returnList$depends <<- "NULL"
-                else
+                if(!is.null(tempDep))
                     returnList$depends <<- formatLine(tempDep)
                 listReady <<- TRUE
                 pagFound <<- FALSE
