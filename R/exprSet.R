@@ -192,7 +192,9 @@
 
 
   ## Class union for the exprs and se.exprs slots of exprSet
-  setClassUnion("exprMatrix", "matrix")
+  if (!isClass("exprMatrix"))
+    setClassUnion("exprMatrix", c("matrix"))
+
   ##data class for expression arrays
   setClass("exprSet", representation(exprs="exprMatrix",
                                      se.exprs = "exprMatrix",
