@@ -14,6 +14,10 @@ if (!isClass("exprList"))
 setClass("eSet", representation(eList="exprList",
                                 phenoData="phenoData"))
 
+if (!isGeneric("eList"))
+ setGeneric("eList", function(object)standardGeneric("eList"))
+
+setMethod("eList", "eSet", function(object) object@eList)
 
 if( !isGeneric("eList<-") )
     setGeneric("eList<-", function(object, value)
@@ -179,5 +183,74 @@ setMethod("show", "eSet", function(object ) {
     object
   })
 
+#
+# combine generic: given an arbitrary number of arguments
+# that are eSet instances, combine into a single eSet
+# instance in a sensible way.  
+#
+# current restrictions: only works for eList slots that are
+# lists
+#
 
+setGeneric("combine", function(x, y, ...)
+ {
+ if (length(list(...)) > 0)
+    combine( x, combine( y, combine(...) ) )
+ else standardGeneric("combine")
+ })
+
+setMethod("combine", c("phenoData", "phenoData"), function(x, y, ...)
+ {
+#
+# merge here will reproduce rows
+#
+ nl <- varLabels(x)
+ if (dim(pData(x))[2] == dim(pData(y))[2] && all(names(pData(x))==names(pData(y))))  
+    {
+    npd <- rbind(pData(x), pData(y))
+    }
+ else 
+    {
+    alln <- union(nx <- names(dx <- pData(x)), ny <- names(dy <- pData(y)))
+    if (length(xx <- setdiff(alln,nx))>0) 
+        for (i in 1:length(xx)) dx[[ xx[i] ]] <- NA
+    if (length(xx <- setdiff(alln,ny))>0) 
+        for (i in 1:length(xx)) dy[[ xx[i] ]] <- NA
+    npd <- rbind(dx,dy)
+    allvl <- list()
+    nvl1 <- names(varLabels(x))
+    nvl2 <- names(varLabels(y))
+    for (i in 1:length(varLabels(x))) allvl[[ nvl1[i] ]] <- varLabels(x)[[i]]
+    for (i in 1:length(varLabels(y))) allvl[[ nvl2[i] ]] <- varLabels(y)[[i]]
+    nl <- list()
+      for (i in 1:ncol(dx)) nl[[ names(dx)[i] ]] <- allvl[[ names(dx)[i] ]]
+    }
+ new("phenoData", pData=npd, varLabels=nl)
+ })
+
+setMethod("combine", "phenoData", function(x, y, ...)
+ {
+ return(x)
+ })
+
+setMethod("combine", c("eSet", "eSet"), function(x, y, ...)
+ {
+#
+# it would be nice to do a combine on the eList elements, but
+# exprList is a virtual class...
+#
+ if (is.environment(eList(x))) stop("not currently supporting environment-valued eLists")
+ if (class(eList(x)) != class(eList(y))) stop("not currently supporting eLists of different classes")
+ if (!all(names(eList(x))==names(eList(y)))) stop("eLists have different element names")
+ o <- list()
+ n <- names(eList(x))
+ for (e in n) o[[e]] <- cbind(eList(x)[[e]], eList(y)[[e]])
+ new("eSet", eList=o,
+             phenoData=combine(phenoData(x), phenoData(y)))
+ })
+
+setMethod("combine", "eSet", function(x, y, ...)
+ {
+ return(x)
+ })
 
