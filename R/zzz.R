@@ -52,13 +52,6 @@ dumpPackTxt <- function (package)
 }
 
 .First.lib <- function(libname, pkgname, where) {
-    ## Determine if this came from library or require
-    origLoad <- as.character(sys.status()$sys.calls)
-    if (any(grep("require\\(",origLoad)))
-        quietly <- TRUE
-    else
-        quietly <- FALSE
-
     require(methods, quietly=TRUE)
     where <- match(paste("package:", pkgname, sep=""), search())
     .initContainer(where)
@@ -67,14 +60,12 @@ dumpPackTxt <- function (package)
     .buildBiobaseOpts()
     .getPDFOption()
 
-    if (!quietly) {
         cat("Welcome to Bioconductor \n")
         cat("\t To view some introductory material -- look at our vignettes\n")
         cat("\t Simply type: openVignette() \n")
         cat("\t to see the available vignettes\n")
         cat("\t To read a vignette see the openVignette help page",
             "for details\n")
-    }
     cacheMetaData(as.environment(where))
 
     .initChunkClasses(where)
