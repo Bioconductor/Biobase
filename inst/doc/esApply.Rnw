@@ -4,6 +4,8 @@
 % NOTE -- ONLY EDIT THE .Rnw FILE!!!  The .tex file is
 % likely to be overwritten.
 %
+% \VignetteIndexEntry{esApply Introduction}
+
 \documentclass[12pt]{article}
 
 \usepackage{amsmath,pstricks}
@@ -21,8 +23,8 @@
 \newcommand{\scscst}{\scriptscriptstyle}
 \newcommand{\scst}{\scriptstyle}
 
-\bibliographystyle{plainnat} 
- 
+\bibliographystyle{plainnat}
+
 \begin{document}
 
 \section*{A note on {\tt esApply}}
