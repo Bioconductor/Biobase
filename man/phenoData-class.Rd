@@ -34,6 +34,9 @@
       does not quite have the right semantics but it is close. This
       operator extracts the named component of the \code{pData} slot in
       \code{phenoData}.}
+    \item{pData<-}{(phenoData): A replacement method for the \code{pData}
+     slot.}
+
   }
 }
 \keyword{methods}
