@@ -71,7 +71,7 @@ dumpPackTxt <- function (package)
     cat("\t simply type: openVignette() \n")
     ##        cat("\t to see the available vignettes\n")
     cat("\t For details on reading vignettes, see\n")
-    cat("\t the openVignette help page.")
+    cat("\t the openVignette help page.\n")
     cacheMetaData(as.environment(where))
 
 }
