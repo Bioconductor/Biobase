@@ -7,10 +7,6 @@
         options("BioC"=BioC)
     }
 
-    # I added this to add "Vignettes" to the menu bar. JZ
-    addVigs2Menu("vExplorer", doThis = "vExplorer()")
-    addVigs2Menu("Biobase")
-
     Base <- list()
     class(Base) <- "BioCPkg"
     Base$urls <- list( bioc = "http://www.bioconductor.org")
@@ -58,7 +54,7 @@ dumpPackTxt <- function (package)
 #    file.show(outFile, delete.file = TRUE)
 }
 
-##we need to be more careful about the where argument. If any of these 
+##we need to be more careful about the where argument. If any of these
 ##function calls load a library, where is wrong from there on...
 .First.lib <- function(libname, pkgname, where) {
     require(methods, quietly=TRUE)
@@ -77,4 +73,8 @@ dumpPackTxt <- function (package)
     ##        cat("\t to see the available vignettes\n")
     cat("\t For details on reading vignettes, see\n")
     cat("\t the openVignette help page.\n")
+
+    # I added this to add "Vignettes" to the menu bar. JZ
+#    addVig2Menu("vExplorer", doThis = "vExplorer()")
+#    addVig2Menu("Biobase")
 }
