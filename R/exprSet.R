@@ -245,11 +245,11 @@
                standardGeneric("notes"), where=where)
   setMethod("notes", "exprSet", function(object)
             object@notes, where=where )
-  
+
   if( !isGeneric("notes<-") )
     setGeneric("notes<-", function(object, value)
                standardGeneric("notes<-"), where=where)
-  
+
   setReplaceMethod("notes", "exprSet", function(object, value) {
     object@notes <- value
     object
@@ -369,21 +369,36 @@
 	pdata <- phenoData(x)
     else
         pdata <- phenoData(x)[j,, ..., drop=FALSE]
+    haveSES <- nrow(x@se.exprs) > 0
     if(missing(j) ) {
-      if( missing(i) )
-        nexprs <- exprs(x)
-      else
-        nexprs <- exprs(x)[i, ,drop=FALSE]
+        if( missing(i) ) {
+            nexprs <- exprs(x)
+            if( haveSES )
+                nses <- se.exprs(x)
+        }
+        else {
+            nexprs <- exprs(x)[i, ,drop=FALSE]
+            if( haveSES )
+                nses <- se.exprs(x)[i, ,drop=FALSE]
+        }
     }
     else {
-      if( missing(i) )
-        nexprs <- exprs(x)[,j, drop=FALSE]
-      else
-        nexprs <- exprs(x)[i, j, drop=FALSE]
+      if( missing(i) ) {
+          nexprs <- exprs(x)[,j, drop=FALSE]
+          if( haveSES )
+              nses <- se.exprs(x)[,j, drop=FALSE]
+      }
+      else {
+          nexprs <- exprs(x)[i, j, drop=FALSE]
+          if( haveSES )
+              nses <- se.exprs(x)[i, j, drop=FALSE]
+      }
     }
-    new("exprSet", exprs=nexprs, phenoData = pdata,
-        description=x@description,
-        notes=x@notes)}, where=where)
+    x@exprs=nexprs
+    if( haveSES )
+        x@se.exprs= nses
+    x@phenoData = pdata
+    x}, where=where)
 
   setMethod("show", "exprSet", function(object ) {
     dm <-dim(object@exprs)
