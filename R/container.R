@@ -26,10 +26,7 @@ if( !isGeneric("locked") )
 setMethod("locked", "container", function(object) object@locked,
           where=where )
 
-#if( !isGeneric("[[<-") )
-#    setGeneric("[[<-")
-
-setReplaceMethod("[[", "container", function(x, i, ..., value) {
+setReplaceMethod("[[", "container", function(x, i, j,..., value) {
     if( locked(x) )
         stop("cannot assign into a locked container")
     cv <- class(value)

@@ -12,10 +12,22 @@
 require(methods)
 
 .initExprset <- function(where) {
- setClass("exprSet", representation(exprs="matrix",
-                                   phenodata="data.frame",
-                                    covariates="list",
-                                    description="character") , where=where)
+
+  setClass("phenoData", representation(phenoData="data.frame"),
+  where=where)
+
+  if( !isGeneric("phenoData") )
+      setGeneric("phenoData", function(object) standardGeneric("phenoData"),
+                 where=where )
+ setMethod("phenoData", "phenoData",
+           function(object) object@phenoData, where=where)
+
+  setClass("exprSet", representation(exprs="matrix",
+                                   se.exprs = "matrix",
+                                   phenoData="phenoData",
+                                   covariates="list",
+                                   description="character",
+                                   notes="character") , where=where)
 
 #define a generic for obtaining the data
  if( !isGeneric("exprs") )
@@ -23,17 +35,17 @@ require(methods)
  where=where )
  setMethod("exprs", "exprSet", function(object) object@exprs, where=where)
 
- if( !isGeneric("phenodata") )
-     setGeneric("phenodata", function(object)
-                standardGeneric("phenodata"), where=where)
- setMethod("phenodata", "exprSet", function(object)
-         object@phenodata, where=where )
+ if( !isGeneric("phenoData") )
+     setGeneric("phenoData", function(object)
+                standardGeneric("phenoData"), where=where)
+ setMethod("phenoData", "exprSet", function(object)
+         object@phenoData, where=where )
 
  if( !isGeneric("sampleNames") )
      setGeneric("sampleNames", function(object)
                 standardGeneric("sampleNames"), where=where)
  setMethod("sampleNames", "exprSet",
-           function(object) row.names(phenodata), where=where)
+           function(object) row.names(phenoData), where=where)
 
  if( !isGeneric("geneNames") )
      setGeneric("geneNames", function(object)
@@ -48,12 +60,12 @@ require(methods)
            object@covariates, where=where)
 
  setMethod("[", "exprSet", function(x, i, j, ..., drop=TRUE)
-     new("exprSet", exprs=x@exprs[i,j], phenodata = x@phenodata[j,,drop=FALSE],
+     new("exprSet", exprs=x@exprs[i,j], phenoData = x@phenoData[j,,drop=FALSE],
      description=x@description), where=where)
 
  setMethod("print", "exprSet", function(x, ...) {
      ngenes <- nrow(x@exprs)
-     dmp <- dim(x@phenodata)
+     dmp <- dim(x@phenoData)
      nsamples <- dmp[1]
      ncovs <- dmp[2]
      cat("Expression Set (exprSet) with \n\t", ngenes, " genes\n\t", sep="")
