@@ -497,8 +497,17 @@
   if( !isGeneric("split") )
     setGeneric("split")
 
+##FIXME: somehow factors are not vectors!!! this is going to cause
+##  some grief - we will need to figure out whether this is an oversight
+  setMethod("split", signature(x="exprSet", f="factor"),
+     function(x, f) 
+         .splitexprSet(x, f))
+
   setMethod("split", signature(x="exprSet", f="vector"),
-            function(x, f) {
+     function(x, f) 
+         .splitexprSet(x, f))
+ 
+.splitexprSet = function(x, f) {
               lenf <- length(f)
               exs <- exprs(x)
               pD <- phenoData(x)
@@ -545,7 +554,7 @@
               }
               else
                 stop("could not split")
-            })
+            }
 
 
   setMethod("split", signature(x="phenoData", f="vector"),

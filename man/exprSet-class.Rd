@@ -50,6 +50,7 @@
 \alias{annotation<-,exprSet-method}
 \alias{show,exprSet-method}
 \alias{split,exprSet,vector-method}
+\alias{split,exprSet,factor-method}
 \alias{write.exprs,exprSet-method}
 \alias{exprs2excel,exprSet-method}
 \title{Class exprSet, a class for microarray data, and methods for
@@ -147,12 +148,10 @@ gene expression values will be iteratively bound to y}
       
     \item{show}{(exprSet): renders information about the exprSet
       in a concise way on stdout. }
-
+    \item{split}{(exprSet, factor): see method for \code{vector}}
     \item{split}{(exprSet, vector): splits the exprSet. The returned
       value is a list, each component of which is an \code{exprSet}.
-      If the length of \code{vector} is a divisor of the number of rows
-      in the expression array then the expression array is
-      split. Subsequently, if the length of \code{vector} is a divisor
+      If the length of \code{vector} is a divisor
       of the number of rows of the phenoData data frame then the split
       is made on this.}
     \item{annotation}{(exprSet): An accessor function for the annotation
