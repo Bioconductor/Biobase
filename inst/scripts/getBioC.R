@@ -93,12 +93,12 @@ getLibName <- function (platform, lib){
 }
 
 getDLUrl <- function(platform, isDevel = FALSE){
-    if(isDevel)
+#    if(isDevel)
         tempUrl <-
-            "http://www.bioconductor.org/packages/distrib//devel/"
-    else
-        tempUrl <-
-            "http://www.bioconductor.org/packages/distrib//release/"
+            "http://www.bioconductor.org/packages/devel/distrib/release/"
+#    else
+#        tempUrl <-
+#            "http://www.bioconductor.org/packages/distrib/release/"
     switch(platform,
             "unix" = return (paste(tempUrl, "Source", sep = "")),
             "windows" = return(paste(tempUrl,"Win32", sep = "")),
