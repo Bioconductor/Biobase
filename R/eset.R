@@ -9,7 +9,6 @@
 if (!isClass("exprList"))
     setClassUnion("exprList", c("list", "environment"))
 
-
 ##just the two slots, everyone else extends this class
 setClass("eSet", representation(eList="exprList",
                                 phenoData="phenoData"))
@@ -73,7 +72,7 @@ setMethod("[", "eSet", function(x, i, j, ..., drop=FALSE) {
     else
         pdata <- phenoData(x)[j,, ..., drop=FALSE]
     eList <- x@eList
-    isList <- is.list(eList) 
+    isList <- is.list(eList)
 
     if( isList )
         eNames <- names(eList)
@@ -105,7 +104,7 @@ setMethod("[", "eSet", function(x, i, j, ..., drop=FALSE) {
                     assign(nm,
                            get(nm, env=eList,
                                inherits=FALSE)[, j, drop=FALSE],
-                           env=outEnv)  
+                           env=outEnv)
             }
         }
         else {
@@ -116,7 +115,7 @@ setMethod("[", "eSet", function(x, i, j, ..., drop=FALSE) {
                     assign(nm,
                            get(nm, env=eList,
                                inherits=FALSE)[i, j, drop=FALSE],
-                           env=outEnv)  
+                           env=outEnv)
             }
         }
     }
@@ -124,7 +123,7 @@ setMethod("[", "eSet", function(x, i, j, ..., drop=FALSE) {
         eList(x) <- eList
     else
         eList(x) <- outEnv
-    
+
     phenoData(x) <- pdata
     x
 })
@@ -138,19 +137,10 @@ setMethod("show", "eSet", function(object ) {
     show(phenoData(object))
 })
 
-
-##For now we duplicate code - but I would like to make both
-##$ and [[ work for environments
-##FIXME: this does not seem to work - should explore it
-"$.environment" <- function(x, name) {
-    print("howdy")
-    get(as.character(name), env=x)
-}
-
 ###################################################################
 ## Pheno data handling code
 ###################################################################
- if( !isGeneric("phenoData") )
+if( !isGeneric("phenoData") )
     setGeneric("phenoData", function(object)
                standardGeneric("phenoData"))
 
@@ -186,7 +176,7 @@ setMethod("show", "eSet", function(object ) {
 #
 # combine generic: given an arbitrary number of arguments
 # that are eSet instances, combine into a single eSet
-# instance in a sensible way.  
+# instance in a sensible way.
 #
 # current restrictions: only works for eList slots that are
 # lists
@@ -205,16 +195,16 @@ setMethod("combine", c("phenoData", "phenoData"), function(x, y, ...)
 # merge here will reproduce rows
 #
  nl <- varLabels(x)
- if (dim(pData(x))[2] == dim(pData(y))[2] && all(names(pData(x))==names(pData(y))))  
+ if (dim(pData(x))[2] == dim(pData(y))[2] && all(names(pData(x))==names(pData(y))))
     {
     npd <- rbind(pData(x), pData(y))
     }
- else 
+ else
     {
     alln <- union(nx <- names(dx <- pData(x)), ny <- names(dy <- pData(y)))
-    if (length(xx <- setdiff(alln,nx))>0) 
+    if (length(xx <- setdiff(alln,nx))>0)
         for (i in 1:length(xx)) dx[[ xx[i] ]] <- NA
-    if (length(xx <- setdiff(alln,ny))>0) 
+    if (length(xx <- setdiff(alln,ny))>0)
         for (i in 1:length(xx)) dy[[ xx[i] ]] <- NA
     npd <- rbind(dx,dy)
     allvl <- list()
