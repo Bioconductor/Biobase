@@ -89,7 +89,7 @@
 
   validphenoData <- function(object) {
       dm <- dim(object@pData)
-      if(dm[2] != length(object@phenoLabels) )
+      if(dm[2] != length(object@varLabels) )
           return(FALSE)
       return(TRUE)
   }
