@@ -23,11 +23,11 @@ require(methods)
   where=where)
 
   if( !isGeneric("pData") )
-      setGeneric("pData", function(object) standardGeneric("pData"),
-                 where=where )
- setMethod("pData", "phenoData",
-           function(object) object@pData, where=where)
-
+    setGeneric("pData", function(object) standardGeneric("pData"),
+               where=where )
+  setMethod("pData", "phenoData",
+            function(object) object@pData, where=where)
+  
   if( !isGeneric("varLabels") )
       setGeneric("varLabels", function(object)
       standardGeneric("varLabels"), where=where)
@@ -109,8 +109,8 @@ require(methods)
       setGeneric("pData<-", function(object, value)
                standardGeneric("pData<-"), where=where)
 
- setReplaceMethod("pData", "exprSet", function(object, value) {
-     ph<-object@phenoData
+  setReplaceMethod("pData", "exprSet", function(object, value) {
+    ph<-object@phenoData
      ph@pData <- value
      object@phenoData <- ph
      object
