@@ -129,6 +129,15 @@ require(methods)
      object
  }, where=where)
 
+##FIXME: uncomment this, it's just commented cause of the code freeze
+##
+##    setReplaceMethod("[[", "exprSet", function(x, i, j, ..., value) {
+##        pD <- x@phenoData
+##       pD@pData[[i]] <- value
+##        x@phenoData <- pD
+##      x}, where=where)
+
+
 ###RI: this is a simple a pData replace for phenoData. i need it for affy.
   setReplaceMethod("pData", "phenoData", function(object, value){
     object@pData <- value
