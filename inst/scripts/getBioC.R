@@ -35,35 +35,43 @@ getBioC <- function (libName = "exprs", destdir = NULL, isDevel = FALSE,
         options(show.error.messages = TRUE)
 
         if(inherits(tryMe, "try-error")){
-            if(verbose)
-                print(paste("Get", i, "failed"))
-            else
-                messages <- paste(messages, paste("Get", i, "failed"),
-                                  sep = "\n")
+           messages <- c(messages, paste("Get", i, "failed"))
         }else{
 # Can not use the existing functions since they are all specific to CRAN
 #           download.packages(i,destdir, contriburl = getReposit())
 #           install.packages(i, lib = .libPaths(),contriburl = getReposit(),
 #                             destdir = destdir)
 
-           download.file(sourceUrl, fileName, quiet = TRUE)
+           download.file(sourceUrl, fileName,
+                         mode = getMode(PLATFORM), quiet = TRUE)
 #           temp <- packageStatus(repositories = getReposit())
 #           print(temp)
 
 #           temp <- update(temp)
 #           print(temp)
 #           upgrade(temp)
-           installPack(PLATFORM, fileName)
+            options(show.error.messages = FALSE)
+            tryMe <- try(installPack(PLATFORM, fileName))
+            options(show.error.messages = TRUE)
+
+            if(inherits(tryMe, "try-error")){
+                messages <- c(messages,
+                                paste("Install", i, "failed"))
+            }
         }
     }
+    if(verbose)
+        print(messages)
     return(invisible(messages))
 }
 
 getPackNames <- function (libName){
+    error <- paste("The library is not valid. Must be:",
+                      "all, exprs, affy, or CDNA", sep = "\n")
     AFFY <- "affy"
     CDNA <- c("marrayInput", "marrayClasses", "marrayNorm",
            "marrayPlots")
-    EXPRS <-c("Biobase", "annotate", "genefilter", "geneploter",
+    EXPRS <-c("Biobase", "annotate", "genefilter", "geneplotter",
               "edd", "Roc", "tkWidgets")
     switch(libName,
            "all" = return(c(EXPRS, AFFY, CDNA)),
@@ -71,7 +79,7 @@ getPackNames <- function (libName){
            "affy" = return(EXPRS, AFFY),
            "cdna" =,
            "CDNA" = return(c(EXPRS, CDNA)),
-           stop("The library is not valid"))
+           stop(error))
 }
 
 getLibName <- function (platform, lib){
@@ -122,12 +130,19 @@ getVersion <- function(isDevel = FALSE){
     }
 }
 
+getMode <- function(platform){
+    switch(platform,
+           "unix" = return("w"),
+           "windows" = return("wb"),
+           stop("OS system not surported"))
+}
+
 installPack <- function(platform, fileName){
     if(platform == "unix"){
         tt <- system(paste("R CMD INSTALL ", fileName, sep = ""), TRUE)
     }else{
         if(platform == "windows"){
-            tt <- zip.unpack(fileName, .libPaths()[1], CRAN = NULL)
+            tt <- install.packages(fileName, .libPaths()[1], CRAN = NULL)
         }else{
             stop("The OS system is not supported")
         }
