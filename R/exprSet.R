@@ -68,7 +68,7 @@ require(methods)
 
   validphenoData <- function(object) {
       dm <- dim(object@pData)
-      if(dm[2] != length(object@pheonLabels) )
+      if(dm[2] != length(object@phenoLabels) )
           return(FALSE)
       return(TRUE)
   }
@@ -105,6 +105,10 @@ require(methods)
                 standardGeneric("geneNames"), where=where)
  setMethod("geneNames", "exprSet", function(object)
      row.names(object@exprs), where=where )
+
+##a varLabels method for exprSets
+  setMethod("varLabels", "exprSet",
+            function(object) object@phenoData@varLabels, where=where)
 
 #<<<<<<< exprSet.R
 # if( !isGeneric("covariates") )
@@ -157,7 +161,6 @@ require(methods)
      dm <-dim(object@exprs)
      ngenes <- dm[1]
      nsamples <- dm[2]
-#>>>>>>> 1.12
      cat("Expression Set (exprSet) with \n\t", ngenes, " genes\n\t", sep="")
      cat(nsamples, "samples\n\t")
      show(object@phenoData)
