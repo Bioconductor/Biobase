@@ -44,7 +44,7 @@ query.packages <- function (pkgName, pkgVersion = NULL, type = "unix",
                                    sep = "")
                 tempZUrl <<- avlCheck(pkgName)
             }
-            if(tempVer > returnList$version){
+            if(tempVer >= returnList$version){
                 returnList$repository <<- tempRep
                 if(!is.null(tempSUrl) && !is.null(tempZUrl))
                     returnList$packUrl <<- ifelse(type == "unix",
@@ -86,9 +86,9 @@ query.packages <- function (pkgName, pkgVersion = NULL, type = "unix",
             if(pkgFound){
                 switch(sub("(^.*): .*", "\\1", j),
                        "Version" = tempVer <- sub("^.*: *(.*)","\\1",j),
-                       "SourceUrl" = tempSUrl <-
+                       "SourceURL" = tempSUrl <-
                        sub("^.*(http://.*)","\\1",j),
-                       "Win32Url" = tempZUrl <- sub("^.*(http://.*)","\\1",j),
+                       "Win32URL" = tempZUrl <- sub("^.*(http://.*)","\\1",j),
                        "Depends" = tempDep <-
                        getDepends(sub("^.*: *(.*)","\\1",j)))
             }
@@ -96,8 +96,9 @@ query.packages <- function (pkgName, pkgVersion = NULL, type = "unix",
         # do list again in case the match is the last one
         if(pkgFound)
             doList()
-        if(listReady)
-            break
+         # Taken out to be in line with the new format of PACKAGES
+#        if(listReady)
+#            break
     }
 
     if(listReady)
