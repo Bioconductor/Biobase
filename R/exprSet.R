@@ -150,8 +150,8 @@ require(methods)
                standardGeneric("sampleNames"), where=where)
   setMethod("sampleNames", "exprSet",
             function(object) {
-              if (! is.null(colnames(expr(object))))
-                colnames(expr(object))
+              if (! is.null(colnames(exprs(object))))
+                colnames(exprs(object))
               else
                 row.names(pData(object))
             }, where=where)
