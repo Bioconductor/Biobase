@@ -486,9 +486,17 @@
                                                            FALSE])
                   nsplit<-length(splitexprs)
                   for(i in 1:nsplit) {
-                    splitexprs[[i]] <- new("exprSet",
-                                           exprs=splitexprs[[i]],
-                                           phenoData = pD, annotation= aN )
+                    ## Create the new exprSet with the same class as
+                    ## the original one - SDR
+                    tmp <- x
+                    exprs(tmp) <- splitexprs[[i]]
+                    phenoData(tmp) <- pD
+                    annotation(tmp) <- aN
+                    se.exprs(tmp) <- matrix(nr=0,nc=0)
+                    description(tmp) <- new("MIAME")
+                    notes(tmp) <- ""
+                    splitexprs[[i]] <- tmp
+                    rm(tmp)
                   }
                   return(splitexprs)
                 }  ##split the expressions
@@ -497,10 +505,16 @@
                 nEx <- lapply(split(1:ncol(exs), f),
                               function(ind) exs[,ind,drop=FALSE])
                 nsplit <- length(npD)
-                for( i in 1:nsplit)
-                  npD[[i]] <- new("exprSet", exprs=nEx[[i]],
-                                  phenoData=npD[[i]],
-                                  annotation=aN)
+                for( i in 1:nsplit) {
+                  ## Create the new exprSet with the same class as
+                  ## the original one - SDR
+                  tmp <- x
+                  exprs(tmp) <- nEx[[i]]
+                  phenoData(tmp) <- npD[[i]]
+                  annotation(tmp) <- aN
+                  npD[[i]] <- tmp
+                  rm(tmp)
+                }
                 return(npD)
               }
               else
