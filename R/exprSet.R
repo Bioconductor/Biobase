@@ -193,15 +193,16 @@ require(methods)
 # and doc needs to be written
 ## these are new functions completely
 #
-setGeneric("iter", function(object,covlab,f)standardGeneric("iter"),
+setGeneric("iter", function(object, covlab, f) standardGeneric("iter"),
      where=where)
 #
 setMethod("iter", signature(object="exprSet", covlab="missing",
                             f="function"),
- function(object,covlab,f)
-   apply(exprs(object),1,f), where=where)
+ function(object, covlab, f)
+   apply(exprs(object), 1, f), where=where)
 #
-setMethod("iter", signature(object="exprSet", covlab="missing", f="list"),
+setMethod("iter", signature(object="exprSet", covlab="missing",
+ f="list"),
 function(object,covlab,f)
  {
  flist <- f
@@ -214,13 +215,15 @@ function(object,covlab,f)
  out
  }, where=where)
 
-setMethod("iter", signature(object="exprSet", covlab="character", f="function"),
- function(object,covlab,f) {
+setMethod("iter", signature(object="exprSet", covlab="character",
+ f="function"),
+ function(object, covlab, f) {
   # f assumed to be a function of two arguments,
   # first is a stratum identifier to be used
   # in evaluating a statistical contrast by f
   varnames <- names(object@phenoData@pData)
-  if (!(any(match(covlab,varnames)))) stop("the requested covariate is not in the exprSet")
+  if (!(any(match(covlab,varnames))))
+      stop("the requested covariate is not in the exprSet")
   fc <- function(x) function(y) f(x,y)
   f2app <- fc(object@phenoData@pData[[covlab]])
   iter(object,f=f2app)
@@ -262,4 +265,4 @@ setMethod("iter", signature(object="exprSet", covlab="character", f="function"),
 }
 
 with.exprSet <- function(data, expr, ...) eval(substitute(expr),
-  data@pData)
+  data@phenoData@pData, enclos=parent.frame())
