@@ -1,9 +1,9 @@
 # A class for microarray data
 
 # in this representation we think of the data set being comprised of
-#  * matrix slot exprs: a collection of array results organized as a matrix, with
-# genes defining rows and samples defining columns.
-#  * data.frame slot phenodata: in the customary organization of samples
+#  matrix slot exprs: a collection of array results organized as a
+#  matrix, with genes defining rows and samples defining columns.
+#  data.frame slot phenoData: in the customary organization of samples
 # defining rows and variables or features defining columns.  thus
 # if x is an exprSet, nrow(x@phenodata) == ncol(x@exprs)
 #  * character slot description: unconstrained string with information about
