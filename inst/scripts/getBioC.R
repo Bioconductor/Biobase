@@ -38,19 +38,9 @@ getBioC <- function (libName = "exprs", destdir = NULL, isDevel = FALSE,
         if(inherits(tryMe, "try-error")){
            messages <- c(messages, paste("Get", i, "failed"))
         }else{
-# Can not use the existing functions since they are all specific to CRAN
-#           download.packages(i,destdir, contriburl = getReposit())
-#           install.packages(i, lib = .libPaths(),contriburl = getReposit(),
-#                             destdir = destdir)
             close(tryMe)
             download.file(sourceUrl, fileName,
                          mode = getMode(PLATFORM), quiet = TRUE)
-#           temp <- packageStatus(repositories = getReposit())
-#           print(temp)
-
-#           temp <- update(temp)
-#           print(temp)
-#           upgrade(temp)
             options(show.error.messages = FALSE)
             tryMe <- try(installPack(PLATFORM, fileName))
             options(show.error.messages = TRUE)
