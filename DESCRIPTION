@@ -7,3 +7,5 @@ Depends: R (>= 1.9.0),tools
 Maintainer: R. Gentleman <rgentlem@hsph.harvard.edu>
 License: LGPL 
 Collate: dumpPackTxt.R addVig2Menu.R aggregate.R as.data.frame.exprSet.R container.R contents.R copySubstitute.R createpackage.R envir.R exprSet.R eset.R multi.R netTools.R openVignette.R pdf.R pkgVersion.R read.MIAME.R read.exprSet.R read.phenoData.R zzz.R
+ReleaseLevel: devel
+
