@@ -27,6 +27,9 @@
 
 \details{No syntactic or other checking of the package is
   performed. For this, use R CMD check.
+
+  The symbols \code{@PKGNAME@} and \code{@DATE@} are automatically defined with the
+  values of \code{pkgname} and \code{\date()}, respectively.
 }
 \value{
   The function returns a \code{list} with one element
@@ -37,11 +40,12 @@
 \keyword{programming}
 
 \examples{
-   ## library(makeProbeTools)
-   ## symbols = list(ARRAYTYPE = "hgu232a")
-   ## createPackage("foo",
-   ##     somedir,
-   ##     file.path(.path.package("makeProbeTools"), "Code"),
-   ##     symbols)
+  sym  = list(AUTHOR="W. Shakespeare", COMPOSER="G. Verdi", VERSION="1.0")
+  dest = tempdir()
+  res  = createPackage("macbeth",
+          destinationDir = dest,
+          originDir      = file.path(.path.package("Biobase"), "Code"),
+          symbolValues   = sym)
+  dir(res$pkgdir)
 }
 

@@ -1,4 +1,4 @@
-copySubstitute = function(symbolValues, cin, cout, symbol.delimiter="@", allow.unresolved.symbols=FALSE) {
+copySubstitute = function(cin, cout, symbolValues, symbol.delimiter="@", allow.unresolved.symbols=FALSE) {
   ## check integrity of arguments (...lots of bureaucracy)
   mess = NULL
   if (!is.list(symbolValues) && !is.vector(symbolValues))
@@ -25,6 +25,12 @@ copySubstitute = function(symbolValues, cin, cout, symbol.delimiter="@", allow.u
   for (i in 1:length(symbolValues))
     txt = gsub(nm[i], symbolValues[[i]], txt)
 
+  ## If the destination is a filename, also substitute that
+  if(is.character(cout)) {
+    for (i in 1:length(symbolValues))
+      cout = gsub(nm[i], symbolValues[[i]], cout)
+  }
+  
   ## check for unresolved symbols
   if(!allow.unresolved.symbols){
     re = regexpr(paste(symbol.delimiter, ".+", symbol.delimiter, sep=""), txt)

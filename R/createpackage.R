@@ -25,7 +25,7 @@ createPackage <- function(pkgname, destinationDir, originDir, symbolValues,
           cat(paste("Existing", pkgdir, "was removed.\n"))
       }
     } else {
-      stop(paste("Directory", pkgdir, "exists. Please use force=TRUE to removed it",
+      stop(paste("Directory", pkgdir, "exists. Please use force=TRUE to remove it",
                  "or choose another destination directory."))
     } ## if(force)else 
   }  ## if (file.exists)
@@ -35,23 +35,26 @@ createPackage <- function(pkgname, destinationDir, originDir, symbolValues,
     if(!res)
       stop(paste("Failed to create directory", file.path(pkgdir, d)))
   }
-    
+
+  ## predefined symbols
+  symbolValues = append(symbolValues, list(TODAY=date(), PKGNAME=pkgname))
+  
   ## DESCRIPTION
-  copySubstitute(symbolValues,
-                 file.path(originDir, "DESCRIPTION"),
-                 file.path(pkgdir,    "DESCRIPTION"))
+  copySubstitute(file.path(originDir, "DESCRIPTION"),
+                 file.path(pkgdir,    "DESCRIPTION"),
+                 symbolValues,)
     
   ## R files
   for (fn in list.files(originDir, pattern="*\\.R$"))
-    copySubstitute(symbolValues, file.path(originDir, fn), file.path(pkgdir, "R", fn))
+    copySubstitute(file.path(originDir, fn), file.path(pkgdir, "R", fn), symbolValues)
   
   ## C files
   for (fn in list.files(originDir, pattern="*\\.c$"))
-    copySubstitute(symbolValues, file.path(originDir, fn), file.path(pkgdir, "src", fn))
+    copySubstitute(file.path(originDir, fn), file.path(pkgdir, "src", fn), symbolValues)
   
   ## man files
   for (fn in list.files(originDir, pattern="*\\.Rd$"))
-    copySubstitute(symbolValues, file.path(originDir, fn), file.path(pkgdir, "man", fn))
+    copySubstitute(file.path(originDir, fn), file.path(pkgdir, "man", fn), symbolValues)
   
   return(list(pkgdir=pkgdir))
 }

@@ -6,11 +6,11 @@
   connection, replace all occurences of a SYMBOL by the corresponding
   value. (see example).
 }
-\usage{copySubstitute(symbolValues, cin, cout, symbol.delimiter="@", allow.unresolved.symbols=FALSE)}
+\usage{copySubstitute(cin, cout, symbolValues, symbol.delimiter="@", allow.unresolved.symbols=FALSE)}
 \arguments{
-  \item{symbolValues}{A named list of character strings.}
   \item{cin}{A connection object or a character string.}
   \item{cout}{A connection object or a character string.}
+  \item{symbolValues}{A named list of character strings.}
   \item{symbol.delimiter}{A character string of with a single character
     in it.}
   \item{allow.unresolved.symbols}{If not \code{TRUE}, then the function
@@ -44,23 +44,22 @@
 
 \examples{
 ## create an example file
-writeLines(text=
-  "This is a @FOO@ file. It has the meaning of @BAR@.\n\n\t\tAnd the rest is @DADA@.",
-  con = "cstest1.txt")
+fin  = tempfile()
+fout = tempfile()
+
+writeLines(text=c("We will perform in @WHAT@:",
+  "So, thanks to @WHOM@ at once and to each one,",
+  "Whom we invite to see us crown'd at @WHERE@."),
+  con=fin) 
 
 ## create the symbol table
-z = list(FOO="test",
-         DADA="silence",
-         BAR="dada")
+z = list(WHAT="measure, time and place", WHOM="all", WHERE="Scone")
 
 ## run copySubstitute
-copySubstitute(z, "cstest1.txt", "cstest2.txt")
+copySubstitute(fin, fout, z)
 
 ## display the results
-cat(readLines("cstest2.txt"))
-
-## clean up
-file.remove(c("cstest1.txt", "cstest2.txt"))
+readLines(fout)
 
 }
 
