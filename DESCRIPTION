@@ -1,7 +1,7 @@
 Package: Biobase
 Title: Biobase: Base functions for Bioconductor
-Version: 0.5-1
-Author: R. Gentleman
+Version: 0.5-2
+Author: R. Gentleman, V. Carey
 Description: Functions that are needed by many other packages or which replace R functions.
 Maintainer: R. Gentleman <rgentlem@hsph.harvard.edu>
 License: GPL2.0

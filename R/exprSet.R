@@ -135,19 +135,19 @@ require(methods)
 #     ncovs <- dmp[2]
 #=======
  setMethod("[", "exprSet", function(x, i, j, ..., drop=TRUE) {
-
-     pdata <- x@phenoData[j,, ..., drop=FALSE]
+# why drop=TRUE? VC 12/21/01
+     pdata <- phenoData(x)[j,, ..., drop=FALSE]
      if(missing(j) ) {
          if( missing(i) )
-             nexprs <- x@exprs
+             nexprs <- exprs(x)
          else
-             nexprs <- x@exprs[i, ]
+             nexprs <- exprs(x)[i, ,drop=FALSE]
      }
      else {
          if( missing(i) )
-             nexprs <- x@exprs[,j]
+             nexprs <- exprs(x)[,j, drop=FALSE]
          else
-             nexprs <- x@exprs[i, j]
+             nexprs <- exprs(x)[i, j, drop=FALSE]
      }
      new("exprSet", exprs=nexprs, phenoData = pdata,
      description=x@description,

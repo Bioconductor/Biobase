@@ -1,7 +1,7 @@
 \name{exprSet-class}
 \docType{class}
 \alias{exprSet-class}
-\title{Class exprSet, A class for Microarray Data }
+\title{Class exprSet, a class for microarray data, and methods for processing them }
 \description{ This is class representation for Microarray Data}
 \section{Creating Objects}{
 \code{  new('exprSet',}\cr
@@ -67,6 +67,9 @@ in a concise way on stdout. }
   eset <- new("exprSet", exprs=geneData, phenoData=pdata)
   eset
   eset[,1:10]
+  eset[,1]
+  eset[1,]
+  eset[1,1]
   eset[1:100,]
   eset[1:44,c(2,4,6)]
   Means <- iter(eset, f=mean)
