@@ -7,7 +7,7 @@
 ##initfun, if they are there they get aggregated with
 ##agfun
 
-aggregate <- function(x, env, agfun, initfun)
+Aggregate <- function(x, env, agfun, initfun)
  {
    if( !is.environment(env) )
      stop("second argument must be an environment")
@@ -17,7 +17,7 @@ aggregate <- function(x, env, agfun, initfun)
    if(is.character(x)) {
      for( i in 1:length(x) ) {
        nm <- x[i]
-       if( !exists(nm, env=env) )
+       if( !exists(nm, env=env, inherits=FALSE) )
           assign(nm, env=env, initfun(nm, x))
        else {
           v1 <- get(nm, env=env)
@@ -29,7 +29,7 @@ aggregate <- function(x, env, agfun, initfun)
      nms <- names(x)
      for( i in 1:length(x) ) {
         nm <- nms[i]
-        if( !exists(nm, env=env) )
+        if( !exists(nm, env=env, inherits=FALSE) )
           assign(nm, env=env, initfun(nm, x[[i]]))
         else {
            v1 <- get(nm, env=env)
@@ -37,5 +37,5 @@ aggregate <- function(x, env, agfun, initfun)
         }
      }
    }
-   else stop("bad type for aggregate")
+   else stop("bad type for Aggregate")
  }

@@ -24,6 +24,7 @@ if( !isGeneric("locked") )
 setMethod("locked", "container", function(object) object@locked)
 
 
+setGeneric("[[<-")
 
 setReplaceMethod("[[", "container", function(x, i, j, ..., value) {
     if( locked(x) )
@@ -37,6 +38,8 @@ setReplaceMethod("[[", "container", function(x, i, j, ..., value) {
     object@x[[i]] <- value
 })
 
+setGeneric("[[")
+
 setMethod("[[", "container", function(x, i, j,...) {
     x@x[[i]]
 })
@@ -45,6 +48,8 @@ setMethod("print", "container", function(x, ...) {
     cat("Container of ", content(x), "\n", sep="")
     print(x@x)
 })
+
+setGeneric("[")
 
 setMethod("[", "container",
     def = function(x, i, j, ..., drop = F){
