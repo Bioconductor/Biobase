@@ -23,7 +23,6 @@ getBioC <- function (libName = "exprs", destdir = NULL, isDevel = FALSE,
     messages <- NULL
 
     packs <- getPackNames(libName)
-    print(packs)
     for(i in packs){
         sourceUrl <- getUrl(PLATFORM, i, isDevel)
         fileName <- getFName(PLATFORM, DESTDIR, i)
@@ -80,11 +79,12 @@ getUrl <- function(platform, pack, isDevel = FALSE){
 }
 
 getFName <- function(platform, destdir, pack){
+     # .Platform$file.sep returns "/" under windows. Hard code for now
      switch(platform,
             "unix" = return (paste(destdir, .Platform$file.sep,
             pack, "_", getVersion(), ".tar.gz", sep = "")),
-            "windows" = return(paste(destdir, .Platform$file.sep,
-            pack, "-snapshot.zip")),
+            "windows" = return(paste(destdir, "\\",
+            pack, "-snapshot.zip", sep = "")),
             stop("The OS system is not supported"))
 }
 
@@ -94,10 +94,10 @@ getVersion <- function(){
 
 installPack <- function(platform, fileName){
     if(platform == "unix"){
-        system(paste("R CMD INSTALL ", fileName, sep = ""))
+        tt <- system(paste("R CMD INSTALL ", fileName, sep = ""), TRUE)
     }else{
         if(platform == "windows"){
-            output <- system(paste("Rcmd INSTALL", fileName, sep = ""))
+            tt <- system(paste("Rcmd INSTALL ", fileName, sep = ""), TRUE)
         }else{
             stop("The OS system is not supported")
         }
