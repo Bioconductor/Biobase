@@ -3,6 +3,8 @@
 % likely to be overwritten.
 %
 % \VignetteIndexEntry{HowTo  HowTo}
+%\VignetteDepends{}
+%\VignetteKeywords{Expression Analysis}
 
 \documentclass[12pt]{article}
 

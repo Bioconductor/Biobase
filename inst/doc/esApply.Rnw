@@ -5,6 +5,8 @@
 % likely to be overwritten.
 %
 % \VignetteIndexEntry{esApply Introduction}
+%\VignetteDepends{Biobase}
+%\VignetteKeywords{Expression Analysis}
 
 \documentclass[12pt]{article}
 
