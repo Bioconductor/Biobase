@@ -1,7 +1,0 @@
-Package: @PKGNAME@
-Title: When shall we three meet again, in thunder, lightning, or in rain?
-Version: @VERSION@
-Author: @AUTHOR@
-Description: This package has been composed by @COMPOSER@ on @TODAY@.
-Maintainer: Some One <some@where.co.uk>
-License:  GPL 2
