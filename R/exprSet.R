@@ -369,12 +369,24 @@
   setMethod("varLabels", "exprSet",
             function(object) phenoData(object)@varLabels, where=where)
 
-  if( !isGeneric("annotation") )
+  ## annotation: read and replace. WH, 11 Mar 2003
+  if(!isGeneric("annotation") )
     setGeneric("annotation", function(object)
                standardGeneric("annotation"), where=where)
-  setMethod("annotation", "exprSet", function(object)
-            object@annotation, where=where)
+  setMethod("annotation", "exprSet", where = where,
+     definition = function(object) object@annotation)
 
+  if(!isGeneric("annotation<-") )
+    setGeneric("annotation<-", function(object, value)
+               standardGeneric("annotation<-"), where=where)
+  
+  setReplaceMethod("annotation", signature="exprSet", where = where,
+     definition =  function(object, value) {
+                     object@annotation <- value
+                     return(object)
+                   })
+  
+  ## [
   setMethod("[", "exprSet", function(x, i, j, ..., drop=FALSE) {
     if( missing(j) )
 	pdata <- phenoData(x)

@@ -25,6 +25,9 @@
 \bibliographystyle{plainnat}
 
 \begin{document}
+<<paranoia>>=
+options(warn=2)
+@
 
 \section*{How to write a HowTo}
 

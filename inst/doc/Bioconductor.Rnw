@@ -25,7 +25,9 @@
 \bibliographystyle{plainnat}
 
 \begin{document}
-
+<<paranoia>>=
+options(warn=2)
+@
 \title{What is Bioconductor}
 \maketitle
 

@@ -7,6 +7,7 @@
 \alias{description}
 \alias{description<-}
 \alias{exprs}
+\alias{exprs<-}
 \alias{se.exprs}
 \alias{notes}
 \alias{notes<-}
@@ -18,6 +19,7 @@
 \alias{sampleNames}
 \alias{phenoData}
 \alias{annotation}
+\alias{annotation<-}
 \alias{split-methods}
 \alias{write.exprs}
 \title{Class exprSet, a class for microarray data, and methods for

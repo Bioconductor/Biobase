@@ -28,6 +28,9 @@
 \bibliographystyle{plainnat}
 
 \begin{document}
+<<paranoia>>=
+options(warn=2)
+@
 
 \section*{A note on {\tt esApply}}
 
