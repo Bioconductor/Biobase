@@ -1,0 +1,123 @@
+
+
+%
+% NOTE -- ONLY EDIT THE .Rnw FILE!!!  The .tex file is
+% likely to be overwritten.
+%
+\documentclass[12pt]{article}
+
+\usepackage{amsmath,pstricks}
+\usepackage[authoryear,round]{natbib}
+\usepackage{hyperref}
+
+
+\textwidth=6.2in
+\textheight=8.5in
+%\parskip=.3cm
+\oddsidemargin=.1in
+\evensidemargin=.1in
+\headheight=-.3in
+
+\newcommand{\scscst}{\scriptscriptstyle}
+\newcommand{\scst}{\scriptstyle}
+
+\bibliographystyle{plainnat} 
+ 
+\begin{document}
+
+\section*{A note on {\tt esApply}}
+
+{\tt exprSet}s are complex objects.  We will think
+of them as linked arrays: the {\tt exprs} element
+of an {\tt exprSet} is $G \times N$, where $G$ is
+the number of genes on a chip and $N$ is the number
+of tissues analyzed, and the {\tt pData} element
+of the associated {\tt phenoData} element is $N \times p$,
+where $p$ is the number of phenotypic or demographic, etc.,
+variables collected.
+
+Abstractly, we are often interested in evaluating
+functions $f(y;x)$ where $y$ is an $N$-vector of
+expression results for a specific gene and $x$ is
+an $N$-dimensional structure, coordinated with $y$, that
+distinguishes elements of $y$ for processing in the function $f$.
+(A basic problem is to guarantee that the $j$th element
+of $y$ is correctly associated with the $j$th component of $x$.)
+
+<<R.hide>>=
+library(Biobase)
+data(eset)
+
+@
+As an example, let's consider the {\tt eset}
+{\tt exprSet} supplied with Biobase.  We will print
+a little report, then
+the first $N$-vector of gene expressions and
+some covariate data:
+<<R>>=
+print(eset)
+print(exprs(eset)[1,])
+print(pData(phenoData(eset))[1:2,1:3])
+
+@
+
+Now let's see how expressions
+and a covariate are related:
+
+<<R>>=
+print( rbind(exprs(eset[1,]),
+cov1=t(pData(phenoData(eset)))[1,]))
+@
+A function that evaluates the
+difference in
+median expression across strata
+defined using an
+abstract covariate {\tt x} is
+<<R>>=
+medContr <- function( y, x ) {
+ ys <- split(y,x)
+ median(ys[[1]]) - median(ys[[2]])
+ }
+@
+We can apply this to a small
+{\tt exprSet} that gives back the data listed above:
+<<R>>=
+print(apply(exprs(eset[1,,drop=F]),1,
+  medContr, pData(phenoData(eset))[["cov1"]]))
+@
+That's a bit clumsy.  This is where
+{\tt esApply} comes in.  We pay for some
+simplicity by following a strict protocol
+for the definition of the statistical
+function to be applied.
+
+<<R>>=
+medContr1 <- function( y, x ) {
+ cov1 <- pData(phenoData(x))[["cov1"]]
+ ys <- split(y,cov1)
+ median(ys[[1]]) - median(ys[[2]])
+ }
+
+print(esApply( eset, medContr1 )[1])
+@
+The manual page on {\tt esApply} has a number of
+additional examples that show how applicable functions
+can be constructed and used.  The important thing to
+note is that the applicable functions 'know' the names of
+the covariates in the {\tt pData} dataframe.
+The function can 'attach' that dataframe to work
+directly with the variables in the dataframe:
+
+<<R>>=
+medContr2 <- function( y, x ) {
+ attach(pData(phenoData(x)))
+ on.exit(detach("pData(phenoData(x))"))
+ ys <- split(y,cov1)
+ median(ys[[1]]) - median(ys[[2]])
+ }
+
+print(esApply( eset, medContr2 )[1])
+ 
+@
+The detachment action is essential.
+\end{document}
