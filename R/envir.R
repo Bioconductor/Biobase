@@ -24,7 +24,7 @@ listLen <- function(list)
 
 l2e <- function(vals, envir) {
     if(missing(envir)) envir <- new.env(hash=TRUE)
-    .Call("listToEnv", vals, envir)
+    .Call("listToEnv", vals, envir, PACKAGE="Biobase")
 }
 
 ##FIXME: not sure that recurse makes sense here
@@ -50,8 +50,8 @@ list2env <- function(vals, envir, recurse=FALSE) {
     envir
 }
 
-copyEnv <- function(oldEnv, newEnv=new.env(parent=parent.env(oldEnv)),
-                    recurse=FALSE) {
+copyEnv <- function(oldEnv, newEnv=new.env(hash=TRUE,
+                    parent=parent.env(oldEnv)), recurse=FALSE) {
     oldVals <- env2list(oldEnv, recurse)
     newEnv <- list2env(oldVals, newEnv)
     return(newEnv)

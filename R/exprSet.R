@@ -354,6 +354,24 @@
                 row.names(pData(object))
             })
 
+  ##replace method for sampleNames
+
+  if( !isGeneric("sampleNames<-") )
+    setGeneric("sampleNames<-", function(object, value)
+               standardGeneric("sampleNames<-"))
+
+  setReplaceMethod("sampleNames", "exprSet", function(object, value) {
+      dn <- dimnames(object@exprs)
+      if( !is.character(value) )
+          stop("replacement names must be strings")
+      if( length(value) != length(dn[[2]]))
+          stop("wrong number of names supplied")
+      dn[[2]] <- value
+      dimnames(object@exprs) <- dn
+      row.names(object@phenoData@pData) <- value
+      object})
+
+
   if( !isGeneric("geneNames") )
     setGeneric("geneNames", function(object)
                standardGeneric("geneNames"))

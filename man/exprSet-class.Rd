@@ -16,6 +16,7 @@
 \alias{phenoData}
 \alias{phenoData<-}
 \alias{sampleNames}
+\alias{sampleNames<-}
 \alias{se.exprs}
 \alias{update2MIAME}
 \alias{varLabels}
@@ -42,6 +43,7 @@
 \alias{pData<-,exprSet-method}
 \alias{varLabels,exprSet-method}
 \alias{sampleNames,exprSet-method}
+\alias{sampleNames<-,exprSet-method}
 \alias{phenoData,exprSet-method}
 \alias{phenoData<-,exprSet,phenoData-method}
 \alias{annotation,exprSet-method}
@@ -138,7 +140,11 @@ gene expression values will be iteratively bound to y}
        labels from \code{pData}. The function takes preferably the
        column labels of \code{exprs} (if any).
      }
-     
+     \item{sampleNames<-}{(exprSet): A replacement method that sets the
+       sample names to new values. The values must be \code{character}
+       and the length of the vector must be equal to the number of samples.
+     }
+      
     \item{show}{(exprSet): renders information about the exprSet
       in a concise way on stdout. }
 
@@ -205,6 +211,9 @@ gene expression values will be iteratively bound to y}
 
   sp1 <- split(eset, c(1,2))
   sp2 <- split(eset, c(rep(1,6), rep(2,7)))
+
+  sampleNames(eset)
+  sampleNames(eset) <- letters
 }
 \seealso{MIAME-class}
 \keyword{methods}
