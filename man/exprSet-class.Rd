@@ -1,6 +1,7 @@
 \name{exprSet-class}
 \docType{class}
 \alias{exprSet-class}
+\alias{$.exprSet}
 \title{Class exprSet, a class for microarray data, and methods for
   processing them } 
 \description{ This is class representation for Microarray Data}
@@ -9,6 +10,7 @@
 \code{    exprs       = ...., # Object of class matrix}\cr
 \code{    se.exprs    = ...., # Object of class matrix}\cr
 \code{    phenoData   = ...., # Object of class phenoData}\cr
+\code{    annotation  = ...., # Object of class character}\cr
 \code{    description = ...., # Object of class character}\cr
 \code{    notes       = ...., # Object of class character}\cr
 \code{  )}}
@@ -26,10 +28,12 @@
     containing the patient (or case) level data. The columns of the
     pData slot of this entity represent
     variables and the rows represent patients or cases. }
+    \item{\code{annotation}}{A character string identifying the
+      annotation that may be used for the \code{exprSet} instance.}
     \item{\code{description}:}{Object of class "character" Vector of
       covariate labels} 
     \item{\code{notes}:}{Object of class "character" Vector of
-      explanatory text } 
+      explanatory text }
   }
 }
 
@@ -57,7 +61,14 @@ gene expression values will be iteratively bound to y}
     \item{sampleNames}{(exprSet): An accessor function for the covariate
     descriptions. }
     \item{show}{(exprSet): renders information about the exprSet
-in a concise way on stdout. }
+      in a concise way on stdout. }
+    \item{annotation}{(exprSet): An accessor function for the annotation
+      information.}
+    \item{\$}{An old-style method.
+      It is \code{((eset@phenoData)@pData)[[as.character(val)]]} which
+      does not quite have the right semantics but it is close. This
+      operator extracts the named component of the \code{pData} slot in
+      \code{phenoData}.}
   }
 }
 \examples{

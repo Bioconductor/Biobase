@@ -80,7 +80,8 @@ require(methods)
                                    se.exprs = "matrix",
                                    phenoData="phenoData",
                                    description="character",
-                                   notes="character") , where=where)
+                                   annotation="character",
+                                     notes="character") , where=where)
 
 #define a generic for obtaining the data
  if( !isGeneric("exprs") )
@@ -109,6 +110,12 @@ require(methods)
 ##a varLabels method for exprSets
   setMethod("varLabels", "exprSet",
             function(object) object@phenoData@varLabels, where=where)
+
+  if( !isGeneric("annotation") )
+      setGeneric("annotation", function(object)
+                 standardGeneric("annotation"), where=where)
+  setMethod("annotation", "exprSet", function(object)
+            object@annotation, where=where)
 
 #<<<<<<< exprSet.R
 # if( !isGeneric("covariates") )
@@ -267,15 +274,15 @@ setMethod("iter", signature(object="exprSet", covlab="character",
 
 }
 
-with.exprSet <- function(data, expr, ...) eval(substitute(expr),
-  data@phenoData@pData, enclos=parent.frame())
+#with.exprSet <- function(data, expr, ...) eval(substitute(expr),
+#  data@phenoData@pData, enclos=parent.frame())
 
 
 esApply <- function( es, f ) {
  # assumes f is of the form f(arg1,arg2) and
  # arg2 is the pData of es
  if (class(es) != "exprSet") stop("arg1 must be of class exprSet")
- if (length(formals(f)) != 2) warning("f should be a function of two arguments...") 
+ if (length(formals(f)) != 2) warning("f should be a function of two arguments...")
  apply( exprs(es), 1, f, es )
  }
 
