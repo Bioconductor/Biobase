@@ -1,6 +1,6 @@
 Package: Biobase
 Title: Biobase: Base functions for Bioconductor
-Version: 1.4.5
+Version: 1.4.6
 Author: R. Gentleman, V. Carey
 Description: Functions that are needed by many other packages or which replace R functions.
 Depends: R (>= 1.8.0),reposTools
