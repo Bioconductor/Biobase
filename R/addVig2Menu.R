@@ -58,13 +58,11 @@ addNonExisting <- function(menuName){
 
 # Add click-able menu items to view the pdf files of a package
 addPDF2Vig <- function(pkgName){
-    path <- .path.package(pkgName)
-    pdfs <- dir(file.path(path, "doc"), pattern = ".pdf")
+    pdfs <- getPkgVigs(pkgName)
     for(i in pdfs){
-        item <- sub(".pdf", "", i)
-        pdfPath <- file.path(path, "doc", i)
+        item <- sub(".pdf", "", basename(i))
         addVig2Menu(item, menuName = paste("Vignettes/", pkgName, sep = ""),
-                    itemAction = paste("shell.exec(\"", pdfPath, "\")",
-                    sep = ""))
+                    itemAction = paste("shell.exec(\"",
+                    as.character(i), "\")", sep = ""))
     }
 }
