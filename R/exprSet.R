@@ -544,15 +544,24 @@
     setGeneric("write.exprs", function(x,...) standardGeneric("write.exprs"),
                where=where )
   setMethod("write.exprs", signature(x="exprSet"),
-            function(x,file = "tmp.txt",
-                     append = FALSE, quote = FALSE, sep = "\t",
+            function(x,...)
+            write.table(exprs(x),...),where=where)
+  
+
+  if( !isGeneric("exprs2excel") )
+    setGeneric("exprs2excel", function(x,...) standardGeneric("exprs2excel"),
+               where=where )
+  setMethod("exprs2excel", signature(x="exprSet"),
+            function(x,file = "tmp.csv",
+                     append = FALSE, quote = FALSE, sep = ",",
                      eol = "\n", na = "NA", dec = ".", row.names = TRUE,
-                     col.names = TRUE, qmethod = c("escape", "double"))
+                     col.names = NA, qmethod = c("escape", "double"))
             write.table(exprs(x),file = file, append = append,
                         quote = quote,
                         sep = sep,eol = eol, na = na, dec = dec,
                         row.names = row.names, col.names = col.names,
                         qmethod = qmethod),where=where)
+
 
 
 }
