@@ -238,6 +238,23 @@
   setMethod("se.exprs", "exprSet", function(object) object@se.exprs,
            where=where)
 
+  ##RI: Added this so i can access notes
+  ##method for notes (accessor and replacement)
+  if( !isGeneric("notes") )
+    setGeneric("notes", function(object)
+               standardGeneric("notes"), where=where)
+  setMethod("notes", "exprSet", function(object)
+            object@notes, where=where )
+  
+  if( !isGeneric("notes<-") )
+    setGeneric("notes<-", function(object, value)
+               standardGeneric("notes<-"), where=where)
+  
+  setReplaceMethod("notes", "exprSet", function(object, value) {
+    object@notes <- value
+    object
+  }, where=where)
+
   ##method for MIAME description
   if( !isGeneric("description") )
     setGeneric("description", function(object)
