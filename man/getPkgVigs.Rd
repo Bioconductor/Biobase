@@ -12,7 +12,7 @@ getPkgVigs(package = NULL)
   \item{package}{A character vector of packages to search.}
 }
 \details{
-  If \code{package} is NULL, all packages are used for the search
+  If \code{package} is NULL, all attached packages are used for the search
   space.
 }
 \value{
