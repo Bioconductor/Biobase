@@ -156,7 +156,7 @@ dumpPackTxt <- function (package)
     cat("\t the openVignette help page.\n")
 
     ##set up repository management
-    require(reposTools, quietly=TRUE) || stop ("Package reposTools required")
+    require("reposTools", quietly=TRUE) || stop ("Package reposTools required")
 
 
     ##set up menus -- windows only for now

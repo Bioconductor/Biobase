@@ -49,7 +49,6 @@ multiassign <- function (x, value, envir = parent.frame(), inherits =
         x <- nx
     }
     lenx <- length(x)
-    lenv <- length(value)
     for(i in 1:lenx) {
         i2 <- (i-1)%%lenx+1
         if( is.list(x) ) {
