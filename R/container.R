@@ -35,7 +35,8 @@ setReplaceMethod("[[", "container", function(x, i, j,..., value) {
         stop(paste("the container is class", cont,
                    "the object is class", cv, "cannot assign",
                    sep=" "))
-    object@x[[i]] <- value
+    x@x[[i]] <- value
+    x
 }, where=where)
 
 setMethod("[[", "container", function(x, i,...) {
