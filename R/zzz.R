@@ -9,8 +9,7 @@
 
     Base <- list()
     class(Base) <- "BioCPkg"
-    Base$urls <- list()
-    Base$urls$bioc <- "http://www.bioconductor.org"
+    Base$urls <- list( bioc = "http://www.bioconductor.org")
 
     BioC <- getOption("BioC")
     BioC$Base <- Base
