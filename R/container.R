@@ -39,7 +39,7 @@ setReplaceMethod("[[", "container", function(x, i, j,..., value) {
     x
 }, where=where)
 
-setMethod("[[", "container", function(x, i) {
+setMethod("[[", "container", function(x, i, j, ...) {
     x@x[[i]]
 }, where=where)
 

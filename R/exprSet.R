@@ -56,7 +56,7 @@ require(methods)
       }
       new("phenoData", pData=pD, varLabels=vL)}, where=where)
 
-  setMethod("[[", "phenoData", function(x, i, j)
+  setMethod("[[", "phenoData", function(x, i, j, ...)
       x@pData[[i]], where=where)
 
   setReplaceMethod("[[", "phenoData", function(x, i, j, ..., value) {
@@ -129,13 +129,11 @@ require(methods)
      object
  }, where=where)
 
-##FIXME: uncomment this, it's just commented cause of the code freeze
-##
-##    setReplaceMethod("[[", "exprSet", function(x, i, j, ..., value) {
-##        pD <- x@phenoData
-##       pD@pData[[i]] <- value
-##        x@phenoData <- pD
-##      x}, where=where)
+ setReplaceMethod("[[", "exprSet", function(x, i, j, ..., value) {
+      pD <- x@phenoData
+      pD@pData[[i]] <- value
+      x@phenoData <- pD
+      x}, where=where)
 
 
 ###RI: this is a simple a pData replace for phenoData. i need it for affy.
@@ -183,8 +181,7 @@ require(methods)
   setMethod("annotation", "exprSet", function(object)
             object@annotation, where=where)
 
- setMethod("[", "exprSet", function(x, i, j, ..., drop=TRUE) {
-# why drop=TRUE? VC 12/21/01
+ setMethod("[", "exprSet", function(x, i, j, ..., drop=FALSE) {
      pdata <- phenoData(x)[j,, ..., drop=FALSE]
      if(missing(j) ) {
          if( missing(i) )
