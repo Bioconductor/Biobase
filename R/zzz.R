@@ -143,7 +143,6 @@ dumpPackTxt <- function (package)
 
     checkPkgDeps(pkgname)
     ## still need methods for 1.6.x users
-    require(methods, quietly=TRUE) || stop("Requires package methods")
 
 
     .buildBiobaseOpts()
