@@ -9,21 +9,19 @@
 
 require("methods")
 
-Aggregate <- function(x, env, agfun, initfun)
+Aggregate <- function(x, agg)
  {
-   if( !is.environment(env) )
-     stop("second argument must be an environment")
-   if( !is.function(agfun) || !is.function(initfun) )
-     stop("agfun and initfun must be functions")
+   if( !inherits(agg, "aggregator") )
+     stop("second argument must be an aggregator")
 
    if(is.character(x)) {
      for( i in 1:length(x) ) {
        nm <- x[i]
-       if( !exists(nm, env=env, inherits=FALSE) )
-          assign(nm, env=env, initfun(nm, x))
+       if( !exists(nm, env=aggenv(agg), inherits=FALSE) )
+          assign(nm, env=aggenv(agg), initfun(agg)(nm, x))
        else {
-          v1 <- get(nm, env=env)
-          assign(nm, agfun(nm, v1), env=env)
+          v1 <- get(nm, env=aggenv(agg))
+          assign(nm, aggfun(agg)(nm, v1), env=aggenv(agg))
        }
      }
    }
@@ -31,20 +29,21 @@ Aggregate <- function(x, env, agfun, initfun)
      nms <- names(x)
      for( i in 1:length(x) ) {
         nm <- nms[i]
-        if( !exists(nm, env=env, inherits=FALSE) )
-          assign(nm, env=env, initfun(nm, x[[i]]))
+        if( !exists(nm, env=aggenv(agg), inherits=FALSE) )
+          assign(nm, env=aggenv(agg), initfun(agg)(nm, x[[i]]))
         else {
-           v1 <- get(nm, env=env)
-           assign(nm, env=env, agfun(nm, v1, x[[i]]))
+           v1 <- get(nm, env=aggenv(agg))
+           assign(nm, env=aggenv(agg), aggfun(agg)(nm, v1, x[[i]]))
         }
      }
    }
    else stop("bad type for Aggregate")
  }
 
-setClass("aggregator", representation( aggenv = "environment", initfun =
-                                     "function", aggfun = "function"),
-         prototype = list(env = new.env(hash=TRUE), initfun =
+setClass("aggregator", representation( aggenv = "environment",
+                                      initfun = "function",
+                                      aggfun = "function"),
+         prototype = list(aggenv = new.env(hash=TRUE), initfun =
                                      function(name, val) 1,
          aggfun =  function(name, current, val) current+1 ) )
 
@@ -55,7 +54,7 @@ if( !isGeneric("aggenv") )
 setMethod("aggenv", "aggregator", function(object) object@aggenv)
 
 if( !isGeneric("initfun") )
-    setGeneric("initfun", function(object) standardGeneric("object"))
+    setGeneric("initfun", function(object) standardGeneric("initfun"))
 
 setMethod("initfun", "aggregator", function(object) object@initfun)
 
@@ -63,3 +62,4 @@ if( !isGeneric("aggfun") )
     setGeneric("aggfun", function(object) standardGeneric("aggfun"))
 
 setMethod("aggfun", "aggregator", function(object) object@aggfun)
+
