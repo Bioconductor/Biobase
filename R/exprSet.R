@@ -280,7 +280,7 @@ setMethod("iter", signature(object="exprSet", covlab="character",
 
 esApply <- function( es, f ) {
  # assumes f is of the form f(arg1,arg2) and
- # arg2 is the pData of es
+ # arg2 is es
  if (class(es) != "exprSet") stop("arg1 must be of class exprSet")
  if (length(formals(f)) != 2) warning("f should be a function of two arguments...")
  apply( exprs(es), 1, f, es )
