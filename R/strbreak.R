@@ -1,4 +1,4 @@
-strbreak <- function(x, width=getOption("width"), exdent=5, breakchar="\n") {
+strbreak <- function(x, width=getOption("width"), exdent=2, breakchar="\n") {
   width <- as.integer(width)
   if(is.na(width) || width<=1)
     stop("invalid argument 'width'")
@@ -10,12 +10,14 @@ strbreak <- function(x, width=getOption("width"), exdent=5, breakchar="\n") {
   rv <- character(length(x))
   
   for(i in seq(along=x)) {
-    fl  <- c(1, width)
+    first <- 1
+    last  <- width
     if(nchar(x[i])>width) {
       f  <- seq(width+1, nchar(x[i]), ww)
-      fl <- rbind(fl, cbind(f, f+ww-1))
+      first <- c(first, f)
+      last  <- c(last, f+ww-1)
     }
-    rv[i] <-  paste(substring(x[i], first=fl[,1], last=fl[,2]), collapse=lb)
+    rv[i] <-  paste(substring(x[i], first=first, last=last), collapse=lb)
   }
   return(rv)
 }
