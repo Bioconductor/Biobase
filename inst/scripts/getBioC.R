@@ -42,16 +42,18 @@ getBioC <- function (libName = "exprs", destdir = NULL, isDevel = FALSE,
                                   sep = "\n")
         }else{
 # Can not use the existing functions since they are all specific to CRAN
-#            download.packages(getLibName(PLATFORM, i),destdir,
-#                       contriburl = getBioCUrl(PLATFORM, isDevel))
-#            install.packages(getLibName(PLATFORM, i), lib = .libPaths(),
-#                      contriburl = getDLUrl(PLATFORM, isDevel),
+#           download.packages(i,destdir, contriburl = getReposit())
+#           install.packages(i, lib = .libPaths(),contriburl = getReposit(),
 #                             destdir = destdir)
 
-            download.file(sourceUrl, fileName, quiet = TRUE)
-#           temp <- packageStatus(repositories = fileName)
+           download.file(sourceUrl, fileName, quiet = TRUE)
+#           temp <- packageStatus(repositories = getReposit())
+#           print(temp)
+
+#           temp <- update(temp)
+#           print(temp)
 #           upgrade(temp)
-            installPack(PLATFORM, fileName)
+           installPack(PLATFORM, fileName)
         }
     }
     return(invisible(messages))
@@ -125,12 +127,21 @@ installPack <- function(platform, fileName){
         tt <- system(paste("R CMD INSTALL ", fileName, sep = ""), TRUE)
     }else{
         if(platform == "windows"){
-            tt <- system(paste("Rcmd INSTALL ", fileName, sep = ""), TRUE)
+            tt <- zip.unpack(fileName, .libPaths()[1], CRAN = NULL)
         }else{
             stop("The OS system is not supported")
         }
     }
 }
+
+#getReposit <- function(){
+#    return("http://www.bioconductor.org/packages/distrib")
+#}
+
+
+
+
+
 
 
 
