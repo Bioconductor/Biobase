@@ -20,13 +20,14 @@ require(methods)
 ##data class for accompanying data
   setClass("phenoData", representation(pData="data.frame",
                                        varLabels="list"),
-  where=where)
+           where=where)
 
   if( !isGeneric("pData") )
     setGeneric("pData", function(object) standardGeneric("pData"),
                where=where )
   setMethod("pData", "phenoData",
             function(object) object@pData, where=where)
+
 
   if( !isGeneric("varLabels") )
       setGeneric("varLabels", function(object)
@@ -95,7 +96,12 @@ require(methods)
      setGeneric("exprs", function(object) standardGeneric("exprs"),
  where=where )
  setMethod("exprs", "exprSet", function(object) object@exprs, where=where)
-
+#RI: define a genric for obtaining the se's
+  if( !isGeneric("se.exprs") )
+     setGeneric("se.exprs", function(object) standardGeneric("se.exprs"),
+ where=where )
+ setMethod("se.exprs", "exprSet", function(object) object@se.exprs, where=where)
+   
  if( !isGeneric("phenoData") )
      setGeneric("phenoData", function(object)
                 standardGeneric("phenoData"), where=where)
@@ -116,7 +122,14 @@ require(methods)
      object
  }, where=where)
 
- if( !isGeneric("sampleNames") )
+###RI: this is a simple a pData replace for phenoData. i need it for affy.
+  setReplaceMethod("pData", "phenoData", function(object, value){
+    object@pData <- value
+    object
+  }, where=where)
+
+  
+  if( !isGeneric("sampleNames") )
      setGeneric("sampleNames", function(object)
                 standardGeneric("sampleNames"), where=where)
  setMethod("sampleNames", "exprSet",
@@ -286,6 +299,7 @@ require(methods)
                         sep = sep,eol = eol, na = na, dec = dec,
                         row.names = row.names, col.names = col.names,
                         qmethod = qmethod),where=where)
+
 
 }
 
