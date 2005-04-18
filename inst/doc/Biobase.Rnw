@@ -17,6 +17,15 @@
 \evensidemargin=.1in
 \headheight=-.3in
 
+\newcommand{\Rfunction}[1]{{\texttt{#1}}}
+\newcommand{\Robject}[1]{{\texttt{#1}}}
+\newcommand{\Rpackage}[1]{{\textsf{#1}}}
+\newcommand{\Rmethod}[1]{{\texttt{#1}}}
+\newcommand{\Rfunarg}[1]{{\texttt{#1}}}
+\newcommand{\Rclass}[1]{{\textit{#1}}}
+
+
+
 \newcommand{\classdef}[1]{%
   {\em #1}
 }
@@ -77,19 +86,23 @@ KEGG. These data can then be linked to the \verb+exprSet+ via the
 The \textit{annotate} package provides basic data manipulation tools
 for the meta-data packages.
 
-%%FIXME: Jianhua, update please
 The \texttt{phenoData} class has the following slots:
 \begin{description}
 \item[pData] A dataframe where the rows are cases and the columns are
   variables.
 \item[varLabels] A list of labels and descriptions for the variables
   represented by the columns of \verb+pData+.
+\item[varMetaData] A \Rclass{data.frame} defining meta-data for the
+  variables contained in the \Robject{pData} slot.
 \end{description}
 
 Instances of this class are essentially \verb+data.frame+'s with some
 additional documentation on the variables stored in the
-\verb+varLabels+ slot.
+\verb+varLabels+ and \Robject{varMetaData} slots.
 
+%%FIXME: does this currently exist? It should be easy to require that
+%%the names of the pData data.frame are the same, and in the same
+%%order as the column names of the exprs
 A mechanism for ensuring that the elements of the \verb+phenoData+
 slot of an instance of \verb+exprSet+ are in the same order as the
 columns of the \verb+exprs+ array is needed. It is important that these be
@@ -147,6 +160,76 @@ pD <- new("phenoData", pData=geneCov, varLabels=covN)
 eSet <- new("exprSet", exprs=geneData, phenoData=pD)
 
 @
+
+
+If instead, you have the data stored in files, e.g. \texttt{.csv}
+files and want to read it in using \Rfunction{read.table} you will
+need to do some conversion. \Rfunction{read.table} reads data into a
+\Robject{data.frame}, and this is fine for the phenotypic data, but
+not for the expression data. You will need to convert the
+\Robject{data.frame} into a matrix. The code example gives a short
+example of the commands that you would need to execute if you have the
+expression data stored in a file named \texttt{myexprs.csv} and the
+phenotypic data in a file named \texttt{mycovs.csv}.
+
+\begin{verbatim}
+
+ myExprs = read.csv("myexprs.csv")
+ myExprsmat = as.matrix(myExprs)
+ myCovs = read.csv("mycovs.csv")
+
+ if( ncol(myExprsmat) != nrow(myCovs) )
+   print("ERROR: these should be the same")
+
+\end{verbatim}
+
+You should probably also check to ensure that you have the appropriate
+samples names used as row names for \Robject{myCovs} and as column
+names for \Robject{myExprsmat}, and they must be in the same order.
+So, again some pseudo-code that gives the essential ingredients is
+given next. If you are unclear on the difference between a
+\Robject{matrix} and a \Robject{data.frame} then you should consult
+one of the very many introductory texts on using R as well as the
+manual pages and documents that come with R.
+
+\begin{verbatim}
+
+  if( !all.equal( row.names(myCovs), dimnames(myExprsmat)[[2]] ) )
+    print("ERROR: samples names are wrong")
+
+\end{verbatim}
+
+
+Now, we are almost ready to create an instance of an \Robject{exprSet}
+object. The missing piece is a list of descriptions for the covariates
+that constitute the phenotypic data. Suppose that we have two
+variables, one the age of the patient in years and the other the
+particular translocation they are known to have. And suppose that in
+the \Robject{data.frame} \Robject{myCovs} the column names are
+\texttt{age} and \texttt{translocation}. Then we could make up the
+covariate descriptions as follows.
+
+\begin{verbatim}
+ covDesc = list(age="age of the patient in years",
+    translocation="known translocation")
+\end{verbatim}
+
+The purpose of this level of documentation is to help others who might
+want to re-analyze your data, or you, if at some time in the future
+you need to go back and see what was done. By carefully annotating the
+data, in a self-describing way, you increase the chances that you will
+understand what was done. Below is the simplest form for creating an
+\Robject{exprSet}. We note that typically you would fill in more
+details, like the name of the chip used and some additional data
+describing the experiment itself.
+
+\begin{verbatim}
+myphenoData = new("phenoData", pData=myCovs, varLabels=covDesc)
+
+myEset = new("exprSet", exprs=myExprsmat, phenoData=myphenoData)
+
+\end{verbatim}
+
 
 \section{Aggregate}
 
