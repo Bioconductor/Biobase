@@ -31,14 +31,14 @@ setMethod("show", "exprList", function(object) {
 
 if (!isGeneric("eMetadata")) setGeneric("eMetadata",
 	function(object) standardGeneric("eMetadata"))
-setMethod("eMetadata", c("eSet"), function(object) {
-	object@eList@eMetadata })
 
 ##just the two slots, everyone else extends this class
 setClass("eSet", representation(eList="exprList",
                                 phenoData="phenoData"))
 
 
+setMethod("eMetadata", c("eSet"), function(object) {
+	object@eList@eMetadata })
 #
 # some concepts: getExpData will look for a component named
 # "exprs" in the list or environment, and this is central
