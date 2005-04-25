@@ -12,6 +12,8 @@ l2e <- function(vals, envir) {
 }
 
 rowQ <- function(imat, which) {
+    if( inherits(imat, "exprSet") )
+       imat=exprs(imat)
     if( any(is.na(imat)) )
        stop("cannot handle missing values  -- yet")
 
