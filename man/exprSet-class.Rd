@@ -24,6 +24,8 @@
 \alias{exprSet-class}
 \alias{exprSet}
 \alias{$.exprSet}
+\alias{$<-,exprSet-method}
+\alias{$<-,phenoData-method}
 \alias{description,exprSet-method}
 \alias{description<-,exprSet-method}
 \alias{exprs,exprSet-method}

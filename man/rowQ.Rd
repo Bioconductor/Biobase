@@ -28,7 +28,7 @@ the requested quantiles.
 }
 \author{ R. Gentleman }
 
-\seealso{ \code{\link{colSum}} }
+\seealso{ \code{\link{colSums}} }
 \examples{
  data(eset)
  rowMin(eset)
