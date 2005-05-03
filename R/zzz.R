@@ -25,12 +25,11 @@
 
 ##we need to be more careful about the where argument. If any of these
 ##function calls load a library, where is wrong from there on...
-.First.lib <- function(libname, pkgname, where) {
-    library.dynam("Biobase", pkgname, libname)
+.onLoad <- function(libname, pkgname) {
 
     ##need contents to load at library attach - not at build time
     where <- match(paste("package:", pkgname, sep=""), search())
-    .initContents(where)
+    .initContents()
     .buildBiobaseOpts()
 
     cat("Welcome to Bioconductor \n")
