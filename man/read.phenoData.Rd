@@ -33,7 +33,7 @@ widget = getOption("BioC")$Base$use.widgets, ...)
 \value{
   An instance of class \code{phenoData}}
 \author{Rafael A. Irizarry <rafa@jhu.edu>}
-\seealso{\code{\link{phenoData}}, \code{\link{tkphenoData}}}
+\seealso{\code{\link{phenoData}}, \code{\link[tkWidgets]{tkphenoData}}}
 
 \examples{
 pd <- read.phenoData(sampleNames=c("sample1","sample2"),widget=FALSE)
