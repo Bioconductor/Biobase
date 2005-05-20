@@ -33,7 +33,7 @@ addVigs2WinMenu(pkgName)
 \examples{
     # Only works for windows now
     if(interactive() && .Platform$OS.type == "windows" &&
-             .Platform.GUI == "Rgui"){
+             .Platform$GUI == "Rgui"){
         addVigs2WinMenu("Biobase")
     }
 }
