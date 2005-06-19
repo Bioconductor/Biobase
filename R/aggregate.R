@@ -62,3 +62,10 @@ Aggregate <- function(x, agg)
 
     setMethod("aggfun", "aggregator", function(object) object@aggfun)
 
+reverseSplit = function(inList) {
+   lens = sapply(inList, length)
+   nms = rep(names(inList), lens)
+   vals = unlist(inList)
+   split(nms, vals)
+  }
+

@@ -20,7 +20,7 @@ exportMethods("[", "[[", abstract, addVarMetadataEntry, aggenv, aggfun,
 
 export(Aggregate, addNonExisting, addPDF2Vig, 
        addVig2Menu, addVig4Unix, addVig4Win, addVigs2WinMenu,
-       copyEnv, copySubstitute, 
+       copyEnv, copySubstitute, reverseSplit,
        createPackage, dumpPackTxt, esApply, getPkgVigs, l2e, listLen,
        multiassign, openPDF, openVignette, "package.version",
        rowMax, rowMedians, rowMin, rowQ,
