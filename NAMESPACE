@@ -25,7 +25,8 @@ export(Aggregate, addNonExisting, addPDF2Vig,
        multiassign, openPDF, openVignette, "package.version",
        rowMax, rowMedians, rowMin, rowQ,
        read.exprSet, read.phenoData, read.MIAME,
-       strbreak, testBioCConnection, "$.eSet", "$.exprSet", "$.phenoData")
+       strbreak, testBioCConnection, "$.eSet", "$.exprSet", "$.phenoData",
+       "as.data.frame.exprSet")
 
 S3method("as.data.frame", exprSet)
 
