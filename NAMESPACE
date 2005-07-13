@@ -3,9 +3,9 @@ useDynLib(Biobase)
 import(tools)
 
 exportClasses(aggregator, container, exprListNM, exprList, eSet, phenoData,
-              MIAME, characterORMIAME, exprMatrix, exprSet)
+              MIAME, characterORMIAME, exprMatrix, exprSet, annotatedDataset)
 
-exportMethods("[", "[[", abstract, addVarMetadataEntry, aggenv, aggfun, 
+exportMethods("[", "[[", "$", abstract, addVarMetadataEntry, aggenv, aggfun, 
              annotation, 
              combine, content, contents, convertVarLabels, description, eList,
              eMetadata, expinfo, exprs, exprs2excel, geneNames, getExpData,
@@ -16,7 +16,7 @@ exportMethods("[", "[[", abstract, addVarMetadataEntry, aggenv, aggfun,
              varMetadata, "annotation<-", "description<-", "eList<-", 
 	     "eMetadata<-", "exprs<-", "geneNames<-", "notes<-", "pData<-", 
 	     "phenoData<-", "sampleNames<-",
-             "se.exprs<-",  "write.exprs")
+             "se.exprs<-",  "write.exprs", "as.data.frame.exprSet")
 
 export(Aggregate, addNonExisting, addPDF2Vig, 
        addVig2Menu, addVig4Unix, addVig4Win, addVigs2WinMenu,
@@ -25,8 +25,5 @@ export(Aggregate, addNonExisting, addPDF2Vig,
        multiassign, openPDF, openVignette, "package.version",
        rowMax, rowMedians, rowMin, rowQ,
        read.exprSet, read.phenoData, read.MIAME,
-       strbreak, testBioCConnection, "$.eSet", "$.exprSet", "$.phenoData",
-       "as.data.frame.exprSet")
-
-S3method("as.data.frame", exprSet)
+       strbreak, testBioCConnection)
 

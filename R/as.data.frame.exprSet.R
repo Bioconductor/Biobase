@@ -1,4 +1,4 @@
-as.data.frame.exprSet <- function(x, row.names=NA, optional=NA) {
+doAsDataFrame <- function(x, row.names=NA, optional=NA) {
   nc.eset <- ncol(exprs(x))
   nr.eset <- nrow(exprs(x))
   gn.eset <- geneNames(x)
@@ -16,3 +16,9 @@ as.data.frame.exprSet <- function(x, row.names=NA, optional=NA) {
   
   return(rv)
 }
+
+setGeneric("as.data.frame.exprSet", function(x, row.names=NA, optional=NA)
+           standardGeneric("as.data.frame.exprSet"))
+
+setMethod("as.data.frame.exprSet", signature(x="exprSet"), doAsDataFrame)
+

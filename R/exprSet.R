@@ -26,76 +26,6 @@
 #
 #more info: http://www.mged.org/Workgroups/MIAME/miame_1.1.html
 
-##data class for accompanying data
-  setClass("phenoData", representation(pData="data.frame",
-                                       varLabels="list",
-					varMetadata="data.frame"),
-           prototype=list(pData=data.frame(matrix(nr=0,nc=0)),
-             varLabels=list(), varMetadata=data.frame(matrix(nr=0,nc=0))),
-           validity =  function(object) {
-                                dm <- dim(object@pData)
-                                if(dm[2] != length(object@varLabels) )
-                                   return(FALSE)
-                                return(TRUE)
-                       }
-           )
-
-  if( !isGeneric("pData") )
-    setGeneric("pData", function(object) standardGeneric("pData"))
-  setMethod("pData", "phenoData",
-            function(object) object@pData)
-
-
-  if( !isGeneric("varLabels") )
-      setGeneric("varLabels", function(object)
-      standardGeneric("varLabels"))
-
-  setMethod("varLabels", "phenoData",
-            function(object) object@varLabels)
-
-  setMethod("[", "phenoData", function(x, i, j, ..., drop=FALSE) {
-      if( missing(drop) ) drop<-FALSE
-      vL <- varLabels(x)
-      if( missing(j) ) {
-          if( missing(i) )
-              pD <- x@pData
-          else
-              pD <- x@pData[i, ,drop=FALSE]
-     }
-      else {
-          vL <- vL[j]
-          if(missing(i) )
-              pD <- x@pData[,j,drop=drop]
-         else
-             pD <- x@pData[i, j,drop=FALSE]
-      }
-      new("phenoData", pData=pD, varLabels=vL)})
-
-  setMethod("[[", "phenoData", function(x, i, j, ...)
-      x@pData[[i]])
-
-  setReplaceMethod("[[", "phenoData", function(x, i, j, ..., value) {
-      x@pData[[i]] <- value
-      x})
-
-  setReplaceMethod("$", "phenoData", function(x, name, value) {
-	x@pData[[name]] = value
-        x})
-
-  setMethod("show", "phenoData",
-            function(object) {
-                dm <- dim(object@pData)
-                cat("\t phenoData object with ", dm[2], " variables",
-            sep="")
-                cat(" and ", dm[1], " cases\n", sep="")
-                vL <- object@varLabels
-                cat("\t varLabels\n")
-                nm <- names(vL)
-                  for(i in seq(along=vL) )
-                    cat("\t\t", nm[[i]], ": ", vL[[i]], "\n", sep="")
-            })
-
-
 
 ##data class for MIAME information
   setClass("MIAME", representation(name="character",
@@ -203,7 +133,6 @@
   ##data class for expression arrays
   setClass("exprSet", representation(exprs="exprMatrix",
                                      se.exprs = "exprMatrix",
-                                     phenoData="phenoData",
                                      description="characterORMIAME",
                                      annotation="character",
                                      notes="character") ,
@@ -211,7 +140,8 @@
              se.exprs = matrix(nr=0,nc=0),
              description=new("MIAME"),
              annotation="",
-             notes=""))
+             notes=""),
+           contains=c("annotatedDataset"))
 
   ##define a method to update exprsSet from previous versions
   if( !isGeneric("update2MIAME") )
@@ -276,10 +206,6 @@
     object
   })
 
-  setReplaceMethod("$", "exprSet", function(x, name, value) {
-        x@phenoData[[name]] = value
-        x})
-
   ##method for MIAME description
   if( !isGeneric("description") )
     setGeneric("description", function(object)
@@ -300,56 +226,6 @@
   ##method for abstract
   setMethod("abstract", "exprSet",
             function(object) abstract(description(object)))
-
-  ##method for phenoData
-  if( !isGeneric("phenoData") )
-    setGeneric("phenoData", function(object)
-               standardGeneric("phenoData"))
-  setMethod("phenoData", "exprSet", function(object)
-            object@phenoData)
-
-  if( !isGeneric("phenoData<-") )
-    setGeneric("phenoData<-", function(object, value)
-               standardGeneric("phenoData<-"))
-
-  setReplaceMethod("phenoData", c("exprSet", "phenoData"),
-                   function(object, value) {
-                       object@phenoData <- value
-                       object })
-
-  ##method for pData
-  setMethod("pData", "exprSet",
-            function(object) pData(phenoData(object)))
-
-
-  ##replace method for pData
-  if( !isGeneric("pData<-") )
-    setGeneric("pData<-", function(object, value)
-               standardGeneric("pData<-"))
-
-  setReplaceMethod("pData", "exprSet", function(object, value) {
-    ph <- phenoData(object)
-    pData(ph) <- value
-    phenoData(object) <- ph
-    object
-  })
-
-  ##[[ method
-  setReplaceMethod("[[", "exprSet", function(x, i, j, ..., value) {
-    pD <- phenoData(x)
-    pD@pData[[i]] <- value
-    phenoData(x) <- pD
-    x})
-
-  setMethod("[[", "exprSet", function(x, i, j, ...)
-      phenoData(x)[[i]] )
-
-
-###RI: this is a simple a pData replace for phenoData. i need it for affy.
-  setReplaceMethod("pData", "phenoData", function(object, value){
-    object@pData <- value
-    object
-  })
 
 
   if( !isGeneric("sampleNames") )
@@ -398,9 +274,6 @@
     object
   })
 
-  ##a varLabels method for exprSets
-  setMethod("varLabels", "exprSet",
-            function(object) phenoData(object)@varLabels)
 
   ## annotation: read and replace. WH, 11 Mar 2003
   if(!isGeneric("annotation") )
@@ -487,6 +360,7 @@
               out
             })
 
+#!!!do something here??
   setMethod("iter", signature(object="exprSet", covlab="character",
                               f="function"),
             function(object, covlab, f) {
@@ -566,6 +440,7 @@
             }
 
 
+#!!!do something here??
   setMethod("split", signature(x="phenoData", f="vector"),
             function(x, f) {
               lenf <- length(f)
@@ -616,14 +491,6 @@
 
 
 
-##not quite the right semantics
-##but it is a start
-
-"$.exprSet" <- function(eset, val)
-    (pData(eset))[[as.character(val)]]
-
-"$.phenoData" <- function(x, val, ...)
-    (pData(x))[[as.character(val)]]
 
 esApply <- function(X, MARGIN, FUN, ...) {
     if ((!is(X, "exprSet")) && (!is(X, "eSet")))

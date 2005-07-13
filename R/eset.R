@@ -33,9 +33,8 @@ if (!isGeneric("eMetadata")) setGeneric("eMetadata",
 	function(object) standardGeneric("eMetadata"))
 
 ##just the two slots, everyone else extends this class
-setClass("eSet", representation(eList="exprList",
-                                phenoData="phenoData"))
-
+setClass("eSet", representation(eList="exprList"),
+         contains=c("annotatedDataset"))
 
 setMethod("eMetadata", c("eSet"), function(object) {
 	object@eList@eMetadata })
@@ -79,9 +78,6 @@ setReplaceMethod("eList", c("eSet", "list"),
                    function(object, value) {
                        object@eList <- value
                        object })
-
-"$.eSet" <- function(eset, val)
-    (pData(eset))[[as.character(val)]]
 
 ##an extractor for specific experimental data
 
@@ -180,42 +176,6 @@ setMethod("show", "eSet", function(object ) {
     show(phenoData(object))
 })
 
-###################################################################
-## Pheno data handling code
-###################################################################
-if( !isGeneric("phenoData") )
-    setGeneric("phenoData", function(object)
-               standardGeneric("phenoData"))
-
-  setMethod("phenoData", "eSet", function(object)
-            object@phenoData)
-
-  if( !isGeneric("phenoData<-") )
-    setGeneric("phenoData<-", function(object, value)
-               standardGeneric("phenoData<-"))
-
-  setReplaceMethod("phenoData", c("eSet", "phenoData"),
-                   function(object, value) {
-                       object@phenoData <- value
-                       object })
-
-  ##method for pData
-  setMethod("pData", "eSet",
-            function(object) pData(phenoData(object)))
-
-
-  ##replace method for pData
-  if( !isGeneric("pData<-") )
-    setGeneric("pData<-", function(object, value)
-               standardGeneric("pData<-"))
-
-  setReplaceMethod("pData", "eSet", function(object, value) {
-    ph <- phenoData(object)
-    pData(ph) <- value
-    phenoData(object) <- ph
-    object
-  })
-
 #
 # combine generic: given an arbitrary number of arguments
 # that are eSet instances, combine into a single eSet
@@ -224,47 +184,7 @@ if( !isGeneric("phenoData") )
 # current restrictions: only works for eList slots that are
 # lists
 #
-
-setGeneric("combine", function(x, y, ...)
- {
- if (length(list(...)) > 0)
-    combine( x, combine( y, combine(...) ) )
- else standardGeneric("combine")
- })
-
-setMethod("combine", c("phenoData", "phenoData"), function(x, y, ...)
- {
-#
-# merge here will reproduce rows
-#
- nl <- varLabels(x)
- if (dim(pData(x))[2] == dim(pData(y))[2] && all(names(pData(x))==names(pData(y))))
-    {
-    npd <- rbind(pData(x), pData(y))
-    }
- else
-    {
-    alln <- union(nx <- names(dx <- pData(x)), ny <- names(dy <- pData(y)))
-    if (length(xx <- setdiff(alln,nx))>0)
-        for (i in 1:length(xx)) dx[[ xx[i] ]] <- NA
-    if (length(xx <- setdiff(alln,ny))>0)
-        for (i in 1:length(xx)) dy[[ xx[i] ]] <- NA
-    npd <- rbind(dx,dy)
-    allvl <- list()
-    nvl1 <- names(varLabels(x))
-    nvl2 <- names(varLabels(y))
-    for (i in 1:length(varLabels(x))) allvl[[ nvl1[i] ]] <- varLabels(x)[[i]]
-    for (i in 1:length(varLabels(y))) allvl[[ nvl2[i] ]] <- varLabels(y)[[i]]
-    nl <- list()
-      for (i in 1:ncol(dx)) nl[[ names(dx)[i] ]] <- allvl[[ names(dx)[i] ]]
-    }
- new("phenoData", pData=npd, varLabels=nl)
- })
-
-setMethod("combine", "phenoData", function(x, y, ...)
- {
- return(x)
- })
+# phenoData parts of combine are now in annotatedDataset.R
 
 setMethod("combine", c("eSet", "eSet"), function(x, y, ...)
  {

@@ -1,6 +1,6 @@
 Package: Biobase
 Title: Biobase: Base functions for Bioconductor
-Version: 1.6.1
+Version: 1.6.2
 Date: 29 April 2005
 Author: R. Gentleman, V. Carey
 Description: Functions that are needed by many other packages or which
@@ -10,8 +10,9 @@ Maintainer: R. Gentleman <rgentlem@fhcrc.org>
 License: LGPL
 Suggests: widgetTools, tkWidgets
 Collate: dumpPackTxt.R addVig2Menu.R aggregate.R
-        as.data.frame.exprSet.R container.R contents.R
-        copySubstitute.R createpackage.R envir.R exprSet.R eset.R
+        container.R contents.R copySubstitute.R 
+        createpackage.R envir.R annotatedDataset.R 
+        exprSet.R eset.R as.data.frame.exprSet.R
         multi.R netTools.R openVignette.R pdf.R pkgVersion.R
         read.MIAME.R read.exprSet.R read.phenoData.R strbreak.R
         varMetadata.R zzz.R

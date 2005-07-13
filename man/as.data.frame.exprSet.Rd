@@ -1,5 +1,6 @@
 \name{as.data.frame.exprSet}
 \alias{as.data.frame.exprSet}
+\alias{as.data.frame.exprSet,exprSet-method}
 \title{ converts an exprSet to a dataframe }
 \description{
   

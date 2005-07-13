@@ -2,7 +2,6 @@
 \docType{class}
 \alias{phenoData-class}
 \alias{phenoData}
-\alias{$.phenoData}
 \alias{phenoData<-,pheno}
 \alias{[,phenoData-method}
 \alias{pData,phenoData-method}
@@ -10,6 +9,7 @@
 \alias{show,phenoData-method}
 \alias{split,phenoData,vector-method}
 \alias{varLabels,phenoData-method}
+\alias{$,phenoData-method}
 \alias{[[,phenoData-method}
 \alias{[[<-,phenoData-method}
 \alias{convertVarLabels,phenoData-method}
