@@ -1,6 +1,6 @@
 \name{df2pD}
 \alias{df2pD}
-\alias{coerce,phenoData-method}
+\alias{coerce,data.frame,phenoData-method}
 
 \title{ A function to coerce from a data.frame to a phenoData object. }
 \description{
