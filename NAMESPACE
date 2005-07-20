@@ -26,6 +26,6 @@ export(Aggregate, addNonExisting, addPDF2Vig,
        getPkgVigs, l2e, listLen,
        multiassign, openPDF, openVignette, "package.version",
        rowMax, rowMedians, rowMin, rowQ,
-       read.exprSet, read.phenoData, read.MIAME,
+       read.exprSet, read.phenoData, read.MIAME, read.pD,
        strbreak, testBioCConnection)
 
