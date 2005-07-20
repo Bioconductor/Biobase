@@ -23,7 +23,7 @@ setMethod("show", "exprListNM", function(object) {
 setMethod("show", "exprList", function(object) {
  cat("exprList object with ")
  if (is.list(object@.Data)) cat(length(object@.Data), " list element(s).")
- else if (is.environment(object@.Data)) 
+ else if (is.environment(object@.Data))
 	cat(length(ls(object@.Data)), "environment elements.")
  cat("\nexprList level metadata:\n ")
  show(eMetadata(object))
@@ -33,8 +33,17 @@ if (!isGeneric("eMetadata")) setGeneric("eMetadata",
 	function(object) standardGeneric("eMetadata"))
 
 ##just the two slots, everyone else extends this class
-setClass("eSet", representation(eList="exprList"),
-         contains=c("annotatedDataset"))
+##added some annotation information needed - at some
+##time we should have a exptAnnotation
+setClass("eSet", representation(eList="exprList",
+                      description="characterORMIAME",
+                      annotation="character",
+                      sampleNames="character",
+                      notes="character") ,
+    prototype = list(eList=new("exprList"), description="",
+            annotation="", sampleNames=character(0),
+            notes=""),
+    contains=c("annotatedDataset"))
 
 setMethod("eMetadata", c("eSet"), function(object) {
 	object@eList@eMetadata })
@@ -44,6 +53,49 @@ setMethod("eMetadata", c("eSet"), function(object) {
 # to the show/exprs method
 #
 
+setMethod("sampleNames", "eSet",
+   function(object) {
+     object@sampleNames})
+
+##check to see if the vector x is the right length to
+##replace the sample names in eSet
+##not sure if this should be exported
+
+eSetValidNames = function(eSet, x) {
+  if( !is.character(x) ) return(FALSE)
+  lenx = length(x)
+  if(length(varLabels(phenoData(eSet))) != lenx ) return(FALSE)
+  nc = ncol(eSet)
+  if(any(nc != lenx)) return(FALSE)
+  TRUE
+}
+
+##reset the eList col names - not for export
+
+seteListColNames = function(eList, names) {
+  if(is.environment(eList@.Data) )
+    for( j in ls(eList@.Data) )
+       dimnames(j)[[2]] = names
+  else if (is.list(eList@.Data) )
+    for( j in eList@.Data )
+       dimnames(j)[[2]] = names
+  else
+    stop("invalid eList")
+  eList
+}
+
+##should we have column names on the elements of eList
+##and if so how do we control their values
+setReplaceMethod("sampleNames", "eSet",
+  function(object, value) {
+     if( !is.character(value) )
+       stop("replacement names must be character strings")
+     if( !eSetValidNames(object, value) )
+       stop("wrong number of sample names")
+     object@sampleNames = value
+     object@eList = seteListColNames(object@eList, names)
+     object
+})
 
 if( !isGeneric("eMetadata<-") )
     setGeneric("eMetadata<-", function(object, value)
@@ -59,6 +111,27 @@ if (!isGeneric("eList"))
  setGeneric("eList", function(object)standardGeneric("eList"))
 
 setMethod("eList", "eSet", function(object) object@eList)
+
+##we need to know all the number of columns in the different
+##components of exprs to be able to decide if a new set of
+##sampleNames can be assigned or not
+
+if (!isGeneric("ncol"))
+ setGeneric("ncol", function(x) standardGeneric("ncol"))
+
+setMethod("ncol", "exprList",
+  function(x) {
+      data=x@.Data
+      if( is.environment(data) )
+         return(unlist(eapply(data, ncol)))
+      if( is.list(data) )
+         return(sapply(data, ncol))
+      stop("eList seems faulty")
+  })
+
+setMethod("ncol", "eSet",
+  function(x) {
+     ncol(x@eList)} )
 
 if( !isGeneric("eList<-") )
     setGeneric("eList<-", function(object, value)
@@ -79,7 +152,15 @@ setReplaceMethod("eList", c("eSet", "list"),
                        object@eList <- value
                        object })
 
-##an extractor for specific experimental data
+##
+
+setReplaceMethod("exprs", "eSet",
+   function(object, value) {
+       object@eList[["exprs"]] = value
+       return(object)
+   })
+
+##An extractor for named experimental data
 
 setGeneric("getExpData", function(object, name)
            standardGeneric("getExpData"))
@@ -87,16 +168,21 @@ setGeneric("getExpData", function(object, name)
 ##FIXME: how much do we want to do to ensure that these are matrices?
 setMethod("getExpData", c("eSet", "character"),
           function(object, name) {
-              if( is.list(object@eList))
-                  object@eList[[name]]
-              else if( is.environment(object@eList) ){
-                  ans <- try(get(name, env=object@eList,
-                                 inherits=FALSE) )
-                  if(inherits(ans, "try-error"))
-                      return(NULL)
-                  ans
-              }
-          })
+              object@eList[[name]] })
+
+##this seems rather more convoluted than we want
+#setMethod("getExpData", c("eSet", "character"),
+#          function(object, name) {
+#              if( is.list(object@eList))
+#                  object@eList[[name]]
+#              else if( is.environment(object@eList) ){
+#                  ans <- try(get(name, env=object@eList,
+#                                 inherits=FALSE) )
+#                  if(inherits(ans, "try-error"))
+#                      return(NULL)
+#                  ans
+#              }
+#          })
 
 setMethod("exprs", "eSet",
           function(object) getExpData(object, "exprs")
