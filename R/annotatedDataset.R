@@ -193,3 +193,27 @@ setMethod("combine", "phenoData", function(x, y, ...)
           {
               return(x)
           })
+
+###functions to coerce between data.frame and phenoData
+##some checking of varLabels - none of varMetadata
+
+df2pD = function(x, varLabels, varMetadata) {
+    if( !is.data.frame(x) )
+        stop("x must be a data.frame")
+    if( missing(varLabels) ) {
+        varLabels = as.list(rep("not initialized", ncol(x)))
+        names(varLabels) = names(x)
+    }
+    if( length(varLabels) != ncol(x) )
+        stop("incorrect length of varLabels")
+    if(missing(varMetadata) )
+        varMetadata = data.frame(matrix(nr=0, nc=0))
+    new("phenoData", pData=x, varLabels=varLabels,
+        varMetadata=varMetadata)
+}
+
+##not for export
+tdf2pD = function(from) df2pD(from)
+
+setAs("data.frame", "phenoData", def=tdf2pD)
+

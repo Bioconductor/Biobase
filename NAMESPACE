@@ -6,7 +6,7 @@ exportClasses(aggregator, container, exprListNM, exprList, eSet, phenoData,
               MIAME, characterORMIAME, exprMatrix, exprSet, annotatedDataset)
 
 exportMethods("[", "[[", "$", abstract, addVarMetadataEntry, aggenv, aggfun, 
-             annotation, 
+             annotation, coerce,
              combine, content, contents, convertVarLabels, description, eList,
              eMetadata, expinfo, exprs, exprs2excel, geneNames, getExpData,
              getUnits, getVarMetadata, hybridizations, initfun, iter,
@@ -16,12 +16,14 @@ exportMethods("[", "[[", "$", abstract, addVarMetadataEntry, aggenv, aggfun,
              varMetadata, "annotation<-", "description<-", "eList<-", 
 	     "eMetadata<-", "exprs<-", "geneNames<-", "notes<-", "pData<-", 
 	     "phenoData<-", "sampleNames<-",
-             "se.exprs<-",  "write.exprs", "as.data.frame.exprSet")
+             "se.exprs<-",  "write.exprs", 
+             "as.data.frame.exprSet")
 
 export(Aggregate, addNonExisting, addPDF2Vig, 
        addVig2Menu, addVig4Unix, addVig4Win, addVigs2WinMenu,
        copyEnv, copySubstitute, reverseSplit, eSetValidNames,
-       createPackage, dumpPackTxt, esApply, getPkgVigs, l2e, listLen,
+       createPackage, df2pD, dumpPackTxt, esApply, 
+       getPkgVigs, l2e, listLen,
        multiassign, openPDF, openVignette, "package.version",
        rowMax, rowMedians, rowMin, rowQ,
        read.exprSet, read.phenoData, read.MIAME,
