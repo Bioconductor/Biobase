@@ -1,6 +1,6 @@
-read.pD = function(filename = NULL) {
+read.pD = function(filename = NULL, ...) {
   if( is.character(filename) || inherits(filename, "connection") )
-    df = read.table(filename)
+    df = read.table(filename, ...)
   else
     stop("incorrect file")
   df2pD(df)
