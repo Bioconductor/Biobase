@@ -382,11 +382,11 @@
 
 ##FIXME: somehow factors are not vectors!!! this is going to cause
 ##  some grief - we will need to figure out whether this is an oversight
-  setMethod("split", signature(x="exprSet", f="factor"),
+  setMethod("split", signature(x="exprSet", f="factor", drop="missing"),
      function(x, f) 
          .splitexprSet(x, f))
 
-  setMethod("split", signature(x="exprSet", f="vector"),
+  setMethod("split", signature(x="exprSet", f="vector", drop="missing"),
      function(x, f) 
          .splitexprSet(x, f))
  
@@ -441,7 +441,7 @@
 
 
 #!!!do something here??
-  setMethod("split", signature(x="phenoData", f="vector"),
+  setMethod("split", signature(x="phenoData", f="vector", drop="missing"),
             function(x, f) {
               lenf <- length(f)
               pD <- pData(x)
