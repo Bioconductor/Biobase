@@ -47,6 +47,34 @@ setClass("eSet", representation(eList="exprList",
 
 setMethod("eMetadata", c("eSet"), function(object) {
 	object@eList@eMetadata })
+
+setMethod("description", signature="eSet", function(object) 
+   object@description)
+
+setReplaceMethod("description", "eSet", function(object, value) {
+   object@description = value
+   object})
+
+setMethod("annotation", "eSet",
+     definition = function(object) object@annotation)
+
+setReplaceMethod("annotation", signature="eSet",
+     definition =  function(object, value) {
+                     object@annotation <- value
+                     object
+                   })
+
+setMethod("notes", signature="eSet", function(object)
+            object@notes)
+
+setReplaceMethod("notes", signature=(object="eSet",
+     value="ANY", function(object, value) {
+    object@notes <- value
+    object
+  })
+
+
+
 #
 # some concepts: getExpData will look for a component named
 # "exprs" in the list or environment, and this is central
