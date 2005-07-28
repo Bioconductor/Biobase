@@ -67,10 +67,10 @@ setReplaceMethod("annotation", signature="eSet",
 setMethod("notes", signature="eSet", function(object)
             object@notes)
 
-setReplaceMethod("notes", signature=(object="eSet",
-     value="ANY", function(object, value) {
-    object@notes <- value
-    object
+setReplaceMethod("notes", signature(object="eSet", value="ANY"), 
+   function(object, value) {
+     object@notes <- value
+     object
   })
 
 

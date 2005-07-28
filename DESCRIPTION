@@ -1,6 +1,6 @@
 Package: Biobase
 Title: Biobase: Base functions for Bioconductor
-Version: 1.6.4
+Version: 1.6.5
 Date: 29 April 2005
 Author: R. Gentleman, V. Carey
 Description: Functions that are needed by many other packages or which
