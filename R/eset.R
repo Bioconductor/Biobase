@@ -92,7 +92,7 @@ setMethod("sampleNames", "eSet",
 eSetValidNames = function(eSet, x) {
   if( !is.character(x) ) return(FALSE)
   lenx = length(x)
-  if(length(varLabels(phenoData(eSet))) != lenx ) return(FALSE)
+  if(nrow(pData(eSet)) != lenx ) return(FALSE)
   nc = ncol(eSet)
   if(any(nc != lenx)) return(FALSE)
   TRUE
