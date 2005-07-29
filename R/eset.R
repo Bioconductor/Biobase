@@ -10,8 +10,8 @@ if (!isClass("exprListNM"))  # no metadata
     setClassUnion("exprListNM", c("list", "environment"))
 
 if (!isClass("exprList"))
-    setClass("exprList", representation(eMetadata="data.frame"),
-		contains="exprListNM")
+    setClass("exprList", representation(eMetadata="data.frame",
+		eList ="exprListNM"))
 
 if(!isGeneric("eMetadata")) setGeneric("eMetadata",
 	function(object) standardGeneric("eMetadata"))
@@ -19,12 +19,13 @@ setMethod("eMetadata", "exprList", function(object)
 	object@eMetadata)
 
 setMethod("show", "exprListNM", function(object) {
- cat("metadata-free exprList; use object@eList@.Data to view") })
+ cat("metadata-free exprList; use object@eList to view") })
+
 setMethod("show", "exprList", function(object) {
  cat("exprList object with ")
- if (is.list(object@.Data)) cat(length(object@.Data), " list element(s).")
- else if (is.environment(object@.Data))
-	cat(length(ls(object@.Data)), "environment elements.")
+ if (is.list(object@eList)) cat(length(object@eList), " list element(s).")
+ else if (is.environment(object@eList))
+	cat(length(ls(object@eList)), "environment elements.")
  cat("\nexprList level metadata:\n ")
  show(eMetadata(object))
 })
@@ -44,6 +45,12 @@ setClass("eSet", representation(eList="exprList",
             annotation="", sampleNames=character(0),
             notes=""),
     contains=c("annotatedDataset"))
+
+setMethod("initialize", "eSet",  
+          function(.Object, ...) {
+              if( length(.Object@sampleNames) < ncol(.Object) ) 
+                 .Object@sampleNames = row.names(pData(.Object))
+              .Object })
 
 setMethod("eMetadata", c("eSet"), function(object) {
 	object@eList@eMetadata })
@@ -101,11 +108,11 @@ eSetValidNames = function(eSet, x) {
 ##reset the eList col names - not for export
 
 seteListColNames = function(eList, names) {
-  if(is.environment(eList@.Data) )
-    for( j in ls(eList@.Data) )
+  if(is.environment(eList@eList) )
+    for( j in ls(eList@eList) )
        dimnames(j)[[2]] = names
-  else if (is.list(eList@.Data) )
-    for( j in eList@.Data )
+  else if (is.list(eList@eList) )
+    for( j in eList@eList )
        dimnames(j)[[2]] = names
   else
     stop("invalid eList")
@@ -149,7 +156,7 @@ if (!isGeneric("ncol"))
 
 setMethod("ncol", "exprList",
   function(x) {
-      data=x@.Data
+      data=x@eList
       if( is.environment(data) )
          return(unlist(eapply(data, ncol)))
       if( is.list(data) )
