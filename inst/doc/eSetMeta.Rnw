@@ -159,7 +159,7 @@ methods.
 <<lkEs>>=
 data(eset)
 md <- data.frame(name="exprs", etype="random numbers")
-newe <- new("exprList", .Data=list(exprs=exprs(eset)),
+newe <- new("exprList", eList=list(exprs=exprs(eset)),
         eMetadata=md)
 es1 <- new("eSet", eList=newe, phenoData=phenoData(eset))
 es1

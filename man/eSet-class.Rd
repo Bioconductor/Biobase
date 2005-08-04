@@ -83,7 +83,7 @@ gene expression data, array CGH data or SELD-TOF/MALDI-TOF data.
 \examples{
 ##---- Should be DIRECTLY executable !! ----
 data(eset)
-newe <- new("exprList", .Data=list(exprs=exprs(eset)),
+newe <- new("exprList", eList=list(exprs=exprs(eset)),
 	eMetadata=data.frame())
 es1 <- new("eSet", eList=newe, phenoData=phenoData(eset))  
 es1
@@ -91,7 +91,7 @@ dim(exprs(es1))
 md <- data.frame(name="exprs", etype="random numbers")
 eMetadata(es1) <- md
 eList(es1)
-newe <- new("exprList", .Data=list(exprs=exprs(eset), se=exprs(eset)/1.96),
+newe <- new("exprList", eList=list(exprs=exprs(eset), se=exprs(eset)/1.96),
 	eMetadata=data.frame(name=c("exprs", "se"),
 		etype=c("RNG output", "S.E. of expression"),
                 method=c("rnorm", "scaling")))
