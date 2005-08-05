@@ -203,7 +203,7 @@ setGeneric("getExpData", function(object, name)
 ##FIXME: how much do we want to do to ensure that these are matrices?
 setMethod("getExpData", c("eSet", "character"),
           function(object, name) {
-              object@eList[[name]] })
+              object@eList@eList[[name]] })
 
 ##this seems rather more convoluted than we want
 #setMethod("getExpData", c("eSet", "character"),
