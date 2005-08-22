@@ -3,7 +3,7 @@ useDynLib(Biobase)
 import(tools)
 
 exportClasses(aggregator, container, exprListNM, exprList, eSet, phenoData,
-              MIAME, characterORMIAME, exprMatrix, exprSet, annotatedDataset)
+              MIAME, characterORMIAME, exprMatrix, exprSet, annotatedDataset, eSet2, listOrEnv)
 
 exportMethods("[", "[[", "$", abstract, addVarMetadataEntry, aggenv, aggfun, 
              annotation, coerce,
@@ -17,7 +17,7 @@ exportMethods("[", "[[", "$", abstract, addVarMetadataEntry, aggenv, aggfun,
 	     "eMetadata<-", "exprs<-", "geneNames<-", "notes<-", "pData<-", 
 	     "phenoData<-", "sampleNames<-",
              "se.exprs<-",  "write.exprs", 
-             "as.data.frame.exprSet")
+             "as.data.frame.exprSet", dim)
 
 export(Aggregate, addNonExisting, addPDF2Vig, 
        addVig2Menu, addVig4Unix, addVig4Win, addVigs2WinMenu,

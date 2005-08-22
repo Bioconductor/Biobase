@@ -15,6 +15,6 @@ Collate: dumpPackTxt.R addVig2Menu.R aggregate.R
         exprSet.R eset.R as.data.frame.exprSet.R
         multi.R netTools.R openVignette.R pdf.R pkgVersion.R
         read.MIAME.R read.exprSet.R read.phenoData.R strbreak.R
-        varMetadata.R zzz.R
+        varMetadata.R zzz.R eset2.R
 SaveImage: Yes
 
