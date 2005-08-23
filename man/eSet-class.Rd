@@ -1,106 +1,122 @@
 \name{eSet-class}
 \docType{class}
 \alias{eSet-class}
+\alias{listOrEnv-class}
+\alias{listOrEnv}
 \alias{[,eSet-method}
-\alias{$.eSet}
-\alias{getExpData}
+\alias{dim,eSet-method}
+\alias{exprs,eSet-method}
+\alias{assayData,eSet-method}
+\alias{show,eSet-method}
+\alias{annotation,eSet-method}
+\alias{generic annotation<-,eSet-method}
+\alias{assayData,exprSet-method}
+\alias{assayData<-,eSet,listOrEnv-method}
 \alias{combine,eSet,eSet-method}
 \alias{combine,eSet,ANY-method}
-\alias{eList}
-\alias{eList<-}
+\alias{description,eSet-method}
+\alias{description<-,eSet-method}
 \alias{eList,eSet-method}
-\alias{eList<-,eSet,environment-method}
-\alias{eList<-,eSet,list-method}
-\alias{exprs,eSet-method}
+\alias{eList<-,eSet,listOrEnv-method}
 \alias{getExpData,eSet,character-method}
-\alias{pData,eSet-method}
-\alias{pData<-,eSet-method}
-\alias{phenoData,eSet-method}
-\alias{phenoData<-,eSet,phenoData-method}
-\alias{show,eSet-method}
-\alias{eMetadata}
-\alias{exprListNM-class}
-\alias{eMetadata<-}
-\alias{eMetadata<-,eSet,data.frame-method}
-\alias{eMetadata,exprList-method}
-\alias{eMetadata,eSet-method}
-\alias{show,exprListNM-method}
-\alias{show,exprList-method}
-\title{Class "eSet": a new exprSet class }
-\description{A second attempt at a universal definition of experimental
-  data, combined with phenotypic data and in some cases probe data.}
+\alias{ncol,eSet-method}
+\alias{notes,eSet-method}
+\alias{notes<-,eSet-method}
+\alias{reporterNames,eSet-method}
+\alias{sampleNames,eSet-method}
+\alias{annotation<-,eSet-method}
+\alias{sampleNames<-,eSet,character-method}
+
+\title{Class "eSet" -- general container for high-throughput assays and
+experimental metadata }
+\description{  general container for high-throughput assays and
+experimental metadata }
 \section{Objects from the Class}{
 Objects can be created by calls of the form \code{new("eSet", ...)}.
-These objects are basically structured to provide a unified and
-simplified set of methods for handling experimental data. This might be
-gene expression data, array CGH data or SELD-TOF/MALDI-TOF data.
 }
 \section{Slots}{
   \describe{
-    \item{\code{eList}:}{Object of class \code{"exprList"} containing
-      the experimental data. }
-    \item{\code{phenoData}:}{Object of class \code{"phenoData"}
-      containing the phenotypic or sample level data.}
+    \item{\code{exprs}:}{Object of class \code{"listOrEnv"}, can be a list
+of matrices or an environment populated by matrices.  The matrices must
+have common dimensions, and number of columns must agree with
+number of rows of \code{phenoData} \code{pData} slot.  }
+    \item{\code{sampleNames}:}{vector of sample names}
+    \item{\code{phenoData}:}{Object of class \code{"phenoData"} }
   }
+}
+\section{Extends}{
+Class \code{"annotatedDataset"}, directly.
 }
 \section{Methods}{
   \describe{
-    \item{[}{\code{signature(x = "eSet")}: basic subsetting. It returns
-      an object of class \code{eSet}. The first index subsets
-      experimental units while the second subsets samples. }
-    \item{combine}{\code{signature(x = "eSet", y = "eSet")}: a method
-      for merging two \code{eSet}s. Substantial checking is carried out. }
-    \item{combine}{\code{signature(x = "eSet", y = "ANY")}: As above. }
-    \item{eList}{\code{signature(object = "eSet")}: a container for the
-      experimental data. This can accomodate multiple channels etc. }
-    \item{eList<-}{\code{signature(object = "eSet", value =
-	"exprList")}: An assignment function for \code{exprList}s. }
-    \item{eList<-}{\code{signature(object = "eSet", value =
-	"environment")}: as above}
-    \item{eList<-}{\code{signature(object = "eSet", value = "list")}: as
-    above.}
-    \item{exprs}{\code{signature(object = "eSet")}: extract the
-      experimental data. }
-    \item{getExpData}{\code{signature(object = "eSet", name =
-	"character")}: extract the experimental data.}
-    \item{pData}{\code{signature(object = "eSet")}: get the actual
-      \code{data.frame} containing the phenotypic data. }
-    \item{pData<-}{\code{signature(object = "eSet")}: replace the actual
-    \code{data.frame} containing the phenotypic data.}
-    \item{phenoData}{\code{signature(object = "eSet")}: extract the
-      phenoData object (data frame plus descriptions of the covariates). }
-    \item{phenoData<-}{\code{signature(object = "eSet", value =
-	"phenoData")}: a replacement method for the \code{phenoData} object. }
-    \item{show}{\code{signature(object = "eSet")}: a print method, to
-      control printing vast amounts of data. }
+    \item{[}{\code{signature(x = "eSet")}: conducts subsetting of
+matrices and phenoData components }
+    \item{dim}{\code{signature(x = "eSet")}: ... }
+    \item{ncol}{\code{signature(x = "eSet")}: ... }
+    \item{exprs}{\code{signature(object = "eSet")}: ... }
+    \item{show}{\code{signature(object = "eSet")}: ... }
+    \item{combine}{\code{signature(object = "eSet")}: ... }
+    \item{description}{\code{signature(object = "eSet")}: ... }
+    \item{annotation}{\code{signature(object = "eSet")}: ... }
+    \item{eList}{\code{signature(object = "eSet")}: DEPRECATED }
+    \item{sampleNames}{\code{signature(object = "eSet")}: DEPRECATED }
+    \item{reporterNames}{\code{signature(object = "eSet")}: DEPRECATED }
   }
 }
-\author{Biocore}
-\note{The data structures etc. were designed by a consensus view of Biocore. }
+%\references{ ~put references to the literature/web site here ~ }
+\author{ VJ Carey after initial design by Robert Gentleman }
+\note{ \code{listOrEnv} is a (virtual) class union. }
 
-\seealso{
-\code{\link{exprSet-class}}}
+% ~Make other sections like Warning with \section{Warning }{....} ~
+
+%\seealso{
+%  ~~objects to See Also as \code{\link{~~fun~~}}, ~~~
+%  or \code{\link{CLASSNAME-class}} for links to other classes
+%}
 \examples{
-##---- Should be DIRECTLY executable !! ----
+#
+# let's get some exprSet
+#
 data(eset)
-newe <- new("exprList", eList=list(exprs=exprs(eset)),
-	eMetadata=data.frame())
-es1 <- new("eSet", eList=newe, phenoData=phenoData(eset))  
-#es1
-#dim(exprs(es1))
-#md <- data.frame(name="exprs", etype="random numbers")
-#eMetadata(es1) <- md
-#eList(es1)
-#newe <- new("exprList", eList=list(exprs=exprs(eset), se=exprs(eset)/1.96),
-#	eMetadata=data.frame(name=c("exprs", "se"),
-#		etype=c("RNG output", "S.E. of expression"),
-#                method=c("rnorm", "scaling")))
-#es2 <- new("eSet", eList=newe, phenoData=phenoData(eset))
-#es2
-#eList(es2)
-#phenoData(es2)@varMetadata <- 
-#   	data.frame(varName=c("cov1", "cov2", "cov3"),
-#		units=c("cm", "in", NA))
-#getUnits(phenoData(es2), "cov1")
+pd <- phenoData(eset)
+xl <- list(e1=exprs(eset))
+gn <- geneNames(eset)
+sn <- sampleNames(eset)
+#
+# build an eSet
+#
+es2 <- new("eSet", phenoData=pd, assayData=xl,
+  reporterNames=gn, sampleNames=sn)
+#
+# illustrate subset and show for assayData as list
+#
+es2[1:4,1:4]
+#
+# build with environment assayData
+#
+eenv <- new.env()
+assign("e1", assayData(eset), eenv)
+es3 <- new("eSet", phenoData=pd, assayData=eenv,
+  reporterNames=gn, sampleNames=sn)
+es3
+es3[1:5,1:5]
+#
+# show some legacy behavior: set list element name to
+# exprs and invoke exprs()
+#
+names(assayData(es2)) <- "exprs"
+dim(exprs(es2))
+#
+# show some validity checking
+#
+assayData(es3) <- assayData(es2)
+es3  # now has list
+sampleNames(es2) <- letters # ok
+if (interactive()) {
+ lk <- try(sampleNames(es2) <- letters[-1]) # not ok
+ lk
+ lk <- try(assayData(es2) <- assayData(es2[-1,])) # not ok
+ lk
+ }
 }
 \keyword{classes}

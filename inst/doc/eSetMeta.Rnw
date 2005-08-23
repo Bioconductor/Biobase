@@ -41,6 +41,8 @@
 
 \section{Introduction}
 
+UNDER CONSTRUCTION.  SOME CODE MEANINGLESS.
+
 Metadata is data about data.  In bioinformatics there
 are many roles for the metadata concept.  This document
 describes management of metadata on the central
@@ -137,8 +139,8 @@ affymetrix data representation.  A new class,
 \Rclass{eSet}, allows more complex data representation.
 <<lkEset>>=
 getSlots("eSet")
-getSlots("exprList")
-getClass("exprListNM")
+#getSlots("exprList")
+getClass("listOrEnv")
 @
 The \Rclass{exprListNM} class has some legacy (under
 the name ``exprList'') in
@@ -159,12 +161,12 @@ methods.
 <<lkEs>>=
 data(eset)
 md <- data.frame(name="exprs", etype="random numbers")
-newe <- new("exprList", eList=list(exprs=exprs(eset)),
-        eMetadata=md)
-es1 <- new("eSet", eList=newe, phenoData=phenoData(eset))
-es1
-eMetadata(es1)
-eList(es1)
+#newe <- new("exprList", eList=list(exprs=exprs(eset)),
+#        eMetadata=md)
+#es1 <- new("eSet", eList=newe, phenoData=phenoData(eset))
+#es1
+#eMetadata(es1)
+#eList(es1)
 @
 
 Additional conventions should be established for

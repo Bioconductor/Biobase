@@ -2,26 +2,26 @@ useDynLib(Biobase)
 
 import(tools)
 
-exportClasses(aggregator, container, exprListNM, exprList, eSet, phenoData,
-              MIAME, characterORMIAME, exprMatrix, exprSet, annotatedDataset, eSet2, listOrEnv)
+exportClasses(aggregator, container, eSet, phenoData,
+              MIAME, characterORMIAME, exprMatrix, exprSet, annotatedDataset, listOrEnv)
 
 exportMethods("[", "[[", "$", abstract, addVarMetadataEntry, aggenv, aggfun, 
              annotation, coerce,
              combine, content, contents, convertVarLabels, description, eList,
-             eMetadata, expinfo, exprs, exprs2excel, geneNames, getExpData,
+             expinfo, exprs, exprs2excel, geneNames, getExpData,
              getUnits, getVarMetadata, hybridizations, initfun, iter,
              length, locked, normControls, ncol, notes, otherInfo, pData,
              phenoData, preproc, sampleNames, samples, "se.exprs", show,
              split, update2MIAME, varLabels,
              varMetadata, "annotation<-", "description<-", "eList<-", 
-	     "eMetadata<-", "exprs<-", "geneNames<-", "notes<-", "pData<-", 
-	     "phenoData<-", "sampleNames<-",
+	     "exprs<-", "geneNames<-", "notes<-", "pData<-", 
+	     "phenoData<-", "sampleNames<-", "assayData<-",
              "se.exprs<-",  "write.exprs", 
-             "as.data.frame.exprSet", dim)
+             "as.data.frame.exprSet", dim, assayData, reporterNames)
 
 export(Aggregate, addNonExisting, addPDF2Vig, 
        addVig2Menu, addVig4Unix, addVig4Win, addVigs2WinMenu,
-       copyEnv, copySubstitute, reverseSplit, eSetValidNames,
+       copyEnv, copySubstitute, reverseSplit, 
        createPackage, df2pD, dumpPackTxt, esApply, 
        getPkgVigs, l2e, listLen,
        multiassign, openPDF, openVignette, "package.version",

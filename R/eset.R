@@ -1,60 +1,123 @@
-##Copyright R. Gentleman, 2003, all rights reserved
 
-##the new, more general exprSet class
-##a list/set/hash of matrices of dimension N by K and a
-##single data frame of dimension K by P
-##there are K labeled samples. For Affy this is the same as K arrays
-##but for cDNA it is different.
 
-if (!isClass("exprListNM"))  # no metadata
-    setClassUnion("exprListNM", c("list", "environment"))
+setClassUnion("listOrEnv", c("list", "environment"))
 
-if (!isClass("exprList"))
-    setClass("exprList", representation(eMetadata="data.frame",
-		eList ="exprListNM"))
+validEset <- function(object) {
+#
+# various things can be checked here
+#
+  d <- dim(object)
+  if (any(d[1,] != d[1,1])) return("assayData components have unequal numbers of reporters")
+  if (any(d[2,] != d[2,1])) return("assayData components have unequal numbers of samples")
+  n <- nrow(pData(object))
+  nrep <- d[1,1]
+  if (any(d[2,] != n)) return("ncol of assayData != nrow pData")
+  if (length(sampleNames(object)) != n) return("length of sampleNames != nrow pData")
+  if (length(reporterNames(object)) != nrep) return("length of reporterNames != nrow assayData")
+  return(TRUE)
+}
 
-if(!isGeneric("eMetadata")) setGeneric("eMetadata",
-	function(object) standardGeneric("eMetadata"))
-setMethod("eMetadata", "exprList", function(object)
-	object@eMetadata)
+# following gets eSet to have a phenoData slot
+setClass("eSet", representation(assayData="listOrEnv",
+	sampleNames="character", reporterNames="character"), contains="annotatedDataset",
+  validity=validEset, prototype=list(assayData=list(), sampleNames=character(0),
+	reporterNames=character(0),
+	phenoData=new("phenoData")))
 
-setMethod("show", "exprListNM", function(object) {
- cat("metadata-free exprList; use object@eList to view") })
+#
+# so now Z <- new("eSet", X, phenoData=Y) will work, as long as X
+# is either a list or an environment, but Z$ and Z[[]] 
+# deal exclusively with phenoData.  this seems to be as desired 
 
-setMethod("show", "exprList", function(object) {
- cat("exprList object with ")
- if (is.list(object@eList)) cat(length(object@eList), " list element(s).")
- else if (is.environment(object@eList))
-	cat(length(ls(object@eList)), "environment elements.")
- cat("\nexprList level metadata:\n ")
- show(eMetadata(object))
+setGeneric("assayData", function(object)standardGeneric("assayData"))
+setMethod("assayData", "eSet", function(object) object@assayData)
+setMethod("exprs", "eSet", function(object) object@assayData[["exprs"]]) # works for list or env!
+setMethod("assayData", "exprSet", function(object) object@exprs)
+
+setMethod("dim", "eSet", function(x) {
+    isEnv <- is(assayData(x), "environment")
+    if (!isEnv) tmp <- sapply(assayData(x), dim)
+    else {
+	enms <- ls(assayData(x))
+	tmp <- sapply(enms,function(z) dim(get(z,assayData(x))))
+	}
+    dimnames(tmp)[[1]] <- c("nrow", "ncol")
+    tmp
+})
+setMethod("ncol", "eSet", function(x) {
+    isEnv <- is(assayData(x), "environment")
+    if (!isEnv) sapply(assayData(x), ncol)
+    else {
+	enms <- ls(assayData(x))
+	sapply(enms,function(z) ncol(get(z,assayData(x))))
+	}
 })
 
-if (!isGeneric("eMetadata")) setGeneric("eMetadata",
-	function(object) standardGeneric("eMetadata"))
+setMethod("[", "eSet", function(x, i, j, ..., drop=FALSE) {
+    if( length(list(...)) > 0 )
+        stop("extra subscripts cannot be handled")
+    if( missing(j) )
+        {
+        pdata <- phenoData(x)
+	sn <- sampleNames(x)
+        }
+    else
+        {
+        pdata <- phenoData(x)[j,, ..., drop=FALSE]
+	sn <- sampleNames(x)[j]
+        }
+    if (missing(i)) rn <- reporterNames(x)
+    else rn <- reporterNames(x)[i]
+    isEnv <- is(assayData(x), "environment")
+    if (!isEnv) {
+	if (missing(i))
+		if (missing(j))
+			return(x)
+		else xd <- lapply( assayData(x), function(x)x[,j,drop=drop] )
+	else if (missing(j))
+		xd <- lapply( assayData(x), function(x)x[i,,drop=drop] )
+	     else
+		xd <- lapply( assayData(x), function(x)x[i,j,drop=drop] )
+	}
+    else { # getting an environment, which is assumed to hold matrices (22 aug 2005)
+	enms <- ls(assayData(x))
+	xd <- new.env()
+        for (nm in enms) {
+	   if (missing(i))
+		{
+		if (missing(j))
+			return(x)
+		else assign(nm, get(nm, env=assayData(x), inherits=FALSE)[,j,drop=drop], env=xd)
+		}
+	   else if (missing(j))
+		assign(nm, get(nm, env=assayData(x), inherits=FALSE)[i,,drop=drop], env=xd)
+	   else
+		assign(nm, get(nm, env=assayData(x), inherits=FALSE)[i,j,drop=drop], env=xd)
+	   }
+        }
+    new("eSet", phenoData=pdata, assayData=xd, reporterNames=rn, sampleNames=sn)
+})
 
-##just the two slots, everyone else extends this class
-##added some annotation information needed - at some
-##time we should have a exptAnnotation
-setClass("eSet", representation(eList="exprList",
-                      description="characterORMIAME",
-                      annotation="character",
-                      sampleNames="character",
-                      notes="character") ,
-    prototype = list(eList=new("exprList"), description="",
-            annotation="", sampleNames=character(0),
-            notes=""),
-    contains=c("annotatedDataset"))
+#data(eset)
+#pd <- phenoData(eset)
+#xl <- list(e1=assayData(eset))
+#es2 <- new("eSet", phenoData=pd, assayData=xl)
 
-setMethod("initialize", "eSet",  
-          function(.Object, ...) {
-              if( length(.Object@sampleNames) < ncol(.Object) ) 
-                 .Object@sampleNames = row.names(pData(.Object))
-              .Object })
+setMethod("show", "eSet", function(object) {
+ cat("instance of eSet\n")
+ cat("assayData component is of class", class(assayData(object)),"\n")
+ cat("dimensions of the assayData components:\n")
+ print(dim(object))
+ show(phenoData(object))
+ cat("first reporterNames:\n")
+ print(reporterNames(object)[1:min(5,length(reporterNames(object)))])
+ cat("first sampleNames:\n")
+ print(sampleNames(object)[1:min(5,length(reporterNames(object)))])
+})
 
-setMethod("eMetadata", c("eSet"), function(object) {
-	object@eList@eMetadata })
-
+#
+# following are legacy, seem OK
+#
 setMethod("description", signature="eSet", function(object) 
    object@description)
 
@@ -81,228 +144,147 @@ setReplaceMethod("notes", signature(object="eSet", value="ANY"),
   })
 
 
-
-#
-# some concepts: getExpData will look for a component named
-# "exprs" in the list or environment, and this is central
-# to the show/exprs method
-#
-
 setMethod("sampleNames", "eSet",
    function(object) {
      object@sampleNames})
 
+setGeneric("reporterNames", 
+   function(object) standardGeneric("reporterNames"))
+setMethod("reporterNames", "eSet",
+   function(object) {
+     object@reporterNames})
+
+# commented out by VC: this check should be done at
+# construction time -- if creator doesn't have it right,
+# then no eSet is made.  any manipulations should guaranteed
+# to preserve name validity
+#
 ##check to see if the vector x is the right length to
 ##replace the sample names in eSet
 ##not sure if this should be exported
 
-eSetValidNames = function(eSet, x) {
-  if( !is.character(x) ) return(FALSE)
-  lenx = length(x)
-  if(nrow(pData(eSet)) != lenx ) return(FALSE)
-  nc = ncol(eSet)
-  if(any(nc != lenx)) return(FALSE)
-  TRUE
-}
+#eSetValidNames = function(eSet, x) {
+#  if( !is.character(x) ) return(FALSE)
+#  lenx = length(x)
+#  if(nrow(pData(eSet)) != lenx ) return(FALSE)
+#  nc = ncol(eSet)
+#  if(any(nc != lenx)) return(FALSE)
+#  TRUE
+#}
 
 ##reset the eList col names - not for export
 
-seteListColNames = function(eList, names) {
-  if(is.environment(eList@eList) )
-    for( j in ls(eList@eList) )
-       dimnames(j)[[2]] = names
-  else if (is.list(eList@eList) )
-    for( j in eList@eList )
-       dimnames(j)[[2]] = names
-  else
-    stop("invalid eList")
-  eList
-}
+# VC commented this out -- wants to handle names
+# directly as slots as much as possible
+#seteListColNames = function(eList, names) {
+#  if(is.environment(eList@eList) )
+#    for( j in ls(eList@eList) )
+#       dimnames(j)[[2]] = names
+#  else if (is.list(eList@eList) )
+#    for( j in eList@eList )
+#       dimnames(j)[[2]] = names
+#  else
+#    stop("invalid eList")
+#  eList
+#}
+#
+###should we have column names on the elements of eList
+###and if so how do we control their values
+#setReplaceMethod("sampleNames", "eSet",
+#  function(object, value) {
+#     if( !is.character(value) )
+#       stop("replacement names must be character strings")
+#     if( !eSetValidNames(object, value) )
+#       stop("wrong number of sample names")
+#     object@sampleNames = value
+#     object@eList = seteListColNames(object@eList, names)
+#     object
+#})
 
-##should we have column names on the elements of eList
-##and if so how do we control their values
-setReplaceMethod("sampleNames", "eSet",
-  function(object, value) {
-     if( !is.character(value) )
-       stop("replacement names must be character strings")
-     if( !eSetValidNames(object, value) )
-       stop("wrong number of sample names")
-     object@sampleNames = value
-     object@eList = seteListColNames(object@eList, names)
-     object
-})
-
-if( !isGeneric("eMetadata<-") )
-    setGeneric("eMetadata<-", function(object, value)
-               standardGeneric("eMetadata<-"))
-
-setReplaceMethod("eMetadata", c("eSet", "data.frame"),
-		function(object, value) {
-			object@eList@eMetadata <- value
-			object
-		})
+# VC -- leave this stuff to another factor, related to varMetadata
+#if( !isGeneric("eMetadata<-") )
+#    setGeneric("eMetadata<-", function(object, value)
+#               standardGeneric("eMetadata<-"))
+#
+#setReplaceMethod("eMetadata", c("eSet", "data.frame"),
+#		function(object, value) {
+#			object@eList@eMetadata <- value
+#			object
+#		})
 
 if (!isGeneric("eList"))
  setGeneric("eList", function(object)standardGeneric("eList"))
 
-setMethod("eList", "eSet", function(object) object@eList)
+setMethod("eList", "eSet", function(object) {
+ .Deprecated("exprs", "Biobase")
+ exprs(object)
+ })
 
-##we need to know all the number of columns in the different
-##components of exprs to be able to decide if a new set of
-##sampleNames can be assigned or not
 
-if (!isGeneric("ncol"))
- setGeneric("ncol", function(x) standardGeneric("ncol"))
+# note the validObject calls -- I do not think setReplaceMethods
+# do constructions.
+setGeneric("eList<-", function(object, value){
+               standardGeneric("eList<-")})
+setGeneric("assayData<-", function(object, value){
+               standardGeneric("assayData<-")})
 
-setMethod("ncol", "exprList",
-  function(x) {
-      data=x@eList
-      if( is.environment(data) )
-         return(unlist(eapply(data, ncol)))
-      if( is.list(data) )
-         return(sapply(data, ncol))
-      stop("eList seems faulty")
-  })
-
-setMethod("ncol", "eSet",
-  function(x) {
-     ncol(x@eList)} )
-
-if( !isGeneric("eList<-") )
-    setGeneric("eList<-", function(object, value)
-               standardGeneric("eList<-"))
-
-setReplaceMethod("eList", c("eSet", "exprList"),
+setReplaceMethod("eList", c("eSet", "listOrEnv"),
                    function(object, value) {
+		       .Deprecated("assayData<-", "Biobase")
                        object@eList <- value
+			validObject(object)
                        object })
 
-setReplaceMethod("eList", c("eSet", "environment"),
+setReplaceMethod("assayData", c("eSet", "listOrEnv"),
                    function(object, value) {
-                       object@eList <- value
+                       object@assayData <- value
+			validObject(object)
                        object })
 
-setReplaceMethod("eList", c("eSet", "list"),
+if(!isGeneric("sampleNames<-")) setGeneric("sampleNames<-", function(object, value){
+               standardGeneric("sampleNames<-")})
+setReplaceMethod("sampleNames", c("eSet", "character"),
                    function(object, value) {
-                       object@eList <- value
+                       object@sampleNames <- value
+			validObject(object)
+                       object })
+setGeneric("reporterNames<-", function(object, value){
+               standardGeneric("reporterNames<-")})
+setReplaceMethod("reporterNames", c("eSet", "character"),
+                   function(object, value) {
+                       object@reporterNames <- value
+			validObject(object)
                        object })
 
 ##
 
-setReplaceMethod("exprs", "eSet",
-   function(object, value) {
-       object@eList[["exprs"]] = value
-       return(object)
-   })
+#setReplaceMethod("exprs", "eSet",
+#   function(object, value) {
+#       object@eList[["exprs"]] = value
+#       return(object)
+#   })
 
 ##An extractor for named experimental data
 
-setGeneric("getExpData", function(object, name)
-           standardGeneric("getExpData"))
+setGeneric("getExpData", function(object, name) {
+           standardGeneric("getExpData")
+})
 
 ##FIXME: how much do we want to do to ensure that these are matrices?
+## this FIXME is still valid in the new design!  I am not sure we
+## want them to be required to be matrices.
 setMethod("getExpData", c("eSet", "character"),
           function(object, name) {
-              object@eList@eList[[name]] })
-
-##this seems rather more convoluted than we want
-#setMethod("getExpData", c("eSet", "character"),
-#          function(object, name) {
-#              if( is.list(object@eList))
-#                  object@eList[[name]]
-#              else if( is.environment(object@eList) ){
-#                  ans <- try(get(name, env=object@eList,
-#                                 inherits=FALSE) )
-#                  if(inherits(ans, "try-error"))
-#                      return(NULL)
-#                  ans
-#              }
-#          })
-
-setMethod("exprs", "eSet",
-          function(object) getExpData(object, "exprs")
-          )
-
-##define a subset operator - needs to operate on all matrices
-setMethod("[", "eSet", function(x, i, j, ..., drop=FALSE) {
-    if( length(list(...)) > 0 )
-        stop("extra subscripts cannot be handled")
-    if( missing(j) )
-	pdata <- phenoData(x)
-    else
-        pdata <- phenoData(x)[j,, ..., drop=FALSE]
-    eList <- x@eList
-    isList <- is.list(eList)
-
-    if( isList )
-        eNames <- names(eList)
-    else {
-        eNames <- ls(eList)
-        outEnv <- new.env()
-    }
-    if(missing(j) ) {
-        if( missing(i) ) {
-            neList <- eList
-        }
-        else {
-            for(nm in eNames) {
-                if( isList )
-                    eList[[nm]] <- eList[[nm]][i, ,drop=FALSE]
-                else
-                    assign(nm,
-                           get(nm, env=eList, inherits=FALSE)[i, , drop=FALSE],
-                           env=outEnv)
-            }
-        }
-    }
-    else {
-        if( missing(i) ) {
-            for(nm in eNames) {
-                if( isList )
-                    eList[[nm]] <- eList[[nm]][,j, drop=FALSE]
-                else
-                    assign(nm,
-                           get(nm, env=eList,
-                               inherits=FALSE)[, j, drop=FALSE],
-                           env=outEnv)
-            }
-        }
-        else {
-            for(nm in eNames) {
-                if( isList )
-                    eList[[nm]] <- eList[[nm]][i, j, drop=FALSE]
-                else
-                    assign(nm,
-                           get(nm, env=eList,
-                               inherits=FALSE)[i, j, drop=FALSE],
-                           env=outEnv)
-            }
-        }
-    }
-    if( isList )
-        eList(x) <- eList
-    else
-        eList(x) <- outEnv
-
-    phenoData(x) <- pdata
-    x
-})
-
-setMethod("show", "eSet", function(object ) {
-    dm <-dim(getExpData(object, "exprs"))
-    ngenes <- dm[1]
-    nsamples <- dm[2]
-    cat("New Expression Set (eSet) with \n\t", ngenes, " genes\n\t", sep="")
-    cat(nsamples, "samples\n\t")
-    show(phenoData(object))
-})
+	      .Deprecated("exprs", "Biobase")
+	      exprs(object)[[name]] })
+#              object@eList@eList[[name]] })
 
 #
 # combine generic: given an arbitrary number of arguments
 # that are eSet instances, combine into a single eSet
 # instance in a sensible way.
 #
-# current restrictions: only works for eList slots that are
+# current restrictions: only works for assayData slots that are
 # lists
 #
 # phenoData parts of combine are now in annotatedDataset.R
@@ -310,17 +292,17 @@ setMethod("show", "eSet", function(object ) {
 setMethod("combine", c("eSet", "eSet"), function(x, y, ...)
  {
 #
-# it would be nice to do a combine on the eList elements, but
-# exprList is a virtual class...
+# it would be nice to do a combine on the assayData elements, but
+# exprList is a virtual class... 
 #
- if (is.environment(eList(x))) stop("not currently supporting environment-valued eLists")
- if (!(any( c(is(x, class(eList(y))), is(y, class(eList(x)))) ) ) )
-     stop("not currently supporting eLists of different classes")
- if (!all(names(eList(x))==names(eList(y)))) stop("eLists have different element names")
+ if (is.environment(assayData(x))) stop("not currently supporting environment-valued assayData")
+ if (!(all( c(is(assayData(x), class(assayData(y))), is(assayData(y), class(assayData(x)))) ) ) )
+     stop("not currently supporting assayData of nonequivalent classes")
+ if (!all(names(assayData(x))==names(assayData(y)))) stop("assayData have different element names")
  o <- list()
- n <- names(eList(x))
- for (e in n) o[[e]] <- cbind(eList(x)[[e]], eList(y)[[e]])
- new("eSet", eList=o,
+ n <- names(assayData(x))
+ for (e in n) o[[e]] <- cbind(assayData(x)[[e]], assayData(y)[[e]])
+ new("eSet", assayData=o,
              phenoData=combine(phenoData(x), phenoData(y)))
  })
 
