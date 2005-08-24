@@ -13,13 +13,14 @@ validEset <- function(object) {
   nrep <- d[1,1]
   if (any(d[2,] != n)) return("ncol of assayData != nrow pData")
   if (length(sampleNames(object)) != n) return("length of sampleNames != nrow pData")
-  if (length(reporterNames(object)) != nrep) return("length of reporterNames != nrow assayData")
+#  if (length(reporterNames(object)) != nrep) return("length of reporterNames != nrow assayData")
   return(TRUE)
 }
 
 # following gets eSet to have a phenoData slot
 setClass("eSet", representation(assayData="listOrEnv",
-	sampleNames="character", reporterNames="character"), contains="annotatedDataset",
+	sampleNames="character", reporterNames="character",
+	description="characterORMIAME", notes="character", annotation="character"), contains="annotatedDataset",
   validity=validEset, prototype=list(assayData=list(), sampleNames=character(0),
 	reporterNames=character(0),
 	phenoData=new("phenoData")))
