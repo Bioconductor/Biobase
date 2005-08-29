@@ -25,6 +25,7 @@
 \alias{reporterNames,eSet-method}
 \alias{sampleNames,eSet-method}
 \alias{annotation<-,eSet-method}
+\alias{exprs<-,eSet,listOrEnv-method}
 \alias{sampleNames<-,eSet,character-method}
 
 \title{Class "eSet" -- general container for high-throughput assays and

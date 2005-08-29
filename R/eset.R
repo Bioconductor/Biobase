@@ -22,7 +22,7 @@ setClass("eSet", representation(assayData="listOrEnv",
 	sampleNames="character", reporterNames="character",
 	description="characterORMIAME", notes="character", annotation="character"), contains="annotatedDataset",
   validity=validEset, prototype=list(assayData=list(), sampleNames=character(0),
-	reporterNames=character(0),
+	reporterNames=character(0), description=character(0),
 	phenoData=new("phenoData")))
 
 #
@@ -226,6 +226,11 @@ setMethod("eList", "eSet", function(object) {
 # do constructions.
 setGeneric("eList<-", function(object, value){
                standardGeneric("eList<-")})
+#
+# careful here: seems that you can clobber the exprSet generic!
+#
+if(!isGeneric("exprs<-")) setGeneric("exprs<-", function(object, value){
+               standardGeneric("exprs<-")})
 setGeneric("assayData<-", function(object, value){
                standardGeneric("assayData<-")})
 
@@ -233,6 +238,13 @@ setReplaceMethod("eList", c("eSet", "listOrEnv"),
                    function(object, value) {
 		       .Deprecated("assayData<-", "Biobase")
                        object@eList <- value
+			validObject(object)
+                       object })
+
+setReplaceMethod("exprs", c("eSet", "listOrEnv"),
+                   function(object, value) {
+			.Deprecated("assayData<-", "Biobase")
+                       object@assayData <- value
 			validObject(object)
                        object })
 
