@@ -1,0 +1,160 @@
+
+%
+% NOTE -- ONLY EDIT THE .Rnw FILE!!!  The .tex file is
+% likely to be overwritten.
+%
+% \VignetteIndexEntry{eSet metadata structures}
+%\VignetteDepends{Biobase}
+%\VignetteKeywords{Expression Analysis}
+%\VignettePackage{Biobase}
+\documentclass[12pt]{article}
+
+\usepackage{amsmath,pstricks}
+\usepackage[authoryear,round]{natbib}
+\usepackage{hyperref}
+
+
+\textwidth=6.2in
+\textheight=8.5in
+%\parskip=.3cm
+\oddsidemargin=.1in
+\evensidemargin=.1in
+\headheight=-.3in
+
+\newcommand{\scscst}{\scriptscriptstyle}
+\newcommand{\scst}{\scriptstyle}
+
+\newcommand{\Rfunction}[1]{{\texttt{#1}}}
+\newcommand{\Robject}[1]{{\texttt{#1}}}
+\newcommand{\Rpackage}[1]{{\textsf{#1}}}
+\newcommand{\Rmethod}[1]{{\texttt{#1}}}
+\newcommand{\Rfunarg}[1]{{\texttt{#1}}}
+\newcommand{\Rclass}[1]{{\textit{#1}}}
+
+
+
+\bibliographystyle{plainnat}
+
+\begin{document}
+\title{eSet structures, August 2005}
+\author{VJ Carey $<$\url{stvjc@channing.harvard.edu}$>$}
+\maketitle
+
+\section{Introduction}
+
+\Rclass{exprSet} class has had a reasonable life.  We wish
+to preserve its concept of a high-throughput container with
+two major components 
+\begin{itemize}
+\item matrix of assay results 
+\item data frame of experiment-level metadata.
+\end{itemize}
+We want to extend the
+assay container structure so that there can be multiple
+matrices encoding various aspects of the assay results.
+
+The \Rclass{eSet} class is a provisional implementation
+of this extended container concept.  The current definition
+is:
+
+<<gb,results=hide>>=
+library(Biobase)
+<<lkes>>=
+getClass("eSet")
+package.version("Biobase")
+@
+
+The \Rclass{listOrEnv} virtual class is essentially
+the \textit{raison d'$\hat{e}$tre} of this new
+structure.
+<<lkle>>=
+getClass("listOrEnv")
+@
+The \texttt{assayData} slot can be occupied by either a list or
+an environment.
+
+\section{Example}
+
+We include a coercion tool, and can thus use the Golub data
+to illustrate.
+
+<<dogol>>=
+library(golubEsets)
+gmes <- as(golubMerge, "eSet")
+gmes
+@
+Note that the show method is slightly elaborated to cope with
+the added potential content of the assayData component.  The
+\Rfunction{exprs} method still works, provided that an element
+of the \texttt{assayData} slot has name \texttt{exprs}.
+<<lke>>=
+dim(exprs(gmes))
+@
+The use of \texttt{exprs} as an accessor is permitted but does
+a bit more than the analogous accessor for \Rclass{exprSet}
+objects.  Assay data are, in this example, contained in a
+named list of matrices.
+<<lkas>>=
+dim(assayData(gmes)[["exprs"]])
+@
+We can add additional information as another matrix:
+<<addit>>=
+assayData(gmes)[["se.exprs"]] <- 2*assayData(gmes)[["exprs"]]
+gmes
+@
+Subsetting operations are as expected:
+<<lksub>>=
+gmes[1:10,1:10]
+@
+
+\section{Environments for assay results}
+
+It is permissible to employ an environment containing matrices
+as the assay data container.  Here we construct the \Rclass{eSet}
+instance explicitly, notice the direct containment of
+sample names and reporter names in slots.
+<<doenv>>=
+ee <- new.env()
+assign("exprs", exprs(golubMerge), ee)
+gme <- new("eSet", assayData=ee, phenoData=phenoData(golubMerge),
+ sampleNames=sampleNames(golubMerge), reporterNames=geneNames(golubMerge))
+gme
+@
+Subsetting works as expected, and the \Rfunction{exprs} or \Rfunction{assayData} extractors
+can be used.
+<<lki>>=
+gme[1:3,1:4]
+dim(exprs(gme))
+@
+
+\section{phenoData metadata}
+
+The \Robject{varMetadata} slot of \Rclass{phenoData} helps to
+encode units or other important features of phenoData variables.
+<<dovm>>=
+pes <- phenoData(gme)
+@
+It is necessary to initialize the metadata-enabled \Rclass{phenoData}
+structure.
+<<dopes>>=
+pes <- convertVarLabels(pes)
+@
+Then metadata can be added field by field.
+<<addf>>=
+pes <- addVarMetadataEntry(pes, "PS", "units", "pct/100")
+phenoData(gme) <- pes
+getUnits(phenoData(gme), "PS")
+@
+
+\section{Session Information}
+
+The version number of R and packages loaded for generating the vignette were:
+
+\begin{verbatim}
+<<echo=FALSE,results=tex>>=
+sessionInfo()
+@
+\end{verbatim}
+
+
+\end{document}
