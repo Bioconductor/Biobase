@@ -324,3 +324,13 @@ setMethod("combine", "eSet", function(x, y, ...)
  return(x)
  })
 
+setAs("exprSet", "eSet",
+ function(from) {
+  new("eSet", assayData=list(exprs=exprs(from)),
+        phenoData=phenoData(from),
+        description=description(from),
+        annotation=annotation(from),
+        notes=notes(from),
+        sampleNames=sampleNames(from),
+        reporterNames=geneNames(from)) })
+

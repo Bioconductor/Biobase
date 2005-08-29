@@ -71,7 +71,7 @@ structure.
 getClass("listOrEnv")
 @
 The \texttt{assayData} slot can be occupied by either a list or
-an environment.
+an environment.  
 
 \section{Example}
 
