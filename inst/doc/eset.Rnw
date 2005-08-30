@@ -42,23 +42,45 @@
 
 \section{Introduction}
 
-\Rclass{exprSet} class has had a reasonable life.  We wish
-to preserve its concept of a high-throughput container with
-two major components 
+The high-throughput information that we wish to work with
+has the following general structure.
 \begin{itemize}
-\item matrix of assay results 
-\item data frame of experiment-level metadata.
+\item There are $N$ samples that have been assayed.  Sample-level
+metadata are collected roughly uniformly for all samples, and
+take the form of $p$-vectors of mixed continuous and categorical
+variables for each sample.
+\item There are $G$ reporters on which assay
+values are obtained.  $G$ can be as large as $10^7$.
+Reporter names come from a vocabulary that can be translated
+into information about biological systems.
+\item There are various forms of experiment-level metadata
+that are collected.
 \end{itemize}
-We want to extend the
-assay container structure so that there can be multiple
-matrices encoding various aspects of the assay results.
+
+The \Rclass{exprSet} class manages information of the type
+described above, with some restrictions.  In an \Rclass{exprSet}
+instance, the \texttt{exprs} slot is intended to hold a $G \times N$
+matrix of numerical assay results.  An \texttt{se.exprs} slot
+has the same dimensions and structure.  The column names and
+row names of the \texttt{exprs} slot provide sample identification
+and reporter identification.  Experiment-level metadata can be
+contained in slots called \texttt{description}, \texttt{annotation}
+and \texttt{notes}.  Sample level data are collected in a structure
+of class \texttt{phenoData}.  This has a slot called \texttt{pData}
+containing an $N \times p$ data frame, a list of \texttt{varLabels}
+that map attribute names to longer descriptive labels, and
+a data frame called \texttt{varMetadata} which can capture
+variable-level information such as units of measurement.
+
 
 The \Rclass{eSet} class is a provisional implementation
-of this extended container concept.  The current definition
+of an extended container concept.  The current definition
 is:
 
 <<gb,results=hide>>=
 library(Biobase)
+<<echo=FALSE>>=
+options(width=60)
 <<lkes>>=
 getClass("eSet")
 package.version("Biobase")
@@ -71,16 +93,23 @@ structure.
 getClass("listOrEnv")
 @
 The \texttt{assayData} slot can be occupied by either a list or
-an environment.  
+an environment.  This allows accommodation of multiple $G \times N$
+matrices with potential performance efficiencies and fewer structural
+restrictions than exist with an \Rclass{exprSet} instance.
 
 \section{Example}
 
 We include a coercion tool, and can thus use the Golub data
-to illustrate.
+to illustrate.  We will add contrived information on
+standard errors and presence calls to illustrate the
+flexibility.
 
 <<dogol>>=
 library(golubEsets)
 gmes <- as(golubMerge, "eSet")
+assayData(gmes)[["se.exprs"]] <- runif(length(exprs(gmes)),1.5,2.5)*assayData(gmes)[["exprs"]]
+ratpred <- (assayData(gmes)[["exprs"]]/assayData(gmes)[["se.exprs"]] > 2)
+assayData(gmes)[["presence"]] <- ratpred
 gmes
 @
 Note that the show method is slightly elaborated to cope with
@@ -97,15 +126,20 @@ named list of matrices.
 <<lkas>>=
 dim(assayData(gmes)[["exprs"]])
 @
-We can add additional information as another matrix:
-<<addit>>=
-assayData(gmes)[["se.exprs"]] <- 2*assayData(gmes)[["exprs"]]
-gmes
+Note the interpretation of \texttt{dim}:
+<<lkd>>=
+dim(gmes)
 @
-Subsetting operations are as expected:
+Subsetting operations perform as expected:
 <<lksub>>=
 gmes[1:10,1:10]
 @
+\section{Validity conditions}
+<<lkval>>=
+getValidity(getClass("eSet"))
+@
+I would like to have a constraint on reporterNames length
+but more discussion is needed.
 
 \section{Environments for assay results}
 
