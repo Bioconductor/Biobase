@@ -27,6 +27,8 @@
 \alias{annotation<-,eSet-method}
 \alias{exprs<-,eSet,listOrEnv-method}
 \alias{sampleNames<-,eSet,character-method}
+\alias{SW}
+\alias{swrep}
 
 \title{Class "eSet" -- general container for high-throughput assays and
 experimental metadata }
@@ -117,7 +119,17 @@ if (interactive()) {
  lk <- try(sampleNames(es2) <- letters[-1]) # not ok
  lk
  lk <- try(assayData(es2) <- assayData(es2[-1,])) # not ok
- lk
+ class(lk)
  }
+#
+# work with the swirl data
+#
+data(SW)
+data(swrep)
+data(SWPD)
+sw <- new("eSet", 
+  assayData=list( R=SW$R, G=SW$G, Rb=SW$Rb, Gb=SW$Gb), 
+  phenoData=SWPD, reporterInfo=swrep, sampleNames=as.character(1:4),
+  reporterNames=as.character(swrep$Name))
 }
 \keyword{classes}

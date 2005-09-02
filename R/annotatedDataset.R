@@ -7,7 +7,7 @@ setClass("phenoData", representation(pData="data.frame",
          validity =  function(object) {
              dm <- dim(object@pData)
              if(dm[2] != length(object@varLabels) )
-               return(FALSE)
+               return("number of varLabels not equal to number of columns of pData data.frame")
              return(TRUE)
          }
          )
@@ -67,9 +67,12 @@ setMethod("show", "phenoData",
                 cat("\t\t", nm[[i]], ": ", vL[[i]], "\n", sep="")
           })
 
+setOldClass("data.frame")
+setClassUnion("data.frameOrNULL", c("data.frame", "NULL"))
 
 ##annotatedDataset, (virtual) Superclass of exprSet, eSet and maybe more later
-setClass("annotatedDataset", representation(phenoData="phenoData","VIRTUAL"),
+setClass("annotatedDataset", representation(reporterInfo="data.frameOrNULL", 
+         phenoData="phenoData","VIRTUAL"),
          prototype=list())
 
 setReplaceMethod("$", "annotatedDataset", function(x, name, value) {
@@ -87,17 +90,29 @@ setMethod("pData", "phenoData",
 if( !isGeneric("phenoData") )
   setGeneric("phenoData", function(object)
              standardGeneric("phenoData"))
+if( !isGeneric("reporterInfo") )
+  setGeneric("reporterInfo", function(object)
+             standardGeneric("reporterInfo"))
 
 setMethod("phenoData", "annotatedDataset", function(object)
           object@phenoData)
+setMethod("reporterInfo", "annotatedDataset", function(object)
+          object@reporterInfo)
 
 if( !isGeneric("phenoData<-") )
   setGeneric("phenoData<-", function(object, value)
              standardGeneric("phenoData<-"))
+if( !isGeneric("reporterInfo<-") )
+  setGeneric("reporterInfo<-", function(object, value)
+             standardGeneric("reporterInfo<-"))
 
 setReplaceMethod("phenoData", c("annotatedDataset", "phenoData"),
                  function(object, value) {
                      object@phenoData <- value
+                     object })
+setReplaceMethod("reporterInfo", c("annotatedDataset", "data.frame"),
+                 function(object, value) {
+                     object@reporterInfo <- value
                      object })
 
 ##method for pData

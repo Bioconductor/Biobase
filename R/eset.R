@@ -20,10 +20,11 @@ validEset <- function(object) {
 # following gets eSet to have a phenoData slot
 setClass("eSet", representation(assayData="listOrEnv",
 	sampleNames="character", reporterNames="character",
-	description="characterORMIAME", notes="character", annotation="character"), contains="annotatedDataset",
+	description="characterORMIAME", notes="character", annotation="character",
+        history="character"), contains="annotatedDataset",
   validity=validEset, prototype=list(assayData=list(), sampleNames=character(0),
 	reporterNames=character(0), description=character(0),
-	phenoData=new("phenoData")))
+	phenoData=new("phenoData"), reporterInfo=data.frame()))
 
 #
 # so now Z <- new("eSet", X, phenoData=Y) will work, as long as X
@@ -302,6 +303,7 @@ setMethod("getExpData", c("eSet", "character"),
 #
 # phenoData parts of combine are now in annotatedDataset.R
 
+ 
 setMethod("combine", c("eSet", "eSet"), function(x, y, ...)
  {
 #
@@ -316,7 +318,8 @@ setMethod("combine", c("eSet", "eSet"), function(x, y, ...)
  n <- names(assayData(x))
  for (e in n) o[[e]] <- cbind(assayData(x)[[e]], assayData(y)[[e]])
  new("eSet", assayData=o,
-             phenoData=combine(phenoData(x), phenoData(y)))
+             phenoData=combine(phenoData(x), phenoData(y)), reporterInfo=rbind(reporterInfo(x),
+						reporterInfo(y)))
  })
 
 setMethod("combine", "eSet", function(x, y, ...)
