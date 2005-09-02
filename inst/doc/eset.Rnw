@@ -40,6 +40,34 @@
 \author{VJ Carey $<$\url{stvjc@channing.harvard.edu}$>$}
 \maketitle
 
+\section{Preliminaries}
+
+There is a need to expand the capabilities of \Rclass{exprSet}, the primary
+multiassay container class in Biobase:
+\begin{itemize}
+\item we should have the ability to have multiple matrices of assay results,
+where rows correspond to reporters, columns correspond to samples
+\item we should have the  ability to have fairly rich metadata content
+for both samples and reporters
+\item we should have the ability to make use of pass-by-reference performance
+with large assay data structures
+\end{itemize}
+We are open to other concerns about container design and would like developers
+to consider the following questions:
+\begin{itemize}
+\item what sorts of reporter data structures and functionalities would
+be of interest?  Use cases would be helpful
+\item are there compelling concepts of auditability of these structures 
+that you would like to address?  I added a character slot `history' in
+which one can place a vector of strings, capturing for example
+results of match.call()
+\item how should we handle geneNames, reporterNames, sampleNames data?  Currently
+I have independent slots for reporterNames and sampleNames, but this information
+could be stored as rownames/colnames of the reporterInfo and phenoData structures.
+\end{itemize}
+Please discuss openly on the bioc-devel list.
+
+
 \section{Introduction}
 
 The high-throughput information that we wish to work with
@@ -47,17 +75,18 @@ has the following general structure.
 \begin{itemize}
 \item There are $N$ samples that have been assayed.  Sample-level
 metadata are collected roughly uniformly for all samples, and
-take the form of $p$-vectors of mixed continuous and categorical
+take the form of $q$-vectors of mixed continuous and categorical
 variables for each sample.
 \item There are $G$ reporters on which assay
 values are obtained.  $G$ can be as large as $10^7$.
 Reporter names come from a vocabulary that can be translated
-into information about biological systems.
+into information about biological systems.  
 \item There are various forms of experiment-level metadata
 that are collected.
 \end{itemize}
 
-The \Rclass{exprSet} class manages information of the type
+In Bioconductor 1.6,
+the \Rclass{exprSet} class managed information of the type
 described above, with some restrictions.  In an \Rclass{exprSet}
 instance, the \texttt{exprs} slot is intended to hold a $G \times N$
 matrix of numerical assay results.  An \texttt{se.exprs} slot
@@ -67,7 +96,7 @@ and reporter identification.  Experiment-level metadata can be
 contained in slots called \texttt{description}, \texttt{annotation}
 and \texttt{notes}.  Sample level data are collected in a structure
 of class \texttt{phenoData}.  This has a slot called \texttt{pData}
-containing an $N \times p$ data frame, a list of \texttt{varLabels}
+containing an $N \times q$ data frame, a list of \texttt{varLabels}
 that map attribute names to longer descriptive labels, and
 a data frame called \texttt{varMetadata} which can capture
 variable-level information such as units of measurement.
@@ -86,16 +115,48 @@ getClass("eSet")
 package.version("Biobase")
 @
 
-The \Rclass{listOrEnv} virtual class is essentially
-the \textit{raison d'$\hat{e}$tre} of this new
-structure.
+The \Rclass{listOrEnv} virtual class confers flexibility
+on the assay data container component.
 <<lkle>>=
 getClass("listOrEnv")
 @
 The \texttt{assayData} slot can be occupied by either a list or
 an environment.  This allows accommodation of multiple $G \times N$
-matrices with potential performance efficiencies and fewer structural
-restrictions than exist with an \Rclass{exprSet} instance.
+matrices representing assay data.
+Environments can be used to obtain pass-by-reference
+semantics.  Both list and environment representations
+for assay data relax structural
+restrictions that exist with an \Rclass{exprSet} instance.
+
+\section{Annotated dataset class}
+
+One superclass from which \Rclass{eSet} inherits is
+\Rclass{annotatedDataset}.
+<<lkad>>=
+getClass("annotatedDataset")
+@
+A variety of operators such as \verb+[[+ and \verb+$+ are
+defined for objects of classes that extend \Rclass{annotatedDataset}.
+See the help page on this class.
+
+A key formal container conferred by \Rclass{annotatedDataset} inheritance is
+\Rclass{phenoData}.
+<<lkpd>>=
+getClass("phenoData")
+@
+The \Rclass{phenoData} slots are \texttt{pData}, the $N \times q$ data frame
+holding sample level non-assay information, \texttt{varLabels}, a named
+list of $q$ variable labels, and \texttt{varMetadata}, a data frame of
+arbitrary dimensions that provides additional information on phenoData variables.
+See section \ref{varmet} below for an example.
+
+In addition to the \Rclass{phenoData} container, we now allow a
+\texttt{reporterInfo} slot to hold a data.frame of $G$ rows with
+metadata about reporters.  The intention is that columns in
+\texttt{reporterInfo} will likely hold factors to facilitate
+splitting up the reporter set, into control and active reporters,
+for example.
+
 
 \section{Example}
 
@@ -141,6 +202,22 @@ getValidity(getClass("eSet"))
 I would like to have a constraint on reporterNames length
 but more discussion is needed.
 
+Let's illustrate the use of the reporterInfo construct.  Suppose
+we wish to make it convenient to bind the gene symbols with the
+data.
+<<dobi>>=
+library(hu6800)
+gs <- unlist(mget(reporterNames(gmes), hu6800SYMBOL))
+gs <- data.frame(name=gs)
+rownames(gs) <- reporterNames(gmes)
+reporterInfo(gmes) <- gs
+@
+Now let's restrict our eSet to those reporters for which
+symbols contain the substring \texttt{NFK}.
+<<donfk>>=
+gmes[ grep("NFK", as.character(reporterInfo(gmes)$name)) , ]
+@
+
 \section{Environments for assay results}
 
 It is permissible to employ an environment containing matrices
@@ -162,6 +239,7 @@ dim(exprs(gme))
 @
 
 \section{phenoData metadata}
+\label{varmet}
 
 The \Robject{varMetadata} slot of \Rclass{phenoData} helps to
 encode units or other important features of phenoData variables.
@@ -179,6 +257,10 @@ pes <- addVarMetadataEntry(pes, "PS", "units", "pct/100")
 phenoData(gme) <- pes
 getUnits(phenoData(gme), "PS")
 @
+It would be possible to have a reporter metadata structure as well.
+This could be used for preserving information on, e.g., the version
+of the mapping between reporter IDs and gene symbols.  Before adding
+this feature I want to hear reactions from the community.
 
 \section{Session Information}
 
