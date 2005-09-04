@@ -27,8 +27,10 @@
 \alias{annotation<-,eSet-method}
 \alias{exprs<-,eSet,listOrEnv-method}
 \alias{sampleNames<-,eSet,character-method}
+\alias{coerce,exprSet,eSet-method}
 \alias{SW}
 \alias{swrep}
+\alias{golubMergeSub}
 
 \title{Class "eSet" -- general container for high-throughput assays and
 experimental metadata }
@@ -68,7 +70,10 @@ matrices and phenoData components }
 }
 %\references{ ~put references to the literature/web site here ~ }
 \author{ VJ Carey after initial design by Robert Gentleman }
-\note{ \code{listOrEnv} is a (virtual) class union. }
+\note{ \code{listOrEnv} is a (virtual) class union. 
+
+\code{golubMergeSub} is an \code{exprSet} example that can be coerced
+to \code{eSet}; see the eset.Rnw vignette..}
 
 % ~Make other sections like Warning with \section{Warning }{....} ~
 
