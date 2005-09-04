@@ -166,8 +166,8 @@ standard errors and presence calls to illustrate the
 flexibility.
 
 <<dogol>>=
-library(golubEsets)
-gmes <- as(golubMerge, "eSet")
+data(golubMergeSub)
+gmes <- as(golubMergeSub, "eSet")
 assayData(gmes)[["se.exprs"]] <- runif(length(exprs(gmes)),1.5,2.5)*assayData(gmes)[["exprs"]]
 ratpred <- (assayData(gmes)[["exprs"]]/assayData(gmes)[["se.exprs"]] > 2)
 assayData(gmes)[["presence"]] <- ratpred
@@ -226,9 +226,9 @@ instance explicitly, notice the direct containment of
 sample names and reporter names in slots.
 <<doenv>>=
 ee <- new.env()
-assign("exprs", exprs(golubMerge), ee)
-gme <- new("eSet", assayData=ee, phenoData=phenoData(golubMerge),
- sampleNames=sampleNames(golubMerge), reporterNames=geneNames(golubMerge))
+assign("exprs", exprs(golubMergeSub), ee)
+gme <- new("eSet", assayData=ee, phenoData=phenoData(golubMergeSub),
+ sampleNames=sampleNames(golubMergeSub), reporterNames=geneNames(golubMergeSub))
 gme
 @
 Subsetting works as expected, and the \Rfunction{exprs} or \Rfunction{assayData} extractors
