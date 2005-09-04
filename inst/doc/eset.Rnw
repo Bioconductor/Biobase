@@ -206,8 +206,8 @@ Let's illustrate the use of the reporterInfo construct.  Suppose
 we wish to make it convenient to bind the gene symbols with the
 data.
 <<dobi>>=
-library(hu6800)
-gs <- unlist(mget(reporterNames(gmes), hu6800SYMBOL))
+data(bbsym)
+gs <- unlist(mget(reporterNames(gmes), bbsym))
 gs <- data.frame(name=gs)
 rownames(gs) <- reporterNames(gmes)
 reporterInfo(gmes) <- gs
