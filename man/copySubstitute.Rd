@@ -1,13 +1,17 @@
 \name{copySubstitute}
 \alias{copySubstitute}
-\title{Copy between connections or from an to files with configure-like
-  name-value substitution}
+
+\title{Copy Between Connections or Files with Configure-Like Name-Value Substitution}
+
 \description{
   Copy files, directory trees or between connections and
-  replace all occurences of a symbol by the corresponding value. 
+  replace all occurences of a symbol by the corresponding value.
 }
-\usage{copySubstitute(src, dest, symbolValues, symbolDelimiter="@",
-allowUnresolvedSymbols=FALSE, recursive = FALSE, removeExtension = "\\.in$")}
+
+\usage{
+copySubstitute(src, dest, symbolValues, symbolDelimiter="@", allowUnresolvedSymbols=FALSE, recursive = FALSE, removeExtension = "\\.in$")
+}
+
 \arguments{
   \item{src}{Source, either a character vector with filenames and/or
     directory names, or a connection object.}
@@ -33,14 +37,14 @@ allowUnresolvedSymbols=FALSE, recursive = FALSE, removeExtension = "\\.in$")}
   \code{bar}, and symbolDelimiter is \code{@}, then any occurence of
   \code{@FOO@} is replaced by \code{bar}. This applies both the text
   contents of the files in \code{src} as well as to the filenames. See examples.
-  
+
   If \code{recursive} is \code{FALSE}, both \code{src} and \code{dest}
   must be connection or a filenames. The text in \code{src} is read
   through the function \code{\link[base:readLines]{readLines}},
   symbols are replaced by their values, and the result is written to
-  \code{dest} through the function \code{\link[base:readLines]{writeLines}}. 
+  \code{dest} through the function \code{\link[base:readLines]{writeLines}}.
 
-  If \code{recursive} is \code{TRUE}, 
+  If \code{recursive} is \code{TRUE},
   \code{\link[Biobase:copySubstitute]{copySubstitute}}
   works recursively down a directory tree (see details and example).
   \code{src} must be a character vector with multiple filenames or
@@ -67,7 +71,7 @@ outfile = tempfile()
 writeLines(text=c("We will perform in @WHAT@:",
   "So, thanks to @WHOM@ at once and to each one,",
   "Whom we invite to see us crown'd at @WHERE@."),
-  con = infile) 
+  con = infile)
 
 ## create the symbol table
 z = list(WHAT="measure, time and place", WHOM="all", WHERE="Scone")
@@ -81,7 +85,7 @@ readLines(outfile)
 
 
 ##--------------------------------------------------------------
-## This is a slightly more complicated example that demonstrates 
+## This is a slightly more complicated example that demonstrates
 ## how copySubstitute works on nested directories
 ##--------------------------------------------------------------
 d = tempdir()
@@ -105,7 +109,7 @@ writeLines(c("File4:", "MOON: @MOON@"),   file.path(d4, "@SUN@.txt"))
 
 ## call copySubstitute
 copySubstitute(src, dest, recursive=TRUE,
-               symbolValues = list(FOO="thefoo", BAR="thebar", 
+               symbolValues = list(FOO="thefoo", BAR="thebar",
                                    SUN="thesun", MOON="themoon"))
 
 ## view the result

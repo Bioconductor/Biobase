@@ -1,9 +1,8 @@
 \name{combine}
 \alias{combine}
-\alias{combine,phenoData,phenoData-method}
-\alias{combine,phenoData,ANY-method}
+\concept{combine phenoData}
 
-\title{Combine Data into a single object.  }
+\title{Combine Data Into a Single Object.  }
 \description{
 This generic function handles methods for combining or merging different
 Bioconductor data structures. It should, given an arbitrary number of
@@ -34,12 +33,8 @@ combine(x, y, ...)
   (in class terms) of the input values. This will contain the
   appropriate combination of the data in the input values.
 }
-\author{Biocore }
+\author{Biocore}
 
 \seealso{\code{\link{merge}}}
 
-\examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-}
 \keyword{manip}

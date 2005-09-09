@@ -1,6 +1,6 @@
 \name{openVignette}
 \alias{openVignette}
-\title{ Open a selected Vignette }
+\title{ Open a Vignette or Show Vignette Selection Menu}
 \description{
   Using the data returned by \code{vignette} this function provides a
   simple easy to use interface for opening vignettes.

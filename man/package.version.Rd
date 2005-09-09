@@ -1,6 +1,6 @@
 \name{package.version}
 \alias{package.version}
-\title{A function to report package versions}
+\title{Report Version of a Package}
 \description{
   Will report the version number of a requested installed package
 }

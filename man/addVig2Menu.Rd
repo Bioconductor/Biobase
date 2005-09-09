@@ -1,11 +1,13 @@
 \name{addVigs2WinMenu}
 \alias{addVigs2WinMenu}
-\alias{addVig2Menu}
-\alias{addVig4Win}
-\alias{addVig4Unix}
-\alias{addNonExisting}
-\alias{addPDF2Vig}
-\title{Add menu items to an existing/new menu of a window}
+
+\concept{addVig2Menu}
+\concept{addVig4Win}
+\concept{addVig4Unix}
+\concept{addNonExisting}
+\concept{addPDF2Vig}
+
+\title{Add Menu Items to an Existing/New Menu of Window}
 \description{
   This function adds a menu item for a package's vignettes.
 }
@@ -18,9 +20,7 @@ addVigs2WinMenu(pkgName)
     R package}
 }
 \details{
-  The original functionality, \code{addVig2Menu} and related functions
-  have been replaced by \code{addVigs2WinMenu}, please use those
-  instead.
+   The original functions \code{addVig2Menu}, \code{addVig4Win}, \code{addVig4Unix}, \code{addNonExisting}, \code{addPDF2Vig} have been replaced by \code{addVigs2WinMenu}, please use those instead.
 }
 \value{
   The functions do not return any value.

@@ -1,11 +1,15 @@
 \name{createPackage}
 \alias{createPackage}
-\title{Create a package directory from a template, with symbol-value substitution}
+
+\title{Create a Package Directory from a Template}
+
 \description{
   Create a package directory from a template, with symbol-value substitution
 }
-\usage{createPackage(pkgname, destinationDir, originDir, symbolValues,
-                     unlink=FALSE, quiet=FALSE)}
+\usage{
+createPackage(pkgname, destinationDir, originDir, symbolValues, unlink=FALSE, quiet=FALSE)
+}
+
 \arguments{
   \item{pkgname}{Character. The name of the package to be written.}
   \item{destinationDir}{Character. The path to a directory where the
@@ -16,7 +20,7 @@
     \code{data}. In all files and filenames, symbols will be replaced
     by their respectives values, see the parameter \code{symbolValues}.}
   \item{symbolValues}{Named list of character strings. The symbol-to-value
-    mapping. See 
+    mapping. See
     \code{\link[Biobase:copySubstitute]{copySubstitute}} for details.}
   \item{unlink}{Logical. If \code{TRUE}, and \code{destinationDir}
     already contains a file or directory with the name \code{pkgname},
@@ -27,9 +31,9 @@
 
 \details{The intended use of this function is for the automated mass
   production of data packages, such as the microarray annotation,
-  CDF, and probe sequence packages. An example is in the function 
+  CDF, and probe sequence packages. An example is in the function
   \code{\link[matchprobes:makeProbePackage]{makeProbePackage}}.
-  
+
   No syntactic or other checking of the package is performed. For this,
   use R CMD check.
 

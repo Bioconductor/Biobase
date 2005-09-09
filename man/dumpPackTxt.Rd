@@ -1,26 +1,26 @@
 \name{dumpPackTxt}
 \alias{dumpPackTxt}
-\title{dump textual description of a package  }
-\description{dump textual description of a package
+
+\title{Dump Textual Description of a Package  }
+
+\description{
+   Dump textual description of a package
 }
 \usage{
 dumpPackTxt(package)
 }
 \arguments{
-  \item{package}{ character string naming an R package}
+  \item{package}{Character string naming an R package}
 }
 \details{
 dumps DESCRIPTION and INDEX files from package sources
 }
 \value{
-writes to stdout
+   \code{stdout} output
 }
-\references{  }
 \author{<stvjc@channing.harvard.edu>}
+
 \note{ Other approaches using formatDL are feasible }
-
-
-\seealso{  }
 
 \examples{
 dumpPackTxt("stats")

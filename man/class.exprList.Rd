@@ -1,9 +1,12 @@
-\name{exprList-class}
+\name{class:exprList}
 \docType{class}
-\alias{exprList-class}
-\alias{eList<-,eSet,exprList-method}
+\alias{class:exprList}
+\concept{exprList}
+\concept{eSet methods}
+\concept{exprSet methods}
 
-\title{Class "exprList" a class union of a list and an environment. }
+\title{Class Union of a List and an Environment}
+
 \description{
 The \code{exprList} class defines a \code{classUnion} for \code{list}s
 and \code{environment}s. This allows programmers to choose their
@@ -14,17 +17,16 @@ around objects that might get altered.
 
 }
 \section{Objects from the Class}{A virtual Class: No objects may be
-  created from it.} 
+  created from it.}
 \section{Methods}{
   \describe{
-    \item{eList<-}{\code{signature(object = "eSet", value =
-	"exprList")}:a replacement method for \code{eSet}s. }
-  } 
+    \item{\code{eList(eSet, exprList)<-}:}{A replacement method for \code{eSet}s. }
+  }
 }
 \author{Biocore }
 
 \seealso{
-\code{\link{list}},\code{\link{environment}},\code{\link{eSet-class}} }
+\code{\link{list}},\code{\link{environment}},\code{\link{eSet}} }
 \examples{
 }
 \keyword{classes}

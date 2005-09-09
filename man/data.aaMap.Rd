@@ -1,11 +1,11 @@
-\name{aaMap}
+\name{data:aaMap}
+\alias{data:aaMap}
 \alias{aaMap}
 \non_function{}
-\title{ names and characteristics of amino acids }
+\title{Dataset: Names and Characteristics of Amino Acids }
 \usage{data(aaMap)}
 \description{
-The \code{aaMap} data frame has 20 rows and 6 columns.
-Include elementary information about amino acids.
+The \code{aaMap} data frame has 20 rows and 6 columns. Includes elementary information about amino acids.
 }
 \format{
   This data frame contains the following columns:
@@ -18,12 +18,8 @@ Include elementary information about amino acids.
     \item{acidic}{logical: side chain is acidic at pH 7}
   }
 }
-\details{
-}
 \source{
 Nei M and Kumar S: Molecular evolution and phylogenetics (Oxford 2000), Table 1.2
-}
-\references{
 }
 \examples{
 data(aaMap)

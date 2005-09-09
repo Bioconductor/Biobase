@@ -1,6 +1,6 @@
 \name{openPDF}
 \alias{openPDF}
-\title{A function to view PDF files}
+\title{Open PDF Files in a Standard Viewer}
 \description{
 Displays the specified PDF file.
 }
