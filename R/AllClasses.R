@@ -118,7 +118,7 @@ setClass("eSet",
       assayData     = "listOrEnv",
       sampleNames   = "character",
       reporterNames = "character",
-      description   = "characterORMIAME",
+      description   = "MIAME",
       notes         = "character",
       annotation    = "character",
       history       = "character"
@@ -129,7 +129,7 @@ setClass("eSet",
       assayData     = list(),
       sampleNames   = character(0),
       reporterNames = character(0),
-      description   = character(0),
+      description   = new("MIAME"),
       phenoData     = new("phenoData"),
       reporterInfo  = data.frame()
    )

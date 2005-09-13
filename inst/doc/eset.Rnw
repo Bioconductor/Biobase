@@ -1,4 +1,3 @@
-
 %
 % NOTE -- ONLY EDIT THE .Rnw FILE!!!  The .tex file is
 % likely to be overwritten.
@@ -39,6 +38,7 @@
 \title{eSet structures, August 2005}
 \author{VJ Carey $<$\url{stvjc@channing.harvard.edu}$>$}
 \maketitle
+\tableofcontents
 
 \section{Preliminaries}
 
@@ -262,7 +262,61 @@ This could be used for preserving information on, e.g., the version
 of the mapping between reporter IDs and gene symbols.  Before adding
 this feature I want to hear reactions from the community.
 
+%--------------------------------------------------
+\section{A suggestion for a basic history mechanism}
+%--------------------------------------------------
+It is desirable that an \Rclass{eSet} object contains some basic information
+about itself. Note that the goal of such a history mechanism is less than
+complete reproducibility: for this we have the vignettes (Sweave) technology.
+
+Currently, preprocessing functions in the \Rpackage{affy} and \Rpackage{vsn}
+packages already do add some information on what they did to their returned
+\Rclass{exprSet} objects. For example, see the last dozen lines in the function
+\Rfunction{vsn} in the file vsn/R/vsn.R of the package \Rpackage{vsn}.
+Here is a toy example for an \Rclass{eSet} object:
+%
+<<proposedBasicHist1,echo=TRUE, results=hide>>=
+setGeneric("wonderfulPreproc", 
+  function(x, lambda) standardGeneric("wonderfulPreproc"))
+setMethod("wonderfulPreproc", c("eSet", "numeric"),
+  function(x, lambda) {
+    y = assayData(x)$exprs
+    gamma = mean(log(diag(t(y)%*%y)))
+    assayData(x)$exprs = 1/(1+(y^lambda)/gamma)
+
+    cmt = list(
+     comment = paste("Processed by wonderful processing method on", date()),
+     lambda = lambda,
+     gamma = gamma)
+
+    x@description@preprocessing = append(x@description@preprocessing, 
+       cmt)
+    return(x)
+})
+Pgme = wonderfulPreproc(gme, pi/2)
+@ 
+The resulting \Robject{description} slot then looks as follows.
+<<proposedBasicHist2>>=
+description(Pgme)
+description(Pgme)@preprocessing
+@
+
+%%%%
+\subsection{Open question}
+The mechanism proposed above allows to put arbitrary objects into the 
+list \Robject{preprocessing}. In particular, these can then be interrogated
+and used by subsequent processing functions. For an example, please see the 
+first dozen lines in the function
+\Rfunction{meanSdPlot} in the file vsn/R/meanSdPlot.R of 
+the package \Rpackage{vsn}.
+
+But how does this relate to the \Robject{history} slot in the \Rclass{eSet},
+which is simply of class character?
+
+ 
+%--------------------------------------------------
 \section{Session Information}
+%--------------------------------------------------
 
 The version number of R and packages loaded for generating the vignette were:
 

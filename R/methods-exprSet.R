@@ -374,9 +374,13 @@ read.exprSet <- function(exprs, se.exprs, phenoData, annotation,
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setAs("exprSet", "eSet",
    function(from) {
+     desc=description(from)
+     if(!is(desc, "MIAME"))
+       desc=new("MIAME", other=list(comment="Converted from exprSet",
+                          characterDescription=desc))
       new("eSet", assayData=list(exprs=exprs(from)),
           phenoData=phenoData(from),
-          description=description(from),
+          description=desc,
           annotation=annotation(from),
           notes=notes(from),
           sampleNames=sampleNames(from),
