@@ -313,6 +313,40 @@ the package \Rpackage{vsn}.
 But how does this relate to the \Robject{history} slot in the \Rclass{eSet},
 which is simply of class character?
 
+%%%%
+\subsubsection{Seth's comments}
+I think the \Robject{history} slot should be a list.  I can see two
+possible ways to go with this.
+
+Method I: Use automation.  Modify every replacement function for
+\Rclass{eSet} to optionally accept a \Robject{history} argument.  The
+default is to grab the current or parent call (as a \Rclass{call}
+object) and append this to the \Robject{history} list.  The benefit is
+we get history tracking without any work.  It remains to be seen
+whether this is useful.  
+
+Method II: Require intervention by implementors to record history.
+Here we could define an \Rclass{CallLoggingObject} class that has a
+\Robject{history} slot (list).  The \Rclass{eSet} class would extend
+\Rclass{CallLoggingObject} as would any class wanting to log history.
+Usage would look like:
+
+\begin{verbatim}
+## record history
+logCall(object) <- aCall
+
+## access history
+callHistory(object)
+\end{verbatim}
+
+The big disadvantage, is that users/developers have to call
+\Robject{logCall} or else history is not recorded.
+
+In recent discussions, Robert prefers method I because it doesn't
+require changes to preprocessing or other code.  It should be fairly
+easy to implement.  We can see if the history log it produces is
+useful and iterate.
+
  
 %--------------------------------------------------
 \section{Session Information}
@@ -322,7 +356,7 @@ The version number of R and packages loaded for generating the vignette were:
 
 \begin{verbatim}
 <<echo=FALSE,results=tex>>=
-sessionInfo()
+toLatex(sessionInfo())
 @
 \end{verbatim}
 
