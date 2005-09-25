@@ -189,5 +189,12 @@ copySubstitute = function(src, dest, symbolValues,
    nm  = paste(symbolDelimiter, names(symbolValues), symbolDelimiter, sep="")
    cpSubs(src, dest)
 }
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# ==========================================================================
+note <- function(...) {
+    ## A "less drastic" version of warning()
+    if (nargs() > 0) {
+        message <- paste("Note:",...,"\n")
+        cat(message)
+    }
+}
 

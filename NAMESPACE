@@ -25,7 +25,7 @@ export(Aggregate, addNonExisting, addPDF2Vig,
        copyEnv, copySubstitute, reverseSplit, 
        createPackage, df2pD, dumpPackTxt, esApply, 
        getPkgVigs, l2e, listLen,
-       multiassign, openPDF, openVignette, "package.version",
+       multiassign, note, openPDF, openVignette, "package.version",
        rowMax, rowMedians, rowMin, rowQ,
        read.exprSet, read.phenoData, read.MIAME, read.pD,
        strbreak, testBioCConnection)
