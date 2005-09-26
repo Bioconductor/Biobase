@@ -35,6 +35,18 @@
     BioC <- getOption("BioC")
     BioC$Base <- Base
     options("BioC"=BioC)
+
+}
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+biocReposList <- function() {
+    ## Locations of Bioconductor release repositories
+    reposList <- c(bioc="http://bioconductor.org/packages/bioc/1.7",
+                   aData="http://bioconductor.org/packages/data/annotate/1.7",
+                   eData="http://bioconductor.org/packages/data/experiment/1.7",
+                   oh="http://bioconductor.org/packages/omegahat/1.7",
+                   li="http://bioconductor.org/packages/lindsey/1.7",
+                   cran="http://cran.fhcrc.org")
+    reposList
 }
 # ==========================================================================
 # RG:
