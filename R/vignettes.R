@@ -78,72 +78,34 @@ addVigs2WinMenu <- function(pkgName) {
     }
 }
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# DEPRECATED (all below)
+# DEFUNCT (all below)
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 addVig2Menu <- function(itemName, menuName = "Vignettes", itemAction = ""){
-    .Deprecated("addVigs2WinMenu")
-    os <- .Platform$OS.type
-    switch(os,
-           "windows" = addVig4Win(menuName, itemName,itemAction ),
-           "unix" = addVig4Unix(menuName, itemName, itemAction),
-           stop("Unknown operating system"))
+    .Defunct("addVigs2WinMenu")
 }
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Add menu for windows
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 addVig4Win <- function(menuName, itemName, itemAction){
-    .Deprecated("addVigs2WinMenu")
-    options(show.error.messages = FALSE)
-    tryMe <- try(winMenuAddItem(menuName, itemName, itemAction))
-    options(show.error.messages = TRUE)
-    if(inherits(tryMe, "try-error")){
-        # Menu does not exist for the item. Add menus
-        addNonExisting(menuName)
-        winMenuAddItem(menuName, itemName, itemAction)
-    }
+    .Defunct("addVigs2WinMenu")
 }
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Add menu for a window in Unix
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 addVig4Unix <- function(menuName, itemName, itemAction){
-   .Deprecated("addVigs2WinMenu")
-   # "Do not know what to do yet"
+   .Defunct("addVigs2WinMenu")
 }
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Find and add all the non-existing menu elelments
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 addNonExisting <- function(menuName){
-    .Deprecated("addVigs2WinMenu")
-    temp <- menuName
-    menus <- unlist(strsplit(menuName, "/"))
-    counter <- 1
-    # Find and add the first missing menu along the menu tree
-    repeat{
-        options(show.error.messages = FALSE)
-        tryMe <- try(winMenuAdd(temp))
-        options(show.error.messages = TRUE)
-        if(inherits(tryMe, "try-error")){
-            temp <- paste(menus[1:(length(menus) - counter)], sep = "",
-                          collapse = "/")
-            counter <- counter + 1
-        }else{
-            break
-        }
-    }
-    # Add the rest menus
-    if(counter > 1){
-        for(i in ((length(menus) - counter + 2):length(menus))){
-            temp <-  paste(menus[1:i], sep = "", collapse = "/")
-            winMenuAdd(temp)
-        }
-    }
+    .Defunct("addVigs2WinMenu")
 }
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Add click-able menu items to view the pdf files of a package
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 addPDF2Vig <- function(pkgName){
-    .Deprecated("addVigs2WinMenu")
-    addVigs2WinMenu(pkgName)
+    .Defunct("addVigs2WinMenu")
 }
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
