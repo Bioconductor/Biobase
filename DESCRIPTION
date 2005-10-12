@@ -1,7 +1,7 @@
 Package: Biobase
 Title: Biobase: Base functions for Bioconductor
-Version: 1.7.4
-Date: 13 September 2005
+Version: 1.7.7
+Date: 2005-10-11
 Author: R. Gentleman, V. Carey
 Description: Functions that are needed by many other packages or which replace R functions. Suggests: widgetTools, tkWidgetsc
 Depends: R (>= 2.2.0), tools, methods

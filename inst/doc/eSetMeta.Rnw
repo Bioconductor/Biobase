@@ -30,8 +30,6 @@
 \newcommand{\Rfunarg}[1]{{\texttt{#1}}}
 \newcommand{\Rclass}[1]{{\textit{#1}}}
 
-
-
 \bibliographystyle{plainnat}
 
 \begin{document}
@@ -72,16 +70,16 @@ to specify conveniently.
 Metadata structures and conventions can help to
 achieve standards for representation and decoding
 of data.  To continue with the example, we use
-the eset example data.
+the exSet example data.
 <<loades,results=hide>>=
 library(Biobase)
-data(eset)
+data(exSet)
 <<lkGol>>=
-eset
+exSet
 @
 We will extract the \Rclass{phenoData} component:
 <<getPheno>>=
-pes <- phenoData(eset)
+pes <- phenoData(exSet)
 @
 A utility called \Rfunction{convertVarLabels}
 will upgrade the \Rclass{phenoData} component
@@ -93,12 +91,12 @@ varMetadata(pes)
 Arbitrarily many metadata entries may be added for
 any variable.
 <<addUn>>=
-pes <- addVarMetadataEntry(pes, "cov1", "units", "inches")
+pes <- addVarMetadataEntry(pes, "weight", "units", "pounds")
 @
 The specific metadata attribute ``units'' can be
 ascertained at the \Rclass{phenoData} level:
 <<lkUn>>=
-getUnits(pes, "cov1")
+getUnits(pes, "weight")
 @
 The metadata container is currently a data.frame.
 For very general programmatic manipulation of metadata,
@@ -131,6 +129,29 @@ named \verb+varLabel+.  Ultimately the varLabels
 component of phenoData may be eliminated in favor
 of varMetadata conventions.
 
+\section{Details on \Rfunarg{reporterInfo} slot}
+
+\Rfunarg{reporterInfo} slot is intended to provide a facility for describing the reporters (probes) on a chip.  
+It is symmetric to the \Rfunarg{phenoData} slot, except that while \Rfunarg{phenoData} describes
+the samples, \Rfunarg{reporterInfo} describes the reporters.  
+The object in the \Rfunarg{reporterInfo} slot is a one-column \Robject{data.frame} object.  
+Each row in the object represents a probe set in the chip.  
+The values in the \Robject{data.frame} object are the predefined types for those probe sets.  
+\Rmethod{reporterInfo} could extract the \Robject{data.frame} object from the \Rclass{exprSet} obect.  
+
+<<exSet.reporterInfo>>=
+reporter <- reporterInfo(exSet)
+head(reporter)
+levels(reporter[,1])
+@ 
+
+We can use the information in \Rfunarg{reporterInfo} slot to select probe sets by types.  
+
+<<exSet.reporterInfo.group>>=
+probeQC <- reporter[,1]=="QC"
+exSet[probeQC,]
+@ 
+
 \section{Details on the eMetadata container
 for \Rclass{eSet} objects}
 
@@ -159,11 +180,11 @@ The following shows the basic manipulations currently
 available; see the eSet class man page for additional
 methods.
 <<lkEs>>=
-data(eset)
+data(exSet)
 md <- data.frame(name="exprs", etype="random numbers")
-#newe <- new("exprList", eList=list(exprs=exprs(eset)),
+#newe <- new("exprList", eList=list(exprs=exprs(exSet)),
 #        eMetadata=md)
-#es1 <- new("eSet", eList=newe, phenoData=phenoData(eset))
+#es1 <- new("eSet", eList=newe, phenoData=phenoData(exSet))
 #es1
 #eMetadata(es1)
 #eList(es1)

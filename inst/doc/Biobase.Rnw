@@ -138,29 +138,84 @@ set. It consists of expression level data for 500 genes on 26
 patients. The data can be accessed with the command
 \verb+data(geneData)+.
 There are three artificial covariates provided as well.
-These can be accessed using \verb+data(geneCov)+ once the Biobase
+These can be accessed using \verb+data(geneCovariate)+ once the Biobase
 library is attached.
 
 %%FIXME: is there a better way to do this?
 The following vignette shows how to read in these data and to create
 an instance of the \verb+exprSet+ class using those data.
+The first step is to create an object of \verb+phenoData+ calss.   
+This object is used to store the phenotype data.  
+We will use the example data frame \verb+geneCovariate+ to create such an object.  
 
 <<R.hide, echo=F, results=hide>>=
 library(Biobase)
 @
 
-<<R>>=
-data(geneCov)
+%%<<R>>=
+%%data(geneCov)
+%%data(geneData)
+%%covN <- list(cov1 = "Covariate 1; 2 levels",
+%%             cov2 = "Covariate 2; 2 levels",
+%%             cov3 = "Covariate 3; 3 levels")
+%%
+%%pD <- new("phenoData", pData=geneCov, varLabels=covN)
+%%eSet <- new("exprSet", exprs=geneData, phenoData=pD)
+%%
+%%@
+
+<<R.phenoData>>=
+data(geneCovariate)
+head(geneCovariate)
+
+phenoD <- new("phenoData", pData=geneCovariate,
+              varLabels=list("sex"="Female/Male","type"="Case/Control","score"="Testing Score")
+              )
+phenoD
+@ 
+
+We also need a \verb+MIAME+ object to represent the background information, such as the names of the experimenter and laboratory, for this data set.
+
+<<R.MIAME>>=
+descr <- new("MIAME",
+             name="Pierre Fermat",
+             lab="Francis Galton Lab",
+             contact="pfermat@lab.not.exist",
+             title="Smoking-Cancer Experiment",
+             abstract="An example object of expression set (exprSet) class",
+             url="www.lab.not.exist",
+             other=list(
+               notes="An example object of expression set (exprSet) class")
+             )
+descr
+@ 
+
+Moreover, we need a \verb+data.frame+ object to group the reporters (probes) at this data set (chip).  
+The definition of probe types is applied from \textit{Affymetrix GeneChip Expression Analysis Data Analysis Fundamentals} (\url{http://www.affymetrix.com/Auth/support/downloads/manuals/data_analysis_fundamentals_manual.pdf}), and the result is stored in the \verb+data.frame+ object \Robject{reporter}.  This is a one-column data frame.  The rows represent the probe ids in the data set, and the values in the data frame are the predefined types associated with each probe.  
+
+<<R.reporterInfo>>=
+data(reporter)
+head(reporter)
+@ 
+
+The data frame \Robject{geneData}, containing 500 probes and 26 samples, is a subset of real expression data from an Affymetrix U95v2
+chip. The \Robject{seD} is a \Rclass{matrix} object containing the standard errors of \Robject{geneData}.  Finaly, we can put all objects together to create the \verb+exprSet+ object.  
+
+<<R.exSet>>=
 data(geneData)
-covN <- list(cov1 = "Covariate 1; 2 levels",
-             cov2 = "Covariate 2; 2 levels",
-             cov3 = "Covariate 3; 3 levels")
+data(seD)
+exSet <- new("exprSet",
+             exprs       = geneData,
+             se.exprs    = seD,
+             phenoData   = phenoD,
+             annotation  = "hgu95av2",
+             description = descr,
+             notes       = descr@other$notes,
+             reporterInfo = reporter
+             )
 
-pD <- new("phenoData", pData=geneCov, varLabels=covN)
-eSet <- new("exprSet", exprs=geneData, phenoData=pD)
-
-@
-
+exSet
+@ 
 
 If instead, you have the data stored in files, e.g. \texttt{.csv}
 files and want to read it in using \Rfunction{read.table} you will
