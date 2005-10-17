@@ -40,6 +40,7 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 biocReposList <- function() {
     ## Locations of Bioconductor release repositories
+    ## FIXME:SF change to 1.8 once devel repos is available
     reposList <- c(bioc="http://bioconductor.org/packages/bioc/1.7",
                    aData="http://bioconductor.org/packages/data/annotation/1.7",
                    eData="http://bioconductor.org/packages/data/experiment/1.7",
@@ -47,6 +48,23 @@ biocReposList <- function() {
                    li="http://bioconductor.org/packages/lindsey/1.7",
                    cran="http://cran.fhcrc.org")
     reposList
+}
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+biocInstall <- function(pkgs, lib, ...) {
+    if (missing(pkgs))
+      stop(paste(sQuote(pkgs), "argument is missing"))
+    if (is.null(pkgs) || length(pkgs) == 0)
+      stop("pkgs was set to ", sQuote(pkgs),
+           ".  I was expecting a non-empty character vector.")
+    if (missing(lib))
+      lib <- .libPaths()[1]
+    args <- list(...)
+    nms <- names(args)
+    if (! "dependencies" %in% nms)
+      args[["dependencies"]] <- c("Depends", "Imports")
+    reposList <- Biobase:::biocReposList()
+    args <- c(list(pkgs=pkgs, repos=reposList, lib=lib), args)
+    do.call("install.packages", args)
 }
 # ==========================================================================
 # RG:
