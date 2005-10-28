@@ -40,11 +40,11 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 biocReposList <- function() {
     ## Locations of Bioconductor release repositories
-    reposList <- c(bioc="http://bioconductor.org/packages/bioc/1.7",
-                   aData="http://bioconductor.org/packages/data/annotation/1.7",
-                   eData="http://bioconductor.org/packages/data/experiment/1.7",
-                   oh="http://bioconductor.org/packages/omegahat/1.7",
-                   li="http://bioconductor.org/packages/lindsey/1.7",
+    reposList <- c(bioc="http://bioconductor.org/packages/bioc/1.8",
+                   aData="http://bioconductor.org/packages/data/annotation/1.8",
+                   eData="http://bioconductor.org/packages/data/experiment/1.8",
+                   oh="http://bioconductor.org/packages/omegahat/1.8",
+                   li="http://bioconductor.org/packages/lindsey/1.8",
                    cran="http://cran.fhcrc.org")
     reposList
 }
