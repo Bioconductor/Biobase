@@ -28,5 +28,5 @@ export(Aggregate, addNonExisting, addPDF2Vig,
        multiassign, note, openPDF, openVignette, "package.version",
        rowMax, rowMedians, rowMin, rowQ,
        read.exprSet, read.phenoData, read.MIAME, read.pD,
-       strbreak, testBioCConnection)
+       strbreak, testBioCConnection, isUnique)
 

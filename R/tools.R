@@ -6,6 +6,7 @@
 # listLen; reverseSplit
 # rowQ; rowMedians; rowMin; rowMax
 # copySubstitute
+# isUnique
 # ==========================================================================
 testBioCConnection <- function() {
    ## Stifle the "connected to www.... garbage output
@@ -198,3 +199,20 @@ note <- function(...) {
     }
 }
 
+## ==================================================
+isUnique = function(x){
+  
+  rv = rep(TRUE, length(x))
+
+  if(length(x)>=2) {
+    ord = order(x)
+    ox = x[ord]
+    ## compare consecutive values
+    neq = (ox[-length(ox)]!=ox[-1])
+    ## a value is unique if neither its predecessor nor successor
+    ## in the ordered vector are the same
+    rv[ord] = c(neq, TRUE) & c(TRUE, neq)
+  }
+
+  return(rv)
+}
