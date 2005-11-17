@@ -30,12 +30,18 @@ l2e(vals, envir)
 }
 
 \details{
-  \code{listLen}:  This function returns a vector of the same lenght as
-  the list containng the lengths of each element of the supplied argument.
-  \code{l2e}:  This function takes a named list and assigns all
-  of its elements into the environment (using the names to name the
-  objects).
-  \code{copyEnv}:  This function will make a copy of the contents from
+  \code{listLen}: This function returns a vector of the same lenght as
+  the list containng the lengths of each element of the supplied
+  argument.
+
+  
+  \code{l2e}: This function takes a named list and assigns all of its
+  elements into the environment (using the names to name the objects).
+
+  
+  \code{copyEnv}: This function will make a copy of the contents from
+
+  
   \code{oldEnv} and place them into \code{newEnv}.
 }
 
