@@ -1,12 +1,8 @@
 # ==========================================================================
 # Biobase package initialization
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# we need to be more careful about the where argument. If any of these
-# function calls load a library, where is wrong from there on...
 # ==========================================================================
 .onLoad <- function(libname, pkgname) {
    # need contents to load at library attach - not at build time
-   where <- match(paste("package:", pkgname, sep=""), search())
    .initContents() # in environment.R
    .buildBiobaseOpts() # in environment.R
    cat("\nWelcome to Bioconductor \n\n")
