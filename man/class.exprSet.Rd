@@ -92,7 +92,11 @@
    Standard generic methods:
    \describe{
       \item{\code{show(exprSet)}:}{Renders information about the exprSet in a concise way on stdout. }
-      \item{\code{[(exprSet)}:}{A subset operator. Ensures that both \code{exprs} and \code{phenoData} are subset properly.}
+      \item{\code{[(exprSet)}:}{A subset operator. Ensures that both
+	\code{exprs} and \code{phenoData} are subset properly.}
+      \item{\code{validObject(exprSet)}:}{Validity-checking method,
+	  ensuring the number and names of \code{phenoData} rows match the
+	  number and names of \code{exprs} columns}
    }
 }
 \seealso{
@@ -107,15 +111,15 @@
   pdata[1,]
   pdata[,2]
 
-  eset <- new("exprSet", exprs=geneData, phenoData=pdata)
-  eset
-  eset[,1:10]
-  eset[,1]
-  eset[1,]
-  eset[1,1]
-  eset[1:100,]
-  eset[1:44,c(2,4,6)]
-  Means <- iter(eset, f=mean)
+  expr <- new("exprSet", exprs=geneData, phenoData=pdata)
+  expr
+  expr[,1:10]
+  expr[,1]
+  expr[1,]
+  expr[1,1]
+  expr[1:100,]
+  expr[1:44,c(2,4,6)]
+  Means <- iter(expr, f=mean)
 
   chkdich <- function(x) if(length(unique(x))!=2) stop("x not dichotomous")
   mytt <- function(x,y) {
@@ -124,20 +128,20 @@
      t.test(d[[1]],d[[2]])$p.val
   }
 
-  Tpvals <- iter(eset, "cov1", mytt )
+  Tpvals <- iter(expr, "cov1", mytt )
 
-  sp1 <- split(eset, c(1,2))
-  sp2 <- split(eset, c(rep(1,6), rep(2,7)))
+  sp1 <- split(expr, c(1,2))
+  sp2 <- split(expr, c(rep(1,6), rep(2,7)))
 
-  sampleNames(eset)
-  sampleNames(eset) <- letters
+  sampleNames(expr)
+  sampleNames(expr) <- letters
 
   # as.data.frame.exprSet - example
-  data(eset)
-  sd.genes <- esApply(eset, 1, sd)
-  dataf <- as.data.frame(eset)
+  data(sample.exprSet)
+  sd.genes <- esApply(sample.exprSet, 1, sd)
+  dataf <- as.data.frame(sample.exprSet)
   dataf <- cbind(dataf, sd.genes=rep(unname(sd.genes), length=nrow(dataf)))
-  coplot(sd.genes ~ exprs | cov1+cov2, data=dataf)
+  coplot(sd.genes ~ exprs | sex+type, data=dataf)
 
 }
 \keyword{methods}

@@ -80,6 +80,11 @@
       \item{\code{dim(eSet)}:}{Not documented}
       \item{\code{ncol(eSet)}:}{Not documented}
       \item{\code{show(eSet)}:}{Not documented}
+      \item{\code{validObject(exprSet)}:}{Validity-checking method,
+	  ensuring (1) all assayData components have the same number of
+	  reporters and samples; (2) the number and names of
+	  \code{phenoData} rows match the number and names of
+	  \code{exprs} columns}
   }
 }
 \author{V.J. Carey, after initial design by R. Gentleman }
@@ -93,14 +98,14 @@
    \code{\link{annotatedDataset}}, \code{\link{phenoData}}, \code{\link{exprSet}}
 }
 \examples{
-# eSet 1 is loaded
-data(eset)
-pd <- phenoData(eset)
-xl <- list(e1=exprs(eset))
-gn <- geneNames(eset)
-sn <- sampleNames(eset)
+# load sample.exprSet, to be used below to conveniently make an eSet
+data(sample.exprSet)
+pd <- phenoData(sample.exprSet)
+xl <- list(e1=exprs(sample.exprSet))
+gn <- geneNames(sample.exprSet)
+sn <- sampleNames(sample.exprSet)
 
-# eSet 2 is constructed
+# construct an eSet, using sample.exprSet components
 es2 <- new("eSet", phenoData=pd, assayData=xl,
   reporterNames=gn, sampleNames=sn)
 
@@ -109,7 +114,6 @@ es2[1:4,1:4]
 
 # build with environment assayData
 eenv <- new.env()
-assign("e1", assayData(eset), eenv)
 es3 <- new("eSet", phenoData=pd, assayData=eenv,
   reporterNames=gn, sampleNames=sn)
 es3
@@ -126,10 +130,7 @@ es3  # now has list
 sampleNames(es2) <- letters # ok
 if (interactive()) {
  lk <- try(sampleNames(es2) <- letters[-1]) # not ok
- lk
- lk <- try(assayData(es2) <- assayData(es2[-1,])) # not ok
- class(lk)
- }
+}
 
 # work with the swirl data
 data(SW)
@@ -139,5 +140,10 @@ sw <- new("eSet",
   assayData=list( R=SW$R, G=SW$G, Rb=SW$Rb, Gb=SW$Gb),
   phenoData=SWPD, reporterInfo=swrep, sampleNames=as.character(1:4),
   reporterNames=as.character(swrep$Name))
+# remove first reporter from each assay, explicitly or implicitly
+assayData(sw) <- assayData(sw[-1,])
+sw <- sw[-1,]
+# now two fewer than original
+sw 
 }
 \keyword{classes}

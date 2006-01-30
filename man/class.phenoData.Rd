@@ -59,8 +59,8 @@
    \code{\link{read.phenoData}}, \code{\link{combine}}
 }
 \examples{
-data(eset)
-pes <- phenoData(eset)
+data(sample.exprSet)
+pes <- phenoData(sample.exprSet)
 pes <- convertVarLabels(pes)
 varMetadata(pes)
 pes <- addVarMetadataEntry(pes, "cov1", "units", "inches")

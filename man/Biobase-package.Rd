@@ -15,7 +15,7 @@
 
    Package manipulation functions: \code{\link{createPackage}} and \code{\link{package.version}}
 
-   Data sets: \code{\link{aaMap}}, \code{\link{eset}}, \code{\link{geneData}}.
+   Data sets: \code{\link{aaMap}}, \code{\link{sample.exprSet}}, \code{\link{sample.eSet}}, \code{\link{geneData}}.
 
    Introductory information is available from vignettes, type \code{openVignette()}.
 

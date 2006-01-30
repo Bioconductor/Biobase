@@ -31,8 +31,8 @@ the requested quantiles.
 
 \seealso{ \code{\link{colSums}} }
 \examples{
- data(eset)
- rowMin(eset)
- rowQ(eset, 4)
+ data(sample.exprSet)
+ rowMin(sample.exprSet)
+ rowQ(sample.exprSet, 4)
 }
 \keyword{ manip }

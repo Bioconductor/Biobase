@@ -73,13 +73,13 @@ of data.  To continue with the example, we use
 the exSet example data.
 <<loades,results=hide>>=
 library(Biobase)
-data(exSet)
+data(sample.exprSet)
 <<lkGol>>=
-exSet
+sample.exprSet
 @
 We will extract the \Rclass{phenoData} component:
 <<getPheno>>=
-pes <- phenoData(exSet)
+pes <- phenoData(sample.exprSet)
 @
 A utility called \Rfunction{convertVarLabels}
 will upgrade the \Rclass{phenoData} component
@@ -140,7 +140,7 @@ The values in the \Robject{data.frame} object are the predefined types for those
 \Rmethod{reporterInfo} could extract the \Robject{data.frame} object from the \Rclass{exprSet} obect.  
 
 <<exSet.reporterInfo>>=
-reporter <- reporterInfo(exSet)
+reporter <- reporterInfo(sample.exprSet)
 head(reporter)
 levels(reporter[,1])
 @ 
@@ -149,7 +149,7 @@ We can use the information in \Rfunarg{reporterInfo} slot to select probe sets b
 
 <<exSet.reporterInfo.group>>=
 probeQC <- reporter[,1]=="QC"
-exSet[probeQC,]
+sample.exprSet[probeQC,]
 @ 
 
 \section{Details on the eMetadata container
@@ -180,7 +180,7 @@ The following shows the basic manipulations currently
 available; see the eSet class man page for additional
 methods.
 <<lkEs>>=
-data(exSet)
+data(sample.exprSet)
 md <- data.frame(name="exprs", etype="random numbers")
 #newe <- new("exprList", eList=list(exprs=exprs(exSet)),
 #        eMetadata=md)

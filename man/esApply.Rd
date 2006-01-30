@@ -34,7 +34,7 @@ esApply(X, MARGIN, FUN, ...)
 }
 
 \examples{
-data(eset)
+data(sample.exprSet.1)
 
 # we know that eset has covariates in the pData called "cov1" and "cov2"
 # here cov1 is an unbound value, it will be resolved by using the pData
@@ -51,7 +51,7 @@ myreg.demo <- function( y ) {
    summary(lm(y~cov1+cov2))$coef[3,4]
 }
 
-newt <- esApply( eset, 1, mytt.demo )
+newt <- esApply( sample.exprSet.1, 1, mytt.demo )
 
 # a resampling method
 resamp <- function( ESET ) {
@@ -67,7 +67,7 @@ q3g100filt <- function( eset ) {
 
 # filter after resampling and then apply
 set.seed(123)
-rest <- esApply( { bool <- q3g100filt(resamp(eset)); eset[bool,] }, 1,
+rest <- esApply( { bool <- q3g100filt(resamp(sample.exprSet.1)); sample.exprSet.1[bool,] }, 1,
 mytt.demo )
 
 }

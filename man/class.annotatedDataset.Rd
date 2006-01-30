@@ -26,7 +26,7 @@
 
 \section{Methods}{
    \describe{
-      \item{\code{$(annotatedDataset)} and \code{$(annotatedDataset, value)<-}}{An old-style method. It is \code{pData(eset)[[as.character(val)]]} which does not quite have the right semantics but it is close. This operator extracts the named component of the \code{pData} slot in \code{phenoData}.}
+      \item{\code{$(annotatedDataset)} and \code{$(annotatedDataset, value)<-}}{An old-style method. It is \code{pData(sample.eSet)[[as.character(val)]]} which does not quite have the right semantics but it is close. This operator extracts the named component of the \code{pData} slot in \code{phenoData}.}
       \item{\code{[[(index)} and \code{[[(index, value)<-}:}{Not documented}
       \item{\code{phenoData(annotatedDataset)} and \code{phenoData(annotatedDataset, value)<-}}{Methods to access/update \code{phenoData} slot}
       \item{\code{reporterInfo(annotatedDataset)} and \code{reporterInfo(annotatedDataset, value)<-}}{Methods to access/update \code{reporterInfo} slot}

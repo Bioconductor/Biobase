@@ -6,7 +6,7 @@
   The \code{reporter} object is a 500 by 1 data frame.  The rows represent
   the 500 probe ids in the \code{geneData} data.  The values in
   \code{reporter} are the predefined probe types for the probes.
-  \code{reporter} is used to created the exprSet object \code{exSet}.  
+  \code{reporter} is used to created the exprSet object \code{sample.exprSet}.  
 }
 \usage{data(reporter)}
 \format{
