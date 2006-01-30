@@ -106,7 +106,7 @@ setClass("annotatedDataset",
    prototype = list()
 )
 # ==========================================================================
-# sSet <== annotatedDataset: general container for high-throughput assays and
+# eSet <== annotatedDataset: general container for high-throughput assays and
 # experimental metadata (V.J. Carey after initial design by R. Gentleman)
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Based on: class 'annotatedDataset'
@@ -123,8 +123,6 @@ setClass("eSet",
       annotation    = "character",
       history       = "character"
    ),
-   contains = "annotatedDataset",
-   validity = function(object) validEset(object),
    prototype = list(
       assayData     = list(),
       sampleNames   = character(0),
@@ -132,7 +130,9 @@ setClass("eSet",
       description   = new("MIAME"),
       phenoData     = new("phenoData"),
       reporterInfo  = data.frame()
-   )
+   ),
+   contains = c("annotatedDataset"),
+   validity = function(object) validEset(object)
 )
 # ==========================================================================
 # exprSet <== annotatedDataset: expression arrays and methods for processing them
@@ -152,7 +152,7 @@ setClass("exprSet",
       description = "characterORMIAME",
       annotation  = "character",
       notes       = "character"
-   ) ,
+   ),
    prototype = list(
       exprs       = matrix(nr=0,nc=0),
       se.exprs    = matrix(nr=0,nc=0),
@@ -160,6 +160,7 @@ setClass("exprSet",
       annotation  = "",
       notes       = ""
    ),
-   contains = c("annotatedDataset")
+   contains = c("annotatedDataset"),
+   validity = function(object) validExprSet(object)
 )
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

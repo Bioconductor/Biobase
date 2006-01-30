@@ -1,5 +1,19 @@
 # ==========================================================================
-# method to update exprsSet from previous versions
+# exprSet Class Validator
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+validExprSet <- function(object) {
+  ## add other checks here
+  if (!is(object, "exprSet"))
+    return(paste("cannot validate object of class", class(object)))
+  n <- dim(exprs(object))[2]
+  if (n != nrow(pData(object)))
+    return("number of exprs columns different from number of pData rows")
+  if (!identical(sampleNames(object), rownames(pData(object))))
+    return("sampleNames different from names of phenoData rows")
+  return(TRUE)
+}
+# ==========================================================================
+# method to update exprSet from previous versions
 setMethod("update2MIAME", "exprSet",
    function(object) {
       if(is(description(object), "MIAME"))
@@ -76,7 +90,8 @@ setReplaceMethod("sampleNames", "exprSet",
          stop("wrong number of names supplied")
       dn[[2]] <- value
       dimnames(object@exprs) <- dn
-      row.names(object@phenoData@pData) <- value
+      row.names(pData(object)) <- value
+      validObject(object)
       object
    }
 )
