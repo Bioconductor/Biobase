@@ -5,8 +5,15 @@
 # multiassign; l2e; copyEnv
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 .initContents <- function() {
-   if( !isGeneric("contents") && !exists("contents", mode="function") )
-      setGeneric("contents", function(object, all.names) standardGeneric("contents"))
+   makeG = TRUE
+   if( isGeneric("contents", where = .GlobalEnv ) )
+       if( identical(names(formals(contents)), c("object", "all.names")) )
+            makeG = FALSE
+   if(makeG)
+     setGeneric("contents", function(object, all.names)
+                         standardGeneric("contents"))
+
+
    setMethod("contents", "environment",
       function(object, all.names) {
          if (missing(all.names))
