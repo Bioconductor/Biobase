@@ -2,7 +2,7 @@
 \alias{isUnique}
 \title{Determine Unique Elements}
 \description{
-  Determines which elements of a vector occur exactly once
+  Determines which elements of a vector occur exactly once.
 }
 
 \usage{
@@ -17,6 +17,7 @@ isUnique(x)
 \code{TRUE} indicates uniqueness.}
  
 \seealso{\code{\link[base:unique]{unique}},\code{\link[base:duplicated]{duplicated}}.}
+\author{Wolfgang Huber}
 
 \examples{
 x <- c(9:20, 1:5, 3:7, 0:8)
