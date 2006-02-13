@@ -201,7 +201,7 @@ note <- function(...) {
 
 ## ==================================================
 isUnique = function(x){
-  
+
   rv = rep(TRUE, length(x))
 
   if(length(x)>=2) {
@@ -215,4 +215,27 @@ isUnique = function(x){
   }
 
   return(rv)
+}
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# O.Sklyar, EBI, 2006
+matchpt <- function(x, y = NULL) {
+    if (is.vector(x))
+        x <- matrix(x, ncol = 1, nrow = length(x))
+    if (!is.matrix(x))
+        stop("x must be a matrix in call to nn (nearest neighbour)")
+    dims <- dim(x)
+    if (length(dims) != 2)
+        stop("wrong argument dimensions")
+    if (!is.null(y)) {
+        if (is.vector(y))
+            y <- matrix(y, ncol = 1, nrow = length(y))
+        if (!is.matrix(y))
+            stop("y must be a matrix in call to nn (nearest neighbour)")
+        if (length(dims) != length(dim(y)))
+            stop("x and y must have the same dimensionality")
+        if (dims[[2]] != dim(y)[[2]])
+            stop("x and y must have the same dimensionality")
+    }
+    res <- .Call("matchpt", x, y, PACKAGE = "Biobase")
+    colnames(res) <- c("index", "distance")
 }
