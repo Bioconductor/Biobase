@@ -220,7 +220,7 @@ isUnique = function(x){
 # O.Sklyar, EBI, 2006
 matchpt <- function(x, y = NULL) {
     if (is.vector(x))
-        x <- matrix(as.numeric(x), ncol = 1, nrow = length(x))
+        x <- matrix(as.double(x), ncol = 1, nrow = length(x))
     if (!is.matrix(x))
         stop("x must be a matrix in call to nn (nearest neighbour)")
     dims <- dim(x)
@@ -228,7 +228,7 @@ matchpt <- function(x, y = NULL) {
         stop("wrong argument dimensions")
     if (!is.null(y)) {
         if (is.vector(y))
-            y <- matrix(as.numeric(y), ncol = 1, nrow = length(y))
+            y <- matrix(as.double(y), ncol = 1, nrow = length(y))
         if (!is.matrix(y))
             stop("y must be a matrix in call to nn (nearest neighbour)")
         if (length(dims) != length(dim(y)))
