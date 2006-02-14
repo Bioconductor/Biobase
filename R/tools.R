@@ -238,4 +238,5 @@ matchpt <- function(x, y = NULL) {
     }
     res <- .Call("matchpt", x, y, PACKAGE = "Biobase")
     colnames(res) <- c("index", "distance")
+    return(res)
 }
