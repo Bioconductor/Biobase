@@ -3,6 +3,16 @@
 \alias{class:MIAME}
 \alias{MIAME}
 
+\alias{MIAME-class}
+\alias{abstract,MIAME-method}
+\alias{expinfo,MIAME-method}
+\alias{hybridizations,MIAME-method}
+\alias{normControls,MIAME-method}
+\alias{otherInfo,MIAME-method}
+\alias{preproc,MIAME-method}
+\alias{samples,MIAME-method}
+\alias{show,MIAME-method}
+
 \concept{abstract}
 \concept{expinfo}
 \concept{hybridizations}

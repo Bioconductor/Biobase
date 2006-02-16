@@ -1,5 +1,5 @@
 eset <- function() {
-    .Deprecated("sample.exprSet")
+    .Deprecated("sample.exprSet.1")
 }
 eset()
 rm("eset")

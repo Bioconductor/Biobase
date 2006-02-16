@@ -1,6 +1,8 @@
 \name{class:characterORMIAME}
 \docType{class}
 \alias{class:characterORMIAME}
+\alias{characterORMIAME-class}
+
 \concept{characterORMIAME}
 \title{Class to Make Older Versions Compatible}
 \description{This class can be either \code{character} or

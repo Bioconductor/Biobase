@@ -3,6 +3,18 @@
 \alias{class:annotatedDataset}
 \alias{annotatedDataset}
 
+\alias{annotatedDataset-class}
+\alias{[[<-,annotatedDataset-method}
+\alias{[[,annotatedDataset-method}
+\alias{$<-,annotatedDataset-method}
+\alias{$,annotatedDataset-method}
+\alias{pData<-,annotatedDataset-method}
+\alias{pData,annotatedDataset-method}
+\alias{phenoData,annotatedDataset-method}
+\alias{reporterInfo,annotatedDataset-method}
+\alias{reporterInfo<-,annotatedDataset,data.frame-method}
+\alias{varLabels,annotatedDataset-method}
+
 \concept{pData}
 \concept{phenoData}
 \concept{varLabels}

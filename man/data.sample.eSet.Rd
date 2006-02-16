@@ -18,6 +18,6 @@ The phenoData and standard error estimates (se.exprs) are made up.
 The information in the "description" slot is fake.  
 }
 \examples{
-data(sample.exprSet)
+data(sample.eSet)
 }
 \keyword{datasets}

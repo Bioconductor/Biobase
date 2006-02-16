@@ -2,9 +2,16 @@
 \docType{class}
 \alias{class:container}
 \alias{container}
-%\alias{[,container-method}
-%\alias{length,container-method}
-%\alias{content,container-method}
+
+\alias{container-class}
+\alias{[,container-method}
+\alias{[[<-,container-method}
+\alias{[[,container-method}
+\alias{content,container-method}
+\alias{length,container-method}
+\alias{locked,container-method}
+\alias{show,container-method}
+
 \concept{content}
 \concept{locked}
 

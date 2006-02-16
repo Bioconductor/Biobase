@@ -1,7 +1,13 @@
 \name{aggregator}
 \docType{class}
-\alias{aggregator}
 \alias{class:aggregator}
+\alias{aggregator}
+\alias{aggregator-class}
+
+\alias{aggenv,aggregator-method}
+\alias{aggfun,aggregator-method}
+\alias{initfun,aggregator-method}
+
 \concept{aggenv}
 \concept{aggfun}
 \concept{initfun}

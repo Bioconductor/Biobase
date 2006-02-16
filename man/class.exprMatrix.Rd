@@ -1,6 +1,8 @@
 \name{class:exprMatrix}
 \docType{class}
 \alias{class:exprMatrix}
+\alias{exprMatrix-class}
+
 \concept{exprMatrix}
 \concept{expression matrix}
 
