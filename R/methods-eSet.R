@@ -20,8 +20,8 @@ validEset <- function(object) {
     return("length of sampleNames different from number of pData rows")
   if (!identical(sampleNames(object), rownames(pData(object))))
     return("sampleNames different from names of phenoData rows")
-##   if (length(reporterNames(object)) != nrep)
-##     return("length of reporterNames != nrow assayData")
+  if (length(object) != 0 && length(reporterNames(object)) != d[1,1])
+    return("number of assayData rows different from number of reporterNames")
   return(TRUE)
 }
 # ==========================================================================

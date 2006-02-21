@@ -5,11 +5,12 @@ validExprSet <- function(object) {
   ## add other checks here
   if (!is(object, "exprSet"))
     return(paste("cannot validate object of class", class(object)))
-  n <- dim(exprs(object))[2]
-  if (n != nrow(pData(object)))
+  if (dim(exprs(object))[2] != nrow(pData(object)))
     return("number of exprs columns different from number of pData rows")
   if (!identical(sampleNames(object), rownames(pData(object))))
     return("sampleNames different from names of phenoData rows")
+  if (!is.null(reporterInfo(object)) && dim(exprs(object))[1] != nrow(reporterInfo(object)))
+      return("number of exprs and reporterInfo rows differ")
   return(TRUE)
 }
 # ==========================================================================
@@ -147,6 +148,8 @@ setMethod("[", "exprSet",
                nses <- se.exprs(x)[i, j, drop=FALSE]
          }
       }
+      if (!missing(i) && !is.null(reporterInfo(x)) && nrow(reporterInfo(x)) > 0)
+        reporterInfo(x) <- reporterInfo(x)[i, ,drop=FALSE]
       exprs(x) <- nexprs
       if(haveSES)
          se.exprs(x) <- nses
