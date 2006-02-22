@@ -9,8 +9,8 @@ validExprSet <- function(object) {
     return("number of exprs columns different from number of pData rows")
   if (!identical(sampleNames(object), rownames(pData(object))))
     return("sampleNames different from names of phenoData rows")
-  if (!is.null(reporterInfo(object)) && dim(exprs(object))[1] != nrow(reporterInfo(object)))
-      return("number of exprs and reporterInfo rows differ")
+##   if (!is.null(reporterInfo(object)) && dim(exprs(object))[1] != nrow(reporterInfo(object)))
+##       return("number of exprs and reporterInfo rows differ")
   return(TRUE)
 }
 # ==========================================================================
