@@ -148,7 +148,9 @@ setMethod("[", "exprSet",
                nses <- se.exprs(x)[i, j, drop=FALSE]
          }
       }
-      if (!missing(i) && !is.null(reporterInfo(x)) && nrow(reporterInfo(x)) > 0)
+      if (!missing(i) &&
+          !is.null(attr(x,"reporterInfo")) &&
+          !is.null(reporterInfo(x)) && nrow(reporterInfo(x)) > 0)
         reporterInfo(x) <- reporterInfo(x)[i, ,drop=FALSE]
       exprs(x) <- nexprs
       if(haveSES)
