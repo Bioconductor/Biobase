@@ -17,3 +17,7 @@
    if( .Platform$OS.type == "windows" && .Platform$GUI == "Rgui" )
       addVigs2WinMenu("Biobase") # in vignettes.R
 }
+
+.onUnload <- function( libpath ) {
+  library.dynam.unload( "Biobase", libpath )
+}
