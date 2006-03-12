@@ -7,6 +7,7 @@
 # rowQ; rowMedians; rowMin; rowMax
 # copySubstitute
 # isUnique
+# cache
 # ==========================================================================
 testBioCConnection <- function() {
    ## Stifle the "connected to www.... garbage output
@@ -216,8 +217,8 @@ isUnique = function(x){
 
   return(rv)
 }
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# O.Sklyar, EBI, 2006
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+## O.Sklyar, EBI, 2006
 matchpt <- function(x, y = NULL) {
     if (is.vector(x))
         x <- matrix(as.double(x), ncol = 1, nrow = length(x))
@@ -239,4 +240,18 @@ matchpt <- function(x, y = NULL) {
     res <- .Call("matchpt", x, y, PACKAGE = "Biobase")
     colnames(res) <- c("index", "distance")
     return(res)
+}
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+## W.Huber, EBI, 2006
+cache <- function(name, expr) {
+  if(!(is.character(name) && length(name)==1))
+    stop("'name' must be a single character string.")
+  cachefile <- paste("tmp-", name, ".RData", sep="")
+  if(file.exists(cachefile)) {
+    load(cachefile)
+  } else {
+    assign(name, expr)
+    save(list=name, file=cachefile, compress=TRUE)
+  }
+  get(name)
 }

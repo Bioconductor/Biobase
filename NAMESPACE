@@ -20,13 +20,13 @@ exportMethods("[", "[[", "$", abstract, addVarMetadataEntry, aggenv, aggfun,
              "se.exprs<-",  "write.exprs",
              "as.data.frame.exprSet", dim, assayData, reporterNames)
 
-export(Aggregate, addNonExisting, addPDF2Vig,
-       addVig2Menu, addVig4Unix, addVig4Win, addVigs2WinMenu,
-       biocReposList, copyEnv, copySubstitute, reverseSplit,
-       createPackage, df2pD, dumpPackTxt, esApply,
-       getPkgVigs, l2e, listLen,
-       multiassign, note, openPDF, openVignette, "package.version",
-       rowMax, rowMedians, rowMin, rowQ,
-       read.exprSet, read.phenoData, read.MIAME, read.pD,
-       strbreak, testBioCConnection, isUnique, matchpt)
+export("Aggregate", "addNonExisting", "addPDF2Vig",
+       "addVig2Menu", "addVig4Unix", "addVig4Win", "addVigs2WinMenu", 
+       "biocReposList", "cache", "copyEnv", "copySubstitute", 
+       "createPackage", "df2pD", "dumpPackTxt", "esApply", 
+       "getPkgVigs", "isUnique", "l2e", "listLen", "matchpt", 
+       "multiassign", "note", "openPDF","openVignette", "package.version", 
+       "reverseSplit", "rowMax", "rowMedians", "rowMin", "rowQ", 
+       "read.exprSet", "read.phenoData", "read.MIAME", "read.pD",
+       "strbreak", "testBioCConnection")
 
