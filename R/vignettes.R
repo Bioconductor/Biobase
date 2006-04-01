@@ -62,21 +62,25 @@ openVignette <- function(package=NULL) {
 # add vignetts or other elements to the menu bar of a window (2002 J. Zhang)
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 addVigs2WinMenu <- function(pkgName) {
-    vigFile <- system.file("Meta", "vignette.rds", package=pkgName)
-    if (file.exists(vigFile)) {
-        vigMtrx <- .readRDS(vigFile)
-        vigs <- file.path(.find.package(pkgName), "doc", vigMtrx[,"PDF"])
-        names(vigs) <- vigMtrx[,"Title"]
-    }
+  vigFile <- system.file("Meta", "vignette.rds", package=pkgName)
+  if (!file.exists(vigFile)) {
+    warning(sprintf("%s contains no vignette, nothing is added to the menu bar", pkgName))
+  } else {
+    vigMtrx <- .readRDS(vigFile)
+    vigs <- file.path(.find.package(pkgName), "doc", vigMtrx[,"PDF"])
+    names(vigs) <- vigMtrx[,"Title"]
+
     if (!"Vignettes" %in% winMenuNames())
-        winMenuAdd("Vignettes")
+      winMenuAdd("Vignettes")
     pkgMenu <- paste("Vignettes", pkgName, sep="/")
     winMenuAdd(pkgMenu)
     for (i in vigs) {
-        item <- sub(".pdf", "", basename(i))
-        winMenuAddItem(pkgMenu, item, paste("shell.exec(\"", as.character(i), "\")", sep = ""))
+      item <- sub(".pdf", "", basename(i))
+      winMenuAddItem(pkgMenu, item, paste("shell.exec(\"", as.character(i), "\")", sep = ""))
     }
+  } ## else
 }
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # DEFUNCT (all below)
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
