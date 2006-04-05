@@ -1,185 +1,250 @@
 # ==========================================================================
 # eSet Class Validator
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-validEset <- function(object) {
-  ## add other checks here
+setMethod( "initialize",
+          signature=c(.Object="eSet"),
+          function( .Object,
+                   assayData = assayDataNew(...),
+                   phenoData = new("AnnotatedDataFrame"),
+                   experimentData = new( "MIAME" ),
+                   annotation = character(),
+                   ...) {
+            .Object@assayData <- assayData
+            .Object@phenoData <- phenoData
+            .Object@experimentData <- experimentData
+            .Object@annotation <- annotation
+            ## coordinate sample names
+            adSampleNames <- sampleNames(assayData)
+            pdSampleNames <- sampleNames(phenoData)
+            if (all(sapply(adSampleNames,is.null)) && is.null(pdSampleNames))
+              sampleNames(.Object) <- 1:dim(assayData)[[2]]
+            else if (all(sapply(adSampleNames,is.null)))
+              sampleNames(.Object) <- pdSampleNames
+            else if (is.null(pdSampleNames)) {
+              nms <- assayDataElementNames(.Object)
+              if (length(nms)==1 ||
+                  (length(nms)>1 && all(adSampleNames[,1]==adSampleNames)))
+                sampleNames(.Object) <- sampleNames(assayData)
+              else
+                stop("conflicting colnames in assayData elements")
+            }
+            validObject(.Object)
+            .Object
+})
+
+setValidity("eSet", function( object ) {
+  msg <- NULL
   if (!is(object, "eSet"))
-    return(paste("cannot validate object of class", class(object)))
-  d <- dim(object)
-  n <- nrow(pData(object))
-  if (length(d)>0) {
-    if (any(d[1,] != d[1,1]))
-      return("assayData components have unequal numbers of reporters")
-    if (any(d[2,] != d[2,1]))
-      return("assayData components have unequal numbers of samples")
-    nrep <- d[1,1]
-    if (any(d[2,] != n))
-      return("number of assayData columns different from number of pData rows")
+    msg <- paste(msg, paste("cannot validate object of class", class( object )), sep = "\n  ")
+  dims <- dims(object)
+  if (!is.na(dims[[1]])) {
+    if (any( dims[1,] != dims[1,1]))
+      msg <- paste( msg, "row numbers differ for assayData members", sep = "\n  " )
+    if (any(dims[2,] != dims[2,1]))
+      msg <- paste( msg, "sample numbers differ for assayData members", sep = "\n  " )
+    if ( dims[2,1] != dim( phenoData( object ))[[1]] )
+      msg <- paste( msg, "sample numbers differ between assayData and phenoData", sep = "\n  " )
+    if (!all(sampleNames(assayData(object))==sampleNames(object)))
+      msg <- paste(msg, "sampleNames differ between assayData and phenoData", sep="\n  ")
+    if (!all(featureNames(assayData(object))==featureNames(object)))
+      msg <- paste(msg, "featureNames differ between assayData elements", sep="\n  ")
+  } else if (dim(phenoData(object))[[1]] != 0 ) {
+    msg <- paste( msg, "sample numbers differ between assayData and phenoData", sep = "\n  " )
   }
-  if (length(sampleNames(object)) != n)
-    return("length of sampleNames different from number of pData rows")
-  if (!identical(sampleNames(object), rownames(pData(object))))
-    return("sampleNames different from names of phenoData rows")
-##   if (length(object) != 0 && length(reporterNames(object)) != d[1,1])
-##     return("number of assayData rows different from number of reporterNames")
-  return(TRUE)
-}
-# ==========================================================================
-setMethod("assayData", "eSet", function(object) object@assayData)
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setReplaceMethod("assayData", c("eSet", "listOrEnv"),
-   function(object, value) {
-      object@assayData <- value
-      validObject(object)
-      object
-   }
-)
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# works for list or env!
-setMethod("exprs", "eSet", function(object) object@assayData[["exprs"]])
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setReplaceMethod("exprs", c("eSet", "listOrEnv"),
-   function(object, value) {
-      .Deprecated("assayData<-", "Biobase")
-      object@assayData <- value
-      validObject(object)
-      object
-   }
-)
-# FIXME: REMOVE THIS OLD IMPLEMENTATION?!
-#setReplaceMethod("exprs", "eSet",
-#   function(object, value) {
-#       object@eList[["exprs"]] = value
-#       return(object)
-#   })
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setMethod("dim", "eSet",
-   function(x) {
-      isEnv <- is(assayData(x), "environment")
-      if (!isEnv)
-         tmp <- sapply(assayData(x), dim)
-      else {
-         enms <- ls(assayData(x))
-         tmp <- sapply(enms,function(z) dim(get(z,assayData(x))))
-      }
-      if (length(tmp) > 0) dimnames(tmp)[[1]] <- c("nrow", "ncol")
-      tmp
-   }
-)
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setMethod("ncol", "eSet",
-   function(x) {
-      isEnv <- is(assayData(x), "environment")
-      if (!isEnv)
-         sapply(assayData(x), ncol)
-      else {
-         enms <- ls(assayData(x))
-         sapply(enms,function(z) ncol(get(z,assayData(x))))
-      }
-   }
-)
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setMethod("[", "eSet",
-   function(x, i, j, ..., drop=FALSE) {
-      if(length(list(...)) > 0)
-         stop("extra subscripts cannot be handled")
-      if(missing(j)) {
-         pdata <- phenoData(x)
-         sn <- sampleNames(x)
-      }
-      else {
-         pdata <- phenoData(x)[j,, ..., drop=FALSE]
-         sn <- sampleNames(x)[j]
-      }
-      if(missing(i))
-         rn <- reporterNames(x)
-      else
-         rn <- reporterNames(x)[i]
-      isEnv <- is(assayData(x), "environment")
-      if (!isEnv) {
-         if (missing(i)) {
-            if (missing(j))
-               return(x)
-            else
-               xd <- lapply( assayData(x), function(x)x[,j,drop=drop] )
-         }
-         else {
-            if (missing(j))
-               xd <- lapply( assayData(x), function(x)x[i,,drop=drop] )
-            else
-               xd <- lapply( assayData(x), function(x)x[i,j,drop=drop] )
-         }
-      }
-      else {
-         # getting an environment, which is assumed to hold matrices (22 aug 2005)
-         enms <- ls(assayData(x))
-         xd <- new.env()
-         for (nm in enms) {
-            if (missing(i)) {
+  ##   if (length(object) != 0 && length(reporterNames(object)) != d[1,1])
+  ##     return("number of assayData rows different from number of reporterNames")
+  if (is.null(msg)) TRUE else msg
+})
+
+setMethod("show", "eSet", function(object) {
+  cat("Instance of", class( object ), "\n")
+  cat("\nassayData\n")
+  cat("  Storage mode:", assayDataStorageMode(assayData(object)), "\n")
+  cat("  Dimensions:\n")
+  print(dims(object))
+  cat("\n")
+  show(phenoData(object))
+  cat("\n")
+  show(experimentData(object))
+  cat("\nAnnotation ")
+  show(annotation(object))
+})
+
+setMethod("sampleNames", "eSet", function(object) sampleNames(phenoData(object)))
+
+setReplaceMethod("sampleNames", c("eSet", "ANY"), function(object, value) {
+  sampleNames(assayData(object)) <- value
+  sampleNames(phenoData(object)) <- value
+  validObject(object)
+  object
+})
+
+setMethod("featureNames", "eSet", function(object) {
+  nms <- featureNames(assayData(object))
+  if (all(sapply(nms, is.null))) NULL else nms[,1]
+})
+
+setReplaceMethod("featureNames", "eSet", function(object, value) {
+  featureNames(assayData(object)) <- value
+  object
+})
+
+setMethod("varLabels", "eSet", function(object) varLabels(phenoData(object)))
+
+setReplaceMethod("varLabels", "eSet", function(object, value) {
+  varLabels(phenoData(object)) <- value
+  object
+})
+
+setMethod("varMetadata", "eSet", function(object) varMetadata(phenoData(object)))
+
+setReplaceMethod("varMetadata", c("eSet", "data.frame"), function(object, value) {
+  varMetadata(phenoData(object)) <- value
+  object
+})
+
+setMethod("dim", "eSet", function(x) assayDataDim(assayData(x)))
+
+setMethod("dims", "eSet", function(object) assayDataDims(assayData(object)))
+
+setMethod("ncol", "eSet", function(x) {
+  d <- dim( x )
+  if (length(d) == 1 && is.na(d)) d
+  else d[[2]]
+})
+
+setMethod("[", "eSet", function(x, i, j, ..., drop = FALSE) {
+  if (missing(drop)) drop <- FALSE
+  if (missing(i) && missing(j)) return(x[,, ..., drop = drop])
+  if (!missing(j))
+    phenoData(x) <- phenoData(x)[j,, ..., drop = drop]
+  ## assayData; implemented here to avoid function call
+  orig <- assayData(x)
+  storage.mode <- assayDataStorageMode(orig)
+  assayData(x) <-
+    switch(storage.mode,
+           environment =,
+           lockedEnvironment = {
+             aData <- new.env(parent=emptyenv())
+             if (missing(i))                     # j must be present
+               for(nm in ls(orig)) aData[[nm]] <- orig[[nm]][, j, ..., drop = drop]
+             else {                              # j may or may not be present
                if (missing(j))
-                  return(x)
-               else assign(nm, get(nm, env=assayData(x), inherits=FALSE)[,j,drop=drop], env=xd)
-            }
-            else {
-               if (missing(j))
-                  assign(nm, get(nm, env=assayData(x), inherits=FALSE)[i,,drop=drop], env=xd)
+                 for(nm in ls(orig)) aData[[nm]] <- orig[[nm]][i,, ..., drop = drop]
                else
-                  assign(nm, get(nm, env=assayData(x), inherits=FALSE)[i,j,drop=drop], env=xd)
-            }
-         }
-      }
-      new("eSet", phenoData=pdata, assayData=xd, reporterNames=rn, sampleNames=sn)
-   }
-)
+                 for(nm in ls(orig)) aData[[nm]] <- orig[[nm]][i, j, ..., drop = drop]
+             }
+             if ("lockedEnvironment" == storage.mode) assayDataEnvLock(aData)
+             aData
+           },
+           list = {
+             if (missing(i))                     # j must be present
+               lapply(orig, function(obj) obj[, j, ..., drop = drop])
+             else {                              # j may or may not be present
+               if (missing(j))
+                 lapply(orig, function(obj) obj[i,, ..., drop = drop])
+               else
+                 lapply(orig, function(obj) obj[i, j, ..., drop = drop])
+             }
+           })
+  x
+})
+
+setMethod("$", "eSet", function(x, name) phenoData(x)[[name]] )
+
+setReplaceMethod("$", "eSet", function(x, name, value) {
+  phenoData(x)[[name]] = value
+  x
+})
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# FIXME: WHAT IS THIS CODE FOR? TEST?
-#data(eset)
-#pd <- phenoData(eset)
-#xl <- list(e1=assayData(eset))
-#es2 <- new("eSet", phenoData=pd, assayData=xl)
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setMethod("show", "eSet",
-   function(object) {
-      cat("instance of eSet\n")
-      cat("assayData component is of class", class(assayData(object)),"\n")
-      cat("dimensions of the assayData components:\n")
-      print(dim(object))
-      show(phenoData(object))
-      cat("first reporterNames:\n")
-      print(reporterNames(object)[1:min(5,length(reporterNames(object)))])
-      cat("first sampleNames:\n")
-      print(sampleNames(object)[1:min(5,length(reporterNames(object)))])
-   }
-)
-# ==========================================================================
-# following are legacy, seem OK
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setMethod("description", signature="eSet", function(object) object@description)
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setReplaceMethod("description", "eSet",
-   function(object, value) {
-      object@description = value
-      object
-   }
-)
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+setMethod("assayData", "eSet", function(object) object@assayData)
+
+setReplaceMethod("assayData", c( "eSet", "AssayData" ), function(object, value) {
+  object@assayData <- value
+  object
+})
+
+setMethod("phenoData", "eSet", function(object) object@phenoData)
+
+setReplaceMethod("phenoData", c("eSet", "AnnotatedDataFrame"), function(object, value) {
+  object@phenoData <- value
+  object
+})
+
+setMethod("pData", "eSet", function(object) pData(phenoData(object)))
+
+setReplaceMethod("pData", c("eSet","data.frame"), function(object, value) {
+  pData(phenoData(object)) <- value
+  object
+})
+
+setMethod("varMetadata", "eSet", function(object) varMetadata(phenoData(object)))
+
+setReplaceMethod("varMetadata", c("eSet","data.frame"), function(object, value) {
+  varMetadata(phenoData(object)) <- value
+  object
+})
+
+setMethod("experimentData", signature="eSet", function(object) object@experimentData)
+
+setReplaceMethod("experimentData", signature=c("eSet","MIAME"), function(object, value) {
+  object@experimentData <- value
+  object
+})
+
+setMethod("pubMedIds", signature="eSet", function(object) pubMedIds(experimentData(object)))
+
+setReplaceMethod("pubMedIds", signature="eSet", function(object, value) {
+  pubMedIds(experimentData(object)) <- value
+  object
+})
+
+setMethod("abstract", "eSet", function(object) abstract(experimentData(object)))
+
 setMethod("annotation", "eSet", definition = function(object) object@annotation)
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setReplaceMethod("annotation", signature="eSet",
-   definition =  function(object, value) {
-      object@annotation <- value
-      object
-   }
-)
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setMethod("notes", signature="eSet", function(object) object@notes)
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setReplaceMethod("notes", signature(object="eSet", value="ANY"),
-   function(object, value) {
-      object@notes <- value
-      object
-   }
-)
+
+setReplaceMethod("annotation", signature=c("eSet", "character"), function(object, value) {
+  object@annotation <- value
+  object
+})
+
+setMethod("combine", c("eSet", "eSet"), function(x, y, ...) {
+  if (class(x) != class(y))
+    stop(paste("objects must be the same class, but are ",
+               class(x), ", ", class(y), sep=""))
+  if (any(annotation(x) != annotation(y)))
+    stop("objects have different annotations: ",
+         annotation(x), ", ", annotation(y))
+  assayData(x) <- combine(assayData(x), assayData(y))
+  phenoData(x) <- combine(phenoData(x), phenoData(y))
+  experimentData(x) <- combine(experimentData(x),experimentData(y))
+  ## annotation -- constant
+  x
+})
+
+setMethod("exprs", "eSet", function(object) {
+  stop("'exprs' not implemented for virtual base class eSet")
+})
+
+setReplaceMethod("exprs", c("eSet", "AssayData"), function(object, value) {
+  stop("'exprs<-' not implemented for virtual base class eSet")
+})
+
+## 
+## Deprecated
+## 
+
+setMethod("reporterNames", "eSet", function(object) {
+  .Deprecated("featureNmaes", "Biobase")
+  featureNames(object)
+})
+
+setReplaceMethod("reporterNames", c("eSet", "character"), function(object, value) {
+  .Deprecated("featureNames<-", "Biobase")
+  featureNames(object) <- value
+})
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # VC:
 
@@ -242,97 +307,21 @@ setReplaceMethod("notes", signature(object="eSet", value="ANY"),
 #     })
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setMethod("eList", "eSet",
-   function(object) {
-      .Deprecated("exprs", "Biobase")
-      exprs(object)
-   }
-)
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# VC: note the validObject calls -- I do not think setReplaceMethods do constructions
-# (next 5 methods)
-setReplaceMethod("eList", c("eSet", "listOrEnv"),
-   function(object, value) {
-      .Deprecated("assayData<-", "Biobase")
-      object@eList <- value
-      validObject(object)
-      object
-   }
-)
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setMethod("sampleNames", "eSet", function(object) object@sampleNames)
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setReplaceMethod("sampleNames", c("eSet", "character"),
-   function(object, value) {
-      if (length(value) != length(sampleNames(object))) # now & informative, rather cryptic in row.names...
-        stop(paste("number of new names (",
-                   length(value),
-                   ") should be equal to number of sampleNames (",
-                   length(sampleNames(object)),
-                   ")",sep=""))
-      object@sampleNames <- value
-      row.names(pData(object)) <- value
-      validObject(object)
-      object
-   }
-)
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setMethod("reporterNames", "eSet", function(object) object@reporterNames)
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setReplaceMethod("reporterNames", c("eSet", "character"),
-   function(object, value) {
-      object@reporterNames <- value
-      validObject(object)
-      object
-   }
-)
+setMethod("eList", "eSet", function(object) {
+  .Deprecated("assayData", "Biobase")
+  assayData(object)
+})
+setReplaceMethod("eList", c("eSet", "AssayData"), function(object, value) {
+  .Deprecated("assayData<-", "Biobase")
+  assayData(object) <- value
+})
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ## An extractor for named experimental data
 ## FIXME: how much do we want to do to ensure that these are matrices?
 ## this FIXME is still valid in the new design!  I am not sure we
 ## want them to be required to be matrices.
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setMethod("getExpData", c("eSet", "character"),
-   function(object, name) {
-      .Deprecated("exprs", "Biobase")
-      exprs(object)[[name]]
-      #object@eList@eList[[name]]
-   }
-)
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# VC:
-# combine generic: given an arbitrary number of arguments
-# that are eSet instances, combine into a single eSet
-# instance in a sensible way.
-#
-# current restrictions: only works for assayData slots that are
-# lists
-#
-# phenoData parts of combine are now in annotatedDataset.R
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setMethod("combine", c("eSet", "eSet"),
-   function(x, y, ...) {
-      # it would be nice to do a combine on the assayData elements, but
-      # exprList is a virtual class...
-      if (is.environment(assayData(x)))
-         stop("not currently supporting environment-valued assayData")
-      if (!(all(c(is(assayData(x), class(assayData(y))), is(assayData(y), class(assayData(x)))))))
-         stop("not currently supporting assayData of nonequivalent classes")
-      if (!all(names(assayData(x))==names(assayData(y))))
-         stop("assayData have different element names")
-      o <- list()
-      n <- names(assayData(x))
-      for (e in n)
-         o[[e]] <- cbind(assayData(x)[[e]], assayData(y)[[e]])
-      new("eSet", assayData=o,
-          phenoData=combine(phenoData(x), phenoData(y)),
-          reporterInfo=rbind(reporterInfo(x), reporterInfo(y)))
-   }
-)
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setMethod("combine", "eSet",
-   function(x, y, ...) {
-      return(x)
-   }
-)
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+setMethod("getExpData", c("eSet", "character"), function(object, name) {
+  .Deprecated("assayData", "Biobase")
+  assayData(object)[[name]]
+})

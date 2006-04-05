@@ -32,8 +32,7 @@ setReplaceMethod("$", "phenoData",
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("varLabels", "phenoData", function(object) object@varLabels)
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setMethod("[", "phenoData",
-   function(x, i, j, ..., drop=FALSE) {
+setMethod("[", "phenoData", function(x, i, j, ..., drop=FALSE) {
       if( missing(drop) ) drop<-FALSE
       vL <- varLabels(x)
       if( missing(j) ) {

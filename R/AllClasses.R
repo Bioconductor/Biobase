@@ -66,6 +66,7 @@ setClass("MIAME",
       title          = "character",
       abstract       = "character",
       url            = "character",
+      pubMedIds      = "character",
       samples        = "list",
       hybridizations = "list",
       normControls   = "list",
@@ -79,6 +80,7 @@ setClass("MIAME",
       title          = "",
       abstract       = "",
       url            = "",
+      pubMedIds      = "",
       samples        = list(),
       hybridizations = list(),
       normControls   = list(),
@@ -105,35 +107,67 @@ setClass("annotatedDataset",
    ),
    prototype = list()
 )
+# eSet
 # ==========================================================================
-# eSet <== annotatedDataset: general container for high-throughput assays and
-# experimental metadata (V.J. Carey after initial design by R. Gentleman)
+# AnnotatedDataFrame: A data.frame, with annotations about columns named
+# in the data slot contained in the metadata slot. The data slot has
+# columns identifying different entities (e.g., genes, samples) and
+# the columns contain attributes of those entities (e.g., control or
+# spike-in information for genes, age or sex for samples). The number
+# of columns in the data slot equals the number of rows in the
+# metadata slot.
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Based on: class 'annotatedDataset'
+setClass("AnnotatedDataFrame",
+         representation(varMetadata = "data.frame",
+                        data = "data.frame" ),
+         prototype = list(
+           varMetadata = new( "data.frame" ),
+           data = new( "data.frame" )),
+         validity = function(object) validAnnotatedDataFrame(object))
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setClassUnion("listOrEnv", c("list", "environment"))
+setClassUnion("AssayData", c("list", "environment"))
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# eSet: A class containing assay data (typically, one or many
+# different sets of results obtained from one or many samples in a
+# single experiment), phenotypic data (describing the samples involved
+# in the experiment), experimental data (describing the methods and
+# protocols used), and an annotation (linking to separately maintained
+# chip annotation information).
+#
+# When assayData contains several sets of results, each set must have
+# the same dimension (e.g., columns representing genes, rows
+# representing samples, all assayData members providing information
+# for the same number of genes and samples).
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setClass("eSet",
-   representation(
-      assayData     = "listOrEnv",
-      sampleNames   = "character",
-      reporterNames = "character",
-      description   = "MIAME",
-      notes         = "character",
-      annotation    = "character",
-      history       = "character"
-   ),
-   prototype = list(
-      assayData     = list(),
-      sampleNames   = character(0),
-      reporterNames = character(0),
-      description   = new("MIAME"),
-      phenoData     = new("phenoData"),
-      reporterInfo  = data.frame()
-   ),
-   contains = c("annotatedDataset"),
-   validity = function(object) validEset(object)
-)
+         representation(assayData = "AssayData",
+                        phenoData = "AnnotatedDataFrame",
+                        experimentData = "MIAME",
+                        annotation = "character"),
+         prototype = list(
+           assayData = list(), # initialize to env, so different instances have different envs
+           phenoData = new( "AnnotatedDataFrame" ),
+           experimentData = new( "MIAME" ),
+           annotation = character()),
+         "VIRTUAL")
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Classes for specific types of data
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# FeatureSet: probe-level information. No subclasses implemented
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Targetset: target-oriented (e.g., gene) summary of features.
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+setClass("ExpressionESet", contains="eSet", "VIRTUAL")
+setClass("ExpressionSet", contains = "ExpressionESet") # exprSet-like
+setClass("GeneralizedExpressionSet", contains = "ExpressionESet") # no constraints on required assayData element names
+## setClass("ExpressionSet", contains = "eSet", validity = validSet ) # Expression
+setClass("SnpESet", contains = "eSet", "VIRTUAL" ) # SNPs
+setClass("SnpSet", contains = "SnpESet")
+## experimental
+setClass("SnpSetN", contains = "SnpESet", "VIRTUAL")
+setClass("SnpSet2", contains = "SnpSetN")
+setClass("SnpSet4", contains = "SnpSetN")
+setClass("SnpSetDetail", contains="SnpSetN")
 # ==========================================================================
 # exprSet <== annotatedDataset: expression arrays and methods for processing them
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

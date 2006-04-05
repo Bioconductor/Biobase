@@ -1,3 +1,10 @@
+updateOldMiame = function(x) {
+  if (!is(x, "MIAME")) stop("only works for instances of MIAME")
+  olds = attributes(unclass(x))
+  joint = intersect(names(olds),names(getSlots("MIAME")))
+  do.call("new", c("MIAME",olds[joint]))
+}
+
 # ==========================================================================
 setMethod("show", "MIAME",
    function(object) {
@@ -6,18 +13,23 @@ setMethod("show", "MIAME",
                 length(object@hybridizations) > 0,
                 length(object@normControls) > 0,
                 length(object@preprocessing) > 0)
-      cat("Experimenter name:",object@name,"\n")
-      cat("Laboratory:",object@lab,"\n")
-      cat("Contact information:",object@contact,"\n")
-      cat("Title:",object@title,"\n")
-      cat("URL:",object@url,"\n")
+      cat("Experiment data\n")
+      cat("  Experimenter name:",object@name,"\n")
+      cat("  Laboratory:",object@lab,"\n")
+      cat("  Contact information:",object@contact,"\n")
+      cat("  Title:",object@title,"\n")
+      cat("  URL:",object@url,"\n")
+# deal with legacy MIAME objects!
+      pmids = try( pubMedIds(object), silent=TRUE )
+      if (!inherits(pmids, "try-error")) cat("  PMIDs:",pmids,"\n")
+# end of dealing!
       if(object@abstract!="")
-         cat("\nA",length(strsplit(object@abstract," ")[[1]]),
+         cat("\n  Abstract: A",length(strsplit(object@abstract," ")[[1]]),
              "word abstract is available. Use 'abstract' method.\n")
       else
-         cat("No abstract available.\n")
+         cat("  No abstract available.\n")
       if(any(Index))
-         cat("\nInformation is available on:", paste(tmp[Index],collapse=", "),"\n")
+         cat("\n  Information is available on:", paste(tmp[Index],collapse=", "),"\n")
    }
 )
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -30,6 +42,13 @@ setMethod("hybridizations","MIAME",function(object) object@hybridizations)
 setMethod("normControls","MIAME",function(object) object@normControls)
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("preproc","MIAME",function(object) object@preprocessing)
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+setMethod("pubMedIds","MIAME",function(object) object@pubMedIds)
+
+setReplaceMethod("pubMedIds","MIAME",function(object,value){
+   object@pubMedIds = value
+   object
+   })
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("otherInfo","MIAME",function(object) object@other)
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -62,5 +81,29 @@ read.MIAME <- function(filename=NULL,widget=getOption("BioC")$Base$use.widgets,.
          return(new("MIAME"))
 }
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-
+setMethod("combine", c("MIAME", "MIAME"), function(x, y, ...) {
+  if (identical(x,y)) return (x)
+  for (sl in names(getSlots(class(x)))) {
+    if (identical(slot(x,sl),slot(y,sl)))
+      next
+    slot(x,sl) <- 
+      switch(sl,
+             ## multiple elements possible
+             name=,
+             lab=,
+             contact=,
+             url=,
+             samples=,
+             hybridizations=,
+             title= {
+               c(slot(x,sl),slot(y,sl))
+             },
+             ## just a single entry
+             abstract= {
+               paste(slot(x,sl), slot(y,sl), collapse="\n")
+             },
+             ## unknown
+             warning("\n  unknown MIAME field '", sl,"'"))
+  }
+  x
+})

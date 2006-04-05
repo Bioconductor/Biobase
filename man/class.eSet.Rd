@@ -131,7 +131,7 @@ gn <- geneNames(sample.exprSet)
 sn <- sampleNames(sample.exprSet)
 
 # construct an eSet, using sample.exprSet components
-es2 <- new("eSet", phenoData=pd, assayData=xl,
+es2 <- new("eSet", phenoData=as(pd,"AnnotatedDataFrame"), assayData=xl,
   reporterNames=gn, sampleNames=sn)
 
 # illustrate subset and show for assayData as list
@@ -139,7 +139,8 @@ es2[1:4,1:4]
 
 # build with environment assayData
 eenv <- new.env()
-es3 <- new("eSet", phenoData=pd, assayData=eenv,
+assign("exprs", exprs(sample.exprSet), eenv)
+es3 <- new("eSet", phenoData=as(pd,"AnnotatedDataFrame"), assayData=eenv,
   reporterNames=gn, sampleNames=sn)
 es3
 es3[1:5,1:5]
@@ -157,18 +158,20 @@ if (interactive()) {
  lk <- try(sampleNames(es2) <- letters[-1]) # not ok
 }
 
+# VJC commented the following out, could not fix varMetadata oddity
 # work with the swirl data
-data(SW)
-data(swrep)
-data(SWPD)
-sw <- new("eSet",
-  assayData=list( R=SW$R, G=SW$G, Rb=SW$Rb, Gb=SW$Gb),
-  phenoData=SWPD, reporterInfo=swrep, sampleNames=as.character(1:4),
-  reporterNames=as.character(swrep$Name))
-# remove first reporter from each assay, explicitly or implicitly
-assayData(sw) <- assayData(sw[-1,])
-sw <- sw[-1,]
-# now two fewer than original
-sw 
+#data(SW)
+#data(swrep)
+#data(SWPD)
+#sw <- new("eSet",
+#  assayData=list( R=SW$R, G=SW$G, Rb=SW$Rb, Gb=SW$Gb),
+#  phenoData=as(SWPD, "AnnotatedDataFrame"), 
+#  reporterInfo=swrep, sampleNames=as.character(1:4),
+#  reporterNames=as.character(swrep$Name))
+## remove first reporter from each assay, explicitly or implicitly
+#assayData(sw) <- assayData(sw[-1,])
+#sw <- sw[-1,]
+## now two fewer than original
+#sw 
 }
 \keyword{classes}

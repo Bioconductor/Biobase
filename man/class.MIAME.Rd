@@ -10,6 +10,7 @@
 \alias{normControls,MIAME-method}
 \alias{otherInfo,MIAME-method}
 \alias{preproc,MIAME-method}
+\alias{pubMedIds,MIAME-method}
 \alias{samples,MIAME-method}
 \alias{show,MIAME-method}
 
@@ -38,6 +39,8 @@
       \item{\code{hybridizations}:}{Object of class \code{list} containing information about the hybridizations}
       \item{\code{normControls}:}{Object of class \code{list} containing information about the controls such as house keeping genes}
       \item{\code{preprocessing}:}{Object of class \code{list} containing information about the pre-processing steps used on the raw data from this experiment}
+      \item{\code{pubMedIds}:}{Object of class \code{character} listing strings
+of PubMed identifiers of papers relevant to the dataset}
       \item{\code{other}:}{Object of class \code{list} containing other information for which none of the above slots does not applies}
   }
 }
@@ -45,13 +48,13 @@
 \section{Methods}{
    Class-specific methods:
    \describe{
-      \item{\code{abstract(MIAME)}:}{An accesor function for \code{abstract}}
-      \item{\code{expinfo(MIAME)}:}{An accesor function for \code{name}, \code{lab}, \code{contact}, \code{title}, and \code{url}}
-      \item{\code{hybridizations(MIAME)}:}{ An accesor function for \code{hybridizations} }
-      \item{\code{normControls(MIAME)}:}{ An accesor function for \code{normControls} }
-      \item{\code{otherInfo(MIAME)}:}{ An accesor function for \code{other} }
-      \item{\code{precproc(MIAME)}:}{ An accesor function for \code{other} }
-      \item{\code{samples(MIAME)}:}{ An accesor function for \code{samples} }
+      \item{\code{abstract(MIAME)}:}{An accessor function for \code{abstract}}
+      \item{\code{expinfo(MIAME)}:}{An accessor function for \code{name}, \code{lab}, \code{contact}, \code{title}, and \code{url}}
+      \item{\code{hybridizations(MIAME)}:}{ An accessor function for \code{hybridizations} }
+      \item{\code{normControls(MIAME)}:}{ An accessor function for \code{normControls} }
+      \item{\code{otherInfo(MIAME)}:}{ An accessor function for \code{other} }
+      \item{\code{precproc(MIAME)}:}{ An accessor function for \code{other} }
+      \item{\code{samples(MIAME)}:}{ An accessor function for \code{samples} }
    }
    Standard generic methods:
    \describe{
