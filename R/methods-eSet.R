@@ -59,7 +59,7 @@ setValidity("eSet", function( object ) {
 setMethod("show", "eSet", function(object) {
   cat("Instance of", class( object ), "\n")
   cat("\nassayData\n")
-  cat("  Storage mode:", assayDataStorageMode(assayData(object)), "\n")
+  cat("  Storage mode:", storageMode(object), "\n")
   cat("  Dimensions:\n")
   print(dims(object))
   cat("\n")
@@ -68,6 +68,13 @@ setMethod("show", "eSet", function(object) {
   show(experimentData(object))
   cat("\nAnnotation ")
   show(annotation(object))
+})
+
+setMethod("storageMode", "eSet", function(object) storageMode(assayData(object)))
+
+setReplaceMethod("storageMode", c("eSet", "character"), function(object, value) {
+  storageMode(assayData(object)) <- value
+  object
 })
 
 setMethod("sampleNames", "eSet", function(object) sampleNames(phenoData(object)))
@@ -236,7 +243,7 @@ setReplaceMethod("exprs", c("eSet", "AssayData"), function(object, value) {
 ## 
 
 setMethod("reporterNames", "eSet", function(object) {
-  .Deprecated("featureNmaes", "Biobase")
+  .Deprecated("featureNames", "Biobase")
   featureNames(object)
 })
 

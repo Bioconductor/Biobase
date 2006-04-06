@@ -26,14 +26,29 @@ assayDataValidMembers <- function(assayData, required) {
     paste("missing '", absent ,"' in assayData" , sep = "", collapse = "\n\t")
 }
 
-assayDataStorageMode <- function(assayData) {
-  if (is(assayData, "list"))
+assayDataStorageMode <- function(object) {
+  if (is(object, "list"))
     "list"
-  else if (environmentIsLocked(assayData))
+  else if (environmentIsLocked(object))
     "lockedEnvironment"
   else
     "environment"
 }
+
+setMethod("storageMode", "AssayData", assayDataStorageMode)
+
+assayDataStorageModeReplace <- function(object, value) {
+  current.mode <- assayDataStorageMode(object)
+  if (current.mode == value) return(object)
+  if (is(object,"environment")) {
+    nms <- ls(object)
+    object <- lapply(object,function(elt) elt)
+    names(object) <- nms
+  }  
+  do.call("assayDataNew", c(storage.mode=value, object))
+}
+
+setReplaceMethod("storageMode", c("AssayData", "character"), assayDataStorageModeReplace)
 
 assayDataEnvLock <- function(assayData) lockEnvironment(assayData, bindings=TRUE)
 

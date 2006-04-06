@@ -161,7 +161,7 @@ affymetrix data representation.  A new class,
 <<lkEset>>=
 getSlots("eSet")
 #getSlots("exprList")
-getClass("listOrEnv")
+getClass("AssayData")
 @
 The \Rclass{exprListNM} class has some legacy (under
 the name ``exprList'') in
