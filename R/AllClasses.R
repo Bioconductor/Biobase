@@ -159,15 +159,12 @@ setClass("eSet",
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setClass("ExpressionESet", contains="eSet", "VIRTUAL")
 setClass("ExpressionSet", contains = "ExpressionESet") # exprSet-like
-setClass("GeneralizedExpressionSet", contains = "ExpressionESet") # no constraints on required assayData element names
+setClass("MultiExpressionSet", contains = "ExpressionESet") # no constraints on required assayData element names
 ## setClass("ExpressionSet", contains = "eSet", validity = validSet ) # Expression
 setClass("SnpESet", contains = "eSet", "VIRTUAL" ) # SNPs
 setClass("SnpSet", contains = "SnpESet")
 ## experimental
-setClass("SnpSetN", contains = "SnpESet", "VIRTUAL")
-setClass("SnpSet2", contains = "SnpSetN")
-setClass("SnpSet4", contains = "SnpSetN")
-setClass("SnpSetDetail", contains="SnpSetN")
+## setClass("TilingESet", contains = "eSet", "VIRTUAL" ) # Tiling arrays
 # ==========================================================================
 # exprSet <== annotatedDataset: expression arrays and methods for processing them
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

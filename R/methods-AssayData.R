@@ -87,7 +87,7 @@ setReplaceMethod("sampleNames", c("AssayData", "ANY"), function(object, value) {
 
 setMethod("featureNames", "AssayData", function(object) sapply(object, rownames))
 
-setReplaceMethod("featureNames", "AssayData", function(object, value) {
+setReplaceMethod("featureNames", c("AssayData","character"), function(object, value) {
   switch(assayDataStorageMode(object),
          lockedEnvironment = {
            object <- copyEnv(object)

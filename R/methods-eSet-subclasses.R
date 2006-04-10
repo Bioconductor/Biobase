@@ -61,12 +61,12 @@ setValidity("ExpressionSet", function(object) {
 
 setMethod("exprs", "ExpressionSet", function(object) assayDataElement(object,"exprs"))
 
-setReplaceMethod("exprs", "ExpressionSet",
+setReplaceMethod("exprs", c("ExpressionSet","matrix"),
                  function(object, value) assayDataElementReplace(object, "exprs", value))
 
-## GeneralizedExpressionSet
+## MultiExpressionSet
 
-setMethod("initialize", "GeneralizedExpressionSet",
+setMethod("initialize", "MultiExpressionSet",
           function(.Object,
                    phenoData = new("AnnotatedDataFrame"),
                    experimentData = new("MIAME"),
@@ -79,7 +79,7 @@ setMethod("initialize", "GeneralizedExpressionSet",
                            annotation = annotation)
           })
 
-updateOldESet <- function(from, ...) {  # to GeneralizedExpressionSet
+updateOldESet <- function(from, ...) {  # to MultiExpressionSet
   metadata <- varMetadata(from)
   if (!is.null(metadata[["varName"]])) {
     rownames(metadata) <- metadata[["varName"]]
@@ -121,9 +121,9 @@ updateOldESet <- function(from, ...) {  # to GeneralizedExpressionSet
   }
   ## reporterInfo
   if (any(dim(from@reporterInfo)!=0))
-    warning("reporterInfo data not transfered to GeneralizedExpressionSet object")
+    warning("reporterInfo data not transfered to MultiExpressionSet object")
   ## new object
-  object <- new("GeneralizedExpressionSet",
+  object <- new("MultiExpressionSet",
                 experimentData = description,
                 annotation = from@annotation)
   assayData(object) <- from@assayData
@@ -136,9 +136,9 @@ updateOldESet <- function(from, ...) {  # to GeneralizedExpressionSet
 ## SnpESet -- virtual base classs for SnpSet's
 ## 
 
-setMethod("exprs", "SnpESet", function(object) assayDataElement(object, "call"))
+setMethod("exprs", c("SnpESet"), function(object) assayDataElement(object, "call"))
 
-setReplaceMethod("exprs", c("SnpESet"), function(object, value) {
+setReplaceMethod("exprs", c("SnpESet", "matrix"), function(object, value) {
   assayDataElementReplace(object, "call", value)
 })
 
@@ -166,110 +166,3 @@ setValidity("SnpSet", function(object) {
   assayDataValidMembers(assayData(object), c("call", "callProbability"))
 })
 
-## 
-## SnpSetN -- virtual base class for SNP data stored in arrays
-## 
-
-setMethod("dim", "SnpSetN", function(x) {
-  data <- assayData(x)
-  d <-
-    if (is(data, "environment")) dim(data[[ ls(data)[[1]] ]]) else dim(data[[1]])
-  names(d) <- c("SNPs", "Samples", "Max. variants")
-  d
-})
-
-setMethod("dims", "SnpSetN", function( object ) {
-  dims <- callNextMethod()
-  rownames(dims) <- c( "SNPs", "Samples", "Max. variants" )
-  dims
-})
-
-setMethod("[", "SnpSetN", function( x, i, j, ..., drop = FALSE ) {
-  if (length(list( ... )) == 0)
-    callNextMethod(x, i, j, , drop = drop)
-  else
-    callNextMethod(x, i, j, ..., drop = drop)
-})
-
-## SnpSet2
-
-setMethod("initialize", "SnpSet2",
-          function(.Object,
-                   phenoData = new("AnnotatedDataFrame"),
-                   experimentData = new("MIAME"),
-                   annotation = character(),
-                   call = new("array", dim=c(0,0,2)), # 1 SNP (+ve [common], -ve [alt]) x 2 strand
-                   callProbability = new("array", dim=c(0,0,2)),
-                   ... ) {
-            callNextMethod(.Object,
-                           assayData = assayDataNew(
-                             call = call,
-                             callProbability = callProbability,
-                             ...),
-                           phenoData = phenoData,
-                           experimentData = experimentData,
-                           annotation = annotation )
-          })
-
-setValidity("SnpSet2", function(object) {
-  msg <- assayDataValidMembers(assayData(object), c("call","callProbability"))
-  if (dim(object)[[3]]!=2)
-    msg <- paste(msg, "too many dimensions in exprs", sep="\n  ")
-  msg
-})
-
-## SnpSet4
-
-setMethod("initialize", "SnpSet4",
-          function(.Object,
-                   phenoData = new("AnnotatedDataFrame"),
-                   experimentData = new("MIAME"),
-                   annotation = character(),
-                   call = new("array", dim=c(0,0,8)), # 4 SNP (A, T, G, C) x 2 strands
-                   callProbability = new("array", dim=c(0,0,8)),
-                   ... ) {
-            callNextMethod(.Object,
-                           assayData = assayDataNew(
-                             call = call,
-                             callProbability = callProbability,
-                             ...),
-                           phenoData = phenoData,
-                           experimentData = experimentData,
-                           annotation = annotation )
-          })
-
-setValidity("SnpSet4", function(object) {
-  msg <- assayDataValidMembers(assayData(object), c("call","callProbability"))
-  if (dim((object))[[3]]!=8)
-    msg <- paste(msg, "too many dimensions in exprs", sep="\n  ")
-  msg
-})
-
-## SnpSetDetail
-
-setMethod("initialize", "SnpSetDetail",
-          function(.Object,
-                   phenoData = new("AnnotatedDataFrame"),
-                   experimentData = new("MIAME"),
-                   annotation = character(),
-                   evidence = new("array", dim = c(0, 0, 2)), # SNP, sample, strand
-                   level = new("array", dim = c(0, 0, 2)),
-                   call = new("array", dim = c(0, 0, 2)),
-                   callProbability = new("array", dim = c(0, 0, 2)),
-                   copyNumber = new("array", dim = c(0, 0, 3)), # strand + total
-                   ...) {
-            callNextMethod(.Object,
-                           assayData = assayDataNew(
-                             evidence=evidence,
-                             level=level,
-                             call=call, callProbability=callProbability,
-                             copyNumber=copyNumber, ...),
-                           phenoData=phenoData,
-                           experimentData=experimentData,
-                           annotation=annotation)
-          })
-
-setValidity("SnpSetDetail", function( object ) {
-  assayDataValidMembers(assayData(object),
-                        c("evidence", "level", "call", "callProbability", "copyNumber"))
-})

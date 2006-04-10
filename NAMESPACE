@@ -6,8 +6,8 @@ exportClasses(aggregator, container, eSet, phenoData,
               MIAME, characterORMIAME,
               annotatedDataset, AssayData, data.frameOrNULL,
               exprMatrix, exprSet, AnnotatedDataFrame,
-              ExpressionESet, ExpressionSet, GeneralizedExpressionSet,
-              SnpESet, SnpSet, SnpSet2, SnpSet4, SnpSetDetail)
+              ExpressionESet, ExpressionSet, MultiExpressionSet,
+              SnpESet, SnpSet)
 
 exportMethods("[", "[[", "$", abstract, addVarMetadataEntry, aggenv, aggfun,
              annotation, coerce,

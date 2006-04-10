@@ -202,7 +202,7 @@ setReplaceMethod("experimentData", signature=c("eSet","MIAME"), function(object,
 
 setMethod("pubMedIds", signature="eSet", function(object) pubMedIds(experimentData(object)))
 
-setReplaceMethod("pubMedIds", signature="eSet", function(object, value) {
+setReplaceMethod("pubMedIds", signature=c("eSet","character"), function(object, value) {
   pubMedIds(experimentData(object)) <- value
   object
 })
