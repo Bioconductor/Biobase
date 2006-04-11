@@ -47,11 +47,14 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 biocReposList <- function() {
     ## Locations of Bioconductor release repositories
-    reposList <- c(bioc="http://bioconductor.org/packages/bioc/1.8",
-                   aData="http://bioconductor.org/packages/data/annotation/1.8",
-                   eData="http://bioconductor.org/packages/data/experiment/1.8",
-                   oh="http://bioconductor.org/packages/omegahat/1.8",
-                   li="http://bioconductor.org/packages/lindsey/1.8",
+    VERSION <- "1.8"
+    root <- paste("http://bioconductor.org/packages", VERSION, sep="/")
+    mkurl <- function(...) paste(root, ..., sep="/")
+    reposList <- c(bioc=mkurl("bioc"),
+                   aData=mkurl("data/annotation"),
+                   eData=mkurl("data/experiment"),
+                   oh=mkurl("omegahat"),
+                   li=mkurl("lindsey"),
                    cran="http://cran.fhcrc.org")
     reposList
 }
