@@ -56,7 +56,7 @@ setAs("exprSet", "ExpressionSet", function(from) {
 })
 
 setValidity("ExpressionSet", function(object) {
-  assayDataValidMembers(assayData(object), c("exprs"))
+  assayDataValidMembers(assayData(object), c("exprs", "se.exprs"))
 })
 
 setMethod("exprs", "ExpressionSet", function(object) assayDataElement(object,"exprs"))
