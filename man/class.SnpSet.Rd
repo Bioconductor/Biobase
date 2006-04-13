@@ -14,11 +14,9 @@
 \description{
   Container for high-throughput assays and experimental
   metadata. \code{SnpSet} class is derived from
-  \code{\link{eSet}} and \code{\link{SnpESet}} classes, and
-  requires matricies \code{call}, \code{callProbability} as assay data members.
-}
-\section{Extends}{
-   Directly extends class \code{\link{SnpESet}}; extends class \code{\link{eSet}}.
+  \code{\link{eSet}}, and requires matricies \code{call},
+  \code{callProbability} as assay data members.  } \section{Extends}{
+   Directly extends class \code{\link{eSet}}.
 }
 \section{Creating Objects}{
 
@@ -59,11 +57,11 @@
 }
 \section{Methods}{
 
-  Class-specific methods: none.
-
-  Derived from \code{\link{SnpESet}}:
+  Class-specific methods:
   \describe{
-    \item{\code{exprs(SnpSet)}, \code{exprs(SnpSet,AssayData)<-}}{See \code{\link{SnpESet}}}
+     \item{\code{exprs(SnpSet)}, \code{exprs(SnpSet,matrix)<-}}{Access and
+       set elements named \code{exprs} in the \code{AssayData}
+       slot.}
   }
   
    Derived from \code{\link{eSet}}:
@@ -102,7 +100,7 @@
 \author{V.J. Carey, after initial design by R. Gentleman }
 
 \seealso{
-  \code{\link{eSet}}, \code{\link{SnpESet}}
+  \code{\link{eSet}}, \code{\link{ExpressionSet}}
 }
 
 \keyword{classes}

@@ -69,22 +69,27 @@
 \concept{sampleNames}
 
 \title{
-  Virtual Class to Contain High-Throughput Assays and Experimental Metadata
+  Class to Contain High-Throughput Assays and Experimental Metadata
 }
 
 \description{
-  Virtual class to unite high-throughput assays and experimental
-  metadata. Derived classes include \code{\link{ExpressionSet}} and
-  \code{\link{SnpSet}}.
+  Container for high-throughput assays and experimental
+  metadata. \code{eSet} is a VIRTUAL class that can contain one or more identical-sized
+  matricies as \code{assayData} elements. Derived classes
+  (e.g., \code{\link{ExpressionSet}}, \code{\link{SnpSet}}) specify
+  which elements must be present in the \code{assayData} slot.
 }
 
 % \section{Extends}{
 %    Directly extends class \code{\link{annotatedDataset}}.
 % }
 \section{Creating Objects}{
-  \code{eSet} is a virtual class; \code{eSet} objects cannot be created.
-  See classes \code{\link{ExpressionSet}}, \code{\link{SnpSet}} for
-  examples of concrete classes derived from \code{eSet}.
+
+  \code{eSet} is a virtual class, so instances cannot be created.
+
+
+  Objects created under previous definitions of \code{eSet-class} can be
+  coerced to classes derived  based on \code{eSet} using \code{updateOldESet}.
 }
 \section{Slots}{
    Introduced in \code{eSet}:
@@ -107,8 +112,6 @@
 
    Class-specific methods:
    \describe{
-     \item{\code{exprs(eSet)}, \code{exprs(eSet,value)<-}}{Method
-       defined in this calss performs no action and issues an error.}
      \item{\code{sampleNames(eSet)} and
        \code{sampleNames(eSet)<-}:}{Coordinate accessing and setting
        sample names in \code{assayData} and \code{phenoData}}

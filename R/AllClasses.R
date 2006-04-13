@@ -127,7 +127,7 @@ setClass("AnnotatedDataFrame",
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setClassUnion("AssayData", c("list", "environment"))
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# eSet: A class containing assay data (typically, one or many
+# eSet: A VIRTUAL class containing assay data (typically, one or many
 # different sets of results obtained from one or many samples in a
 # single experiment), phenotypic data (describing the samples involved
 # in the experiment), experimental data (describing the methods and
@@ -150,21 +150,8 @@ setClass("eSet",
            experimentData = new( "MIAME" ),
            annotation = character()),
          "VIRTUAL")
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Classes for specific types of data
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# FeatureSet: probe-level information. No subclasses implemented
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Targetset: target-oriented (e.g., gene) summary of features.
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setClass("ExpressionESet", contains="eSet", "VIRTUAL")
-setClass("ExpressionSet", contains = "ExpressionESet") # exprSet-like
-setClass("MultiExpressionSet", contains = "ExpressionESet") # no constraints on required assayData element names
-## setClass("ExpressionSet", contains = "eSet", validity = validSet ) # Expression
-setClass("SnpESet", contains = "eSet", "VIRTUAL" ) # SNPs
-setClass("SnpSet", contains = "SnpESet")
-## experimental
-## setClass("TilingESet", contains = "eSet", "VIRTUAL" ) # Tiling arrays
+setClass("ExpressionSet", contains = "eSet") # exprSet-like
+setClass("SnpSet", contains = "eSet")
 # ==========================================================================
 # exprSet <== annotatedDataset: expression arrays and methods for processing them
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

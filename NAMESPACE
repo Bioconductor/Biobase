@@ -6,8 +6,7 @@ exportClasses(aggregator, container, eSet, phenoData,
               MIAME, characterORMIAME,
               annotatedDataset, AssayData, data.frameOrNULL,
               exprMatrix, exprSet, AnnotatedDataFrame,
-              ExpressionESet, ExpressionSet, MultiExpressionSet,
-              SnpESet, SnpSet)
+              ExpressionSet, SnpSet)
 
 exportMethods("[", "[[", "$", abstract, addVarMetadataEntry, aggenv, aggfun,
              annotation, coerce,
@@ -27,6 +26,7 @@ exportMethods("[", "[[", "$", abstract, addVarMetadataEntry, aggenv, aggfun,
 
 export("Aggregate", "addNonExisting", "addPDF2Vig",
        "addVig2Menu", "addVig4Unix", "addVig4Win", "addVigs2WinMenu",
+       "assayDataNew", "assayDataValidMembers",
        "assayDataElementNames", "assayDataElement", "assayDataElementReplace",
        "biocReposList", "cache", "copyEnv", "copySubstitute", 
        "createPackage", "df2pD", "dumpPackTxt", "esApply", 

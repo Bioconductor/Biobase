@@ -6,11 +6,7 @@ baseClass <- list(eSet = NULL)
 featureSubclases <- NULL
 targetSubclasses <-
   list(ExpressionSet = c("exprs", "se.exprs"),
-##        ExpressionSet = c("level", "stdErr", "call", "callProbability"),
-       SnpSet = c("call", "callProbability"),
-       SnpSetDetail = c("evidence", "level", "call", "callProbability", "copyNumber"),
-       SnpSet2 = c("call","callProbability"),
-       SnpSet4 = c("call","callProbability"))
+       SnpSet = c("call", "callProbability"))
 
 allClasses <- c( baseClass, featureSubclases, targetSubclasses )
 allSubclasses <- c( featureSubclases, targetSubclasses )
@@ -55,7 +51,7 @@ helperNew <- function(obj, ...) {
 
 helperFillWithNoise <- function( obj ) {
   aData <- assayData(obj)
-  storage.mode <- assayDataStorageMode(aData)
+  storage.mode <- storageMode(obj)
   names <- if (is(aData,"environment")) ls(aData) else names(aData)
   if (is(aData,"environment")) aData <- new.env(parent=emptyenv())
   adim <- as.numeric(dim(obj))
@@ -149,7 +145,7 @@ testSubset <- function() {
     checkTrue(validObject(obj1))
     checkTrue(all(dims(obj1)[1:2,] == c( 15, 5 )))
     ## original unmodified
-    if (assayDataStorageMode(assayData(obj))!="environment") {
+    if (storageMode(obj)!="environment") {
       checkTrue(validObject(obj))
       checkTrue(all(dims(obj)[1:2,] == c(.features,.samples)))
       obj <- obj[1:15, 1:5]
@@ -198,7 +194,7 @@ testSampleNames <- function() {
     obj1 <- obj
     sampleNames(obj1) <- mod
     checkTrue(all(sampleNames(obj) == orig))
-    if (assayDataStorageMode(assayData(obj))!="environment")
+    if (storageMode(obj)!="environment")
       checkTrue(validObject(obj), "after modification")
     else
       checkEquals(validObject(obj, test = TRUE ), "\n  sampleNames differ between assayData and phenoData")
@@ -240,7 +236,7 @@ testExprs <- function() {
     oldExprs <- exprs(obj)
     exprs(obj) <- newExprs
     checkTrue( identical(exprs(obj), newExprs))
-    if (assayDataStorageMode(assayData(obj))!="environment")
+    if (storageMode(obj)!="environment")
       checkTrue(!identical(exprs(obj), oldExprs))
     sampleNames(assayData(obj)) <- sNames
     featureNames(assayData(obj)) <- fNames
@@ -337,6 +333,6 @@ testSetAs <- function() {
   checkNewGolubMerge(gm,Golub_Merge)
 
   data(sample.eSet)
-  es <- updateOldESet(sample.eSet)
+  es <- updateOldESet(sample.eSet, "SwirlSet")
   checkNewSampleEset(es, sample.eSet)
 }

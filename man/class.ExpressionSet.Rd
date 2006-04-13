@@ -17,11 +17,11 @@
 \description{
   Container for high-throughput assays and experimental
   metadata. \code{ExpressionSet} class is derived from
-  \code{\link{eSet}} and \code{\link{ExpressionESet}} classes, and
-  requires a matrix named \code{exprs} as an assay data member.
+  \code{\link{eSet}}, and requires matricies named \code{exprs} and
+  \code{se.exprs} as an assay data members.
 }
 \section{Extends}{
-   Directly extends class \code{\link{ExpressionESet}}; extends class \code{\link{eSet}}.
+   Directly extends class \code{\link{eSet}}.
 }
 \section{Creating Objects}{
 
@@ -64,13 +64,13 @@
   \describe{
     \item{\code{as(exprSet,"ExpressionSet")}}{Coerce objects of
       \code{\link{exprSet-class}} to \texttt{ExpressionSet}}
+     \item{\code{exprs(ExpressionSet)}, \code{exprs(ExpressionSet,matrix)<-}}{Access and
+       set elements named \code{exprs} in the \code{AssayData}
+       slot.}
     }
 
    Derived from \code{\link{eSet}}:
    \describe{
-     \item{\code{exprs(ExpressionSet)}, \code{exprs(ExpressionSet,AssayData)<-}}{Access and
-       set elements named \code{exprs} in the \code{AssayData}
-       slot.}
      \item{\code{sampleNames(ExpressionSet)} and \code{sampleNames(ExpressionSet)<-}:}{See \code{\link{eSet}}}
      \item{\code{featureNames(ExpressionSet)}, \code{featureNames(ExpressionSet, value)<-}:}{See \code{\link{eSet}}}
      \item{\code{dims(ExpressionSet)}:}{See \code{\link{eSet}}}
@@ -95,8 +95,7 @@
     \item{\code{validObject(ExpressionSet)}:}{Validity-checking method, ensuring
       that \code{exprs} is a member of
       \code{assayData}. \code{checkValidity(ExpressionSet)} imposes this
-      validity check, and the validity checks of \code{ExpressionESet}
-      and \code{eSet}.}
+      validity check, and the validity checks of \code{eSet}.}
      \item{\code{show(ExpressionSet)}}{See \code{\link{eSet}}}
      \item{\code{dim(ExpressionSet)}, \code{ncol}}{See \code{\link{eSet}}}
      \item{\code{ExpressionSet[(index)}:}{See \code{\link{eSet}}}
@@ -106,7 +105,7 @@
 \author{V.J. Carey, after initial design by R. Gentleman }
 
 \seealso{
-  \code{\link{eSet}}, \code{\link{ExpressionSet}}, \code{\link{MultiExpressionSet}}
+  \code{\link{eSet}}, \code{\link{ExpressionSet}}
 }
 
 \keyword{classes}

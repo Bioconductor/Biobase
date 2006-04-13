@@ -1,7 +1,7 @@
 # ==========================================================================
 # eSet Class Validator
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setMethod( "initialize",
+setMethod("initialize",
           signature=c(.Object="eSet"),
           function( .Object,
                    assayData = assayDataNew(...),
@@ -31,6 +31,59 @@ setMethod( "initialize",
             validObject(.Object)
             .Object
 })
+
+updateOldESet <- function(from, toClass, ...) {  # to MultiExpressionSet
+  metadata <- varMetadata(from)
+  if (!is.null(metadata[["varName"]])) {
+    rownames(metadata) <- metadata[["varName"]]
+    metadata[["varName"]] <- NULL
+  } else if (!is.null(colnames(pData(from))))
+    rownames(metadata) <- colnames(pData(from))
+  if (!is.null(metadata[["varLabels"]])) {
+    names(metadata)[names(metadata)=="varLabels"] <- "labelDescription"
+    metadata[["labelDescription"]] <- as.character(metadata[["labelDescription"]])
+  }
+  ## phenoData
+  pData <- pData(from)
+  phenoData <- new("AnnotatedDataFrame", data=pData, varMetadata=metadata)
+  ## sampleNames
+  if (any(sampleNames(assayData(from))!=sampleNames(phenoData))) {
+    warning("setting assayData colnames to sampleNames")
+    sampleNames(assayData(from)) <- sampleNames(phenoData)
+  }
+  ## reporterNames
+  if (length(from@reporterNames == dim(from)[[1]])) {
+    if (any(sapply(assayData(from),rownames)!=from@reporterNames))
+      warning("setting assayData rownames to reporterNames")
+    featureNames(assayData(from)) <- from@reporterNames
+  }
+  ## description
+  description <- from@description
+  if (is(description,"MIAME")) {
+    if (length(from@notes)!=0) {
+      warning("addding 'notes' to 'description'")
+      description@other <- c(description@other@other,from@notes)
+    }
+    if (length(from@history)!=0) {
+      warning("adding 'history' to 'description'")
+      description@other <- c(description@other@other,from@history)
+    }
+  } else {
+    warning("'description' is not of class MIAME; ignored")
+    description <- NULL
+  }
+  ## reporterInfo
+  if (any(dim(from@reporterInfo)!=0))
+    warning("reporterInfo data not transfered to MultiExpressionSet object")
+  ## new object
+  object <- new(toClass,
+                experimentData = description,
+                annotation = from@annotation)
+  assayData(object) <- from@assayData
+  phenoData(object) <- phenoData
+  validObject(object)
+  object
+}
 
 setValidity("eSet", function( object ) {
   msg <- NULL
@@ -228,14 +281,6 @@ setMethod("combine", c("eSet", "eSet"), function(x, y, ...) {
   experimentData(x) <- combine(experimentData(x),experimentData(y))
   ## annotation -- constant
   x
-})
-
-setMethod("exprs", "eSet", function(object) {
-  stop("'exprs' not implemented for virtual base class eSet")
-})
-
-setReplaceMethod("exprs", c("eSet", "AssayData"), function(object, value) {
-  stop("'exprs<-' not implemented for virtual base class eSet")
 })
 
 ## 
