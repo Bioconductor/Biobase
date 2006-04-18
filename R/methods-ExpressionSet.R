@@ -29,6 +29,7 @@ setAs("exprSet", "ExpressionSet", function(from) {
     desc = updateOldMiame(desc)
   if (all(dim(from@se.exprs) == dims)) {
     se.exprs <- from@se.exprs
+    colnames(se.exprs) <- colnames(exprs)
     new("ExpressionSet",
         phenoData=as(phenoData(from), "AnnotatedDataFrame"),
         experimentData=desc,

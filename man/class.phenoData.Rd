@@ -1,9 +1,6 @@
 \name{phenoData}
 \docType{class}
 \alias{class:phenoData}
-\alias{phenoData}
-\alias{varMetadata}
-\alias{pData}
 
 \alias{phenoData-class}
 \alias{[,phenoData-method}

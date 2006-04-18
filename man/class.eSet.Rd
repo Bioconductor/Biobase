@@ -57,7 +57,6 @@
 \alias{SWPD}
 \alias{swrep}
 \alias{golubMergeSub}
-\alias{assayData}
 
 \concept{exprs}
 \concept{annotation}
