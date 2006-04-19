@@ -124,23 +124,24 @@ setAs("phenoData", "AnnotatedDataFrame", function(from) {
       varMetadata=varMetadata)
 })
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+showSomeNames <- function( names ) {
+  len <- length( names )
+  if ( len > 5 ) names <-
+    paste(names[1], names[2], names[3], "...",
+          names[(len-1)], names[len], sep=", ")
+  else names <- paste(names, collapse=", ")
+  paste(names, " (", len, " total)", sep="")
+}
+
 setMethod("show", "AnnotatedDataFrame", function(object) {
-  someNames <- function( names ) {
-    len <- length( names )
-    if ( len > 5 ) names <-
-      paste(names[1], names[2], names[3], "...",
-            names[(len-1)], names[len], sep=", ")
-    else names <- paste(names, collapse=", ")
-    paste(names, " (", len, " total)", sep="")
-  }
   cat("\nphenoData\n")
-  cat("  sampleNames:", someNames(sampleNames(object)), "\n")
+  cat("  sampleNames:", showSomeNames(sampleNames(object)), "\n")
   cat("  varLabels:\n")
   metadata <- varMetadata(object)
   mapply(function(nm, meta) cat("    ",nm,": ", meta, "\n", sep=""),
          varLabels(object), metadata[["labelDescription"]])
   if (length(colnames(metadata))>1)
-    cat("  varMetadata:", someNames(colnames(metadata)), "\n")
+    cat("  varMetadata:", showSomeNames(colnames(metadata)), "\n")
 })
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("combine", c("AnnotatedDataFrame", "AnnotatedDataFrame"), function(x, y) {

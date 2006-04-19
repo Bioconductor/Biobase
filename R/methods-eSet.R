@@ -34,11 +34,16 @@ setMethod("initialize",
 
 updateOldESet <- function(from, toClass, ...) {  # to MultiExpressionSet
   metadata <- varMetadata(from)
+  if (all(dim(metadata)==0)) {
+    warning("replacing apparently empty varMetadata")
+    metadata <- data.frame(numeric(ncol(pData(from))))[,FALSE]
+  }
   if (!is.null(metadata[["varName"]])) {
     rownames(metadata) <- metadata[["varName"]]
     metadata[["varName"]] <- NULL
-  } else if (!is.null(colnames(pData(from))))
+  } else if (!is.null(colnames(pData(from)))) {
     rownames(metadata) <- colnames(pData(from))
+  }
   if (!is.null(metadata[["varLabels"]])) {
     names(metadata)[names(metadata)=="varLabels"] <- "labelDescription"
     metadata[["labelDescription"]] <- as.character(metadata[["labelDescription"]])
@@ -113,9 +118,9 @@ setMethod("show", "eSet", function(object) {
   cat("Instance of", class( object ), "\n")
   cat("\nassayData\n")
   cat("  Storage mode:", storageMode(object), "\n")
+  cat("  featureNames:", showSomeNames(featureNames(object)), "\n")
   cat("  Dimensions:\n")
   print(dims(object))
-  cat("\n")
   show(phenoData(object))
   cat("\n")
   show(experimentData(object))
