@@ -90,13 +90,16 @@ varMetadata(pes)
 @
 Arbitrarily many metadata entries may be added for
 any variable.
+
+This didn't seem to catch on and has been removed for now.
+
 <<addUn>>=
-pes <- addVarMetadataEntry(pes, "weight", "units", "pounds")
+##pes <- addVarMetadataEntry(pes, "weight", "units", "pounds")
 @
 The specific metadata attribute ``units'' can be
 ascertained at the \Rclass{phenoData} level:
 <<lkUn>>=
-getUnits(pes, "weight")
+##getUnits(pes, "weight")
 @
 The metadata container is currently a data.frame.
 For very general programmatic manipulation of metadata,
