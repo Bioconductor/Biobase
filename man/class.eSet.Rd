@@ -19,8 +19,6 @@
 \alias{description,eSet-method}
 \alias{dim,eSet-method}
 \alias{dims,eSet-method}
-\alias{eList,eSet-method}
-\alias{eList<-,eSet,AssayData-method}
 \alias{experimentData,eSet-method}
 \alias{experimentData<-,eSet,MIAME-method}
 \alias{exprs,eSet-method}
@@ -52,7 +50,6 @@
 \alias{storageMode<-,eSet,character-method}
 
 \alias{listOrEnv}
-\alias{eList}
 \alias{SW}
 \alias{SWPD}
 \alias{swrep}
@@ -95,7 +92,7 @@
    \describe{
       \item{\code{assayData}:}{Contains matrices with equal
 	dimensions, and with column number equal to
-	\code{nrow(phenoData)}. Class:\code{\link{AssayData}}}
+	\code{nrow(phenoData)}. Class:\code{\link{AssayData-class}}}
       \item{\code{phenoData}:}{Contains variables describing sample
 	(i.e., columns in \code{assayData})
 	phenotypes.Class: \code{\link{AnnotatedDataFrame-class}}}
@@ -175,7 +172,7 @@
 
 
 \seealso{
-  \code{\link{AssayData}}, \code{\link{AnnotatedDataFrame}},
+  \code{\link{AssayData-class}}, \code{\link{AnnotatedDataFrame}},
   \code{\link{MIAME}}, \code{\link{ExpressionSet}}, \code{\link{SnpSet}}
 }
 % \examples{}			% no examples -- virutal class

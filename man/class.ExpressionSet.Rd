@@ -52,7 +52,7 @@
 	\code{exprs} with rows represening features (e.g., reporters)
 	and columns representing samples. Additional matrices of
 	identical size (e.g., representing measurement errors) may
-	also be included in \code{assayData}. Class:\code{\link{AssayData}}}
+	also be included in \code{assayData}. Class:\code{\link{AssayData-class}}}
       \item{\code{phenoData}:}{See \code{\link{eSet}}}
       \item{\code{experimentData}:}{See \code{\link{eSet}}}
       \item{\code{annotation}:}{See \code{\link{eSet}}}
@@ -65,7 +65,7 @@
     \item{\code{as(exprSet,"ExpressionSet")}}{Coerce objects of
       \code{\link{exprSet-class}} to \texttt{ExpressionSet}}
      \item{\code{exprs(ExpressionSet)}, \code{exprs(ExpressionSet,matrix)<-}}{Access and
-       set elements named \code{exprs} in the \code{AssayData}
+       set elements named \code{exprs} in the \code{AssayData-class}
        slot.}
     }
 

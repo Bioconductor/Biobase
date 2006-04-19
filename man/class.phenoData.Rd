@@ -8,12 +8,10 @@
 \alias{[[,phenoData-method}
 \alias{$<-,phenoData-method}
 \alias{$,phenoData-method}
-\alias{addVarMetadataEntry,phenoData,character,character-method}
 \alias{coerce,data.frame,phenoData-method}
 \alias{combine,phenoData,phenoData-method}
 \alias{combine,phenoData,ANY-method}
 \alias{convertVarLabels,phenoData-method}
-\alias{getUnits,phenoData,character-method}
 \alias{getVarMetadata,phenoData,character,character-method}
 \alias{getVarMetadata,phenoData,character,missing-method}
 \alias{pData<-,phenoData-method}
@@ -50,11 +48,9 @@
 \section{Methods}{
    Class-specific methods:
    \describe{
-      \item{\code{addVarMetadataEntry(phenoData, character, character, ANY)}}{Not documented: FIXME: it should be a replace method, otherwise it is not clear how should it work}
       \item{\code{combine(phenoData, phenoData)}}{Combines several instances into a single 'phenoData' instance. See \code{\link{combine}}}
       \item{\code{convertVarLabels(phenoData)}}{Not documented}
       \item{\code{getVarMetadata(phenoData, character, character)} or \code{getVarMetadata(phenoData, character, missing)}}{Not documented}
-      \item{\code{getUnits(phenoData, character}}{Not documented}
       \item{\code{pData(phenoData), pData(phenoData)<-}}{Get/set methods for slot \code{pData}}
       \item{\code{phenoData(exprSet)<-}}{A replacement method for the \code{phenoData} slot}
       \item{\code{split(phenoData, vector)}}{FIXME: there is no implementation!!! A method to \code{split} \code{pData} and return a list of \code{phenoData} objects. Unlike \code{split} this function requires the number of rows of \code{pData} to be a multiple of the length of \code{vector}}
@@ -82,12 +78,11 @@ data(sample.exprSet)
 pes <- phenoData(sample.exprSet)
 pes <- convertVarLabels(pes)
 varMetadata(pes)
-pes <- addVarMetadataEntry(pes, "cov1", "units", "inches")
-getUnits(pes, "cov1")
 
-   # example for 'df2pD'
-   data(cars)
-   d1 = df2pD(cars)
+# example for 'df2pD'
+data(cars)
+d1 = df2pD(cars)
+
 }
 \keyword{methods}
 \keyword{manip}

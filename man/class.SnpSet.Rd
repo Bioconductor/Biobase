@@ -49,7 +49,7 @@
 	call. The content of \code{call} and \code{callProbability} are
 	not enforced by the class. Additional matrices of
 	identical size may also be included in
-	\code{assayData}. Class:\code{\link{AssayData}}} 
+	\code{assayData}. Class:\code{\link{AssayData-class}}} 
       \item{\code{phenoData}:}{See \code{\link{eSet}}}
       \item{\code{experimentData}:}{See \code{\link{eSet}}}
       \item{\code{annotation}:}{See \code{\link{eSet}}}
