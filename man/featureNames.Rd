@@ -10,7 +10,7 @@
 \title{Retrieve feature and sample names from eSets and exprSets.}
 \description{
 These generic functions access the feature names (typically, gene or SNP
-identifiers) and sample names stored in an object derived from the \code{\link{eSet}} or \code{\link{exprSet}} class.
+identifiers) and sample names stored in an object derived from the \code{\link{eSet-class}} or \code{\link{exprSet-class}}.
 }
 \usage{
 featureNames(object)
@@ -32,6 +32,6 @@ geneNames(object) <- value
 }
 \author{Biocore}
 
-\seealso{\code{\link{exprSet}}, \code{\link{ExpressionSet-class}}, \code{\link{SnpSet-class}}}
+\seealso{\code{\link{exprSet-class}}, \code{\link{ExpressionSet-class}}, \code{\link{SnpSet-class}}}
 
 \keyword{manip}

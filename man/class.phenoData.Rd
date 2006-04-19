@@ -12,9 +12,11 @@
 \alias{combine,phenoData,phenoData-method}
 \alias{combine,phenoData,ANY-method}
 \alias{convertVarLabels,phenoData-method}
+\alias{getVarMetadata}
+\alias{getVarMetadata<-}
 \alias{getVarMetadata,phenoData,character,character-method}
 \alias{getVarMetadata,phenoData,character,missing-method}
-\alias{pData<-,phenoData-method}
+\alias{pData<-,phenoData,ANY-method}
 \alias{pData,phenoData-method}
 \alias{phenoData<-,annotatedDataset,phenoData-method}
 \alias{show,phenoData-method}

@@ -11,6 +11,8 @@
 \alias{normControls,MIAME-method}
 \alias{otherInfo,MIAME-method}
 \alias{preproc,MIAME-method}
+\alias{notes,MIAME-method}
+\alias{notes<-,MIAME,list-method}
 \alias{pubMedIds,MIAME-method}
 \alias{pubMedIds<-,MIAME,ANY-method}
 \alias{samples,MIAME-method}
@@ -42,8 +44,7 @@
       \item{\code{hybridizations}:}{Object of class \code{list} containing information about the hybridizations}
       \item{\code{normControls}:}{Object of class \code{list} containing information about the controls such as house keeping genes}
       \item{\code{preprocessing}:}{Object of class \code{list} containing information about the pre-processing steps used on the raw data from this experiment}
-      \item{\code{pubMedIds}:}{Object of class \code{character} listing strings
-of PubMed identifiers of papers relevant to the dataset}
+      \item{\code{pubMedIds}:}{Object of class \code{character} listing strings of PubMed identifiers of papers relevant to the dataset}
       \item{\code{other}:}{Object of class \code{list} containing other information for which none of the above slots does not applies}
   }
 }
@@ -56,6 +57,7 @@ of PubMed identifiers of papers relevant to the dataset}
       \item{\code{expinfo(MIAME)}:}{An accessor function for \code{name}, \code{lab}, \code{contact}, \code{title}, and \code{url}}
       \item{\code{hybridizations(MIAME)}:}{ An accessor function for \code{hybridizations} }
       \item{\code{normControls(MIAME)}:}{ An accessor function for \code{normControls} }
+      \item{\code{notes(MIAME)}:}{ An accessor function for \code{other}; duplicated here for compatibility with \code{exprSet-class}}
       \item{\code{otherInfo(MIAME)}:}{ An accessor function for \code{other} }
       \item{\code{precproc(MIAME)}:}{ An accessor function for \code{other} }
       \item{\code{pubMedIds(MIAME)}:}{ An accessor function for \code{pubMedIds}}

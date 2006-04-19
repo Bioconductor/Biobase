@@ -38,7 +38,6 @@
 \alias{update2MIAME}
 \alias{exprs2excel}
 
-
 \concept{annotation}
 \concept{description}
 \concept{exprs}

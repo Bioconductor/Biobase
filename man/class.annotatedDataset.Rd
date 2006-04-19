@@ -8,7 +8,7 @@
 \alias{[[,annotatedDataset-method}
 \alias{$<-,annotatedDataset-method}
 \alias{$,annotatedDataset-method}
-\alias{pData<-,annotatedDataset-method}
+\alias{pData<-,annotatedDataset,ANY-method}
 \alias{pData,annotatedDataset-method}
 \alias{phenoData,annotatedDataset-method}
 \alias{reporterInfo,annotatedDataset-method}

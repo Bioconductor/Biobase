@@ -2,7 +2,7 @@
 # eSet Class Validator
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("initialize",
-          signature=c(.Object="eSet"),
+          signature(.Object="eSet"),
           function( .Object,
                    assayData = assayDataNew(...),
                    phenoData = new("AnnotatedDataFrame"),
@@ -62,11 +62,11 @@ updateOldESet <- function(from, toClass, ...) {  # to MultiExpressionSet
   if (is(description,"MIAME")) {
     if (length(from@notes)!=0) {
       warning("addding 'notes' to 'description'")
-      description@other <- c(description@other@other,from@notes)
+      description@other <- c(description@other,from@notes)
     }
     if (length(from@history)!=0) {
       warning("adding 'history' to 'description'")
-      description@other <- c(description@other@other,from@history)
+      description@other <- c(description@other,from@history)
     }
   } else {
     warning("'description' is not of class MIAME; ignored")
@@ -74,7 +74,7 @@ updateOldESet <- function(from, toClass, ...) {  # to MultiExpressionSet
   }
   ## reporterInfo
   if (any(dim(from@reporterInfo)!=0))
-    warning("reporterInfo data not transfered to MultiExpressionSet object")
+    warning("reporterInfo data not transfered to '",toClass, "' object")
   ## new object
   object <- new(toClass,
                 experimentData = description,
@@ -246,16 +246,38 @@ setReplaceMethod("varMetadata", c("eSet","data.frame"), function(object, value) 
   object
 })
 
-setMethod("experimentData", signature="eSet", function(object) object@experimentData)
+setMethod("experimentData", signature(object="eSet"), function(object) object@experimentData)
 
-setReplaceMethod("experimentData", signature=c("eSet","MIAME"), function(object, value) {
-  object@experimentData <- value
-  object
-})
+setReplaceMethod("experimentData", signature(object="eSet",value="MIAME"),
+                 function(object, value) {
+                     object@experimentData <- value
+                     object
+                 })
 
-setMethod("pubMedIds", signature="eSet", function(object) pubMedIds(experimentData(object)))
+setMethod("description", signature(object="eSet"),
+          function(object) {
+              experimentData(object)
+          })
 
-setReplaceMethod("pubMedIds", signature=c("eSet","character"), function(object, value) {
+setReplaceMethod("description", signature(object="eSet", value="MIAME"),
+                 function(object, value) {
+                     object@experimentData <- value
+                     object
+                 })
+
+setMethod("notes", signature(object="eSet"),
+          function(object) otherInfo(experimentData(object)))
+
+setReplaceMethod("notes", signature(object="eSet", value="list"),
+                 function(object, value) {
+                     otherInfo(experimentData(object)) <- value
+                     object
+                 })
+
+setMethod("pubMedIds", signature(object="eSet"),
+          function(object) pubMedIds(experimentData(object)))
+
+setReplaceMethod("pubMedIds", signature("eSet","character"), function(object, value) {
   pubMedIds(experimentData(object)) <- value
   object
 })
@@ -264,10 +286,11 @@ setMethod("abstract", "eSet", function(object) abstract(experimentData(object)))
 
 setMethod("annotation", "eSet", definition = function(object) object@annotation)
 
-setReplaceMethod("annotation", signature=c("eSet", "character"), function(object, value) {
-  object@annotation <- value
-  object
-})
+setReplaceMethod("annotation", signature(object="eSet", value="character"),
+                 function(object, value) {
+                     object@annotation <- value
+                     object
+                 })
 
 setMethod("combine", c("eSet", "eSet"), function(x, y, ...) {
   if (class(x) != class(y))

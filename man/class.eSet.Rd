@@ -15,8 +15,8 @@
 \alias{coerce,exprSet,eSet-method}
 \alias{combine,eSet,ANY-method}
 \alias{combine,eSet,eSet-method}
-\alias{description<-,eSet-method}
 \alias{description,eSet-method}
+\alias{description<-,eSet,MIAME-method}
 \alias{dim,eSet-method}
 \alias{dims,eSet-method}
 \alias{experimentData,eSet-method}
@@ -28,8 +28,8 @@
 \alias{initialize,eSet-method}
 \alias{getExpData,eSet,character-method}
 \alias{ncol,eSet-method}
-\alias{notes<-,eSet-method}
 \alias{notes,eSet-method}
+\alias{notes<-,eSet,list-method}
 \alias{pData,eSet-method}
 \alias{pData<-,eSet,data.frame-method}
 \alias{phenoData,eSet-method}
@@ -103,67 +103,70 @@
   }
 }
 \section{Methods}{
-  Methods defined in derived classes (e.g., \code{\link{ExpressionSet}},
-  \code{\link{SnpSet}}) may override the methods described here.
+  Methods defined in derived classes (e.g., \code{\link{ExpressionSet-class}},
+  \code{\link{SnpSet-class}}) may override the methods described here.
 
    Class-specific methods:
    \describe{
-     \item{\code{sampleNames(eSet)} and
-       \code{sampleNames(eSet)<-}:}{Coordinate accessing and setting
+     \item{\code{sampleNames(object)} and
+       \code{sampleNames(object)<-value}:}{Coordinate accessing and setting
        sample names in \code{assayData} and \code{phenoData}}
-     \item{\code{featureNames(eSet)},
-       \code{featureNames(eSet, value)<-}:}{Coordinate accessing and setting of
+     \item{\code{featureNames(object)},
+       \code{featureNames(object) <- value}:}{Coordinate accessing and setting of
        feature names (e.g, genes, probes) in \code{assayData}.}
-     \item{\code{dims(eSet)}:}{Access the common dimensions (\code{dim}) or
+     \item{\code{dims(object)}:}{Access the common dimensions (\code{dim}) or
        column numbers (\code{ncol}), or dimensions of all memebers
        (\code{dims}) of \code{assayData}.}
-     \item{\code{phenoData(eSet)},
-       \code{phenoData(eSet,value)<-}:}{Access and set \code{phenoData}.}
-     \item{\code{varLabels(eSet)}, \code{varLabels(eSet,
+     \item{\code{phenoData(object)},
+       \code{phenoData(object) <- value}:}{Access and set \code{phenoData}.}
+     \item{\code{varLabels(object)}, \code{varLabels(eSet,
 	 value)<-}:}{Access and set variable labels in
        \code{phenoData}.}
-     \item{\code{varMetadata(eSet)},
-       \code{varMetadata(eSet,value)<-}:}{Access and set descriptions of
+     \item{\code{varMetadata(object)},
+       \code{varMetadata(object) <- value}:}{Access and set descriptions of
        variables in \code{phenoData}.}
-     \item{\code{pData(eSet)}, \code{pData(eSet,value)<-}:}{Access and set
+     \item{\code{pData(object)}, \code{pData(object) <- value}:}{Access and set
        sample data information}
-     \item{\code{varMetadata(eSet)},
+     \item{\code{varMetadata(object)},
        \code{varMetadata(eSet,value)}}{Access and set metadata describing
        variables reported in \code{pData}}
-     \item{\code{experimentData(eSet)},\code{experimentData(eSet,value)<-}:}{Access
+     \item{\code{experimentData(object)},\code{experimentData(object) <- value}:}{Access
        and set details of experimental methods}
-     \item{\code{pubMedIds(eSet)}, \code{pubMedIds(eSet,value)}}{Access
+     \item{\code{description(object)},\code{description(object) <- value}:}{Synonymous with experimentData; included for compatibility with \code{exprSet}. }
+     \item{\code{notes(object)},\code{notes(object) <- value}:}{\code{signature(object="eSet", value="list")} Retrieve and set unstructured notes associated with \code{eSet}.}
+     \item{\code{pubMedIds(object)}, \code{pubMedIds(eSet,value)}}{Access
        and set PMIDs in \code{experimentData}.}
-     \item{\code{abstract(eSet)}:}{Access abstract in
+     \item{\code{abstract(object)}:}{Access abstract in
        \code{experimentData}.}
-     \item{\code{annotation(eSet)},
-       \code{annotation(eSet,value)<-}}{Access and set annotation label
+     \item{\code{annotation(object)},
+       \code{annotation(object) <- value}}{Access and set annotation label
        indicating package used in the experiment.}
      \item{\code{combine(eSet,eSet)}:}{Combine two \code{eSet}
        objects. To be combined, eSets must have identical numbers of
        \code{featureNames}, distinct \code{sampleNames}, and identical \code{annotation}.}
-     \item{\code{storageMode(eSet)}, \code{storageMode(eSet,character)<-}:}{Change storage mode
+     \item{\code{storageMode(object)}, \code{storageMode(eSet,character)<-}:}{Change storage mode
        of \code{\link{assayData}}. Can be used to 'unlock' environments,
        or to change between \code{list} and \code{environment} modes of
        storing \code{assayData}.}
-     \item{\code{reporterNames(eSet)}, \code{reporterNames(eSet,value)<-}:}{DEPRECATED}
+     \item{\code{reporterNames(object)}, \code{reporterNames(object) <-
+	 value}:}{DEPRECATED, see \code{featureNames}}
   }
   Standard generic methods:
   \describe{
-    \item{\code{initialize(eSet)}:}{Object instantiation, can be called by
+    \item{\code{initialize(object)}:}{Object instantiation, can be called by
       derived classes but not usually by the user.}
-    \item{\code{validObject(eSet)}:}{Validity-checking method,
+    \item{\code{validObject(object)}:}{Validity-checking method,
 	  ensuring (1) all assayData components have the same number of
 	  features and samples; (2) the number and names of
 	  \code{phenoData} rows match the number and names of
 	  \code{assayData} columns}
-     \item{\code{show(eSet)}}{Informatively display object contents.}
-     \item{\code{dim(eSet)}, \code{ncol}}{Access the common
+     \item{\code{show(object)}}{Informatively display object contents.}
+     \item{\code{dim(object)}, \code{ncol}}{Access the common
        dimensions (\code{dim}) or column numbers (\code{ncol}), of all
        memebers (\code{dims}) of \code{assayData}.}
-     \item{\code{eSet[(index)}:}{Conducts subsetting of matrices and
+     \item{\code{object[(index)}:}{Conducts subsetting of matrices and
        phenoData components }
-     \item{\code{eSet$}, \code{eSet$<-}}{Access and set named columns in \code{phenoData}}
+     \item{\code{object}, \code{eSet$<-}}{Access and set named columns in \code{phenoData}}
    }
    Additional functions:
    \describe{

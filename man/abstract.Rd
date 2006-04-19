@@ -6,10 +6,13 @@
 \alias{experimentData<-}
 
 \title{Retrieve feature and sample names from eSets and exprSets.}
+
 \description{
-These generic functions access the feature names (typically, gene or SNP
-identifiers) and sample names stored in an object derived from the \code{\link{eSet}} or \code{\link{exprSet}} class.
+  These generic functions access the feature names (typically, gene or
+  SNP identifiers) and sample names stored in an object derived from the
+  \code{\link{eSet-class}} or \code{\link{exprSet-class}}.
 }
+
 \usage{
 abstract(object)
 pubMedIds(object)

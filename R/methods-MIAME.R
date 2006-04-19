@@ -48,7 +48,7 @@ setMethod("pubMedIds","MIAME",function(object) object@pubMedIds)
 setReplaceMethod("pubMedIds","MIAME",function(object,value){
    object@pubMedIds = value
    object
-   })
+})
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("otherInfo","MIAME",function(object) object@other)
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -59,6 +59,15 @@ setMethod("expinfo","MIAME",
     return(tmp)
    }
 )
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+setMethod("notes", signature(object="MIAME"),
+          function(object) object@other)
+
+setReplaceMethod("notes", signature(object="MIAME", value="list"),
+                 function(object, value) {
+                     object@other <- value
+                     object
+                 })
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 read.MIAME <- function(filename=NULL,widget=getOption("BioC")$Base$use.widgets,...) {
    if(!is.null(filename)) {

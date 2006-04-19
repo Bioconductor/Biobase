@@ -17,10 +17,7 @@
 
 \description{
    The function you have asked for has been deprected.  It may even be
-   defunct. Please see the related help pages:
-   \describe{
-     \item{reporterNames}{\code{\link{featureNames}}}
-   }
+   defunct. 
 }
 \keyword{internal}
 
