@@ -21,7 +21,11 @@ setReplaceMethod("phenoData", c("annotatedDataset", "phenoData"),
    }
 )
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setMethod("reporterInfo", "annotatedDataset", function(object) object@reporterInfo)
+setMethod("reporterInfo", "annotatedDataset",
+          function(object) {
+              .Deprecated("ExpressionSet")
+              object@reporterInfo
+          })
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setReplaceMethod("reporterInfo", c("annotatedDataset", "data.frame"),
    function(object, value) {
