@@ -8,6 +8,7 @@
 \alias{getUnits,phenoData,character-method}
 
 \alias{eList}
+\alias{eList<-}
 \alias{eList<-,eSet,AssayData-method}
 \alias{eList,eSet-method}
 \alias{eList<-,eSet,AssayData-method}
