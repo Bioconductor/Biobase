@@ -9,10 +9,10 @@
 }
 
 .onAttach <- function(libname, pkgname) {
-   cat("\nWelcome to Bioconductor \n\n")
-   cat("\tVignettes contain introductory material.\n")
-   cat("\tTo view, simply type 'openVignette()' or start with 'help(Biobase)'. \n")
-   cat("\tFor details on reading vignettes, see the openVignette help page.\n\n")
+   message("\nWelcome to Bioconductor \n\n")
+   message("    Vignettes contain introductory material.\n")
+   message("    To view, simply type 'openVignette()' or start with 'help(Biobase)'. \n")
+   message("    For details on reading vignettes, see the openVignette help page.\n\n")
    ##set up menus -- windows only for now
    if( .Platform$OS.type == "windows" && .Platform$GUI == "Rgui" )
       addVigs2WinMenu("Biobase") # in vignettes.R
