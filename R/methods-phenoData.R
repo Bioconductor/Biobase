@@ -126,6 +126,7 @@ setMethod("varMetadata", "phenoData",
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("addVarMetadataEntry", c("phenoData", "character", "character", "ANY"),
    function(object, vname, attname, attval) {
+       .Deprecated()
       if (attname == "varName")
          stop("varName should not be used as a metadata attribute name")
       vm <- varMetadata(object)
@@ -168,6 +169,7 @@ setMethod("getVarMetadata", c("phenoData", "character", "missing"),
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("getUnits", c("phenoData", "character"),
    function(object,vname) {
+       .Deprecated()
       getVarMetadata(object, vname, "units")
    }
 )
@@ -189,21 +191,7 @@ setMethod("convertVarLabels", "phenoData",
       object
    }
 )
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# FIXME: what is this commented code?
-# whose? when posted and why? tests?
-# x <- new("phenoData", pData=data.frame(age=3, height=88), varLabels=list(age="patient age", height="patient height"))
-# print(x)
-# x <- addVarMetadataEntry(x, "age", "units", "years")
-# print(x)
-# x <- addVarMetadataEntry(x, "height", "units", "cm")
-# print(x)
-# x <- addVarMetadataEntry(x, "height", "maxvalcm", 200)
-# print(x)
-# x <- addVarMetadataEntry(x, "drug", "name", "vioxx")
-# print(x)
-
-   # ==========================================================================
+# ==========================================================================
 # function to coerce between data.frame and phenoData
 # some checking of varLabels - none of varMetadata
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
