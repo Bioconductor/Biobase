@@ -140,8 +140,7 @@ setReplaceMethod("sampleNames", c("eSet", "ANY"), function(object, value) {
 })
 
 setMethod("featureNames", "eSet", function(object) {
-  nms <- featureNames(assayData(object))
-  if (all(sapply(nms, is.null))) NULL else nms[,1]
+  featureNames(assayData(object))
 })
 
 setReplaceMethod("featureNames", "eSet", function(object, value) {

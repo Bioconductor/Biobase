@@ -70,6 +70,7 @@ assayDataElementReplace <- function(obj, elt, value) {
   obj
 }
 
+
 setMethod("sampleNames", "AssayData", function(object) sapply(object, colnames))
 
 setReplaceMethod("sampleNames", c("AssayData", "ANY"), function(object, value) {
@@ -85,10 +86,19 @@ setReplaceMethod("sampleNames", c("AssayData", "ANY"), function(object, value) {
   object
 })
 
-setMethod("featureNames", "AssayData", function(object) sapply(object, rownames))
+setMethod("featureNames", signature(object="AssayData"),
+          function(object) {
+              if (!length(object))
+                return(character(0))
+              switch(assayDataStorageMode(object),
+                     list=rownames(object[[1]]),
+                     rownames(object[[ls(object)[1]]]))
+          })
 
-setReplaceMethod("featureNames", c("AssayData"), function(object, value) {
-  switch(assayDataStorageMode(object),
+
+setReplaceMethod("featureNames", signature(object="AssayData", value="ANY"),
+                 function(object, value) {
+    switch(assayDataStorageMode(object),
          lockedEnvironment = {
            object <- copyEnv(object)
            for (nm in ls(object)) rownames(object[[nm]]) <- value
@@ -101,29 +111,20 @@ setReplaceMethod("featureNames", c("AssayData"), function(object, value) {
 })
 
 setMethod("combine", c("AssayData", "AssayData"), function(x, y, ...) {
-  combineElement <- function(x,y) {
-    d <- dim(x)
-    if (length(d) != length(dim(y)))
-      stop("assayData elements have different dimension lengths: ",
-           d, ", ", dim(y))
-    if (!all({d==dim(y)}[-2]))
-        stop("assayData elements have incompatible dimensions: ",
-             d, ", ", dim(y))
-    if (2==length(d))
-      cbind(x,y)
-    else if (3==length(d)) {
-      d <- dim(x)
-      xd <- dim(x)[[2]]; yd <- dim(y)[[2]]
-      d[[2]] <- xd + yd
-      obj <- array(0,d)
-      if (xd != 0) obj[,1:xd,] <- x
-      if (yd != 0) obj[,(xd+1):(xd+yd),] <- y
-      rownames(obj) <- rownames(x)
-      colnames(obj) <- c(colnames(x),colnames(y))
-      obj
-    } else {
-      stop("Cannot combine AssayData with dim length ", length(dim(x)))
-    }}
+    
+    combineElement <- function(x, y) {
+        d <- dim(x)
+        if (length(d) != length(dim(y)))
+          stop("assayData elements have different dimension lengths: ",
+               d, ", ", dim(y))
+        if (!all({d==dim(y)}[-2]))
+          stop("assayData elements have incompatible dimensions: ",
+               d, ", ", dim(y))
+        if (2==length(d))
+          cbind(x,y)
+        else
+          stop("Cannot combine AssayData with dim length ", length(dim(x)))
+    }
   storage.mode <- assayDataStorageMode(x)
   nmfunc <- if ("environment"==class(x)) ls else names
 
@@ -137,16 +138,16 @@ setMethod("combine", c("AssayData", "AssayData"), function(x, y, ...) {
     stop("assayData have different numbers of elements:\n\t",
          paste(nmfunc(x), collapse=" "), "\n\t",
          paste(nmfunc(y), collapse=" "))
-  if (!all(nmfunc(x)==nmfunc(y)))
+  if (!all(nmfunc(x) == nmfunc(y)))
     stop(paste("assayData have different element names:",
                paste(nmfunc(x), collapse=" "),
                paste(nmfunc(y), collapse=" "), sep="\n\t"))
-  if ("list"==storage.mode) {
+  if ("list" == storage.mode) {
     aData <- lapply(names(x), function(nm) combineElement(x[[nm]],y[[nm]]))
     names(aData) <- names(x)
   } else {
     aData <- new.env(parent=emptyenv())
-    for (nm in ls(x)) aData[[nm]] <- combineElement(x[[nm]],y[[nm]])
+    for (nm in ls(x)) aData[[nm]] <- combineElement(x[[nm]], y[[nm]])
     if ("lockedEnvironment" == storage.mode) assayDataEnvLock(aData)
   }
   aData
