@@ -1,11 +1,6 @@
-# ==========================================================================
-# Functions to detect and open vignettes:
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# getPkgVigs; openVignette; addVigs2WinMenu
-# deprecated: addVig2Menu; addVig4Win; addVig4Unix; addNonExisting; addPDF2Vig
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# uses tools.R
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+## Functions to detect and open vignettes:
+## uses tools.R
+
 getPkgVigs <- function(package=NULL) {
     require("tools", quietly=TRUE) || stop("Requires the tools package")
     pkgs <- .packages()
@@ -80,36 +75,4 @@ addVigs2WinMenu <- function(pkgName) {
     }
   } ## else
 }
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# DEFUNCT (all below)
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-addVig2Menu <- function(itemName, menuName = "Vignettes", itemAction = ""){
-    .Defunct("addVigs2WinMenu")
-}
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Add menu for windows
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-addVig4Win <- function(menuName, itemName, itemAction){
-    .Defunct("addVigs2WinMenu")
-}
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Add menu for a window in Unix
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-addVig4Unix <- function(menuName, itemName, itemAction){
-   .Defunct("addVigs2WinMenu")
-}
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Find and add all the non-existing menu elelments
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-addNonExisting <- function(menuName){
-    .Defunct("addVigs2WinMenu")
-}
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Add click-able menu items to view the pdf files of a package
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-addPDF2Vig <- function(pkgName){
-    .Defunct("addVigs2WinMenu")
-}
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 

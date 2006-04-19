@@ -24,8 +24,8 @@ exportMethods("[", "[[", "$", abstract, addVarMetadataEntry, aggenv, aggfun,
 	     pubMedIds, "pubMedIds<-",
              initialize)
 
-export("Aggregate", "addNonExisting", "addPDF2Vig",
-       "addVig2Menu", "addVig4Unix", "addVig4Win", "addVigs2WinMenu",
+export("Aggregate", 
+       "addVigs2WinMenu",
        "assayDataNew", "assayDataValidMembers",
        "assayDataElementNames", "assayDataElement", "assayDataElementReplace",
        "biocReposList", "cache", "copyEnv", "copySubstitute", 
