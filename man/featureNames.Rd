@@ -9,7 +9,7 @@
 
 \title{Retrieve feature and sample names from eSets and exprSets.}
 \description{
-These generic function accesses the feature names (typically, gene or SNP
+These generic functions access the feature names (typically, gene or SNP
 identifiers) and sample names stored in an object derived from the \code{\link{eSet}} or \code{\link{exprSet}} class.
 }
 \usage{

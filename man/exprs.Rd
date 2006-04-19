@@ -1,22 +1,29 @@
 \name{exprs}
 \alias{exprs}
 \alias{exprs<-}
+\alias{se.exprs}
+\alias{se.exprs<-}
 
 \title{Retrieve expression data from eSets.}
 \description{
-This generic function accesses the `expression' assay
-data stored in an object derived from the \code{\link{eSet}} or \code{\link{exprSet}} class.
+  These generic functions access the expression and error measurements
+  of assay data stored in an object derived from the \code{\link{eSet}}
+  or \code{\link{exprSet}} class. 
 }
 \usage{
 exprs(object)
 exprs(object) <- value
+se.exprs(object)
+se.exprs(object) <- value
 }
 \arguments{
   \item{object}{Object derived from class \code{eSet}, or \code{exprSet}}
-  \item{value}{matrix with rows representing features and columns samples.}
+  \item{value}{Matrix with rows representing features and columns samples.}
 }
 \value{
-  \code{exprs} returns a (usually large!) matrix of expression values.
+  \code{exprs} returns a (usually large!) matrix of expression values;
+  \code{se.exprs} returns the corresponding matrix of standard errors,
+  when available.
 }
 \author{Biocore}
 

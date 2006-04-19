@@ -17,8 +17,8 @@
 \description{
   Container for high-throughput assays and experimental
   metadata. \code{ExpressionSet} class is derived from
-  \code{\link{eSet}}, and requires matricies named \code{exprs} and
-  \code{se.exprs} as an assay data members.
+  \code{\link{eSet}}, and requires a matrix named \code{exprs} as
+  assayData member.
 }
 \section{Extends}{
    Directly extends class \code{\link{eSet}}.

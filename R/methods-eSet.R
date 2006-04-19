@@ -130,7 +130,8 @@ setReplaceMethod("storageMode", c("eSet", "character"), function(object, value) 
   object
 })
 
-setMethod("sampleNames", "eSet", function(object) sampleNames(phenoData(object)))
+setMethod("sampleNames", signature(object="eSet"),
+          function(object) sampleNames(phenoData(object)))
 
 setReplaceMethod("sampleNames", c("eSet", "ANY"), function(object, value) {
   sampleNames(assayData(object)) <- value

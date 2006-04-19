@@ -13,9 +13,14 @@
 \alias{eList,eSet-method}
 \alias{eList<-,eSet,AssayData-method}
 
+\alias{reporterNames}
+
 \description{
    The function you have asked for has been deprected.  It may even be
-   defunct.
+   defunct. Please see the related help pages:
+   \describe{
+     \item{reporterNames}{\code{\link{featureNames}}}
+   }
 }
 \keyword{internal}
 

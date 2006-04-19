@@ -70,8 +70,14 @@ assayDataElementReplace <- function(obj, elt, value) {
   obj
 }
 
-
-setMethod("sampleNames", "AssayData", function(object) sapply(object, colnames))
+setMethod("sampleNames", signature(object="AssayData"),
+          function(object) {
+              if (!length(object))
+                return(character(0))
+              switch(assayDataStorageMode(object),
+                     list=colnames(object[[1]]),
+                     colnames(object[[ls(object)[1]]]))
+          })
 
 setReplaceMethod("sampleNames", c("AssayData", "ANY"), function(object, value) {
   switch(assayDataStorageMode(object),

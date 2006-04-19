@@ -1,7 +1,6 @@
 \name{AssayData-class}
 \docType{class}
 \alias{AssayData-class}
-\alias{assayData<-,eSet,AssayData-method}
 \alias{combine,AssayData,AssayData-method}
 \alias{featureNames,AssayData-method}
 \alias{featureNames<-,AssayData-method}
@@ -9,6 +8,12 @@
 \alias{sampleNames<-,AssayData-method}
 \alias{storageMode,AssayData-method}
 \alias{storageMode<-,AssayData,character-method}
+
+\alias{assayDataElement}
+\alias{assayDataElementNames}
+\alias{assayDataElementReplace}
+\alias{assayDataNew}
+\alias{assayDataValidMembers}
 
 \title{Class "AssayData"}
 \description{
@@ -45,8 +50,21 @@
          possible.
     }
   }
+  Additional functions operating on \code{AssayData} include:
+  \describe{
+    \item{assayDataNew}{\code{storage.mode = c("lockedEnvironment",
+	"environment", "list"), ...} use \code{storage.mode} to create a
+      new list or environment contining named elements in \code{...}}
+    \item{assayDataValidMembers}{\code{assayData, required} validate
+      \code{assayData}, ensuring that the named elements \code{required}
+      are present and matrices of the same dimension}
+    \item{assayDataElement, assayDataElementReplace}{\code{obj, elt} Return
+      or set element \code{elt} in assayData \code{obj}}
+    \item{assayDataElementNames}{\code{obj} Return element names in
+      assayData \code{elt}}
+  }
 }
-\author{M.T. Morgan}
+\author{Biocore}
 \seealso{
   \code{\link{eSet-class}}
   \code{\link{ExpressionSet-class}}

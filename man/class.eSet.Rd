@@ -48,6 +48,7 @@
 \alias{varMetadata<-,eSet,data.frame-method}
 \alias{storageMode,eSet-method}
 \alias{storageMode<-,eSet,character-method}
+\alias{updateOldESet}
 
 \alias{listOrEnv}
 \alias{SW}
@@ -82,7 +83,6 @@
 \section{Creating Objects}{
 
   \code{eSet} is a virtual class, so instances cannot be created.
-
 
   Objects created under previous definitions of \code{eSet-class} can be
   coerced to classes derived  based on \code{eSet} using \code{updateOldESet}.
@@ -150,7 +150,7 @@
   }
   Standard generic methods:
   \describe{
-    \item{\code{initialize(eSet)}:}{Object instantiate, can be called by
+    \item{\code{initialize(eSet)}:}{Object instantiation, can be called by
       derived classes but not usually by the user.}
     \item{\code{validObject(eSet)}:}{Validity-checking method,
 	  ensuring (1) all assayData components have the same number of
@@ -164,7 +164,13 @@
      \item{\code{eSet[(index)}:}{Conducts subsetting of matrices and
        phenoData components }
      \item{\code{eSet$}, \code{eSet$<-}}{Access and set named columns in \code{phenoData}}
-  }
+   }
+   Additional functions:
+   \describe{
+     \item{\code{updateOldESet}}{Update versions of \code{eSet}
+       constructued using \code{listOrEnv} as \code{assayData} slot
+       (before May, 2006)}
+   }
 }
 \author{V.J. Carey, after initial design by R. Gentleman }
 \note{

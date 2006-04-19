@@ -50,7 +50,8 @@ setValidity("ExpressionSet", function(object) {
   assayDataValidMembers(assayData(object), c("exprs"))
 })
 
-setMethod("exprs", "ExpressionSet", function(object) assayDataElement(object,"exprs"))
+setMethod("exprs", signature(object="ExpressionSet"),
+          function(object) assayDataElement(object,"exprs"))
 
-setReplaceMethod("exprs", c("ExpressionSet","matrix"),
+setReplaceMethod("exprs", signature(object="ExpressionSet",value="matrix"),
                  function(object, value) assayDataElementReplace(object, "exprs", value))

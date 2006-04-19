@@ -4,6 +4,8 @@
 \alias{SnpSet}
 
 \alias{SnpSet-class}
+\alias{exprs<-,SnpSet,matrix-method}
+\alias{exprs,SnpSet-method}
 
 \alias{initialize,SnpSet-method}
 
