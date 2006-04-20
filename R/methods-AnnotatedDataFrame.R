@@ -16,6 +16,8 @@ setMethod("initialize", "AnnotatedDataFrame",
             .Object@data = data
             if (!("labelDescription" %in% colnames(varMetadata)))
               varMetadata[["labelDescription"]] <- rep(NA, nrow(varMetadata))
+            else
+              varMetadata[["labelDescription"]] <- as.character(varMetadata[["labelDescription"]])
             .Object@varMetadata = varMetadata
             validObject(.Object)
             .Object
@@ -67,6 +69,10 @@ setReplaceMethod("varLabels", c("AnnotatedDataFrame", "ANY"), function(object, v
 setMethod("varMetadata", "AnnotatedDataFrame", function(object) object@varMetadata )
 
 setReplaceMethod("varMetadata", c("AnnotatedDataFrame", "data.frame"), function(object, value) {
+  if (!("labelDescription" %in% colnames(value)))
+    warning("varMetadata must have column named 'labelDescription'")
+  else
+    value[["labelDescription"]] <- as.character(value[["labelDescription"]])
   object@varMetadata <- value
   object
 })
@@ -124,24 +130,35 @@ setAs("phenoData", "AnnotatedDataFrame", function(from) {
       varMetadata=varMetadata)
 })
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-showSomeNames <- function( names ) {
-  len <- length( names )
-  if ( len > 5 ) names <-
-    paste(names[1], names[2], names[3], "...",
-          names[(len-1)], names[len], sep=", ")
-  else names <- paste(names, collapse=", ")
-  paste(names, " (", len, " total)", sep="")
+selectSome <- function(obj, maxToShow=5) {
+  len <- length(obj)
+  if (maxToShow<2) maxToShow <- 2
+  if (len > maxToShow) {
+    bot <- ceiling(maxToShow/2)
+    top <- len-(maxToShow-bot-1)
+    c(obj[1:bot], "...", obj[top:len])
+  }
+  else obj
 }
 
 setMethod("show", "AnnotatedDataFrame", function(object) {
-  cat("\nphenoData\n")
-  cat("  sampleNames:", showSomeNames(sampleNames(object)), "\n")
-  cat("  varLabels:\n")
+  nms <- selectSome(sampleNames(object))
+  cat("  sampleNames:", paste(nms, collapse=", "))
+  if (nrow(object)>length(nms))
+    cat(" (",nrow(object)," total)", sep="")
+  cat("\n  varLabels:\n")
   metadata <- varMetadata(object)
+  vars <- selectSome(varLabels(object), maxToShow=9)
+  meta <- selectSome(metadata[["labelDescription"]], maxToShow=9)
   mapply(function(nm, meta) cat("    ",nm,": ", meta, "\n", sep=""),
-         varLabels(object), metadata[["labelDescription"]])
-  if (length(colnames(metadata))>1)
-    cat("  varMetadata:", showSomeNames(colnames(metadata)), "\n")
+         vars, meta)
+  if (nrow(metadata)>=length(meta))
+    cat("    (", nrow(metadata), " total)", sep="")
+  cat("\n")
+  if (ncol(metadata)>1) {
+    mnms <- selectSome(colnames(metadata))
+    cat("  varMetadata:", paste(mnms, collapse=", "), "\n")
+  }
 })
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("combine", c("AnnotatedDataFrame", "AnnotatedDataFrame"), function(x, y) {
