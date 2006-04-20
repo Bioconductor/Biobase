@@ -107,7 +107,6 @@ setClass("annotatedDataset",
    ),
    prototype = list()
 )
-# eSet
 # ==========================================================================
 # AnnotatedDataFrame: A data.frame, with annotations about columns named
 # in the data slot contained in the metadata slot. The data slot has
@@ -145,11 +144,14 @@ setClass("eSet",
                         experimentData = "MIAME",
                         annotation = "character"),
          prototype = list(
-           assayData = list(), # initialize to env, so different instances have different envs
+           assayData = list(), # use initialize to set as env, so different instances have different envs
            phenoData = new( "AnnotatedDataFrame" ),
            experimentData = new( "MIAME" ),
-           annotation = character()),
-         "VIRTUAL")
+           annotation = character())
+## should be VIRTUAL, but this allows us to trap calls and direct users to correct documentation
+##          , "VIRTUAL")
+)
+
 setClass("ExpressionSet", contains = "eSet") # exprSet-like
 setClass("SnpSet", contains = "eSet")
 # ==========================================================================

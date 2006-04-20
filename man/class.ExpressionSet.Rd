@@ -63,7 +63,7 @@
   Class-specific methods.
   \describe{
     \item{\code{as(exprSet,"ExpressionSet")}}{Coerce objects of
-      \code{\link{exprSet-class}} to \texttt{ExpressionSet}}
+      \code{\link{exprSet-class}} to \code{ExpressionSet}}
      \item{\code{exprs(ExpressionSet)}, \code{exprs(ExpressionSet,matrix)<-}}{Access and
        set elements named \code{exprs} in the \code{AssayData-class}
        slot.}
@@ -102,10 +102,39 @@
      \item{\code{ExpressionSet$}, \code{ExpressionSet$<-}}{See \code{\link{eSet}}}
   }
 }
-\author{V.J. Carey, after initial design by R. Gentleman }
+
+\author{Biocore team}
 
 \seealso{
-  \code{\link{eSet}}, \code{\link{ExpressionSet}}
+  \code{\link{eSet-class}}, \code{\link{ExpressionSet-class}}
+}
+
+\examples{
+# create an instance of ExpressionSet
+new("ExpressionSet")
+
+# update existing exprSet-like class to ExpressionSet
+data(sample.exprSet)
+expressionSet <- as(sample.exprSet,"ExpressionSet")
+expressionSet
+
+# information about assay and sample data
+featureNames(expressionSet)[1:10]
+sampleNames(expressionSet)[1:5]
+phenoData(expressionSet)
+experimentData(expressionSet)
+
+# subset: first 10 genes, samples 2, 4, and 10
+expressionSet <- as(sample.exprSet,"ExpressionSet")
+expressionSet[1:10,c(2,4,10)]
+
+# named features and their expression levels
+subset <- expressionSet[c("AFFX-BioC-3_at","AFFX-BioDn-5_at"),]
+exprs(subset)
+
+# samples with above-average 'score' in phenoData
+highScores <- expressionSet$score > mean(expressionSet$score)
+expressionSet[,highScores]
 }
 
 \keyword{classes}

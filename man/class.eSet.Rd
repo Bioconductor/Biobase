@@ -48,7 +48,6 @@
 \alias{varMetadata<-,eSet,data.frame-method}
 \alias{storageMode,eSet-method}
 \alias{storageMode<-,eSet,character-method}
-\alias{updateOldESet}
 
 \alias{listOrEnv}
 \alias{SW}
@@ -70,11 +69,16 @@
 }
 
 \description{
+
   Container for high-throughput assays and experimental
-  metadata. \code{eSet} is a VIRTUAL class that can contain one or more identical-sized
-  matricies as \code{assayData} elements. Derived classes
-  (e.g., \code{\link{ExpressionSet}}, \code{\link{SnpSet}}) specify
-  which elements must be present in the \code{assayData} slot.
+  metadata. Classes derived from \code{eSet} contain one or more
+  identical-sized matricies as \code{assayData} elements. Derived
+  classes (e.g., \code{\link{ExpressionSet-class}}, \code{\link{SnpSet-class}})
+  specify which elements must be present in the \code{assayData} slot.
+
+  \code{eSet} object cannot be instantiated directly; see the examples
+  for useage.
+
 }
 
 % \section{Extends}{
@@ -175,66 +179,64 @@
        (before May, 2006)}
    }
 }
-\author{V.J. Carey, after initial design by R. Gentleman }
-\note{
-  \code{golubMergeSub} is an \code{exprSet} example that can be coerced to \code{eSet}; see the \code{eSet} vignette.}
-
+\author{Biocore team}
 
 \seealso{
-  \code{\link{AssayData-class}}, \code{\link{AnnotatedDataFrame}},
-  \code{\link{MIAME}}, \code{\link{ExpressionSet}}, \code{\link{SnpSet}}
+  Method use in \code{\link{ExpressionSet-class}}.
+  Related  classes
+  \code{\link{AssayData-class}}, \code{\link{AnnotatedDataFrame-class}}, \code{\link{MIAME-class}}.
+  Derived classes
+  \code{\link{ExpressionSet-class}}, \code{\link{SnpSet-class}}.
+  To update objects from previous class versions, see \code{\link{updateOldESet}}.
 }
-% \examples{}			% no examples -- virutal class
-% # load sample.exprSet, to be used below to conveniently make an eSet
-% data(sample.exprSet)
-% # easy conversion
-% pd <- phenoData(sample.exprSet)
-% xl <- list(e1=exprs(sample.exprSet))
-% gn <- geneNames(sample.exprSet)
-% sn <- sampleNames(sample.exprSet)
 
-% # construct an eSet, using sample.exprSet components
-% es2 <- new("eSet", phenoData=as(pd,"AnnotatedDataFrame"), assayData=xl,
-%   reporterNames=gn, sampleNames=sn)
+\examples{
+# create an instance of an existing derived class
+new("ExpressionSet")
 
-% # illustrate subset and show for assayData as list
-% es2[1:4,1:4]
+# update existing exprSet-like class to existing derived class
+data(sample.exprSet)
+expressionSet <- as(sample.exprSet,"ExpressionSet")
+expressionSet
 
-% # build with environment assayData
-% eenv <- new.env()
-% assign("exprs", exprs(sample.exprSet), eenv)
-% es3 <- new("eSet", phenoData=as(pd,"AnnotatedDataFrame"), assayData=eenv,
-%   reporterNames=gn, sampleNames=sn)
-% es3
-% es3[1:5,1:5]
+# update previous eSet-like class oldESet to existing derived class
+\dontrun{updateOldESet(oldESet, "ExpressionSet")}
 
-% # show some legacy behavior: set list element name to
-% # exprs and invoke exprs()
-% names(assayData(es2)) <- "exprs"
-% dim(exprs(es2))
+# create a new, ad hoc, class, for personal use
+# all methods outlined above are available automatically
+setClass("MySet", contains="eSet")
+new("MySet")
 
-% # show some validity checking
-% assayData(es3) <- assayData(es2)
-% es3  # now has list
-% sampleNames(es2) <- letters # ok
-% if (interactive()) {
-%  lk <- try(sampleNames(es2) <- letters[-1]) # not ok
-% }
+# Create a more robust class, with initialization and validation methods
+# to ensure assayData contains specific matricies
+setClass("TwoColorSet", contains="eSet")
 
-% # VJC commented the following out, could not fix varMetadata oddity
-% # work with the swirl data
-% #data(SW)
-% #data(swrep)
-% #data(SWPD)
-% #sw <- new("eSet",
-% #  assayData=list( R=SW$R, G=SW$G, Rb=SW$Rb, Gb=SW$Gb),
-% #  phenoData=as(SWPD, "AnnotatedDataFrame"), 
-% #  reporterInfo=swrep, sampleNames=as.character(1:4),
-% #  reporterNames=as.character(swrep$Name))
-% ## remove first reporter from each assay, explicitly or implicitly
-% #assayData(sw) <- assayData(sw[-1,])
-% #sw <- sw[-1,]
-% ## now two fewer than original
-% #sw 
-% }
+setMethod("initialize", "TwoColorSet",
+          function(.Object,
+                   phenoData = new("AnnotatedDataFrame"),
+                   experimentData = new("MIAME"),
+                   annotation = character(),
+                   R = new("matrix"),
+                   G = new("matrix"),
+                   Rb = new("matrix"),
+                   Gb = new("matrix"),
+                   ... ) {
+            callNextMethod(.Object,
+                           phenoData = phenoData,
+                           experimentData = experimentData,
+                           annotation = annotation,
+                           R=R, G=G, Rb=Rb, Gb=Gb,
+                           ...)
+          })
+
+setValidity("TwoColorSet", function(object) {
+  assayDataValidMembers(assayData(object), c("R", "G", "Rb", "Gb"))
+})
+
+new("TwoColorSet")
+
+# eSet objects cannot be instantiated directly, only derived objects
+try(new("eSet"))
+}
+
 \keyword{classes}
