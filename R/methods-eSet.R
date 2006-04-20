@@ -10,6 +10,10 @@ setMethod("initialize",
                    annotation = character(),
                    ...) {
             .Object@assayData <- assayData
+            if (is(phenoData,"phenoData")) {
+              warning("updating phenoData argument to 'AnnotatedDataFrame'", call.=FALSE)
+              phenoData <- as(phenoData,"AnnotatedDataFrame")
+            }
             .Object@phenoData <- phenoData
             .Object@experimentData <- experimentData
             .Object@annotation <- annotation
