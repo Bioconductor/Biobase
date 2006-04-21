@@ -5,12 +5,14 @@ baseClass <- list(eSet = NULL)
 ##        PmMmOneChannelSNPSet = c("pm", "mm"))
 featureSubclases <- NULL
 targetSubclasses <-
-  list(ExpressionSet = c("exprs", "se.exprs"),
+  list(ExpressionSet = c("exprs"),
+       MultiSet = c("myElt", "yourElt"),
        SnpSet = c("call", "callProbability"))
 
 allClasses <- c( baseClass, featureSubclases, targetSubclasses )
 allSubclasses <- c( featureSubclases, targetSubclasses )
-exprsEnabledSubclasses <- names(targetSubclasses)
+exprsEnabledSubclasses <- c("ExpressionSet","SnpSet")
+nonEmptySubclasses <- exprsEnabledSubclasses
 
 modes <- c("lockedEnvironment","environment","list")
 
@@ -127,7 +129,7 @@ testValidation <- function() {
 
 testNColSubclasses <- function() {
   for (mode in modes)
-    lapply(names(allSubclasses), function( s ) {
+    lapply(nonEmptySubclasses, function( s ) {
       obj <- new( s, storage.mode = mode )
       checkTrue( ncol( obj ) == 0 )
     })
@@ -275,6 +277,7 @@ testVarMetadata <- function() {
 
 testCombine <- function() {
   combineEmpty <- function(s, ...) {
+    if (s=="MultiSet") return(TRUE)
     obj1 <- new(s)
     obj2 <- new(s)
     obj <- combine(obj1,obj2)

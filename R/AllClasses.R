@@ -151,8 +151,8 @@ setClass("eSet",
 ## should be VIRTUAL, but this allows us to trap calls and direct users to correct documentation
 ##          , "VIRTUAL")
 )
-
 setClass("ExpressionSet", contains = "eSet") # exprSet-like
+setClass("MultiSet", contains = "eSet") # any elements in the assayData slot
 setClass("SnpSet", contains = "eSet")
 # ==========================================================================
 # exprSet <== annotatedDataset: expression arrays and methods for processing them

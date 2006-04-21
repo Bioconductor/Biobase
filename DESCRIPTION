@@ -1,6 +1,6 @@
 Package: Biobase
 Title: Biobase: Base functions for Bioconductor
-Version: 1.9.26
+Version: 1.9.27
 Author: R. Gentleman, V. Carey, M. Morgan, S. Falcon
 Description: Functions that are needed by many other packages or which replace R functions. Suggests: widgetTools, tkWidgetsc
 Depends: R (>= 2.2.0), tools, methods
@@ -11,7 +11,7 @@ Collate: tools.R strings.R environment.R vignettes.R packages.R
          methods-container.R methods-phenoData.R methods-MIAME.R
          methods-annotatedDataset.R
 	 methods-AssayData.R methods-AnnotatedDataFrame.R methods-eSet.R
-         methods-ExpressionSet.R methods-SnpSet.R
+	 methods-ExpressionSet.R methods-MultiSet.R methods-SnpSet.R
          methods-exprSet.R
          zzz.R
 SaveImage: Yes
