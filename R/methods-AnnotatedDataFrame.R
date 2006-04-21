@@ -152,9 +152,8 @@ setMethod("show", "AnnotatedDataFrame", function(object) {
   meta <- selectSome(metadata[["labelDescription"]], maxToShow=9)
   mapply(function(nm, meta) cat("    ",nm,": ", meta, "\n", sep=""),
          vars, meta)
-  if (nrow(metadata)>=length(meta))
-    cat("    (", nrow(metadata), " total)", sep="")
-  cat("\n")
+  if (nrow(metadata)>length(meta))
+    cat("    (", nrow(metadata), " total)\n", sep="")
   if (ncol(metadata)>1) {
     mnms <- selectSome(colnames(metadata))
     cat("  varMetadata:", paste(mnms, collapse=", "), "\n")
