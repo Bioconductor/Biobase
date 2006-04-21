@@ -15,3 +15,4 @@ Collate: tools.R strings.R environment.R vignettes.R packages.R
          methods-exprSet.R
          zzz.R
 SaveImage: Yes
+biocViews: Infrastructure, Statistics
