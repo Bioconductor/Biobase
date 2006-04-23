@@ -9,8 +9,6 @@ setMethod("initialize",
                    experimentData = new( "MIAME" ),
                    annotation = character(),
                    ...) {
-            if (class(.Object) == "eSet")
-              stop("in initialize(.Object, ...): cannot create an instance of eSet; see help('eSet-class') for useage", call.=FALSE)
             .Object@assayData <- assayData
             if (is(phenoData,"phenoData")) {
               warning("updating phenoData argument to 'AnnotatedDataFrame'", call.=FALSE)

@@ -147,9 +147,8 @@ setClass("eSet",
            assayData = list(), # use initialize to set as env, so different instances have different envs
            phenoData = new( "AnnotatedDataFrame" ),
            experimentData = new( "MIAME" ),
-           annotation = character())
-## should be VIRTUAL, but this allows us to trap calls and direct users to correct documentation
-##          , "VIRTUAL")
+           annotation = character()),
+           "VIRTUAL"
 )
 setClass("ExpressionSet", contains = "eSet") # exprSet-like
 setClass("MultiSet", contains = "eSet") # any elements in the assayData slot
