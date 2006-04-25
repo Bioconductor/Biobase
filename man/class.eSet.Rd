@@ -103,7 +103,10 @@
       \item{\code{experimentData}:}{Contains details of experimental
 	methods. Class: \code{\link{MIAME-class}}}
       \item{\code{annotation}:}{Label associated with the annotation
-	package used in the experiment. Class:\code{character}}
+	package used in the experiment. Class: \code{character}}
+      \item{\code{.classVersion}:}{Character vector describing the R and
+	Biobase version number used to created the instance. Intended
+	for developer use. Class: \code{character}} 
   }
 }
 \section{Methods}{

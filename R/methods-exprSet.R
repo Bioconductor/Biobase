@@ -394,6 +394,7 @@ read.exprSet <- function(exprs, se.exprs, phenoData, annotation,
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setAs("exprSet", "eSet",
    function(from) {
+     .Deprecated('as(from,"ExpressionSet")', "Biobase")
      desc=description(from)
      if(!is(desc, "MIAME"))
        desc=new("MIAME", other=list(comment="Converted from exprSet",
