@@ -241,17 +241,23 @@ matchpt <- function(x, y = NULL) {
     colnames(res) <- c("index", "distance")
     return(res)
 }
-## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-## W.Huber, EBI, 2006
-cache <- function(name, expr) {
-  if(!(is.character(name) && length(name)==1))
-    stop("'name' must be a single character string.")
-  cachefile <- paste("tmp-", name, ".RData", sep="")
-  if(file.exists(cachefile)) {
-    load(cachefile)
-  } else {
-    assign(name, expr)
-    save(list=name, file=cachefile, compress=TRUE)
-  }
-  get(name)
+
+
+cache <- function(expr, dir=".", prefix="tmp_R_cache_") {
+    pexpr <- parse(text=deparse(substitute(expr)))
+    pexpr <- as.list(pexpr[[1]])
+    if (pexpr[[1]] != "<-")
+      stop("Expression must be of the form 'LHS <- RHS'")
+    name <- as.character(pexpr[[2]])
+    RHS <- pexpr[[3]]
+    cachefile <- file.path(dir, paste(prefix, name, ".RData", sep=""))
+    if(file.exists(cachefile)) {
+        load(cachefile)
+        assign(name, get(name), envir=.GlobalEnv)
+    } else {
+        assign(name, eval(RHS), envir=.GlobalEnv)
+        save(list=name, file=cachefile)
+    }
+    invisible(get(name))
 }
+
