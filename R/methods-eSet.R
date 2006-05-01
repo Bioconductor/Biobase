@@ -43,10 +43,10 @@ updateOldESet <- function(from, toClass, ...) {  # to MultiExpressionSet
     metadata <- data.frame(numeric(ncol(pData(from))))[,FALSE]
   }
   if (!is.null(metadata[["varName"]])) {
-    rownames(metadata) <- metadata[["varName"]]
+    row.names(metadata) <- metadata[["varName"]]
     metadata[["varName"]] <- NULL
   } else if (!is.null(colnames(pData(from)))) {
-    rownames(metadata) <- colnames(pData(from))
+    row.names(metadata) <- colnames(pData(from))
   }
   if (!is.null(metadata[["varLabels"]])) {
     names(metadata)[names(metadata)=="varLabels"] <- "labelDescription"

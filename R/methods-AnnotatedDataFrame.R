@@ -2,8 +2,8 @@ validAnnotatedDataFrame <- function( object ) {
   msg <- NULL
   if (!is(object, "AnnotatedDataFrame"))
     msg <- paste(msg, paste("Cannot validate", class(object), "as AnnotatedDataFrame" ), sep = "\n  ")
-  if (any(rownames(object@varMetadata) != colnames(object@data)))
-    msg <- paste(msg, "AnnotatedDataFrame colnames of data differ from rownames of varMetadata", sep="\n  ")
+  if (any(row.names(object@varMetadata) != colnames(object@data)))
+    msg <- paste(msg, "AnnotatedDataFrame colnames of data differ from row.names of varMetadata", sep="\n  ")
   if ( !("labelDescription" %in% colnames(varMetadata(object))))
     msg <- paste(msg, "AnnotatedDataFrame varMetadata missing labelDescription column", sep="\n  ")
   if (is.null(msg)) TRUE else msg
@@ -16,8 +16,6 @@ setMethod("initialize", "AnnotatedDataFrame",
             .Object@data = data
             if (!("labelDescription" %in% colnames(varMetadata)))
               varMetadata[["labelDescription"]] <- rep(NA, nrow(varMetadata))
-            else
-              varMetadata[["labelDescription"]] <- as.character(varMetadata[["labelDescription"]])
             .Object@varMetadata = varMetadata
             validObject(.Object)
             .Object
@@ -40,7 +38,7 @@ setReplaceMethod("pData", c("AnnotatedDataFrame", "data.frame"), function(object
   object
 })
 
-setMethod("sampleNames", "AnnotatedDataFrame", function(object) rownames(object@data))
+setMethod("sampleNames", "AnnotatedDataFrame", function(object) row.names(object@data))
 
 setReplaceMethod("sampleNames", c("AnnotatedDataFrame", "ANY"), function(object, value) {
   if (length(value) != dim(object@data)[[1]])
@@ -48,7 +46,7 @@ setReplaceMethod("sampleNames", c("AnnotatedDataFrame", "ANY"), function(object,
                length(value),
                ") should equal number of rows in phenoData (",
                dim( object )[[1]], ")",sep=""))
-  rownames(object@data) <- value
+  row.names(object@data) <- value
   object
 })
 
@@ -62,7 +60,7 @@ setReplaceMethod("varLabels", c("AnnotatedDataFrame", "ANY"), function(object, v
                ") should equal number of columns in phenoData (",
                dim(object)[[2]], ")", sep=""))
   colnames(object@data) <- value
-  rownames(object@varMetadata) <- value
+  row.names(object@varMetadata) <- value
   object
 })
 
@@ -169,26 +167,25 @@ setMethod("combine", c("AnnotatedDataFrame", "AnnotatedDataFrame"), function(x, 
                  "identical names are:",
                  paste(sNames[duplicated(sNames)],collapse=", "),
                  sep="\n\t"))
-  df <- data.frame(rep(0,length(sNames)),row.names=sNames)[,FALSE]
+  pData <- data.frame(rep(0,length(sNames)),row.names=sNames)[,FALSE]
   for (nm in vNames) {
     xdata <- if (is.null(x[[nm]])) rep(NA,nrow(x)) else x[[nm]]
     ydata <- if (is.null(y[[nm]])) rep(NA,nrow(y)) else y[[nm]]
-    df[[nm]] <- c(xdata,ydata)
+    pData[[nm]] <- c(xdata,ydata)
   }
-  colnames(df) <- vNames
-  pData(x) <- df
+  colnames(pData) <- vNames
   ## varMetadata
   vx <- varMetadata(x)
   vy <- varMetadata(y)
 
-  vmRownames <- c(rownames(vx),rownames(vy))
+  vmRownames <- c(row.names(vx),row.names(vy))
   uniqueRownames <- unique(vmRownames)
   duplRownames <- duplicated(vmRownames)
   vmColnames <- unique(c(colnames(vx),colnames(vy)))
-  df <- data.frame(rep(0,length(uniqueRownames)),row.names=uniqueRownames)[,FALSE]
 
-  if (0!=nrow(df)) 
-    for (nm in vmColnames) df[uniqueRownames,nm] <-
+  if (length(uniqueRownames)!=0) {
+    vM <- data.frame(rep(0,length(uniqueRownames)),row.names=uniqueRownames)[,FALSE]
+    for (nm in vmColnames) vM[uniqueRownames,nm] <-
       ifelse(is.na(vx[uniqueRownames,nm]) ||
              identical(vx[uniqueRownames,nm],vy[uniqueRownames,nm]),
              vy[uniqueRownames,nm],
@@ -199,6 +196,8 @@ setMethod("combine", c("AnnotatedDataFrame", "AnnotatedDataFrame"), function(x, 
                                vx[uniqueRownames,nm],
                                vy[uniqueRownames,nm],
                                sep="\n\t  "))))
-  varMetadata(x) <- df
-  x
+  } else
+    vM <- data.frame()
+  ## new object
+  new("AnnotatedDataFrame", data=pData, varMetadata=vM)
 })
