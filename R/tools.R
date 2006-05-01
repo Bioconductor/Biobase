@@ -241,13 +241,34 @@ matchpt <- function(x, y = NULL) {
     colnames(res) <- c("index", "distance")
     return(res)
 }
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+## W.Huber, EBI, 2006
+cache_old <- function(name, expr) {
+    .Deprecated("cache, but with different args, see man page")
+  if(!(is.character(name) && length(name)==1))
+    stop("'name' must be a single character string.")
+  cachefile <- paste("tmp-", name, ".RData", sep="")
+  if(file.exists(cachefile)) {
+    load(cachefile)
+  } else {
+    assign(name, expr)
+    save(list=name, file=cachefile, compress=TRUE)
+  }
+  get(name)
+}
 
-
-cache <- function(expr, dir=".", prefix="tmp_R_cache_") {
+cache <- function(expr, dir=".", prefix="tmp_R_cache_", name) {
     pexpr <- parse(text=deparse(substitute(expr)))
     pexpr <- as.list(pexpr[[1]])
-    if (pexpr[[1]] != "<-")
-      stop("Expression must be of the form 'LHS <- RHS'")
+    useOld <- (pexpr[[1]] != "<-" || !missing(name))
+    if  (useOld) { ## compatibility layer
+        if (missing(name))
+          name <- expr
+        if (pexpr[[1]] != "<-" && !missing(dir))
+          expr <- dir
+        cache__usage <- cache_old
+        return(cache__usage(name, expr))
+    }
     name <- as.character(pexpr[[2]])
     RHS <- pexpr[[3]]
     cachefile <- file.path(dir, paste(prefix, name, ".RData", sep=""))
@@ -255,6 +276,7 @@ cache <- function(expr, dir=".", prefix="tmp_R_cache_") {
         load(cachefile)
         assign(name, get(name), envir=.GlobalEnv)
     } else {
+        dir.create(dir, recursive=TRUE, showWarnings=FALSE)
         assign(name, eval(RHS), envir=.GlobalEnv)
         save(list=name, file=cachefile)
     }

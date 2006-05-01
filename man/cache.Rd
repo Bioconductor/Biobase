@@ -8,7 +8,7 @@
 }
 
 \usage{
-    cache(expr, dir=".", prefix="tmp_R_cache_")
+    cache(expr, dir=".", prefix="tmp_R_cache_", name)
 }
 \arguments{
     \item{expr}{An expression of the form \code{LHS <- RHS}, Where
@@ -21,6 +21,9 @@
 
     \item{prefix}{A string giving the prefix to use when naming and
       searching for cache files.  The default is \code{"tmp_R_cache_"}}
+
+    \item{name}{Unused.  This argument is present as a compatibility
+    layer for the deprecated calling convention.}
 }
 
 \details{
@@ -45,6 +48,7 @@
   
   To flush the cache and force recomputation, simply remove the cache
   files.  You can use \code{\link{file.remove}} to do this.
+
 }
 
 \value{
@@ -54,6 +58,13 @@
 \author{
   Wolfgang Huber, \email{huber@ebi.ac.uk}
   Seth Falcon, \email{sfalcon@fhcrc.org}
+}
+
+\section{Note}{
+  The first version of this function had a slightly different interface
+  which is now deprecated (but still functional).  The old version has
+  arguments \code{name} and \code{expr} and the intended usage is:
+  \code{foo <- cache("foo", expr)}.
 }
 
 \examples{
