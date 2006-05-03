@@ -47,7 +47,7 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 biocReposList <- function() {
     ## Locations of Bioconductor release repositories
-    VERSION <- "1.8"
+    VERSION <- "1.9"
     root <- paste("http://bioconductor.org/packages", VERSION, sep="/")
     mkurl <- function(...) paste(root, ..., sep="/")
     reposList <- c(bioc=mkurl("bioc"),
