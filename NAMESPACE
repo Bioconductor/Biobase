@@ -6,6 +6,7 @@ exportClasses(aggregator, container, eSet, phenoData,
               MIAME, characterORMIAME,
               annotatedDataset, AssayData, data.frameOrNULL,
               exprMatrix, exprSet, AnnotatedDataFrame,
+              Versions, VersionsNull, Versioned, VersionedBiobase,
               ExpressionSet, MultiSet, SnpSet)
 
 exportMethods("[", "[[", "$", abstract, addVarMetadataEntry, aggenv, aggfun,
@@ -14,7 +15,7 @@ exportMethods("[", "[[", "$", abstract, addVarMetadataEntry, aggenv, aggfun,
              experimentData, expinfo, exprs, exprs2excel, featureNames, geneNames, getExpData,
              getUnits, getVarMetadata, hybridizations, initfun, iter,
              length, locked, normControls, ncol, notes, otherInfo, pData,
-             phenoData, preproc, sampleNames, samples, "se.exprs", show,
+             phenoData, preproc, sampleNames, samples, "se.exprs",
              split, storageMode, update2MIAME, varLabels, varMetadata, reporterInfo,
               "annotation<-", "description<-", "eList<-",
              "experimentData<-", "exprs<-", "featureNames<-", "geneNames<-", "notes<-", "pData<-",
@@ -22,7 +23,8 @@ exportMethods("[", "[[", "$", abstract, addVarMetadataEntry, aggenv, aggfun,
              "se.exprs<-",  "storageMode<-", "write.exprs",
              "as.data.frame.exprSet", dim, assayData, reporterNames,
 	     pubMedIds, "pubMedIds<-",
-             initialize)
+             isVersioned, isCurrent, classVersion, "classVersion<-",
+             initialize, show, Compare)
 
 export("Aggregate", 
        "addVigs2WinMenu",

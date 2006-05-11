@@ -68,3 +68,9 @@ setGeneric("varMetadata",     function(object) standardGeneric("varMetadata"))
 setGeneric("varMetadata<-",   function(object, value) standardGeneric("varMetadata<-"))
 setGeneric("update2MIAME",    function(object) standardGeneric("update2MIAME"))
 setGeneric("write.exprs",     function(x,...) standardGeneric("write.exprs"))
+## Version-related generics
+setGeneric("classVersion",    function(object) standardGeneric("classVersion"))
+setGeneric("classVersion<-",  function(object, value) standardGeneric("classVersion<-"))
+setGeneric("isCurrent",       function(object, value) standardGeneric("isCurrent"))
+setGeneric("isVersioned",     function(object) standardGeneric("isVersioned"))
+
