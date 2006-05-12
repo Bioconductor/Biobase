@@ -77,14 +77,6 @@ setClass("C",
          contains=("VersionedBiobase"),
          prototype=prototype(new("VersionedBiobase", versions=c(C="1.0.1"))))
 
-setMethod("initialize", signature(.Object = "C"),
-          function(.Object, ...) {
-            .Object <- callNextMethod()
-            args <- list(...)
-            if ("x" \%in\% names(args)) .Object@x <- args[["x"]]
-            .Object
-          })
-
 setMethod("show", signature(object="C"),
           function(object) print(object@x))
 

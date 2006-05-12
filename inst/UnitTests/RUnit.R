@@ -35,16 +35,6 @@ setClass("A",
          contains=("VersionedBiobase"),
          prototype=prototype(new("VersionedBiobase", versions=c(C="1.0.1"))))
 
-setMethod("initialize", signature(.Object = "A"),
-          function(.Object, ...) {
-            .Object <- callNextMethod()
-            args <- list(...)
-            if ("x" %in% names(args)) .Object@x <- args[["x"]]
-            .Object
-          })
-
-
-
 allSuite <- defineTestSuite( "allSuite",
                             system.file("UnitTests", package="Biobase"),
                             "^runit.+\.R$")

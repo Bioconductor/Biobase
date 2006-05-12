@@ -6,8 +6,8 @@
 
 setMethod("initialize", signature(.Object="Versioned"),
           function(.Object, ..., versions = list()) {
-              if (length(versions) > 0)
-                classVersion(.Object)[names(versions)] <- versions
+              .Object <- callNextMethod()
+              classVersion(.Object)[names(versions)] <- versions
               .Object
           })
 

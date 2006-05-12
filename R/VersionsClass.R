@@ -6,11 +6,7 @@
 setClass("Versions", contains="list")
 
 setMethod("initialize", signature(.Object="Versions"),
-          function(.Object, ...) {
-              args <- list(...)
-              .Object[names(args)] <- args
-              .Object
-          })
+          function(.Object, ...) callNextMethod(.Object, .asValidVersions(list(...))))
 
 .isValidVersion <- function(versions) {
     tryCatch(all(as.integer(versions)==versions) &&
@@ -26,6 +22,7 @@ setMethod("initialize", signature(.Object="Versions"),
       res[i] <-
         if (!is.character(versions[[i]]) && .isValidVersion(versions[[i]])) versions[i]
         else unclass(package_version(versions[[i]]))
+    names(res) <- names(versions)
     res
 }
 
