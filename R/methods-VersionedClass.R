@@ -17,7 +17,12 @@ setMethod("isVersioned", signature(object="ANY"),
           function(object) FALSE)
 
 setMethod("isVersioned", signature(object="character"),
-          function(object) extends(getClass(object), "Versioned"))
+          function(object) {
+              ## need to check getNamespace("Biobase") during Biobase installation
+              (isClass(object) ||
+               isClass(object, where=getNamespace("Biobase"))) &&
+              extends(getClass(object), "Versioned")
+      })
 
 setMethod("isVersioned", signature(object="Versioned"),
           function(object) ".__classVersion__" %in% names(attributes(object)))
@@ -65,4 +70,4 @@ setMethod("isCurrent", signature(object="Versioned", value="character"),
 ## show
 
 setMethod("show", signature(object="Versioned"),
-          function(object) invisible())
+          function(object) callNextMethod())

@@ -3,15 +3,19 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 validExprSet <- function(object) {
   ## add other checks here
-  if (!is(object, "exprSet"))
-    return(paste("cannot validate object of class", class(object)))
-  if (dim(exprs(object))[2] != nrow(pData(object)))
-    return("number of exprs columns different from number of pData rows")
-  if (!identical(sampleNames(object), row.names(pData(object))))
-    return("sampleNames different from names of phenoData rows")
+    if (!is(object, "exprSet"))
+      return(paste("cannot validate object of class", class(object)))
+    msg <- NULL
+    if (dim(exprs(object))[2] != nrow(pData(object)))
+      msg <- c(msg, "number of exprs columns different from number of pData rows")
+    if (nrow(se.exprs(object))>0 && !all(dim(exprs(object))==dim(se.exprs(object))))
+      msg <- c(msg, "se.exprs dimensions do not match exprs")
+    if (!identical(sampleNames(object), row.names(pData(object))))
+      msg <- c(msg, "sampleNames different from names of phenoData rows")
 ##   if (!is.null(reporterInfo(object)) && dim(exprs(object))[1] != nrow(reporterInfo(object)))
 ##       return("number of exprs and reporterInfo rows differ")
-  return(TRUE)
+    if (is.null(msg)) msg <- TRUE
+    msg
 }
 # ==========================================================================
 # method to update exprSet from previous versions
