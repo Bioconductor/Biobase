@@ -19,14 +19,9 @@ setAs("exprSet", "ExpressionSet", function(from) {
   if (class(desc)!="MIAME") {
     warning("missing or mis-formed MIAME 'description' in original object; creating new, empty description")
     desc <- new("MIAME")
-  }
+  } else if (!isCurrent(desc)) desc <- updateObject(desc)
   exprs <- assayData(from)
   dims <- dim(exprs)
-  ## now if it is a MIAME instance that lacks pubMedIds, we do not
-  ## just want to shuffle it across!
-  pmid = try( pubMedIds(desc) , silent=TRUE) # should only error if slot nonexistent
-  if ( inherits(pmid, "try-error") )
-    desc = updateOldMiame(desc)
   if (all(dim(from@se.exprs) == dims)) {
     se.exprs <- from@se.exprs
     colnames(se.exprs) <- colnames(exprs)

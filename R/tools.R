@@ -282,4 +282,14 @@ cache <- function(expr, dir=".", prefix="tmp_R_cache_", name) {
     }
     invisible(get(name))
 }
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+getObjectSlots <- function(object) { # object, rather than class defn, slots
+    if(!is.object(object) || isVirtualClass(class(object)))
+      return(NULL)
+    value <- attributes(object)
+    value$class <- NULL
+    if(is(object, "vector"))
+      value$.Data <- as.vector(object)
+    value
+}
 

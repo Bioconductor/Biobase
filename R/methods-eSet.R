@@ -94,6 +94,9 @@ updateOldESet <- function(from, toClass, ...) {  # to MultiExpressionSet
   object
 }
 
+setAs("eSet", "ExpressionSet", function(from, to) updateOldESet(from, "ExpressionSet"))
+setAs("eSet", "MultiSet", function(from, to) updateOldESet(from, "MultiSet"))
+
 setValidity("eSet", function( object ) {
   msg <- NULL
   if (!is(object, "eSet"))

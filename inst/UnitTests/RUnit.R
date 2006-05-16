@@ -30,16 +30,15 @@ eSetSubclassesSuite <- defineTestSuite( "eSetSubclasses",
                                        system.file("UnitTests", package="Biobase"),
                                        "^runitEset.+\.R$")
 
-setClass("A",
-         representation(x="numeric"),
-         contains=("VersionedBiobase"),
-         prototype=prototype(new("VersionedBiobase", versions=c(C="1.0.1"))))
+updateObjectSuite <- defineTestSuite( "updateSuite",
+                                     system.file("UnitTests", package="Biobase"),
+                                     "^runitUp.+\.R$")
 
 allSuite <- defineTestSuite( "allSuite",
                             system.file("UnitTests", package="Biobase"),
                             "^runit.+\.R$")
 
-testData <- runTestSuite(allSuite)
+testData <- runTestSuite(eSetSubclassesSuite)
 
 printTextProtocol(testData, showDetails=TRUE)
 

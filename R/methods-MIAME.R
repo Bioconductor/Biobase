@@ -1,9 +1,18 @@
 updateOldMiame = function(x) {
-  if (!is(x, "MIAME")) stop("only works for instances of MIAME")
-  olds = attributes(unclass(x))
-  joint = intersect(names(olds),names(getSlots("MIAME")))
-  do.call("new", c("MIAME",olds[joint]))
+    .Deprecated("updateObject(x)", "Biobase")
+    updateObject(x)
 }
+
+setMethod("isCurrent", signature(object="MIAME", value="missing"),
+          function(object, value) "pubMedIds" %in% names(getObjectSlots(object)))
+         
+setMethod("updateObject", signature(object="MIAME"),
+          function(object, ..., verbose=FALSE) {
+              if (verbose) message("updateObject object = 'MIAME'")
+              if (isCurrent(object)) object
+              else
+                updateObjectFromSlots(object, "MIAME", ..., verbose=verbose)
+          })
 
 # ==========================================================================
 setMethod("show", "MIAME",

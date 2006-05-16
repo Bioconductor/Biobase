@@ -9,6 +9,7 @@
 \alias{exprs<-,ExpressionSet,matrix-method}
 \alias{initialize,ExpressionSet-method}
 \alias{coerce,exprSet,ExpressionSet-method}
+\alias{coerce,eSet,ExpressionSet-method}
 
 \title{
   Class to Contain and Describe High-Throughput Expression Level Assays.
@@ -96,6 +97,8 @@
       that \code{exprs} is a member of
       \code{assayData}. \code{checkValidity(ExpressionSet)} imposes this
       validity check, and the validity checks of \code{eSet}.}
+     \item{\code{as(exprSet,ExpressionSet)}:}{Coerce \code{exprSet} too \code{ExpressionSet}.}
+     \item{\code{as(eSet,ExpressionSet)}:}{Coerce the \code{eSet} portion of an object to \code{ExpressionSet}.}
      \item{\code{show(ExpressionSet)}}{See \code{\link{eSet}}}
      \item{\code{dim(ExpressionSet)}, \code{ncol}}{See \code{\link{eSet}}}
      \item{\code{ExpressionSet[(index)}:}{See \code{\link{eSet}}}

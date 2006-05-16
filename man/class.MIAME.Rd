@@ -17,6 +17,8 @@
 \alias{pubMedIds<-,MIAME,ANY-method}
 \alias{samples,MIAME-method}
 \alias{show,MIAME-method}
+\alias{updateObject,MIAME-method}
+\alias{isCurrent,MIAME,missing-method}
 \alias{samples}
 
 \concept{abstract}
@@ -65,6 +67,8 @@
    }
    Standard generic methods:
    \describe{
+     \item{\code{updateObject(MIAME)}:}{Update instances of \code{MIAME} to the current representation}
+     \item{\code{isCurrent(MIAME)}:}{Determine whether the instance of \code{MIAME} is current. See \code{\link{updateObject}}}
       \item{\code{show(MIAME)}:}{Renders information about the MIAME information }
    }
 }

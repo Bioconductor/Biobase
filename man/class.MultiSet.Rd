@@ -5,6 +5,7 @@
 
 \alias{MultiSet-class}
 \alias{initialize,MultiSet-method}
+\alias{coerce,eSet,MultiSet-method}
 
 \title{
   Class to Contain and Describe High-Throughput Expression Level Assays.
@@ -88,6 +89,7 @@
       by \code{new}; not to be called directly by the user.}
     \item{\code{validObject(MultiSet)}:}{Validity-checking method, ensuring
       that all elements of \code{assayData} are matricies with equal dimensions.}
+     \item{\code{as(eSet,MultiSet)}:}{Coerce the \code{eSet} portion of an object to \code{MultiSet}.}
      \item{\code{show(MultiSet)}}{See \code{\link{eSet-class}}}
      \item{\code{dim(MultiSet)}, \code{ncol}}{See \code{\link{eSet-class}}}
      \item{\code{MultiSet[(index)}:}{See \code{\link{eSet-class}}}
@@ -103,30 +105,18 @@
 
 \examples{
 # create an instance of ExpressionSet
-new("ExpressionSet")
+new("MultiSet")
 
-# update existing exprSet-like class to ExpressionSet
-data(sample.exprSet)
-expressionSet <- as(sample.exprSet,"ExpressionSet")
-expressionSet
+# update existing eSet class to MultiSet
+data(sample.eSet)
+multiSet <- as(sample.eSet,"MultiSet")
+multiSet
 
 # information about assay and sample data
-featureNames(expressionSet)[1:10]
-sampleNames(expressionSet)[1:5]
-phenoData(expressionSet)
-experimentData(expressionSet)
-
-# subset: first 10 genes, samples 2, 4, and 10
-expressionSet <- as(sample.exprSet,"ExpressionSet")
-expressionSet[1:10,c(2,4,10)]
-
-# named features and their expression levels
-subset <- expressionSet[c("AFFX-BioC-3_at","AFFX-BioDn-5_at"),]
-exprs(subset)
-
-# samples with above-average 'score' in phenoData
-highScores <- expressionSet$score > mean(expressionSet$score)
-expressionSet[,highScores]
+featureNames(multiSet)[1:10]
+sampleNames(multiSet)[1:5]
+phenoData(multiSet)
+experimentData(multiSet)
 }
 
 \keyword{classes}
