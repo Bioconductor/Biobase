@@ -17,6 +17,16 @@ validExprSet <- function(object) {
     if (is.null(msg)) msg <- TRUE
     msg
 }
+
+setMethod("updateObject", signature(object="exprSet"),
+          function(object, ..., verbose=FALSE) {
+              if (verbose) message("updateObject(object = 'exprSet')")
+              object <- callNextMethod()
+              if (isCurrent(object)["exprSet"]) object
+              else if (!isVersioned(object))
+                  updateObjectFromSlots(object, "exprSet", ..., verbose=verbose)
+              else object
+          })
 # ==========================================================================
 # method to update exprSet from previous versions
 setMethod("update2MIAME", "exprSet",
@@ -170,7 +180,7 @@ setMethod("show", "exprSet",
       ngenes <- dm[1]
       nsamples <- dm[2]
       cat("Expression Set (exprSet) with \n\t", ngenes, " genes\n\t", sep="")
-      cat(nsamples, "samples\n\t")
+      cat(nsamples, "samples\n")
       show(phenoData(object))
    }
 )

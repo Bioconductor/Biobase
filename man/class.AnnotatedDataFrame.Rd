@@ -21,6 +21,7 @@
 \alias{sampleNames<-,AnnotatedDataFrame-method}
 \alias{sampleNames,AnnotatedDataFrame-method}
 \alias{show,AnnotatedDataFrame-method}
+\alias{updateObject,AnnotatedDataFrame-method}
 \alias{varLabels<-,AnnotatedDataFrame-method}
 \alias{varLabels,AnnotatedDataFrame-method}
 
@@ -104,6 +105,9 @@
     \item{\code{validObject(<AnnotatedDataFrame>)}:}{Validity-checking
       method, ensuring coordination between \code{data} and
       \code{varMetadata} elements}
+     \item{\code{updateObject(object, ..., verbose=FALSE)}}{Update instance to current version, if necessary. See \code{\link{updateObject}}}
+     \item{\code{isCurrent(object)}}{Determine whether version of object is current. See \code{\link{isCurrent}}}
+     \item{\code{isVersioned(object)}}{Determine whether object contains a 'version' string describing its structure . See \code{\link{isVersioned}}}
      \item{\code{show(<AnnotatedDataFrame>)}}{Abbreviated display of object}
     \item{\code{[<sample>,<variable>}:}{Subset operation, taking two arguments and
       indexing the sample and variable. Returns an

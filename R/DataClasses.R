@@ -43,7 +43,9 @@ setClass("phenoData",
       varLabels   = "list",
       varMetadata = "data.frame"
    ),
-   prototype = list(
+   contains="Versioned",
+   prototype = prototype(
+      new("Versioned", versions=c(phenoData="1.0.0")),
       pData       = data.frame(matrix(nr=0,nc=0)),
       varLabels   = list(),
       varMetadata = data.frame(matrix(nr=0,nc=0))
@@ -73,7 +75,9 @@ setClass("MIAME",
       preprocessing  = "list",
       other          = "list"
    ),
-   prototype = list(
+   contains=c("Versioned"),
+   prototype = prototype(
+      new("Versioned", versions=c(MIAME="1.0.0")),
       name           = "",
       lab            = "",
       contact        = "",
@@ -105,7 +109,9 @@ setClass("annotatedDataset",
       phenoData    = "phenoData",
       "VIRTUAL"
    ),
-   prototype = list()
+   contains=c("VersionedBiobase"),
+   prototype = prototype(
+       new("VersionedBiobase", versions=c(annotatedDataset="1.0.0")))
 )
 # ==========================================================================
 # AnnotatedDataFrame: A data.frame, with annotations about columns named
@@ -119,7 +125,9 @@ setClass("annotatedDataset",
 setClass("AnnotatedDataFrame",
          representation(varMetadata = "data.frame",
                         data = "data.frame" ),
-         prototype = list(
+         contains=c("Versioned"),
+         prototype = prototype(
+           new("Versioned", versions=list(AnnotatedDataFrame="1.0.0")),
            varMetadata = new( "data.frame" ),
            data = new( "data.frame" )),
          validity = function(object) validAnnotatedDataFrame(object))
@@ -144,15 +152,28 @@ setClass("eSet",
                         experimentData = "MIAME",
                         annotation = "character",
                         "VIRTUAL"),
-         prototype = list(
+         contains="VersionedBiobase",
+         prototype = prototype(
+           new("VersionedBiobase", versions=c(eSet="1.0.0")),
            assayData = list(), # use initialize to set as env, so different instances have different envs
            phenoData = new( "AnnotatedDataFrame" ),
            experimentData = new( "MIAME" ),
-           annotation = character()),
-)
-setClass("ExpressionSet", contains = "eSet") # exprSet-like
-setClass("MultiSet", contains = "eSet") # any elements in the assayData slot
-setClass("SnpSet", contains = "eSet")
+           annotation = character()))
+setClass("ExpressionSet",               # exprSet-like
+         contains = "eSet",
+         prototype = prototype(
+           new("VersionedBiobase",
+               versions=c(classVersion("eSet"), ExpressionSet="1.0.0"))))
+setClass("MultiSet",                    # any element in assayData slot
+         contains = "eSet",
+         prototype = prototype(
+           new("VersionedBiobase",
+               versions=c(classVersion("eSet"), MultiSet="1.0.0"))))
+setClass("SnpSet",                      # call, callProbability
+         contains = "eSet",
+         prototype = prototype(
+           new("VersionedBiobase",
+               versions=c(classVersion("eSet"), SnpSet="1.0.0"))))
 # ==========================================================================
 # exprSet <== annotatedDataset: expression arrays and methods for processing them
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -172,14 +193,16 @@ setClass("exprSet",
       annotation  = "character",
       notes       = "character"
    ),
-   prototype = list(
+   contains = c("annotatedDataset"), # contains VersionedBiobase implicitly
+   prototype = prototype(
+      new("VersionedBiobase",
+          versions=c(classVersion("annotatedDataset"), exprSet="1.0.0")),
       exprs       = matrix(nr=0,nc=0),
       se.exprs    = matrix(nr=0,nc=0),
       description = new("MIAME"),
       annotation  = "",
       notes       = ""
    ),
-   contains = c("annotatedDataset"),
    validity = function(object) validExprSet(object)
 )
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

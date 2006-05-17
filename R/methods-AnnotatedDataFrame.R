@@ -20,6 +20,16 @@ setMethod("initialize", "AnnotatedDataFrame",
             validObject(.Object)
             .Object
           })
+
+setMethod("updateObject", signature(object="AnnotatedDataFrame"),
+          function(object, ..., verbose=FALSE) {
+              if (verbose) message("updateObject(object = 'AnnotatedDataFrame')")
+              to <- new("AnnotatedDataFrame")
+              varMetadata(to) <- updateObject(varMetadata(object))
+              pData(to) <- updateObject(pData(object))
+              to
+          })
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("dim", "AnnotatedDataFrame", function( x ) {
   d <- dim(x@data)

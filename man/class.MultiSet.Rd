@@ -66,6 +66,9 @@
 
    Derived from \code{\link{eSet-class}}:
    \describe{
+     \item{\code{updateObject(object, ..., verbose=FALSE)}}{Update instance to current version, if necessary. See \code{\link{updateObject}} and \code{\link{eSet}}}
+     \item{\code{isCurrent(object)}}{Determine whether version of object is current. See \code{\link{isCurrent}}}
+     \item{\code{isVersioned(object)}}{Determine whether object contains a 'version' string describing its structure . See \code{\link{isVersioned}}}
      \item{\code{sampleNames(MultiSet)} and \code{sampleNames(MultiSet)<-}:}{See \code{\link{eSet-class}}}
      \item{\code{featureNames(MultiSet)}, \code{featureNames(MultiSet, value)<-}:}{See \code{\link{eSet-class}}}
      \item{\code{dims(MultiSet)}:}{See \code{\link{eSet-class}}}
@@ -85,10 +88,8 @@
 
   Standard generic methods:
   \describe{
-    \item{\code{initialize(MultiSet)}:}{Object instantiation, used
-      by \code{new}; not to be called directly by the user.}
-    \item{\code{validObject(MultiSet)}:}{Validity-checking method, ensuring
-      that all elements of \code{assayData} are matricies with equal dimensions.}
+     \item{\code{initialize(MultiSet)}:}{Object instantiation, used by \code{new}; not to be called directly by the user.}
+     \item{\code{validObject(MultiSet)}:}{Validity-checking method, ensuring that all elements of \code{assayData} are matricies with equal dimensions.}
      \item{\code{as(eSet,MultiSet)}:}{Coerce the \code{eSet} portion of an object to \code{MultiSet}.}
      \item{\code{show(MultiSet)}}{See \code{\link{eSet-class}}}
      \item{\code{dim(MultiSet)}, \code{ncol}}{See \code{\link{eSet-class}}}

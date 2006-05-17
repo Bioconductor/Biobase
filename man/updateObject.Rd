@@ -114,6 +114,8 @@ a <- new("UpdtA", x=1:10)
 ## See steps involved
 updateObject(a)
 
+removeClass("UpdtA")
+removeMethod("updateObject", "UpdtA")
 }
 
 \keyword{manip}

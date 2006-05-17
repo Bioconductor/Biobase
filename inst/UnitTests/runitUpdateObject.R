@@ -96,8 +96,6 @@ testUpdateExpressionSet <- function() {
     checkTrue(identical(lapply(ls(assayData(obj), all=TRUE), function(x) x),
                         lapply(ls(assayData(sample.ExpressionSet),all=TRUE), function(x) x)))
     checkTrue(!identical(assayData(obj), assayData(sample.ExpressionSet))) # different environments
-    checkTrue(identical(phenoData(obj), phenoData(sample.ExpressionSet)))
-    checkTrue(identical(experimentData(obj), experimentData(sample.ExpressionSet)))
     checkTrue(identical(annotation(obj), annotation(sample.ExpressionSet)))
 
     obj1a <- updateObjectTo(sample.ExpressionSet, new("ExpressionSet"))
@@ -108,7 +106,7 @@ testUpdateExpressionSet <- function() {
 
 testUpdateExprSet <- function() {
     data(sample.exprSet)
-    obj <- updateObject(sample.exprSet,verbose=TRUE)
+    obj <- updateObject(sample.exprSet)
 }
 
 testUpdateESetMisc <- function() {
@@ -117,4 +115,7 @@ testUpdateESetMisc <- function() {
 
     data(sample.eSet)
     obj <- as(sample.eSet, "MultiSet")
+
+    data(eset)
+    obj <- as(eset, "ExpressionSet")
 }

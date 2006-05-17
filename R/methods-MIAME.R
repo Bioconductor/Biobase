@@ -4,11 +4,13 @@ updateOldMiame = function(x) {
 }
 
 setMethod("isCurrent", signature(object="MIAME", value="missing"),
-          function(object, value) "pubMedIds" %in% names(getObjectSlots(object)))
+          function(object, value) {
+              callNextMethod() && "pubMedIds" %in% names(getObjectSlots(object))
+      })
          
 setMethod("updateObject", signature(object="MIAME"),
           function(object, ..., verbose=FALSE) {
-              if (verbose) message("updateObject object = 'MIAME'")
+              if (verbose) message("updateObject(object = 'MIAME')")
               if (isCurrent(object)) object
               else
                 updateObjectFromSlots(object, "MIAME", ..., verbose=verbose)

@@ -48,6 +48,8 @@
 \alias{varMetadata<-,eSet,data.frame-method}
 \alias{storageMode,eSet-method}
 \alias{storageMode<-,eSet,character-method}
+\alias{updateObject,eSet-method}
+\alias{updateObjectTo,eSet,eSet-method}
 
 \alias{listOrEnv}
 \alias{SW}
@@ -167,6 +169,12 @@
 	  features and samples; (2) the number and names of
 	  \code{phenoData} rows match the number and names of
 	  \code{assayData} columns}
+     \item{\code{as(eSet, "ExpressionSet")}}{Convert instance of class \code{"eSet"} to instance of \code{\link{ExpressionSet-class}}, if possible.}
+     \item{\code{as(eSet, "MultiSet")}}{Convert instance of class \code{"eSet"} to instance of \code{\link{MultiSet-class}}, if possible.}
+     \item{\code{updateObject(object, ..., verbose=FALSE)}}{Update instance to current version, if necessary. Usually called through class inheritance rather than directly by the user. See \code{\link{updateObject}}}
+     \item{\code{updateObjectTo(object, template, ..., verbose=FALSE)}}{Update instance to current version by updating slots in \code{template}, if necessary. Usually call by class inheritance, rather than directly by the user. See \code{\link{updateObjectTo}}}
+     \item{\code{isCurrent(object)}}{Determine whether version of object is current. See \code{\link{isCurrent}}}
+     \item{\code{isVersioned(object)}}{Determine whether object contains a 'version' string describing its structure . See \code{\link{isVersioned}}}
      \item{\code{show(object)}}{Informatively display object contents.}
      \item{\code{dim(object)}, \code{ncol}}{Access the common
        dimensions (\code{dim}) or column numbers (\code{ncol}), of all
@@ -179,7 +187,7 @@
    \describe{
      \item{\code{updateOldESet}}{Update versions of \code{eSet}
        constructued using \code{listOrEnv} as \code{assayData} slot
-       (before May, 2006)}
+       (before May, 2006).}
    }
 }
 \author{Biocore team}
@@ -240,6 +248,10 @@ new("TwoColorSet")
 
 # eSet objects cannot be instantiated directly, only derived objects
 try(new("eSet"))
+
+removeClass("MySet")
+removeClass("TwoColorSet")
+removeMethod("initialize", "TwoColorSet")
 }
 
 \keyword{classes}

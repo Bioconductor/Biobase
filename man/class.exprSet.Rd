@@ -30,6 +30,7 @@
 \alias{split,exprSet,factor,missing-method}
 \alias{split,exprSet,vector,missing-method}
 \alias{update2MIAME,exprSet-method}
+\alias{updateObject,exprSet-method}
 \alias{write.exprs,exprSet-method}
 
 \alias{as.data.frame.exprSet}
@@ -119,9 +120,11 @@
    }
    Standard generic methods:
    \describe{
+     \item{\code{updateObject(object, ..., verbose=FALSE)}}{Update instance to current version, if necessary. See \code{\link{updateObject}}}
+     \item{\code{isCurrent(object)}}{Determine whether version of object is current. See \code{\link{isCurrent}}}
+     \item{\code{isVersioned(object)}}{Determine whether object contains a 'version' string describing its structure . See \code{\link{isVersioned}}}
       \item{\code{show(exprSet)}:}{Renders information about the exprSet in a concise way on stdout. }
-      \item{\code{[(exprSet)}:}{A subset operator. Ensures that both
-	\code{exprs} and \code{phenoData} are subset properly.}
+      \item{\code{[(exprSet)}:}{A subset operator. Ensures that both \code{exprs} and \code{phenoData} are subset properly.}
       \item{\code{validObject(exprSet)}:}{Validity-checking method,
 	  ensuring the number and names of \code{phenoData} rows match the
 	  number and names of \code{exprs} columns}

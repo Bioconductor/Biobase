@@ -46,6 +46,7 @@ setClass("A", contains="VersionedBiobase",
 a <- new("A")
 isVersioned(a)
 
+removeClass("A")
 }
 
 \keyword{manip}

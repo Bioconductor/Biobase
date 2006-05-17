@@ -97,6 +97,38 @@ updateOldESet <- function(from, toClass, ...) {  # to MultiExpressionSet
 setAs("eSet", "ExpressionSet", function(from, to) updateOldESet(from, "ExpressionSet"))
 setAs("eSet", "MultiSet", function(from, to) updateOldESet(from, "MultiSet"))
 
+updateESetTo <- function(object, template, ..., verbose=FALSE) {
+    if (verbose) message("updateESetTo(object = 'eSet' template = '", class(template), "')")
+    ## cannot instantiate a 'virtual' class, so use accessor functions
+    ## to update class components. Better than direct slot access?
+    funcs <- c("assayData", "phenoData", "experimentData", "annotation")
+    eval(parse(text=paste(funcs,"(template)<-",
+                 "updateObject(", funcs, "(object), ..., verbose=verbose)")))
+    vers <- classVersion("eSet")
+    classVersion(template)[names(vers)] <- vers # current class version, eSet & 'below' only
+    template
+}
+
+setMethod("updateObject", signature(object="eSet"),
+          function(object, ..., verbose=FALSE) {
+              if (verbose) message("updateObject(object = 'eSet')")
+              object <- callNextMethod()
+              if (isCurrent(object)["eSet"]) return(object)
+              ## storage.mode likely to be useful to update versioned classes, too
+              storage.mode.final <- storageMode(object)
+              storage.mode <-
+                if (storage.mode.final == "lockedEnvironment") "environment"
+                else storage.mode.final
+              if (!isVersioned(object)) {
+                  object <- updateESetTo(object, new(class(object), storage.mode=storage.mode), ..., verbose=verbose)
+                  storageMode(object) <- storage.mode.final
+                  object
+              }
+              else stop("cannot update object of class '", class(object), "'")
+          })
+
+setMethod("updateObjectTo", signature(object="eSet", template="eSet"), updateESetTo)
+
 setValidity("eSet", function( object ) {
   msg <- NULL
   if (!is(object, "eSet"))

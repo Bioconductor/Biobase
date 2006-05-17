@@ -50,6 +50,9 @@ classVersion("B")
 b <- new("B")
 classVersion(b)
 
+removeClass("A")
+removeClass("B")
+
 }
 
 \keyword{classes}

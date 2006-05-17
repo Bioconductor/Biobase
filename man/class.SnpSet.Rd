@@ -68,6 +68,9 @@
   
    Derived from \code{\link{eSet}}:
    \describe{
+     \item{\code{updateObject(object, ..., verbose=FALSE)}}{Update instance to current version, if necessary. See \code{\link{updateObject}} and \code{\link{eSet}}}
+     \item{\code{isCurrent(object)}}{Determine whether version of object is current. See \code{\link{isCurrent}}}
+     \item{\code{isVersioned(object)}}{Determine whether object contains a 'version' string describing its structure . See \code{\link{isVersioned}}}
      \item{\code{sampleNames(SnpSet)} and \code{sampleNames(SnpSet)<-}:}{See \code{\link{eSet}}}
      \item{\code{featureNames(SnpSet)}, \code{featureNames(SnpSet, value)<-}:}{See \code{\link{eSet}}}
      \item{\code{dims(SnpSet)}:}{See \code{\link{eSet}}}
@@ -87,12 +90,8 @@
 
   Standard generic methods:
   \describe{
-    \item{\code{initialize(SnpSet)}:}{Object instantiation, used
-      by \code{new}; not to be called directly by the user.}
-    \item{\code{validObject(SnpSet)}:}{Validity-checking method, ensuring
-      that \code{call} and \code{callProbability} is a member of
-      \code{assayData}. \code{checkValidity(SnpSet)} imposes this
-      validity check, and the validity checks of \code{eSet}.}
+     \item{\code{initialize(SnpSet)}:}{Object instantiation, used by \code{new}; not to be called directly by the user.}
+     \item{\code{validObject(SnpSet)}:}{Validity-checking method, ensuring that \code{call} and \code{callProbability} is a member of \code{assayData}. \code{checkValidity(SnpSet)} imposes this validity check, and the validity checks of \code{eSet}.}
      \item{\code{show(SnpSet)}}{See \code{\link{eSet}}}
      \item{\code{dim(SnpSet)}, \code{ncol}}{See \code{\link{eSet}}}
      \item{\code{SnpSet[(index)}:}{See \code{\link{eSet}}}

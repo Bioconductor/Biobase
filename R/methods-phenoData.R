@@ -2,11 +2,27 @@
 # phenoData class validator
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 validator.phenoData <- function(object) {
-   dm <- dim(object@pData)
-   if(dm[2] != length(object@varLabels) )
-      return("number of varLabels not equal to number of columns of pData data.frame")
-   return(TRUE)
+    msg <- NULL
+    if (!isCurrent(object))
+        msg <- c(msg, "missing 'Versioned' base class; use updateObject")
+    dm <- dim(object@pData)
+    if(dm[2] != length(object@varLabels) )
+        msg <- c(msg,"number of varLabels not equal to number of columns of pData data.frame")
+    if (is.null(msg)) TRUE else msg
 }
+
+setMethod("updateObject", signature(object="phenoData"),
+          function(object, ..., verbose=FALSE) {
+              if (verbose) message("updateObject(object='phenoData')")
+              object <- callNextMethod()
+              if (isCurrent(object)["phenoData"]) object
+              else
+                  new("phenoData",
+                      pData = updateObject(pData(object), ..., verbose=verbose),
+                      varLabels = updateObject(varLabels(object), ..., verbose=verbose),
+                      varMetadata = updateObject(varMetadata(object), ..., verbose=verbose))
+          })
+
 # ==========================================================================
 setMethod("pData", "phenoData", function(object) object@pData)
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -64,10 +80,10 @@ setReplaceMethod("[[", "phenoData",
 setMethod("show", "phenoData",
    function(object) {
       dm <- dim(object@pData)
-      cat("\t phenoData object with ", dm[2], " variables", sep="")
+      cat("\tphenoData object with ", dm[2], " variables", sep="")
       cat(" and ", dm[1], " cases\n", sep="")
       vL <- object@varLabels
-      cat("\t varLabels\n")
+      cat("\tvarLabels\n")
       nm <- names(vL)
       for(i in seq(along=vL) )
          cat("\t\t", nm[[i]], ": ", vL[[i]], "\n", sep="")

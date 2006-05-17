@@ -1,19 +1,19 @@
 setMethod("updateObject", signature(object="ANY"),
           function(object, ..., verbose=FALSE) {
               if (verbose)
-                  message("updateObject default object = '", class(object), "'")
+                  message("updateObject(object = 'ANY') default for object of class '", class(object), "'")
               object
           })
 
 setMethod("updateObject", signature(object="list"),
           function(object, ..., verbose=FALSE) {
-              if (verbose) message("updateObject object = 'list'")
+              if (verbose) message("updateObject(object = 'list')")
               lapply(object, updateObject, ..., verbose=verbose)
           })
 
 setMethod("updateObject", signature(object="environment"),
           function(object, ..., verbose=FALSE) {
-              if (verbose) message("updateObject object = 'environment'")
+              if (verbose) message("updateObject(object = 'environment')")
               envLocked <- environmentIsLocked(object)
               if (envLocked) warning("updateObject duplicating locked environment")
               else warning("updateObject modifying environment")
@@ -39,10 +39,13 @@ setMethod("updateObject", signature(object="environment"),
 
 updateObjectFromSlots <- function(object, class, ..., verbose=FALSE) {
     if (verbose)
-        message("updateObjectFromSlots object = '", class(object),
-                "' class = '", class, "'")
+        message("updateObjectFromSlots(object = '", class(object),
+                "' class = '", class, "')")
     ## get slots from object, and use as arguments to construct new instance
     objectSlots <- getObjectSlots(object)
+    ## de-mangle and remove NULL
+    nulls <- sapply(names(objectSlots), function(slt) is.null(slot(object, slt)))
+    objectSlots[nulls] <- NULL
     classSlots <- names(getSlots(class))
     joint <- intersect(names(objectSlots), classSlots)
     toDrop <- which(!names(objectSlots) %in% joint)
@@ -50,6 +53,6 @@ updateObjectFromSlots <- function(object, class, ..., verbose=FALSE) {
         warning("dropping slot(s) ",
                 paste(names(objectSlots)[toDrop],collapse=", "),
                 " from object = '", class(object), "'")
-    objectSlots <- lapply(objectSlots[joint], updateObject, ..., verbose=verbose)
+    objectSlots <- sapply(objectSlots[joint], updateObject, ..., verbose=verbose)
     do.call("new", c(class, objectSlots))
 }

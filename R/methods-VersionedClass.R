@@ -63,7 +63,10 @@ setMethod("isCurrent", signature(object="Versioned", value="character"),
                   vers <- classVersion(value)
                   res <- classVersion(object)[names(vers)] == vers
                   if (length(res)==0) TRUE
-                  else res
+                  else {
+                      names(res) <- names(vers)
+                      res
+                  }
               } else FALSE
           })
 

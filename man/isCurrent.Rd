@@ -54,6 +54,7 @@ classVersion(a)
 isCurrent(a, "VersionedBiobase")
 isCurrent(a) # more recent, so does not match 'current' defined by prototype
 
+removeClass("A")
 }
 
 \keyword{manip}

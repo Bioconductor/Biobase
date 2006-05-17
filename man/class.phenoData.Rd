@@ -21,6 +21,7 @@
 \alias{phenoData<-,annotatedDataset,phenoData-method}
 \alias{show,phenoData-method}
 \alias{split,phenoData,vector,missing-method}
+\alias{updateObject,phenoData-method}
 \alias{varLabels,phenoData-method}
 \alias{varMetadata,phenoData-method}
 
@@ -68,6 +69,9 @@
    }
    Functions defined in Biobase to operate with 'phenoData' instances include:
    \describe{
+     \item{\code{updateObject(object, ..., verbose=FALSE)}}{Update instance to current version, if necessary. See \code{\link{updateObject}}}
+     \item{\code{isCurrent(object)}}{Determine whether version of object is current. See \code{\link{isCurrent}}}
+     \item{\code{isVersioned(object)}}{Determine whether object contains a 'version' string describing its structure . See \code{\link{isVersioned}}}
       \item{\code{df2pD(x, varLabels, varMetadata)}}{Function to coerce from a \code{data.frame} to a \code{phenoData} object. Here \code{x} is the \code{data.frame} to be coerced; \code{varLabels} is a character describing each of the columns in \code{x} and \code{varMetadata} is a more extensive descriptions of the variables in \code{x}, including units of measurement etc}
       \item{\code{read.phenoData}}{See help on \code{\link{read.phenoData}}}
    }

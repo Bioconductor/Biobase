@@ -63,12 +63,14 @@
       \item{\code{otherInfo(MIAME)}:}{ An accessor function for \code{other} }
       \item{\code{precproc(MIAME)}:}{ An accessor function for \code{other} }
       \item{\code{pubMedIds(MIAME)}:}{ An accessor function for \code{pubMedIds}}
-      \item{\code{samples(MIAME)}:}{ An accessor function for \code{samples} }
+      \item{\code{samples(MIAME)}:}{ An accessor function for
+	\code{samples} }
    }
    Standard generic methods:
    \describe{
-     \item{\code{updateObject(MIAME)}:}{Update instances of \code{MIAME} to the current representation}
-     \item{\code{isCurrent(MIAME)}:}{Determine whether the instance of \code{MIAME} is current. See \code{\link{updateObject}}}
+     \item{\code{updateObject(object, ..., verbose=FALSE)}}{Update instance to current version, if necessary. See \code{\link{updateObject}}}
+     \item{\code{isCurrent(object)}}{Determine whether version of object is current. See \code{\link{isCurrent}}}
+     \item{\code{isVersioned(object)}}{Determine whether object contains a 'version' string describing its structure . See \code{\link{isVersioned}}}
       \item{\code{show(MIAME)}:}{Renders information about the MIAME information }
    }
 }
