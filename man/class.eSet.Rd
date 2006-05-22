@@ -202,13 +202,6 @@
 }
 
 \examples{
-# create an instance of an existing derived class
-new("ExpressionSet")
-
-# update existing exprSet-like class to existing derived class
-data(sample.exprSet)
-expressionSet <- as(sample.exprSet,"ExpressionSet")
-expressionSet
 
 # update previous eSet-like class oldESet to existing derived class
 \dontrun{updateOldESet(oldESet, "ExpressionSet")}

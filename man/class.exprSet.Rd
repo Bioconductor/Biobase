@@ -174,6 +174,10 @@
   dataf <- cbind(dataf, sd.genes=rep(unname(sd.genes), length=nrow(dataf)))
   coplot(sd.genes ~ exprs | sex+type, data=dataf)
 
+  # update existing exprSet-like object
+  data(sample.exprSet)
+  updateObject(sample.exprSet) # to match class definition of same (exprSet) class
+  expressionSet <- as(sample.exprSet, "ExpressionSet") # to different class
 }
 \keyword{methods}
 \keyword{classes}

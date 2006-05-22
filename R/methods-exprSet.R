@@ -22,7 +22,7 @@ setMethod("updateObject", signature(object="exprSet"),
           function(object, ..., verbose=FALSE) {
               if (verbose) message("updateObject(object = 'exprSet')")
               object <- callNextMethod()
-              if (isCurrent(object)["exprSet"]) object
+              if (isVersioned(object) && isCurrent(object)["exprSet"]) object
               else if (!isVersioned(object))
                   updateObjectFromSlots(object, "exprSet", ..., verbose=verbose)
               else object

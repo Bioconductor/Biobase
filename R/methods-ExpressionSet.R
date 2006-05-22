@@ -16,10 +16,11 @@ setMethod("initialize", "ExpressionSet",
 
 setAs("exprSet", "ExpressionSet", function(from) {
   desc <- description(from)
-  if (class(desc)!="MIAME") {
-    warning("missing or mis-formed MIAME 'description' in original object; creating new, empty description")
-    desc <- new("MIAME")
-  } else if (!isCurrent(desc)) desc <- updateObject(desc)
+  desc <- 
+    if (class(desc)!="MIAME") {
+        warning("missing or mis-formed MIAME 'description' in original object; creating new, empty description")
+        new("MIAME")
+    } else updateObject(desc)
   exprs <- assayData(from)
   dims <- dim(exprs)
   if (all(dim(from@se.exprs) == dims)) {

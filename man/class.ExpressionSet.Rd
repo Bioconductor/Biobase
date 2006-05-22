@@ -119,6 +119,10 @@
 # create an instance of ExpressionSet
 new("ExpressionSet")
 
+# update an existing ExpressionSet
+data(sample.ExpressionSet)
+updateObject(sample.ExpressionSet)
+
 # update existing exprSet-like class to ExpressionSet
 data(sample.exprSet)
 expressionSet <- as(sample.exprSet,"ExpressionSet")

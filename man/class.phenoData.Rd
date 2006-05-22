@@ -89,6 +89,9 @@ varMetadata(pes)
 data(cars)
 d1 = df2pD(cars)
 
+# update phenoData to current class description
+updateObject(phenoData(sample.exprSet))
+
 }
 \keyword{methods}
 \keyword{manip}

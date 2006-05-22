@@ -113,7 +113,7 @@ setMethod("updateObject", signature(object="eSet"),
           function(object, ..., verbose=FALSE) {
               if (verbose) message("updateObject(object = 'eSet')")
               object <- callNextMethod()
-              if (isCurrent(object)["eSet"]) return(object)
+              if (isVersioned(object) && isCurrent(object)["eSet"]) return(object)
               ## storage.mode likely to be useful to update versioned classes, too
               storage.mode.final <- storageMode(object)
               storage.mode <-

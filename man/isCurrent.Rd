@@ -37,6 +37,8 @@ isCurrent(object, value)
 
 \examples{
 
+
+
 obj <- new("VersionedBiobase")
 isCurrent(obj)
 

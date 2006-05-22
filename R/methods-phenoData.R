@@ -15,12 +15,11 @@ setMethod("updateObject", signature(object="phenoData"),
           function(object, ..., verbose=FALSE) {
               if (verbose) message("updateObject(object='phenoData')")
               object <- callNextMethod()
-              if (isCurrent(object)["phenoData"]) object
-              else
-                  new("phenoData",
-                      pData = updateObject(pData(object), ..., verbose=verbose),
-                      varLabels = updateObject(varLabels(object), ..., verbose=verbose),
-                      varMetadata = updateObject(varMetadata(object), ..., verbose=verbose))
+              if (isVersioned(object) && isCurrent(object)["phenoData"]) return(object)
+              new("phenoData",
+                  pData = updateObject(pData(object), ..., verbose=verbose),
+                  varLabels = updateObject(varLabels(object), ..., verbose=verbose),
+                  varMetadata = updateObject(varMetadata(object), ..., verbose=verbose))
           })
 
 # ==========================================================================
