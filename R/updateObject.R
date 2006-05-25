@@ -41,18 +41,24 @@ updateObjectFromSlots <- function(object, class, ..., verbose=FALSE) {
     if (verbose)
         message("updateObjectFromSlots(object = '", class(object),
                 "' class = '", class, "')")
-    ## get slots from object, and use as arguments to construct new instance
+    ## get slots from object instance
     objectSlots <- getObjectSlots(object)
     ## de-mangle and remove NULL
     nulls <- sapply(names(objectSlots), function(slt) is.null(slot(object, slt)))
     objectSlots[nulls] <- NULL
+    ## two sources of slots -- those from class(object), and those from the class
+    ## we're responsible for updating i.e., class...
     classSlots <- names(getSlots(class))
     joint <- intersect(names(objectSlots), classSlots)
-    toDrop <- which(!names(objectSlots) %in% joint)
-    if (length(toDrop))
+    objectSlots[joint] <- lapply(objectSlots[joint], updateObject, ..., verbose=verbose)
+    ## We cannot create a new instance with slots that are not defined in object's class
+    objectDefSlots <- names(getSlots(class(object)))
+    toDrop <- which(!names(objectSlots) %in% objectDefSlots)
+    if (length(toDrop)) {
         warning("dropping slot(s) ",
                 paste(names(objectSlots)[toDrop],collapse=", "),
                 " from object = '", class(object), "'")
-    objectSlots <- sapply(objectSlots[joint], updateObject, ..., verbose=verbose)
-    do.call("new", c(class, objectSlots))
+        objectSlots <- objectSlots[-toDrop]
+    }
+    do.call("new", c(class(object), objectSlots))
 }
