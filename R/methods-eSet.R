@@ -57,13 +57,13 @@ updateOldESet <- function(from, toClass, ...) {  # to MultiExpressionSet
   phenoData <- new("AnnotatedDataFrame", data=pData, varMetadata=metadata)
   ## sampleNames
   if (any(sampleNames(assayData(from))!=sampleNames(phenoData))) {
-    warning("setting assayData colnames to sampleNames")
+    warning("creating assayData colnames from phenoData sampleNames")
     sampleNames(assayData(from)) <- sampleNames(phenoData)
   }
   ## reporterNames
   if (length(from@reporterNames == dim(from)[[1]])) {
     if (any(sapply(assayData(from),rownames)!=from@reporterNames))
-      warning("setting assayData rownames to reporterNames")
+      warning("creating assayData featureNames from reporterNames")
     featureNames(assayData(from)) <- from@reporterNames
   }
   ## description
@@ -143,8 +143,9 @@ setValidity("eSet", function( object ) {
       msg <- paste( msg, "sample numbers differ between assayData and phenoData", sep = "\n  " )
     if (!all(sampleNames(assayData(object))==sampleNames(object)))
       msg <- paste(msg, "sampleNames differ between assayData and phenoData", sep="\n  ")
-    if (!all(featureNames(assayData(object))==featureNames(object)))
-      msg <- paste(msg, "featureNames differ between assayData elements", sep="\n  ")
+    msga <- assayDataValidMembers(assayData(object))
+    if (!(is.logical(msga) && msga))
+      msg <- paste(msg, msga)
   } else if (dim(phenoData(object))[[1]] != 0 ) {
     msg <- paste( msg, "sample numbers differ between assayData and phenoData", sep = "\n  " )
   }

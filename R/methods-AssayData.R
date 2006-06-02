@@ -18,12 +18,22 @@ assayDataNew <- function(storage.mode = c("lockedEnvironment", "environment", "l
 }
 
 assayDataValidMembers <- function(assayData, required) {
-  names <- if (is(assayData, "environment")) ls(assayData) else names(assayData)
-  absent <- required[ !(required %in% names)]
-  if (length(absent) == 0)
-    TRUE
-  else
-    paste("missing '", absent ,"' in assayData" , sep = "", collapse = "\n\t")
+    msg <- NULL
+    if (!missing(required)) {
+        names <- if (is(assayData, "environment")) ls(assayData) else names(assayData)
+        absent <- required[ !(required %in% names)]
+        if (length(absent) != 0)
+          msg <- paste(msg, 
+                       paste("missing '", absent ,"' in assayData" , sep = "", collapse = "\n\t"),
+                       sep="\n")
+    }
+    if (length(assayData)>1) {
+        nms <- sapply(assayData, rownames)
+        if (!all(sapply(nms, is.null))) 
+          if (any(sapply(nms, is.null)) || any(nms[,1]!=nms))
+            msg <- paste(msg, "featureNames differ between AssayData members", sep="\n")
+    }
+    if (is.null(msg)) TRUE else msg
 }
 
 assayDataStorageMode <- function(object) {

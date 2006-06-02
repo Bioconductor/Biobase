@@ -64,7 +64,8 @@
       new list or environment containing the named elements in \code{...}}
     \item{assayDataValidMembers(assayData, required)}{Validate
       \code{assayData}, ensuring that the named elements \code{required}
-      are present and matrices of the same dimension}
+      are present, matrices are of the same dimension, and \code{featureNames} (rownames) are
+      consistent (identical or \code{NULL}) across entries.}
     \item{assayDataElement(object, element)}{Return matrix
       \code{element} from assayData \code{object}.}
     \item{assayDataElementReplace(object, element, value)}{Set element \code{element} in assayData \code{object} to matrix \code{value}}

@@ -34,11 +34,15 @@ updateObjectSuite <- defineTestSuite( "updateSuite",
                                      system.file("UnitTests", package="Biobase"),
                                      "^runitUp.+\.R$")
 
+validitySuite <- defineTestSuite("validitySuite",
+                                 system.file("UnitTests", package="Biobase"),
+                                 "^runitVal.+\.R$")
+
 allSuite <- defineTestSuite( "allSuite",
                             system.file("UnitTests", package="Biobase"),
                             "^runit.+\.R$")
 
-testData <- runTestSuite(eSetSubclassesSuite)
+testData <- runTestSuite(list(eSetSubclassesSuite,validitySuite))
 
 printTextProtocol(testData, showDetails=TRUE)
 
