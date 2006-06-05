@@ -10,6 +10,8 @@
 \alias{initialize,ExpressionSet-method}
 \alias{coerce,exprSet,ExpressionSet-method}
 \alias{coerce,eSet,ExpressionSet-method}
+\alias{coerce,ExpressionSet,data.frame-method}
+\alias{as.data.frame.ExpressionSet}
 
 \title{
   Class to Contain and Describe High-Throughput Expression Level Assays.
@@ -65,6 +67,11 @@
   \describe{
     \item{\code{as(exprSet,"ExpressionSet")}}{Coerce objects of
       \code{\link{exprSet-class}} to \code{ExpressionSet}}
+    \item{\code{as(object,"data.frame")}}{Coerce objects of
+      \code{\link{ExpressionSet-class}} to \code{data.frame} by
+      transposing the expression matrix and concatenating \code{phenoData}}
+    \item{\code{as.data.frame(object)}}{Coerce
+      \code{ExpressionSet-class} object to \code{data.frame}}
      \item{\code{exprs(ExpressionSet)}, \code{exprs(ExpressionSet,matrix)<-}}{Access and
        set elements named \code{exprs} in the \code{AssayData-class}
        slot.}
@@ -145,6 +152,9 @@ exprs(subset)
 # samples with above-average 'score' in phenoData
 highScores <- expressionSet$score > mean(expressionSet$score)
 expressionSet[,highScores]
+
+# (automatically) coerce to data.frame
+lm(score~AFFX.BioDn.5_at + AFFX.BioC.3_at, data=subset)
 }
 
 \keyword{classes}

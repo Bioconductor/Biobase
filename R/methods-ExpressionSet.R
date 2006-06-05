@@ -46,6 +46,12 @@ setValidity("ExpressionSet", function(object) {
   assayDataValidMembers(assayData(object), c("exprs"))
 })
 
+setAs("ExpressionSet", "data.frame",
+      function (from) data.frame(t(exprs(from)), pData(from)))
+
+as.data.frame.ExpressionSet <- function(x, row.names=NULL, optional=FALSE, ...)
+  as(x, "data.frame")
+
 setMethod("exprs", signature(object="ExpressionSet"),
           function(object) assayDataElement(object,"exprs"))
 

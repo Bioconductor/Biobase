@@ -29,6 +29,7 @@ exportMethods("[", "[[", "$", abstract, addVarMetadataEntry, aggenv, aggfun,
 
 export("Aggregate", 
        "addVigs2WinMenu",
+       "as.data.frame.ExpressionSet",
        "assayDataNew", "assayDataValidMembers",
        "assayDataElementNames", "assayDataElement", "assayDataElementReplace",
        "biocReposList", "cache", "copyEnv", "copySubstitute", "getObjectSlots",

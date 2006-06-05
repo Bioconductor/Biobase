@@ -4,7 +4,7 @@ setGeneric("aggenv",          function(object) standardGeneric("aggenv"))
 setGeneric("aggfun",          function(object) standardGeneric("aggfun"))
 setGeneric("annotation",      function(object) standardGeneric("annotation"))
 setGeneric("annotation<-",    function(object, value) standardGeneric("annotation<-"))
-setGeneric("as.data.frame.exprSet", function(x, row.names=NA, optional=NA) standardGeneric("as.data.frame.exprSet"))
+setGeneric("as.data.frame.exprSet", function(x, row.names=NULL, optional=FALSE, ...) standardGeneric("as.data.frame.exprSet"))
 setGeneric("assayData",       function(object)standardGeneric("assayData"))
 setGeneric("assayData<-",     function(object, value) standardGeneric("assayData<-"))
 setGeneric("combine",
