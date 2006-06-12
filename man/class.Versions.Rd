@@ -48,6 +48,8 @@
 
 \seealso{
   \code{\link{classVersion}}
+  \code{\link{isCurrent}}
+  \code{\link{isVersioned}}
 }
 
 \examples{

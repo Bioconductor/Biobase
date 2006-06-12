@@ -38,7 +38,7 @@ testUpdateObjectEnv <- function() {
 
     lockEnvironment(e)
     obj <- updateObject(e)
-##     checkTrue(TRUE==bindingIsLocked("x", obj)) # R bug, 14 May, 2006
+    checkTrue(TRUE==bindingIsLocked("x", obj)) # R bug, 14 May, 2006, fixed
     checkTrue(FALSE==bindingIsLocked(".x", obj))
 }
 
@@ -87,6 +87,7 @@ testUpdateExpressionSet <- function() {
     checkTrue(identical(new("ExpressionSet", storage.mode="list"), updateObject(obj))) # same class -- list
 
     data(sample.ExpressionSet)
+    classVersion(sample.ExpressionSet)["ExpressionSet"] <- "0.0.1"
     checkException(validObject(sample.ExpressionSet))
 
     obj <- updateObject(sample.ExpressionSet)

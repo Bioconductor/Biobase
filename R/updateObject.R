@@ -37,28 +37,56 @@ setMethod("updateObject", signature(object="environment"),
               env
           })
 
-updateObjectFromSlots <- function(object, class, ..., verbose=FALSE) {
-    if (verbose)
-        message("updateObjectFromSlots(object = '", class(object),
-                "' class = '", class, "')")
-    ## get slots from object instance
+updateObjectFromSlots <- function(object, objclass = class(object), ..., verbose=FALSE) {
+    if (is(object, "environment")) {
+        if (verbose) message("returning original object of class 'environment'")
+        return(object)
+    }
+    classSlots <- names(getSlots(objclass))
+    if (is.null(classSlots)) {
+        if (verbose) message("definition of '", objclass, "' has no slots; ",
+                             "returning original object")
+        return(object)
+    }
+    errf <- function(...)
+      function(err) {
+          if (verbose)
+            message(..., ":\n    ", conditionMessage(err),
+                    "\n    trying next method...")
+          NULL
+      }
+    if (verbose) message("updateObjectFromSlots(object = '", class(object),
+                         "' class = '", objclass, "')")
     objectSlots <- getObjectSlots(object)
     ## de-mangle and remove NULL
     nulls <- sapply(names(objectSlots), function(slt) is.null(slot(object, slt)))
     objectSlots[nulls] <- NULL
-    ## two sources of slots -- those from class(object), and those from the class
-    ## we're responsible for updating i.e., class...
-    classSlots <- names(getSlots(class))
     joint <- intersect(names(objectSlots), classSlots)
     objectSlots[joint] <- lapply(objectSlots[joint], updateObject, ..., verbose=verbose)
-    ## We cannot create a new instance with slots that are not defined in object's class
-    objectDefSlots <- names(getSlots(class(object)))
-    toDrop <- which(!names(objectSlots) %in% objectDefSlots)
+    toDrop <- which(!names(objectSlots) %in% classSlots)
     if (length(toDrop)) {
         warning("dropping slot(s) ",
                 paste(names(objectSlots)[toDrop],collapse=", "),
                 " from object = '", class(object), "'")
         objectSlots <- objectSlots[-toDrop]
     }
-    do.call("new", c(class(object), objectSlots))
+    ## ad-hoc methods for creating new instances
+    res <- NULL
+    if (is.null(res))
+      res <- 
+        tryCatch({
+            do.call("new", c(objclass, objectSlots[joint]))
+        }, error=errf("'new(\"", objclass, "\", ...)' from slots failed"))
+    if (is.null(res))
+      res <- 
+        tryCatch({
+            obj <- do.call("new", list(objclass))
+            for (slt in joint) slot(obj, slt) <- slot(object, slt)
+            obj
+        }, error=errf("failed to add slots to 'new(\"", objclass, "\", ...)'"))
+    if (is.null(res))
+      stop("could not updateObject to class '", objclass, "'",
+           "\nconsider defining an 'updateObject' method for class '",
+           class(object), "'")
+    res
 }

@@ -15,6 +15,7 @@
 \alias{coerce,exprSet,ExpressionSet-method}
 \alias{coerce,eSet,ExpressionSet-method}
 \alias{coerce,ExpressionSet,data.frame-method}
+\alias{updateObject,ExpressionSet-method}
 \alias{as.data.frame.ExpressionSet}
 
 \title{
@@ -111,6 +112,9 @@
   \describe{
     \item{\code{initialize(ExpressionSet)}:}{Object instantiation, used
       by \code{new}; not to be called directly by the user.}
+    \item{\code{updateObject(ExpressionSet)}:}{Update outaded versions
+      of \code{ExpressionSet} to their current definiton. See
+      \code{\link{updateObject}}, \code{\link{Versions-class}}.}
     \item{\code{validObject(ExpressionSet)}:}{Validity-checking method, ensuring
       that \code{exprs} is a member of
       \code{assayData}. \code{checkValidity(ExpressionSet)} imposes this

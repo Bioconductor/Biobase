@@ -268,3 +268,8 @@ getObjectSlots <- function(object) { # object, rather than class defn, slots
     value
 }
 
+validMsg <- function(msg, result) {
+    if (is.character(result)) {
+        append(msg, result)
+    } else msg
+}

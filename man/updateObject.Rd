@@ -52,12 +52,15 @@
 
   Sample methods are illustrated below.
 
-  \code{updateObjectFromSlots(object, class, ..., verbose=FALSE} is a
+  \code{updateObjectFromSlots(object, objclass = class(object), ..., verbose=FALSE)} is a
   utility function that identifies the intersection of slots defined in
-  the \code{object} instance and \code{class} definition. The
+  the \code{object} instance and \code{objclass} definition. The
   corresponding elements in \code{object} are then updated (with
-  \code{updateObject(elt, ..., verbose=verbose)} and used as arguments to
-  a call to \code{new(class, ...)}.
+  \code{updateObject(elt, ..., verbose=verbose)}) and used as arguments to
+  a call to \code{new(class, ...)}, with \code{...} replaced by slots
+  from the original object. If this fails, \code{updateObjectFromSlots}
+  then tries \code{new(class)} and assigning slots of \code{object} to
+  the newly created instance.
 
   \code{getObjectSlots(object)} extracts the slot names and contents from
   \code{object}. This is useful when \code{object} was created by a class
@@ -67,14 +70,14 @@
 \usage{
 updateObject(object, ..., verbose=FALSE)
 updateObjectTo(object, template, ..., verbose=FALSE)
-updateObjectFromSlots(object, class, ..., verbose=FALSE)
+updateObjectFromSlots(object, objclass=class(object), ..., verbose=FALSE)
 getObjectSlots(object)
 }
 \arguments{
   \item{object}{Object to be updated, or for slot information to be
     extracted from.}
   \item{template}{Instance representing a template for updating object.}
-  \item{class}{Character string naming the class of the object to be created.} 
+  \item{objclass}{Optional character string naming the class of the object to be created.} 
   \item{verbose}{A logical, indicating whether information about the
     update should be reported. Use \code{message} to report this.}
   \item{...}{Additional arguments, for use in specific update methods}
@@ -82,8 +85,7 @@ getObjectSlots(object)
 \value{
   \code{updateObject} returns a valid instance of \code{object}.
   \code{updateObjectTo} returns a valid instance of \code{template}.
-  \code{updateObjectFromSlots} returns an instance of class
-  \code{class}.
+  \code{updateObjectFromSlots} returns an instance of class \code{objclass}.
   \code{getObjectSlots} returns a list of named elements, with each
   element corresponding to a slot in \code{object}.
 }

@@ -43,8 +43,25 @@ setAs("exprSet", "ExpressionSet", function(from) {
 })
 
 setValidity("ExpressionSet", function(object) {
-  assayDataValidMembers(assayData(object), c("exprs"))
+    msg <- validMsg(NULL, isValidVersion(object, "ExpressionSet"))
+    msg <- validMsg(msg, assayDataValidMembers(assayData(object), c("exprs")))
+    if (is.null(msg)) TRUE else msg
 })
+
+setMethod("updateObject", signature(object="ExpressionSet"),
+          function(object, ..., verbose=FALSE) {
+              if (verbose) message("updateObject(object = 'ExpressionSet')")
+              if (isVersioned(object) && all(isCurrent(object)[c("eSet","ExpressionSet")])) {
+                  object
+              } else {
+                  updt <- new("ExpressionSet")
+                  phenoData(updt) <- updateObject(phenoData(object),verbose=verbose)
+                  experimentData(updt) <- updateObject(experimentData(object),verbose=verbose)
+                  annotation(updt) <- updateObject(annotation(object),verbose=verbose)
+                  assayData(updt) <- updateObject(assayData(object),verbose=verbose)
+                  updt
+              }
+          })
 
 setAs("ExpressionSet", "data.frame",
       function (from) data.frame(t(exprs(from)), pData(from)))

@@ -132,22 +132,21 @@ setMethod("updateObjectTo", signature(object="eSet", template="eSet"), updateESe
 setValidity("eSet", function( object ) {
   msg <- NULL
   if (!is(object, "eSet"))
-    msg <- paste(msg, paste("cannot validate object of class", class( object )), sep = "\n  ")
+    msg <- validMsg(msg, paste("cannot validate object of class", class( object )))
+  msg <- validMsg(msg, isValidVersion(object, "eSet"))
   dims <- dims(object)
   if (!is.na(dims[[1]])) {
     if (any( dims[1,] != dims[1,1]))
-      msg <- paste( msg, "row numbers differ for assayData members", sep = "\n  " )
+      msg <- validMsg(msg, "row numbers differ for assayData members")
     if (any(dims[2,] != dims[2,1]))
-      msg <- paste( msg, "sample numbers differ for assayData members", sep = "\n  " )
+      msg <- validMsg(msg, "sample numbers differ for assayData members")
     if ( dims[2,1] != dim( phenoData( object ))[[1]] )
-      msg <- paste( msg, "sample numbers differ between assayData and phenoData", sep = "\n  " )
+      msg <- validMsg(msg, "sample numbers differ between assayData and phenoData")
     if (!all(sampleNames(assayData(object))==sampleNames(object)))
-      msg <- paste(msg, "sampleNames differ between assayData and phenoData", sep="\n  ")
-    msga <- assayDataValidMembers(assayData(object))
-    if (!(is.logical(msga) && msga))
-      msg <- paste(msg, msga)
+      msg <- validMsg(msg, "sampleNames differ between assayData and phenoData")
+    msg <- validMsg(msg, assayDataValidMembers(assayData(object)))
   } else if (dim(phenoData(object))[[1]] != 0 ) {
-    msg <- paste( msg, "sample numbers differ between assayData and phenoData", sep = "\n  " )
+    msg <- validMsg(msg, "sample numbers differ between assayData and phenoData")
   }
   ##   if (length(object) != 0 && length(reporterNames(object)) != d[1,1])
   ##     return("number of assayData rows different from number of reporterNames")

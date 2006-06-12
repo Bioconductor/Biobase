@@ -6,16 +6,16 @@ validExprSet <- function(object) {
     if (!is(object, "exprSet"))
       return(paste("cannot validate object of class", class(object)))
     msg <- NULL
+    msg <- validMsg(msg, isValidVersion(object, "exprSet"))
     if (dim(exprs(object))[2] != nrow(pData(object)))
-      msg <- c(msg, "number of exprs columns different from number of pData rows")
+      msg <- validMsg(msg, "number of exprs columns different from number of pData rows")
     if (nrow(se.exprs(object))>0 && !all(dim(exprs(object))==dim(se.exprs(object))))
-      msg <- c(msg, "se.exprs dimensions do not match exprs")
+      msg <- validMsg(msg, "se.exprs dimensions do not match exprs")
     if (!identical(sampleNames(object), row.names(pData(object))))
-      msg <- c(msg, "sampleNames different from names of phenoData rows")
+      msg <- validMsg(msg, "sampleNames different from names of phenoData rows")
 ##   if (!is.null(reporterInfo(object)) && dim(exprs(object))[1] != nrow(reporterInfo(object)))
 ##       return("number of exprs and reporterInfo rows differ")
-    if (is.null(msg)) msg <- TRUE
-    msg
+    if (is.null(msg)) TRUE else msg
 }
 
 setMethod("updateObject", signature(object="exprSet"),

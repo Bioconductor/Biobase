@@ -123,7 +123,7 @@ testValidation <- function() {
       obj <- helperNew(s, storage.mode=mode)
       checkTrue(validObject( obj ))
       phenoData(obj) <- new("AnnotatedDataFrame")
-      checkEquals( validObject( obj, test = TRUE ), "\n  sample numbers differ between assayData and phenoData")
+      checkEquals( validObject( obj, test = TRUE ), "sample numbers differ between assayData and phenoData")
     })
 }
 
@@ -199,12 +199,13 @@ testSampleNames <- function() {
     if (storageMode(obj)!="environment")
       checkTrue(validObject(obj), "after modification")
     else
-      checkEquals(validObject(obj, test = TRUE ), "\n  sampleNames differ between assayData and phenoData")
+      checkEquals(validObject(obj, test = TRUE ), "sampleNames differ between assayData and phenoData")
     checkTrue(all(sampleNames(obj1)==mod))
     checkTrue(validObject(obj1))
     
     sampleNames(assayData(obj)) <- mod
-    checkEquals(validObject( obj, test = TRUE ), "\n  sampleNames differ between assayData and phenoData")
+    validObject(obj,test=TRUE)
+    checkEquals(validObject( obj, test = TRUE ), "sampleNames differ between assayData and phenoData")
   }
   for (mode in modes)
     lapply(names(allSubclasses), function(s) nameCheck(helperNew(s, storage.mode=mode)))

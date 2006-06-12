@@ -11,6 +11,27 @@ setMethod("initialize", signature(.Object="Versioned"),
               .Object
           })
 
+## validity
+
+setValidity("Versioned", function(object) {
+    msg <- NULL
+    if (!isVersioned(object))
+      msg <- validMsg(msg, "missing version string")
+    if (is.null(msg)) TRUE else msg
+})
+
+isValidVersion <- function(object, nm) {# utility
+    msg <- NULL
+    if (isVersioned(object) && !all(isCurrent(object)[nm])) {
+        vers <- isCurrent(object)[nm]
+        vers[is.na(vers)] <- FALSE
+        names(vers) <- nm
+        bad <- names(vers[vers==FALSE])
+        msg <- validMsg(msg, paste("out-of-date class version '", bad, "'", sep=""))
+    }
+    msg
+}
+
 ##  isVersioned
 
 setMethod("isVersioned", signature(object="ANY"),
