@@ -7,6 +7,10 @@
 
 \alias{exprs,ExpressionSet-method}
 \alias{exprs<-,ExpressionSet,matrix-method}
+
+\alias{geneNames,ExpressionSet-method}
+\alias{geneNames<-,ExpressionSet,character-method}
+
 \alias{initialize,ExpressionSet-method}
 \alias{coerce,exprSet,ExpressionSet-method}
 \alias{coerce,eSet,ExpressionSet-method}
@@ -84,6 +88,10 @@
      \item{\code{isVersioned(object)}}{Determine whether object contains a 'version' string describing its structure . See \code{\link{isVersioned}}}
      \item{\code{sampleNames(ExpressionSet)} and \code{sampleNames(ExpressionSet)<-}:}{See \code{\link{eSet}}}
      \item{\code{featureNames(ExpressionSet)}, \code{featureNames(ExpressionSet, value)<-}:}{See \code{\link{eSet}}}
+           \item{\code{geneNames(ExpressionSet)} and
+           \code{geneNames(ExpressionSet, value)<-}:}{Deprecated.  Has
+           the same effect as \code{featureNames} which is the preferred
+           accessor of expression matrix row names.}
      \item{\code{dims(ExpressionSet)}:}{See \code{\link{eSet}}}
      \item{\code{phenoData(ExpressionSet)}, \code{phenoData(ExpressionSet,value)<-}:}{See \code{\link{eSet}}}
      \item{\code{varLabels(ExpressionSet)}, \code{varLabels(ExpressionSet, value)<-}:}{See \code{\link{eSet}}}

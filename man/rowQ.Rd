@@ -1,8 +1,14 @@
 \name{rowQ}
 \alias{rowQ}
+\alias{rowQ,matrix,numeric-method}
+\alias{rowQ,ExpressionSet,numeric-method}
+\alias{rowQ,exprSet,numeric-method}
 \alias{rowMin}
 \alias{rowMax}
 \alias{rowMedians}
+\alias{rowMedians,matrix-method}
+\alias{rowMedians,ExpressionSet-method}
+\alias{rowMedians,exprSet-method}
 
 \title{A function to compute empirical row quantiles.}
 \description{

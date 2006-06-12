@@ -57,3 +57,20 @@ setMethod("exprs", signature(object="ExpressionSet"),
 
 setReplaceMethod("exprs", signature(object="ExpressionSet",value="matrix"),
                  function(object, value) assayDataElementReplace(object, "exprs", value))
+
+
+setMethod("geneNames", signature(object="ExpressionSet"),
+          function(object) {
+              .Deprecated("featureNames")
+              featureNames(object)
+          })
+
+
+setReplaceMethod("geneNames", signature(object="ExpressionSet",
+                                        value="character"),
+          function(object, value) {
+              .Deprecated("featureNames")
+              ## FIXME: check length and uniqueness?
+              ##        call validObject?
+              featureNames(object) <- value
+          })

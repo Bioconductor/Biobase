@@ -64,31 +64,6 @@ reverseSplit = function(inList) {
    split(nms, vals)
 }
 # ==========================================================================
-rowQ <- function(imat, which) {
-   if( inherits(imat, "exprSet") )
-      imat=exprs(imat)
-   if( any(is.na(imat)) )
-      stop("cannot handle missing values  -- yet")
-   if( !is.finite(which) || length(which)!=1 || !is.numeric(which) )
-      stop("which must be length one, and numeric")
-   .Call("rowQ", imat, which, PACKAGE="Biobase")
-}
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-rowMedians <- function(imat) {
-   nr = ncol(imat)
-   half <- (nr + 1)/2
-   if( nr%%2 == 1 )
-      return(rowQ(imat, half))
-   else
-      return((rowQ(imat, half) + rowQ(imat, half+1))/2)
-}
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-rowMin <- function(imat)
-   rowQ(imat, 1)
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-rowMax <- function(imat)
-   rowQ(imat, ncol(imat))
-# ==========================================================================
 copySubstitute = function(src, dest, symbolValues,
                           symbolDelimiter = "@",
                           allowUnresolvedSymbols = FALSE,
