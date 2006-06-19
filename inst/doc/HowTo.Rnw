@@ -2,7 +2,7 @@
 % NOTE -- ONLY EDIT THE .Rnw FILE!!!  The .tex file is
 % likely to be overwritten.
 %
-% \VignetteIndexEntry{HowTo  HowTo}
+% \VignetteIndexEntry{HowTo write a HowTo Document}
 %\VignetteDepends{}
 %\VignetteKeywords{Expression Analysis}
 %\VignettePackage{Biobase}
