@@ -2,7 +2,7 @@
 % NOTE -- ONLY EDIT THE .Rnw FILE!!!  The .tex file is
 % likely to be overwritten.
 %
-% \VignetteIndexEntry{Howto Bioconductor}
+%\VignetteIndexEntry{Bioconductor Overview}
 %\VignetteDepends{}
 %\VignetteKeywords{Documentation}
 %\VignettePackage{Biobase}
