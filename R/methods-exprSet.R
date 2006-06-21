@@ -133,6 +133,10 @@ setReplaceMethod("annotation", signature="exprSet",
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("[", "exprSet",
    function(x, i, j, ..., drop=FALSE) {
+      if(missing(i) && missing(j) && length(list(...))!=0)
+        stop("specify genes or samples to subset; use '",
+             substitute(x), "$", names(list(...))[[1]],
+             "' to access phenoData variables")
       if(missing(j))
          pdata <- phenoData(x)
       else
