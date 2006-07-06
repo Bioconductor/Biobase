@@ -114,10 +114,15 @@ setMethod("combine", c("MIAME", "MIAME"), function(x, y, ...) {
              name=,
              lab=,
              contact=,
+             title=,
              url=,
+             pubMedIds=,
              samples=,
              hybridizations=,
-             title= {
+             normControls=,
+             preprocessing=,
+             other=
+             {
                c(slot(x,sl),slot(y,sl))
              },
              ## just a single entry
@@ -125,7 +130,11 @@ setMethod("combine", c("MIAME", "MIAME"), function(x, y, ...) {
                paste(slot(x,sl), slot(y,sl), collapse="\n")
              },
              ## unknown
-             warning("\n  unknown MIAME field '", sl,"'"))
+             {
+                 warning("\n  unknown MIAME field '", sl,"'; using info from objext 'x'")
+                 slot(x,sl)
+             })
+             
   }
   x
 })
