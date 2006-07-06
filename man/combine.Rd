@@ -7,7 +7,10 @@
 This generic function handles methods for combining or merging different
 Bioconductor data structures. It should, given an arbitrary number of
 arguments of the same class (possibly by inheritance), combine them into
-a single instance in a sensible way (your mileage may vary).
+a single instance in a sensible way (some methods may only combine 2
+objects, ignoring \code{...} in the argument list; because Bioconductor
+data structures are complicated, check carefully that \code{combine}
+does as you intend).
 }
 \usage{
 combine(x, y, ...)
