@@ -17,6 +17,8 @@
 \alias{exprs,exprSet-method}
 \alias{geneNames<-,exprSet-method}
 \alias{geneNames,exprSet-method}
+\alias{featureNames<-,exprSet-method}
+\alias{featureNames,exprSet-method}
 \alias{iter,exprSet,missing,function-method}
 \alias{iter,exprSet,missing,list-method}
 \alias{iter,exprSet,character,function-method}
@@ -102,6 +104,7 @@
       \item{\code{abstract(exprSet)}:}{Not documented: \code{function(object) abstract(description(object))}}
       \item{\code{sampleNames(exprSet)} and \code{sampleNames(exprSet, value)<-}:}{Methods to access/update \code{dimnames} of the \code{exprs} slot }
       \item{\code{geneNames(exprSet)} and \code{geneNames(exprSet, value)<-}:}{Methods to access/update \code{row.names} of the \code{exprs} slot - gene names }
+      \item{\code{featureNames(exprSet)} and \code{featureNames(exprSet, value)<-}:}{Methods to access/update \code{row.names} of the \code{exprs} slot; use \code{featureNames} in preference to \code{geneNames}, to allow easier transition to new Biobase classes like \code{\link{ExpressionSet-class}}.}
       \item{\code{write.exprs(exprSet,...)}:}{Writes the expression levels to file. It takes the same arguments as \code{\link{write.table}}. If called with no arguments it is equivalent to \code{write.table(exprs(exprSet),file="tmp.txt",quote=FALSE,sep="\t")}.}
       \item{\code{exprs2excel(exprSet,...)}:}{Writes the expression levels to \code{csv} file. This file will open nicely in excel. It takes the same arguments as \code{\link{write.table}}. If called with no arguments it is equivalent to \code{write.table(exprs(exprSet),file="tmp.csv", sep = ",", col.names = NA)}.}
       \item{\code{as.data.frame.exprSet(exprSet, row.names = NA, optional = NA)}:}{Converts \code{exprSet} into a \code{data.frame}. In the return value, the first column is called \code{exprs} and contains the values returned by the method \code{exprs()}. The second column is called genenames and contains the values returned by the method \code{geneNames()}. The other columns will depend on the contents of the \code{\link{phenoData}} slot.}
@@ -166,6 +169,7 @@
 
   sampleNames(expr)
   sampleNames(expr) <- letters
+  featureNames(expr)[1:10]
 
   # as.data.frame.exprSet - example
   data(sample.exprSet)

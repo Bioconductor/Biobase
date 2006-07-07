@@ -111,9 +111,9 @@ setReplaceMethod("sampleNames", "exprSet",
    }
 )
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setMethod("geneNames", "exprSet", function(object) row.names(exprs(object)))
+setMethod("featureNames", "exprSet", function(object) row.names(exprs(object)))
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setReplaceMethod("geneNames", "exprSet",
+setReplaceMethod("featureNames", "exprSet",
    function(object, value) {
       es <- exprs(object)
       row.names(es) <- value
@@ -121,6 +121,11 @@ setReplaceMethod("geneNames", "exprSet",
       object
    }
 )
+setMethod("geneNames", "exprSet", function(object) featureNames(object))
+setReplaceMethod("geneNames", "exprSet", function(object, value) {
+    featureNames(object) <- value
+    object
+})
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("annotation", "exprSet", definition = function(object) object@annotation)
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

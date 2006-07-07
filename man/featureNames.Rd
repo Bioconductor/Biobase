@@ -10,7 +10,10 @@
 \title{Retrieve feature and sample names from eSets and exprSets.}
 \description{
 These generic functions access the feature names (typically, gene or SNP
-identifiers) and sample names stored in an object derived from the \code{\link{eSet-class}} or \code{\link{exprSet-class}}.
+identifiers) and sample names stored in an object derived from the
+\code{\link{eSet-class}} or \code{\link{exprSet-class}}.
+\code{geneNames} and \code{featureNames} offer similar functionality,
+but \code{featureNames} is the preferred method.
 }
 \usage{
 featureNames(object)

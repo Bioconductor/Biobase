@@ -131,7 +131,7 @@ setMethod("combine", c("MIAME", "MIAME"), function(x, y, ...) {
              },
              ## unknown
              {
-                 warning("\n  unknown MIAME field '", sl,"'; using info from objext 'x'")
+                 warning("\n  unknown MIAME field '", sl,"'; using info from object 'x'")
                  slot(x,sl)
              })
              
