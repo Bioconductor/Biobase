@@ -177,12 +177,12 @@ assayDataDim <- function(object) {
   d
 }
 
-##  --old, commented out by 15.7.2006
+# --- old, commented out by wh 15.7.2006 ---
 # assayDataDims <- function( object ) {
 #  dims <- sapply( object, dim )
 #  if (length(dims) == 0) return( NA )
 #  rownames(dims) <- c("Rows", "Samples", rep("...", max(dim(dims)[[1]]-2, 0)))
-#  dims[,order(colnames(dims))]
+#  dims[,order(colnames(dims))]  # note by wh  - this line has no effect, 
 #  dims
 # }
 
