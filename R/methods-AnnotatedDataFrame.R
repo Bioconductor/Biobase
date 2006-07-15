@@ -187,30 +187,53 @@ setMethod("combine", c("AnnotatedDataFrame", "AnnotatedDataFrame"), function(x, 
     pData[[nm]] <- c(xdata,ydata)
   }
   colnames(pData) <- vNames
+
+  
   ## varMetadata
   vx <- varMetadata(x)
   vy <- varMetadata(y)
 
   vmRownames <- c(row.names(vx),row.names(vy))
   uniqueRownames <- unique(vmRownames)
-  duplRownames <- duplicated(vmRownames)
-  vmColnames <- unique(c(colnames(vx),colnames(vy)))
+  ## duplRownames <- duplicated(vmRownames)
+  vmColnames <- unique(c(colnames(vx), colnames(vy)))
 
   if (length(uniqueRownames)!=0) {
-    vM <- data.frame(rep(0,length(uniqueRownames)),row.names=uniqueRownames)[,FALSE]
-    for (nm in vmColnames) vM[uniqueRownames,nm] <-
-      ifelse(is.na(vx[uniqueRownames,nm]) ||
-             identical(vx[uniqueRownames,nm],vy[uniqueRownames,nm]),
-             vy[uniqueRownames,nm],
-             ifelse(is.na(vy[uniqueRownames,nm]),
-                    vx[uniqueRownames,nm],
-                    stop(paste("AnnotatedDataFrame varMetadata contains conflicting descriptions:",
-                               paste("column:",nm),
-                               vx[uniqueRownames,nm],
-                               vy[uniqueRownames,nm],
-                               sep="\n\t  "))))
-  } else
+    
+   ## vM <- data.frame(rep(0,length(uniqueRownames)),row.names=uniqueRownames)[,FALSE]
+   ## for (nm in vmColnames) vM[uniqueRownames,nm] <-
+   ##   ifelse(is.na(vx[uniqueRownames,nm]) ||
+   ##         identical(vx[uniqueRownames,nm], vy[uniqueRownames,nm]),
+   ##          vy[uniqueRownames,nm],
+   ##          ifelse(is.na(vy[uniqueRownames,nm]),
+   ##                 vx[uniqueRownames,nm],
+   ##                 stop(paste("AnnotatedDataFrame varMetadata contains conflicting descriptions:",
+   ##                            paste("column:",nm),
+   ##                            vx[uniqueRownames,nm],
+   ##                            vy[uniqueRownames,nm],
+   ##                            sep="\n\t  "))))
+    
+   ## The "I()" is quite important since otherwise as.data.frame will do auto-conversions
+   ## which can be quite painful esp. when the combine function is supposed to be called recursively
+   ## on a series of objects
+
+    vM <- as.data.frame(I(do.call("cbind", lapply(vmColnames, function(nm) {
+      vxrn = vx[uniqueRownames, nm]
+      vyrn = vy[uniqueRownames, nm]
+      whDiff = which(vxrn!=vyrn)
+      if(length(whDiff)>0)
+        stop(paste("AnnotatedDataFrame varMetadata contains conflicting descriptions:",
+                   paste("column:", nm), paste(vxrn, collapse=" "), paste(vyrn, collapse=" "), sep="\n\t  "))
+      ifelse(is.na(vxrn) , vyrn, vxrn)
+      } ))))
+    colnames(vM) <- vmColnames
+    rownames(vM) <- uniqueRownames
+    
+  } else {
     vM <- data.frame()
+  }
+
+    
   ## new object
   new("AnnotatedDataFrame", data=pData, varMetadata=vM)
 })
