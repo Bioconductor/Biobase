@@ -77,21 +77,29 @@ testNewSubclassCreation <- function() {
 }
 
 testStorageMode <- function() {
-  lapply(names(allSubclasses), function(s) {
-    obj <- new(s)
-    checkTrue(class(assayData(obj))=="environment")
-    obj <- new(s, storage.mode="list")
-    checkTrue(class(assayData(obj))=="list")
-    obj <- new(s, storage.mode="environment")
-    checkTrue(class(assayData(obj))=="environment")
-    ## is helperNew behaving?
-    obj <- helperNew(s)
-    checkTrue(class(assayData(obj))=="environment")
-    obj <- helperNew(s, storage.mode="list")
-    checkTrue(class(assayData(obj))=="list")
-    obj <- helperNew(s, storage.mode="environment")
-    checkTrue(class(assayData(obj))=="environment")
-})
+    lapply(names(allSubclasses), function(s) {
+        obj <- new(s)
+        checkTrue(class(assayData(obj))=="environment")
+        obj <- new(s, storage.mode="list")
+        checkTrue(class(assayData(obj))=="list")
+        obj <- new(s, storage.mode="environment")
+        checkTrue(class(assayData(obj))=="environment")
+        ## is helperNew behaving?
+        obj <- helperNew(s)
+        checkTrue(class(assayData(obj))=="environment")
+        obj <- helperNew(s, storage.mode="list")
+        checkTrue(class(assayData(obj))=="list")
+        obj <- helperNew(s, storage.mode="environment")
+        checkTrue(class(assayData(obj))=="environment")
+    })
+    ## update storage modes
+    data(sample.ExpressionSet)
+    storageMode(sample.ExpressionSet) <- "environment"
+    checkTrue(storageMode(sample.ExpressionSet)=="environment")
+    storageMode(sample.ExpressionSet) <- "lockedEnvironment"
+    checkTrue(storageMode(sample.ExpressionSet)=="lockedEnvironment")
+    storageMode(sample.ExpressionSet) <- "list"
+    checkTrue(storageMode(sample.ExpressionSet)=="list")
 }
 
 testNewValidSubclasses <- function() {

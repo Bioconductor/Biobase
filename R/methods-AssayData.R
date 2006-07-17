@@ -6,7 +6,7 @@ assayDataNew <- function(storage.mode = c("lockedEnvironment", "environment", "l
                       list = list())
   arglist <- list(...)
   for (nm in names(arglist)) assayData[[nm]] <- arglist[[nm]]
-  adim <- assayDataDim(assayData)
+##   adim <- assayDataDim(assayData)
 ##   if (length(adim)!=1 && !is.na(adim)) {
 ##     if (adim[[1]]>0 && all(sapply(featureNames(assayData), is.null)))
 ##       featureNames(assayData) <- 1:adim[[1]]
@@ -19,8 +19,9 @@ assayDataNew <- function(storage.mode = c("lockedEnvironment", "environment", "l
 
 assayDataValidMembers <- function(assayData, required) {
     msg <- NULL
+    storageMode <- assayDataStorageMode(assayData)
     if (!missing(required)) {
-        names <- if (is(assayData, "environment")) ls(assayData) else names(assayData)
+        names <- if (storageMode == "list") names(assayData) else ls(assayData)
         absent <- required[ !(required %in% names)]
         if (length(absent) != 0)
           msg <- paste(msg, 
@@ -28,9 +29,12 @@ assayDataValidMembers <- function(assayData, required) {
                        sep="\n")
     }
     if (length(assayData)>1) {
-        nms <- sapply(assayData, rownames)
+        nms <-
+          if (storageMode == "list") lapply(assayData, rownames)
+          else eapply(assayData, rownames)
         if (!all(sapply(nms, is.null))) 
-          if (any(sapply(nms, is.null)) || any(nms[,1]!=nms))
+          if (any(sapply(nms, is.null)) ||
+              any(nms[[1]] != unlist(nms[-1], use.names=FALSE)))
             msg <- paste(msg, "featureNames differ between AssayData members", sep="\n")
     }
     if (is.null(msg)) TRUE else msg
@@ -48,14 +52,19 @@ assayDataStorageMode <- function(object) {
 setMethod("storageMode", "AssayData", assayDataStorageMode)
 
 assayDataStorageModeReplace <- function(object, value) {
-  current.mode <- assayDataStorageMode(object)
-  if (current.mode == value) return(object)
-  if (is(object,"environment")) {
-    nms <- ls(object)
-    object <- lapply(object,function(elt) elt)
-    names(object) <- nms
-  }  
-  do.call("assayDataNew", c(storage.mode=value, object))
+    storageMode <- assayDataStorageMode(object)
+    if (storageMode == value) return(object)
+    switch(value,
+           lockedEnvironment = {
+               assayData <- new.env(parent=emptyenv())
+               for (nm in ls(object)) assayData[[nm]] <- object[[nm]]
+               assayDataEnvLock(assayData)
+               assayData
+           }, environment = {
+               assayData <- new.env(parent=emptyenv())
+               for (nm in ls(object)) assayData[[nm]] <- object[[nm]]
+               assayData
+           }, list = as.list(object))
 }
 
 setReplaceMethod("storageMode", c("AssayData", "character"), assayDataStorageModeReplace)
@@ -63,7 +72,7 @@ setReplaceMethod("storageMode", c("AssayData", "character"), assayDataStorageMod
 assayDataEnvLock <- function(assayData) lockEnvironment(assayData, bindings=TRUE)
 
 assayDataElementNames <- function(obj)
-  if (is(assayData(obj),"environment")) ls(assayData(obj)) else names(assayData(obj))
+  if (assayDataStorageMode(obj) == "list") names(assayData(obj)) else ls(assayData(obj))
 
 assayDataElement <- function(obj, elt) assayData(obj)[[elt]]
 
@@ -127,7 +136,6 @@ setReplaceMethod("featureNames", signature(object="AssayData", value="ANY"),
 })
 
 setMethod("combine", c("AssayData", "AssayData"), function(x, y, ...) {
-    
     combineElement <- function(x, y) {
         d <- dim(x)
         if (length(d) != length(dim(y)))
@@ -170,7 +178,7 @@ setMethod("combine", c("AssayData", "AssayData"), function(x, y, ...) {
 })
 
 assayDataDim <- function(object) {
-  nms <- if(is(object,"environment")) ls(object) else names(object)
+  nms <- if (assayDataStorageMode(object) == "list") names(object) else ls(object)
   if ( length( nms ) == 0 ) return( NA )
   d <- dim( object[[ nms[[1]] ]])
   names(d) <- c( "Rows", "Samples", rep("...", max(length(d)-2, 0)))
@@ -178,7 +186,7 @@ assayDataDim <- function(object) {
 }
 
 assayDataDims <- function( object ) {
-  nms <- if(is(object,"environment")) ls(object) else names(object)
+  nms <- if (assayDataStorageMode(object) == "list") names(object) else ls(object)
   if ( length( nms ) == 0 ) return( NA )
   d = sapply(nms, function(i) dim(object[[i]]))
   rownames(d) <- c("Rows", "Samples", rep("...", nrow(d)-2))
