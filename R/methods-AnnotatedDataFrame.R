@@ -1,24 +1,29 @@
 validAnnotatedDataFrame <- function( object ) {
-  msg <- NULL
-  if (!is(object, "AnnotatedDataFrame"))
-    msg <- paste(msg, paste("Cannot validate", class(object), "as AnnotatedDataFrame" ), sep = "\n  ")
-  if (any(row.names(object@varMetadata) != colnames(object@data)))
-    msg <- paste(msg, "AnnotatedDataFrame colnames of data differ from row.names of varMetadata", sep="\n  ")
-  if ( !("labelDescription" %in% colnames(varMetadata(object))))
-    msg <- paste(msg, "AnnotatedDataFrame varMetadata missing labelDescription column", sep="\n  ")
-  if (is.null(msg)) TRUE else msg
+    msg <- NULL
+    if (!is(object, "AnnotatedDataFrame"))
+      msg <- paste(msg, paste("Cannot validate", class(object), "as AnnotatedDataFrame" ), sep = "\n  ")
+    if (length(row.names(varMetadata(object))) != length(colnames(pData(object))))
+      msg <- paste(msg, "All AnnotatedDataFrame pData column names must be present as rows in varMetadata, and vice versa", sep="\n")
+    if (any(row.names(varMetadata(object)) != colnames(pData(object))))
+      msg <- paste(msg, "AnnotatedDataFrame colnames of data differ from row.names of varMetadata", sep="\n  ")
+    if ( !("labelDescription" %in% colnames(varMetadata(object))))
+      msg <- paste(msg, "AnnotatedDataFrame varMetadata missing labelDescription column", sep="\n  ")
+    if (is.null(msg)) TRUE else msg
 }
 
 setMethod("initialize", "AnnotatedDataFrame",
-          function(.Object,
-                   data = data.frame(),
-                   varMetadata = data.frame()) {
-            .Object@data = data
-            if (!("labelDescription" %in% colnames(varMetadata)))
-              varMetadata[["labelDescription"]] <- rep(NA, nrow(varMetadata))
-            .Object@varMetadata = varMetadata
-            validObject(.Object)
-            .Object
+          function(.Object, data = data.frame(), varMetadata = data.frame(),
+                   ...) {
+              if (missing(varMetadata)) {
+                  varMetadata <- data.frame(labelDescription = rep(NA, ncol(data)))
+                  row.names(varMetadata) <- as.character(colnames(data))
+              } else if (!"labelDescription" %in% colnames(varMetadata)) {
+                  varMetadata[["labelDescription"]] <- rep(NA, nrow(varMetadata))
+              }
+              .Object@data <- data
+              .Object@varMetadata = varMetadata
+              validObject(.Object)
+              .Object
           })
 
 setMethod("updateObject", signature(object="AnnotatedDataFrame"),
@@ -157,7 +162,7 @@ setMethod("show", "AnnotatedDataFrame", function(object) {
   cat("  sampleNames:", paste(nms, collapse=", "))
   if (nrow(object)>length(nms))
     cat(" (",nrow(object)," total)", sep="")
-  cat("\n  varLabels:\n")
+  cat("\n  varLabels and descriptions:\n")
   metadata <- varMetadata(object)
   vars <- selectSome(varLabels(object), maxToShow=9)
   meta <- selectSome(metadata[["labelDescription"]], maxToShow=9)
@@ -199,19 +204,6 @@ setMethod("combine", c("AnnotatedDataFrame", "AnnotatedDataFrame"), function(x, 
   vmColnames <- unique(c(colnames(vx), colnames(vy)))
 
   if (length(uniqueRownames)!=0) {
-    
-   ## vM <- data.frame(rep(0,length(uniqueRownames)),row.names=uniqueRownames)[,FALSE]
-   ## for (nm in vmColnames) vM[uniqueRownames,nm] <-
-   ##   ifelse(is.na(vx[uniqueRownames,nm]) ||
-   ##         identical(vx[uniqueRownames,nm], vy[uniqueRownames,nm]),
-   ##          vy[uniqueRownames,nm],
-   ##          ifelse(is.na(vy[uniqueRownames,nm]),
-   ##                 vx[uniqueRownames,nm],
-   ##                 stop(paste("AnnotatedDataFrame varMetadata contains conflicting descriptions:",
-   ##                            paste("column:",nm),
-   ##                            vx[uniqueRownames,nm],
-   ##                            vy[uniqueRownames,nm],
-   ##                            sep="\n\t  "))))
     
    ## The "I()" is quite important since otherwise as.data.frame will do auto-conversions
    ## which can be quite painful esp. when the combine function is supposed to be called recursively
