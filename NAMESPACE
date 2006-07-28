@@ -39,4 +39,4 @@ export("Aggregate",
        "reverseSplit", "rowMax", "rowMedians", "rowMin", "rowQ", 
        "read.exprSet", "read.phenoData", "read.MIAME", "read.pD",
        "strbreak", "testBioCConnection",
-       "updateOldESet", "updateObjectFromSlots")
+       "updateOldESet", "updateObjectFromSlots", "userQuery")

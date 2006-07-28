@@ -8,6 +8,7 @@
 # copySubstitute
 # isUnique
 # cache
+# userQuery
 # ==========================================================================
 testBioCConnection <- function() {
    ## Stifle the "connected to www.... garbage output
@@ -272,4 +273,31 @@ validMsg <- function(msg, result) {
     if (is.character(result)) {
         append(msg, result)
     } else msg
+}
+
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+userQuery <- function(msg, allowed=c("y","n"), default = "n",
+                      case.sensitive = FALSE) {
+    ## Prompts the user with a string and for an answer
+    ## repeats until it gets allowable input
+  if(interactive()){
+    repeat {
+      allowMsg <- paste("[",paste(allowed,collapse="/"),
+                        "] ", sep="")
+      outMsg <- paste(msg,allowMsg)
+      cat(outMsg)
+      if(case.sensitive)
+        ans <- readLines(n=1)
+      else
+        ans <- tolower(readLines(n=1))
+      if (ans %in% allowed)
+        break
+      else
+        cat(paste(ans,"is not a valid response, try again.\n"))
+    }
+    return(ans)
+  }else{
+    return(default)
+  }
 }
