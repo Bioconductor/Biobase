@@ -37,7 +37,7 @@
 
 \title{\Biobase{} development and the new \eSet}
 \author{\mref{mailto:mtmorgan@fhcrc.org}{Martin T. Morgan}}
-\date{28 July, 2006}
+\date{ 7 August, 2006}
 \maketitle
 
 \section{Introduction}
@@ -92,62 +92,118 @@ Key features in the redesign.
 \item \Rfunction{updateObject} methods (in the development branch).
 \end{itemize}
 
-\subsection{A quick tour}
-The \eSet{} class structure present in \Biobase{} is:
-<<eSet-class>>=
+\section{A quick tour}
+<<Biobase,echo=FALSE,results=hide>>=
 library(Biobase)
+@ 
+
+\subsection{The \eSet{} object: high-throughput experiments}
+Purpose.
+\begin{itemize}
+\item Coordinate and contain high-throughput genomic data.
+\end{itemize}
+Structure: virtual base class.
+<<eSet-class>>=
 getClass("eSet")
 @ 
-The main functionality of \eSet{} is to coordinate
-\Robject{assayData}, \Robject{phenoData}, \Robject{experimentData},
-and \Robject{annotation} information, and the structure of \eSet{}
-reflects this functionality.  Documentation of the \eSet{} (and of
-other classes in \Biobase) can be obtained with the command
-\Rfunction{?"eSet-class"}.
+\begin{itemize}
+\item \Robject{assayData}: high-throughput data.
+\item \Robject{phenoData}: sample covariates.
+\item \Robject{experimentData}: experimental description.
+\item \Robject{annotation}: assay description.
+\item See below, and \verb|?"eSet-class"|
+\end{itemize}
 
-Each slot in \eSet{} is defined in terms of a class. We will discuss
-\Rclass{AssayData} below; it is used for storing high-throughput data.
-\Rclass{AnnotatedDataFrame} coordinates phenotypic data (variables
-measured on the samples for which high throughput data were obtained)
-and a description of the data. The information in the
-\Robject{phenoData} slot is similar to that in previous versions of
-\Biobase, but attempts have been made to simplify data storage and
-ensure valid object creation (discussed below for \eSet{} as a whole).
-\Rclass{MIAME} uses primarily text fields to provide standardized
-mechanisms for documenting how the experiment was performed. The
-\Robject{annotation} slot is a character string indicating where
-\Robject{assayData} features are documented.  \eSet{} can also be
-thought of as a generalized container, with high-throughput data
-stored in the \Robject{assayData} slot.
+\subsubsection{\Robject{assayData}: high-throughput data}
+Purpose.
+\begin{itemize}
+\item Efficiently and flexibly contain high-volume data.
+\end{itemize}
+Structure: \Rclass{list}, \Rclass{environment}, or \Rclass{lockEnvironment} class union.
+\begin{itemize}
+\item Each element of \Rclass{list} / \Rclass{environment} / \Rclass{lockEnvironment} is a matrix
+\item Rows: \emph{features}, e.g., gene names.
+\item Columns: \emph{samples} represented on each chip. 
+\item All matricies must have the same dimensions, row names, and column names.
+\item Subclasses determine which matricies \emph{must} be present.
+\item See \verb|?"AssayData-class"|
+\end{itemize}
 
-\eSet{} is a \verb|VIRTUAL| class. This means that the user cannot
-create instances of \eSet{}. Instead, the developer extends \eSet{} in
-ways that embody specific functionality. The subclasses
-\ExpressionSet{}, \Robject{MultiSet}, and \Robject{SnpSet} are
-examples of such extensions.  
+\subsubsection{\Robject{phenoData}: sample covariates}
+Purpose.
+\begin{itemize}
+\item Contain and document sample covariates.
+\end{itemize}
+Structure: \Rclass{AnnotatedDataFrame}.
+\begin{itemize}
+\item \Robject{data}: \Rclass{data.frame}.
+  \begin{itemize}
+  \item Rows: sample identifiers.
+  \item Columns: measured covariates.
+  \end{itemize}
+\item \Robject{varMetadata}: \Rclass{data.frame}.
+  \begin{itemize}
+  \item Rows: measured covariate labels.
+  \item Columns: covariate descriptors. 
+  \end{itemize}
+\item See \verb|?"AnnotatedDataFrame-class"|
+\end{itemize}
 
-There are several benefits to a virtual class like \eSet.
-Methods for generic operations can be written once, and are
-automatically used by derived classes. Methods defined for \eSet{}
-include:
-<<eSet-methods>>=
-res <- showMethods(where="package:Biobase", classes=c("eSet"), printTo=FALSE)
-empty <- which(res=="<Empty Methods List>")
-res <- res[-c(empty,empty-1,empty-2)]
-res <- res[grep("Function", res)]
-res <- unique(gsub('Function \\"(.*)\\":', "\\1", res))
-res
-@ 
-These methods initialize and print \eSet{} (\Rfunction{initialize},
-\Rfunction{show}), allow accessing and updating \eSet{} slots (e.g.,
-\Rfunction{assayData}, \Rfunction{assayData<-}), and perform
-operations common to \eSet{} objects (e.g., \Rfunction{storageMode<-},
-to change how data in the \Robject{assayData} slot is stored;
-\Rfunction{updateObject} to check and convert, if necessary, a
-serialized instance of \eSet{} to the current class definition).
+\subsubsection{\Robject{experimentData}: experiment description}
+Purpose.
+\begin{itemize}
+\item Summarize where and how the experiment was performed.
+\end{itemize}
+Structure: \Rclass{MIAME}
+\begin{itemize}
+\item \Robject{title}: experiment title.
+\item \Robject{name}: experimenter name(s).
+\item \Robject{preprocessing}: \Robject{list} of pre-processing steps.
+\item Additional slots.
+\item See \verb|?"MIAME-class"|.
+\end{itemize}
 
-\eSet{} provides consistent structure to data. This is enforced by
-validity methods.
+\subsubsection{\Robject{annotation}: assay description}
+Purpose.
+\begin{itemize}
+\item Link experiment to annotation package.
+\end{itemize}
+Structure: \Rclass{character}
+\begin{itemize}
+\item Label identifying annotation package.
+\end{itemize}
+
+%% Methods
+
+\subsection{Important \eSet{} methods}
+Initialization.
+\begin{itemize}
+\item \eSet{} is \verb|VIRTUAL|, initialize via subclass \Rfunction{callNextMethod}
+\end{itemize}
+Accessors (get, set).
+\begin{itemize}
+\item \Rfunction{assayData(obj); assayData(obj) <- value}: access or assign \Robject{assayData}
+\item \Rfunction{phenoData(obj); phenoData(obj) <- value}: access or assign \Robject{phenoData}
+\item \Rfunction{experimentData(obj); experimentData(obj) <- value}: access or assign \Robject{experimentData}
+\item \Rfunction{annotation(obj); annotation(obj) <- value}: access or assign \Robject{annotation}
+\end{itemize}
+Subsetting.
+\begin{itemize}
+\item \Rfunction{obj[i, j]}: select genes $i$ and samples $j$.
+\item \Rfunction{obj\$name; obj\$name <- value}:
+  retrieve  or assign covariate \Robject{name} in \Robject{phenoData}
+\end{itemize}
+
+\subsubsection{Additional \eSet{} methods}
+\begin{itemize}
+\item \Rfunction{show}.
+\item \Rfunction{storageMode}: influence how \Robject{assayData} is stored.
+\item \Rfunction{updateObject}: update \eSet{} objects to their current version.
+\item \Rfunction{validObject}: ensure that \eSet{} is valid.
+\end{itemize}
+
+The \Rfunction{validObject} method is particularly important to
+\eSet{}, ensuring that \eSet{} contains consistent structure to data.
 <<eSet-validity>>=
 getValidity(getClass("eSet"))
 @ 
@@ -160,6 +216,9 @@ classes underlying each slot as well. For instance, the validity
 methods for \Robject{AnnotatedDataFrame} check that variables used in
 \Robject{pData} are at least minimally described in \Robject{varMetadata}.
 
+%% Subclasses
+
+\subsection{Subclasses of \eSet}
 \Biobase{} defines three classes that extend \eSet{}. \ExpressionSet{}
 (discussed further below) is meant to contain microarray gene
 expression data. \Rclass{SnpSet} is a preliminary class to contain SNP
@@ -168,42 +227,38 @@ provide alternative implementations for SNP data. \Rclass{MultiSet} is
 an \ExpressionSet-like class, but without restriction on the names
 (though not structure) of elements in the \Robject{assayData} slot.
 
-\subsection{\ExpressionSet: a derived class for expression data}
-
-A designer wanting to implement \eSet{} for a particular type of data
-creates a class that `contains' \eSet{}. The steps for doing this are
-described below. One example of such a class is \ExpressionSet,
-designed to hold a matrix of gene expression values in the
-\Robject{assayData} slot. 
-<<ExpressionSet-class>>=
-getClass("ExpressionSet")
-getValidity(getClass("ExpressionSet"))
+\subsubsection{\ExpressionSet}
+Purpose: 
+\begin{itemize}
+\item Contain gene expression data.
+\end{itemize}
+Required \Robject{assayData} members.
+\begin{itemize}
+\item \Robject{exprs}, a matrix of expression values.
+\end{itemize}
+Important methods.
+\begin{itemize}
+\item Initialization (additional details below):
+<<ExpressionSet-initialize,eval=FALSE>>=
+obj <- new("eSet", phenoData = new("AnnotatedDataFrame"), experimentData = new("MIAME"), annotation = character(), exprs = new("matrix")) 
 @ 
-The data structure of an \ExpressionSet{} is identical to that of
-\eSet, and in fact is inherited (without additional slot creation)
-from \eSet{}. The main difference is that the validity methods of
-\eSet{} are augmented by a method to check that the
-\Robject{assayData} slot contains an entity named \Robject{"exprs"}. A
-valid \ExpressionSet{} object must also satisfy all the validity
-requirements of \eSet{}, but the developer does not explicitly invoke
-validity checking of the parts of the data structure inherited from
-\eSet{}.
+\item \Rfunction{exprs(obj), exprs(obj) <- value}: get or set \Robject{exprs}; methods defined for \Rclass{ExpressionSet}, \Rclass{AssayData}.
+\end{itemize}
  
-A strength of the \eSet{} hierarchy is apparent from a look at the
-methods defined for \ExpressionSet:
-<<ExpressionSet-methods>>=
-res1 <- showMethods(where="package:Biobase", classes=c("ExpressionSet"), inherited=FALSE, printTo=FALSE)
-empty <- which(res1=="<Empty Methods List>")
-res1 <- res1[-c(empty,empty-1,empty-2)]
-res1 <- res1[grep("Function", res1)]
-unique(gsub('Function \\"(.*)\\":', "\\1", res1))
-@ 
-The designer wrote only a handful of methods to enable the unique
-features of the \ExpressionSet{} class; other methods and
-functionality are inherited from methods in \eSet{}.
 
-\subsection{\Robject{assayData}: high-throughput data storage}
+\subsubsection{\Rclass{MultiSet} and \Rclass{SnpSet}}
+\Rclass{MultiSet}.
+\begin{itemize}
+\item Purpose: flexibly contain a collection of expression data matricies.
+\item Required \Robject{assayData} members: none.
+\end{itemize}
+\Rclass{SnpSet}.
+\begin{itemize}
+\item Purpose: contain genomic SNP calls.
+\item Required \Robject{assayData} members: \Robject{call}, \Robject{callProbability}.
+\end{itemize}
 
+\section{Comments on \Robject{assayData}: high-throughput data storage}
 The \Robject{assayData} slot is meant to store high-throughput
 data. The idea is that the slot contains identically sized matrices
 containing expression or other data. All matrices in the slot must
@@ -293,12 +348,32 @@ such as \Rfunction{exprs()} for data access, so that classes derived
 from \Rclass{AssayData} can provide implementations appropriate for
 their underlying storage mode.
 
+
 \section{Extending \eSet}
+A designer wanting to implement \eSet{} for a particular type of data
+creates a class that `contains' \eSet{}. The steps for doing this are
+described below. One example of such a class is \ExpressionSet,
+designed to hold a matrix of gene expression values in the
+\Robject{assayData} slot. 
+<<ExpressionSet-class>>=
+getClass("ExpressionSet")
+getValidity(getClass("ExpressionSet"))
+@ 
+The data structure of an \ExpressionSet{} is identical to that of
+\eSet, and in fact is inherited (without additional slot creation)
+from \eSet{}. The main difference is that the validity methods of
+\eSet{} are augmented by a method to check that the
+\Robject{assayData} slot contains an entity named \Robject{"exprs"}. A
+valid \ExpressionSet{} object must also satisfy all the validity
+requirements of \eSet{}, but the developer does not explicitly invoke
+validity checking of the parts of the data structure inherited from
+\eSet{}.
 
 Developers often want to create a subclass of \eSet, \ExpressionSet,
 or other classes in the \eSet{} hierarchy. We will use the
 \emph{Swirl} data set in the \Robject{sample.eSet} data set. 
 
+\subsection{Implementing a new class: a \Rclass{SwirlSet} example}
 The \emph{Swril} data setcontains four elements in the
 \Robject{assayData} slot: \Robject{R}, \Robject{G}, \Robject{Rb},
 \Robject{Gb}. To derive a class from \eSet{} for this data, we create

@@ -62,7 +62,7 @@
   Class-specific methods:
   \describe{
      \item{\code{exprs(SnpSet)}, \code{exprs(SnpSet,matrix)<-}}{Access and
-       set elements named \code{exprs} in the \code{AssayData}
+       set elements named \code{call} in the \code{AssayData}
        slot.}
   }
   
