@@ -38,5 +38,6 @@ export("Aggregate",
        "multiassign", "note", "openPDF","openVignette", "package.version", 
        "reverseSplit", "rowMax", "rowMedians", "rowMin", "rowQ", 
        "read.exprSet", "read.phenoData", "read.MIAME", "read.pD",
+       "selectSome",
        "strbreak", "testBioCConnection",
        "updateOldESet", "updateObjectFromSlots", "userQuery")

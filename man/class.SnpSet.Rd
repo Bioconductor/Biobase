@@ -98,6 +98,7 @@
      \item{\code{SnpSet$}, \code{SnpSet$<-}}{See \code{\link{eSet}}}
   }
 }
+% NB -- this authorship claim seems to need adjustment!  Martin? -- VC
 \author{V.J. Carey, after initial design by R. Gentleman }
 
 \seealso{
