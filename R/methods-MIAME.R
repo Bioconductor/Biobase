@@ -129,9 +129,12 @@ setMethod("combine", c("MIAME", "MIAME"), function(x, y, ...) {
              abstract= {
                paste(slot(x,sl), slot(y,sl), collapse="\n")
              },
+             .__classVersion__= {
+                 stop("'MIAME' objects have different class version strings")
+             },
              ## unknown
              {
-                 warning("\n  unknown MIAME field '", sl,"'; using info from object 'x'")
+                 warning("\n  unknown or conflicting information in MIAME field '", sl,"'; using information from object 'x'")
                  slot(x,sl)
              })
              
