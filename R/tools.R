@@ -250,13 +250,13 @@ cache <- function(expr, dir=".", prefix="tmp_R_cache_", name) {
     cachefile <- file.path(dir, paste(prefix, name, ".RData", sep=""))
     if(file.exists(cachefile)) {
         load(cachefile)
-        assign(name, get(name), envir=.GlobalEnv)
+        assign(name, get(name), envir=parent.frame())
     } else {
         dir.create(dir, recursive=TRUE, showWarnings=FALSE)
-        assign(name, eval(RHS), envir=.GlobalEnv)
-        save(list=name, file=cachefile)
+        assign(name, eval(RHS, envir=parent.frame()), envir=parent.frame())
+        save(list=name, file=cachefile, envir=parent.frame())
     }
-    invisible(get(name))
+    invisible(get(name, envir=parent.frame()))
 }
 ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 getObjectSlots <- function(object) { # object, rather than class defn, slots
