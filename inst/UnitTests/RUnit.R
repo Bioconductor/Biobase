@@ -1,5 +1,6 @@
-library(Biobase)
-library(RUnit)
+library("Biobase")
+library("RUnit")
+
 
 ## instantiate here to satisfy RUnit
 
@@ -26,23 +27,16 @@ setValidity("SwirlSet", function(object) {
   assayDataValidMembers(assayData(object), c("R", "G", "Rb", "Gb"))
 })
 
-eSetSubclassesSuite <- defineTestSuite( "eSetSubclasses",
-                                       system.file("UnitTests", package="Biobase"),
-                                       "^runitEset.+\.R$")
+## RUnit Test Suites
 
-updateObjectSuite <- defineTestSuite( "updateSuite",
-                                     system.file("UnitTests", package="Biobase"),
-                                     "^runitUp.+\.R$")
+testFilePat <- ".*_test\.R$"
 
-validitySuite <- defineTestSuite("validitySuite",
-                                 system.file("UnitTests", package="Biobase"),
-                                 "^runitVal.+\.R$")
+allSuite <- defineTestSuite(name="allSuite",
+                            dirs=system.file("UnitTests", package="Biobase"),
+                            testFileRegexp=testFilePat,
+                            rngKind="default",
+                            rngNormalKind="default")
 
-allSuite <- defineTestSuite( "allSuite",
-                            system.file("UnitTests", package="Biobase"),
-                            "^runit.+\.R$")
-
-testData <- runTestSuite(list(eSetSubclassesSuite,validitySuite))
-
-printTextProtocol(testData, showDetails=TRUE)
+testData <- runTestSuite(allSuite)
+printTextProtocol(testData, showDetails=FALSE)
 
