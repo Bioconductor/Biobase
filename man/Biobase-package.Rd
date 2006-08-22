@@ -13,7 +13,7 @@
 
    Vignette routines: \code{\link{openVignette}}, \code{\link{getPkgVigs}}, \code{\link{openPDF}}.
 
-   Package manipulation functions: \code{\link{createPackage}} and \code{\link{package.version}}
+   Package manipulation functions: \code{\link{createPackage}}
 
    Data sets: \code{\link{aaMap}}, \code{\link{sample.ExpressionSet}}, \code{\link{sample.exprSet}}, \code{\link{sample.eSet}}, \code{\link{geneData}}.
 
