@@ -29,10 +29,12 @@ setValidity("SwirlSet", function(object) {
 
 ## RUnit Test Suites
 
+dirs <- '.'
+## dirs <- system.file("UnitTests", package="Biobase"),
 testFilePat <- ".*_test\.R$"
 
 allSuite <- defineTestSuite(name="allSuite",
-                            dirs=system.file("UnitTests", package="Biobase"),
+                            dirs=dirs,
                             testFileRegexp=testFilePat,
                             rngKind="default",
                             rngNormalKind="default")

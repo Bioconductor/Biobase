@@ -1,3 +1,13 @@
+nonvirtualClasses <- NULL
+instanceDir <- "VersionedClass_data"
+
+.setUp <- function() {
+    nms <- ls(getNamespace("Biobase"),all=TRUE)
+    classes <- gsub(".__C__", "", nms[grep(".__C__", nms)])
+    isVirtual <- sapply(classes, function(nm) getClass(nm)@virtual)
+    nonvirtualClasses <<- classes[!isVirtual]
+}
+
 testNewVersioned <- function() {
   new("Versioned")
   new("VersionedBiobase")
@@ -7,22 +17,20 @@ testNewVersioned <- function() {
   checkTrue(classVersion(v)["x"]=="1.0.0")
 
   ## use class definition defined in RUnit.R
-  a <- new("A")
-  checkTrue(all(classVersion(a) == classVersion(new("VersionedBiobase", versions=list(A="1.0.1")))))
-  checkTrue(all(a@x==10:1))
-  a <- new("A", x=1:10)
-  checkTrue(all(classVersion(a) == classVersion(new("VersionedBiobase", versions=list(A="1.0.1")))))
-  checkTrue(all(a@x==1:10))
-  a <- new("A", x=1:10, versions=list(x="1.0.1"))
-  checkTrue(all(a@x==1:10))
-  checkTrue(all(classVersion(a) == classVersion(new("VersionedBiobase", versions=list(A="1.0.1",x="1.0.1")))))
+##   a <- new("A")
+##   checkTrue(all(classVersion(a) == classVersion(new("VersionedBiobase", versions=list(A="1.0.1")))))
+##   checkTrue(all(a@x==10:1))
+##   a <- new("A", x=1:10)
+##   checkTrue(all(classVersion(a) == classVersion(new("VersionedBiobase", versions=list(A="1.0.1")))))
+##   checkTrue(all(a@x==1:10))
+##   a <- new("A", x=1:10, versions=list(x="1.0.1"))
+##   checkTrue(all(a@x==1:10))
+##   checkTrue(all(classVersion(a) == classVersion(new("VersionedBiobase", versions=list(A="1.0.1",x="1.0.1")))))
 }
 
 testIsVersioned <- function() {
   checkTrue(isVersioned(new("VersionedBiobase")))
-  checkTrue(isVersioned(new("A")))
   checkTrue(isVersioned("VersionedBiobase"))
-  checkTrue(isVersioned("A"))
   checkTrue(!isVersioned(1:10))
 }
 
@@ -56,5 +64,30 @@ testClassVersionReplace <- function() {
 testIsCurrent <- function() {
   checkTrue(is.na(isCurrent(1:10)))
   checkTrue(all(isCurrent(new("VersionedBiobase"))))
-  checkTrue(all(isCurrent(new("A"))))
+}
+
+testDevelInstanceArchived <- function() {
+    ## archived devel instance?
+    instances <- sub(".Rda", "",
+                     list.files(path=file.path(instanceDir, "devel"),
+                                pattern=".*.Rda"))
+    checkTrue(all(nonvirtualClasses %in% instances),
+              msg=paste(nonvirtualClasses[!nonvirtualClasses %in% instances],
+                collapse=" "))
+}
+
+testDevelInstanceIsCurrent <- function() {
+    ## overall class is current
+    lapply(nonvirtualClasses, function(cls) {
+        cls <- paste(cls, ".Rda", sep="")
+        load(file.path(instanceDir, "devel", cls), parent.frame(2))
+    })
+    instances <-
+      sub(".Rda", "",
+          list.files(path=file.path(instanceDir, "devel"), pattern=".*.Rda"))
+    current <- sapply(instances, function(obj) {
+        all(isCurrent(get(obj))[obj])
+    })
+    currentv <- current[!is.na(current)]
+    checkTrue(all(currentv), msg=paste(names(currentv)[!currentv], collapse=" "))
 }

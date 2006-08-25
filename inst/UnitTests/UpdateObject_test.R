@@ -1,4 +1,5 @@
 testUpdateObjectList <- function() {
+    DEACTIVATED("cannot yet setClass during RUnit")
     setClass("A", representation(x="numeric"), prototype(x=1:10))
     a <- new("A")
     l <- list(a,a)
@@ -34,7 +35,7 @@ testUpdateObjectEnv <- function() {
     e$x=1
     e$.x=1
     lockBinding("x", e)
-    checkException(updateObject(e))
+    checkException(updateObject(e), silent=TRUE)
 
     lockEnvironment(e)
     obj <- updateObject(e)
@@ -54,7 +55,10 @@ testUpdateObjectDefaults <- function() {
     x <- as.numeric(1:10)
     checkTrue(identical(as.integer(1:10), updateObjectTo(x, integer())))
     checkTrue(!identical(as.numeric(1:10), updateObjectTo(x, integer())))
+}
 
+testUpdateObjectSetClass <- function() {
+    DEACTIVATED("cannot yet setClass during RUnit")
     setClass("A",
              representation(x="numeric"),
              prototype=prototype(x=1:10))
@@ -65,7 +69,7 @@ testUpdateObjectDefaults <- function() {
 
     setClass("B", representation(x="numeric"))
     b <- new("B")
-    checkException(updateObjectTo(a, b))
+    checkException(updateObjectTo(a, b), silent=TRUE)
 
     setAs("A", "B", function(from) {
         b <- new("B")
@@ -88,7 +92,7 @@ testUpdateExpressionSet <- function() {
 
     data(sample.ExpressionSet)
     classVersion(sample.ExpressionSet)["ExpressionSet"] <- "0.0.1"
-    checkException(validObject(sample.ExpressionSet))
+    checkException(validObject(sample.ExpressionSet), silent=TRUE)
 
     obj <- updateObject(sample.ExpressionSet)
     checkTrue(isVersioned(obj))

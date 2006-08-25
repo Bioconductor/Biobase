@@ -184,17 +184,19 @@ testOtherSlots <- function() {
 }
 
 testShow <- function() {                # just 'does it show'
+    capture.output(
   for (mode in modes)
     lapply(names(allSubclasses), function( s ) {
       obj <- helperNew (s, storage.mode=mode)
       tryCatch(show(obj), error=function(e) checkTrue( 1==0 ))
     })
+                   )
 }
 
 testSampleNames <- function() {
   nameCheck <- function( obj ) {
     checkTrue( all( sampleNames( obj ) == sampleNames( phenoData( obj ))))
-    checkException( sampleNames( obj ) <- 1:10 )
+    checkException( sampleNames( obj ) <- 1:10, silent=TRUE )
     sampleNames( obj ) <- letters[ 1:dim( obj )[[2]] %% 26 ]
     checkTrue(all(sampleNames(assayData(obj)) == sampleNames(obj)))
     checkTrue(validObject(obj), "original")
@@ -277,11 +279,11 @@ testExprs <- function() {
 }
 
 testLabelNames <- function() {
-  checkTrue(FALSE)
+    DEACTIVATED("no test defined")
 }
 
 testVarMetadata <- function() {
-  checkTrue(FALSE)
+    DEACTIVATED("no test defined")
 }
 
 testCombine <- function() {
