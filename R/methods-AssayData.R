@@ -54,15 +54,16 @@ setMethod("storageMode", "AssayData", assayDataStorageMode)
 assayDataStorageModeReplace <- function(object, value) {
     storageMode <- assayDataStorageMode(object)
     if (storageMode == value) return(object)
+    names <- if (storageMode == "list") names(object) else ls(object)
     switch(value,
            lockedEnvironment = {
                assayData <- new.env(parent=emptyenv())
-               for (nm in ls(object)) assayData[[nm]] <- object[[nm]]
+               for (nm in names) assayData[[nm]] <- object[[nm]]
                assayDataEnvLock(assayData)
                assayData
            }, environment = {
                assayData <- new.env(parent=emptyenv())
-               for (nm in ls(object)) assayData[[nm]] <- object[[nm]]
+               for (nm in names) assayData[[nm]] <- object[[nm]]
                assayData
            }, list = as.list(object))
 }

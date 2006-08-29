@@ -100,6 +100,8 @@ testStorageMode <- function() {
     checkTrue(storageMode(sample.ExpressionSet)=="lockedEnvironment")
     storageMode(sample.ExpressionSet) <- "list"
     checkTrue(storageMode(sample.ExpressionSet)=="list")
+    storageMode(sample.ExpressionSet) <- "environment"
+    checkTrue(storageMode(sample.ExpressionSet)=="environment")
 }
 
 testNewValidSubclasses <- function() {
