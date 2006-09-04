@@ -105,18 +105,19 @@
 	\code{nrow(phenoData)}. Class:\code{\link{AssayData-class}}}
       \item{\code{phenoData}:}{Contains variables describing sample
 	(i.e., columns in \code{assayData})
-	phenotypes.Class: \code{\link{AnnotatedDataFrame-class}}}
+	phenotypes. Class: \code{\link{AnnotatedDataFrame-class}}}
       \item{\code{featureData}:}{Contains variables describing features
 	(i.e., rows in \code{assayData}) unique to this experiment. Use
-	the \code{annotation} slot efficiently reference feature data
-	common to the annotation package used in the experiment.}
+	the \code{annotation} slot to efficiently reference feature data
+	common to the annotation package used in the experiment. Class:
+	\code{\link{AnnotatedDataFrame-class}}} 
       \item{\code{experimentData}:}{Contains details of experimental
 	methods. Class: \code{\link{MIAME-class}}}
       \item{\code{annotation}:}{Label associated with the annotation
 	package used in the experiment. Class: \code{character}}
       \item{\code{.classVersion}:}{Character vector describing the R and
 	Biobase version number used to created the instance. Intended
-	for developer use. Class: \code{character}} 
+	for developer use. Class: \code{\link{Versions-class}}} 
   }
 }
 \section{Methods}{
