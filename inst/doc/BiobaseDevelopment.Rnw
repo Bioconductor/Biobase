@@ -70,7 +70,7 @@ development.
 
 What is an \eSet{}?
 \begin{itemize}
-\item Coordinate gene expression and phenotype data.
+\item Coordinate high through-put (e.g., gene expression) and phenotype data.
 \item Provide common data container for diverse Bioconductor packages.
 \end{itemize}
 Motivation for change.
@@ -234,7 +234,7 @@ getValidity(getClass("eSet"))
 The validity methods for \eSet{} reflect our design goals. All
 \Robject{assayData} members must have identical row and column
 dimensions and \Robject{featureNames}. The names and numbers of
-samples and must be the same in \Robject{assayData} and
+samples must be the same in \Robject{assayData} and
 \Robject{phenoData} slots. Validity methods are defined for the
 classes underlying each slot as well. For instance, the validity
 methods for \Robject{AnnotatedDataFrame} check that variables used in
@@ -417,8 +417,7 @@ setMethod("initialize", "SwirlSet",
                    Rb = new("matrix"),
                    Gb = new("matrix"),
                    ... ) {
-            callNextMethod(
-                           .Object,
+            callNextMethod(.Object,
                            R=R, G=G, Rb=Rb, Gb=Gb,
                            ...)
         })
