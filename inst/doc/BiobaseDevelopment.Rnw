@@ -37,8 +37,10 @@
 
 \title{\Biobase{} development and the new \eSet}
 \author{\mref{mailto:mtmorgan@fhcrc.org}{Martin T. Morgan}}
-\date{ 7 August, 2006}
+\date{7 August, 2006}
 \maketitle
+
+Revised 4 September, 2006 -- \Robject{featureData} slot
 
 \section{Introduction}
 
@@ -50,9 +52,9 @@ of \Biobase.
 Recent changes (see the date in the title of this document!) to
 \Biobase{} introduce new structure and approaches to \eSet{}. The
 changes make it easy for developers to creatively use and extend the
-\eSet{} class hierarchy. The purpose of this document is to outline
-the changes that have been made, and to illustrate how developers can
-exploit the new structure to efficiently use and extend \eSet{}. 
+\eSet{} class hierarchy. This document outlines recent changes, and
+illustrates how developers can exploit the new structure to
+efficiently use and extend \eSet{}.
 
 The document starts with a brief description of the motivation for
 change, and a comparison of the old and new \eSet{}s and related
@@ -109,6 +111,7 @@ getClass("eSet")
 \begin{itemize}
 \item \Robject{assayData}: high-throughput data.
 \item \Robject{phenoData}: sample covariates.
+\item \Robject{featureData}: feature covariates.
 \item \Robject{experimentData}: experimental description.
 \item \Robject{annotation}: assay description.
 \item See below, and \verb|?"eSet-class"|
@@ -139,6 +142,27 @@ Structure: \Rclass{AnnotatedDataFrame}.
 \item \Robject{data}: \Rclass{data.frame}.
   \begin{itemize}
   \item Rows: sample identifiers.
+  \item Columns: measured covariates.
+  \end{itemize}
+\item \Robject{varMetadata}: \Rclass{data.frame}.
+  \begin{itemize}
+  \item Rows: measured covariate labels.
+  \item Columns: covariate descriptors. 
+  \end{itemize}
+\item See \verb|?"AnnotatedDataFrame-class"|
+\end{itemize}
+
+\subsubsection{\Robject{featureData}: feature covariates}
+Purpose.
+\begin{itemize}
+\item Contain and document feature covariates specific to the
+  experiment; use the \Robject{annotation} slot for chip-level descriptions.
+\end{itemize}
+Structure: \Rclass{AnnotatedDataFrame}.
+\begin{itemize}
+\item \Robject{data}: \Rclass{data.frame}.
+  \begin{itemize}
+  \item Rows: feature identifiers. These match row names of \Robject{assayData}.
   \item Columns: measured covariates.
   \end{itemize}
 \item \Robject{varMetadata}: \Rclass{data.frame}.
