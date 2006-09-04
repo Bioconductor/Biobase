@@ -1,30 +1,28 @@
-validAnnotatedDataFrame <- function( object ) {
-    msg <- NULL
-    if (!is(object, "AnnotatedDataFrame"))
-      msg <- paste(msg, paste("Cannot validate", class(object), "as AnnotatedDataFrame" ), sep = "\n  ")
-    if (length(row.names(varMetadata(object))) != length(colnames(pData(object))))
-      msg <- paste(msg, "All AnnotatedDataFrame pData column names must be present as rows in varMetadata, and vice versa", sep="\n")
-    if (any(row.names(varMetadata(object)) != colnames(pData(object))))
-      msg <- paste(msg, "AnnotatedDataFrame colnames of data differ from row.names of varMetadata", sep="\n  ")
-    if ( !("labelDescription" %in% colnames(varMetadata(object))))
-      msg <- paste(msg, "AnnotatedDataFrame varMetadata missing labelDescription column", sep="\n  ")
-    if (is.null(msg)) TRUE else msg
-}
-
-setMethod("initialize", "AnnotatedDataFrame",
-          function(.Object, data = data.frame(), varMetadata = data.frame(),
-                   ...) {
+setMethod("initialize", signature(.Object="AnnotatedDataFrame"),
+          function(.Object, data = data.frame(), varMetadata = data.frame(),...) {
               if (missing(varMetadata)) {
                   varMetadata <- data.frame(labelDescription = rep(NA, ncol(data)))
                   row.names(varMetadata) <- as.character(colnames(data))
               } else if (!"labelDescription" %in% colnames(varMetadata)) {
                   varMetadata[["labelDescription"]] <- rep(NA, nrow(varMetadata))
               }
-              .Object@data <- data
-              .Object@varMetadata = varMetadata
-              validObject(.Object)
-              .Object
+              callNextMethod(.Object, data=data, varMetadata=varMetadata, ...)
           })
+
+validAnnotatedDataFrame <- function( object ) {
+    msg <- NULL
+    if (!is(object, "AnnotatedDataFrame"))
+      msg <- paste(msg, paste("Cannot validate", class(object), "as AnnotatedDataFrame" ), sep = "\n  ")
+    if (length(row.names(varMetadata(object))) != length(colnames(pData(object))))
+      msg <- paste(msg, "All AnnotatedDataFrame pData column names must be present as rows in varMetadata, and vice versa", sep="\n")
+    else if (any(row.names(varMetadata(object)) != colnames(pData(object))))
+      msg <- paste(msg, "AnnotatedDataFrame colnames of data differ from row.names of varMetadata", sep="\n  ")
+    if ( !("labelDescription" %in% colnames(varMetadata(object))))
+      msg <- paste(msg, "AnnotatedDataFrame varMetadata missing labelDescription column", sep="\n  ")
+    if (is.null(msg)) TRUE else msg
+}
+
+setValidity("AnnotatedDataFrame", validAnnotatedDataFrame)
 
 setMethod("updateObject", signature(object="AnnotatedDataFrame"),
           function(object, ..., verbose=FALSE) {
@@ -87,8 +85,6 @@ setMethod("varMetadata", "AnnotatedDataFrame", function(object) object@varMetada
 setReplaceMethod("varMetadata", c("AnnotatedDataFrame", "data.frame"), function(object, value) {
   if (!("labelDescription" %in% colnames(value)))
     warning("varMetadata must have column named 'labelDescription'")
-  else
-    value[["labelDescription"]] <- as.character(value[["labelDescription"]])
   object@varMetadata <- value
   object
 })
@@ -165,7 +161,7 @@ setMethod("show", "AnnotatedDataFrame", function(object) {
   cat("\n  varLabels and descriptions:\n")
   metadata <- varMetadata(object)
   vars <- selectSome(varLabels(object), maxToShow=9)
-  meta <- selectSome(metadata[["labelDescription"]], maxToShow=9)
+  meta <- selectSome(as.character(metadata[["labelDescription"]]), maxToShow=9)
   mapply(function(nm, meta) cat("    ",nm,": ", meta, "\n", sep=""),
          vars, meta)
   if (nrow(metadata)>length(meta))
@@ -176,56 +172,27 @@ setMethod("show", "AnnotatedDataFrame", function(object) {
   }
 })
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setMethod("combine", c("AnnotatedDataFrame", "AnnotatedDataFrame"), function(x, y) {
-  ## data
-  sNames <- c(sampleNames(x),sampleNames(y))
-  vNames <- unique(c(varLabels(x),varLabels(y)))
-  if (any(duplicated(sNames)))
-      stop(paste("AnnotatedDataFrames must have different sample names,",
-                 "identical names are:",
-                 paste(sNames[duplicated(sNames)],collapse=", "),
-                 sep="\n\t"))
-  pData <- data.frame(rep(0,length(sNames)),row.names=sNames)[,FALSE]
-  for (nm in vNames) {
-    xdata <- if (is.null(x[[nm]])) rep(NA,nrow(x)) else x[[nm]]
-    ydata <- if (is.null(y[[nm]])) rep(NA,nrow(y)) else y[[nm]]
-    pData[[nm]] <- c(xdata,ydata)
-  }
-  colnames(pData) <- vNames
+setMethod("combine",
+          signature(x="AnnotatedDataFrame", y="AnnotatedDataFrame"),
+          function(x, y) {
 
-  
-  ## varMetadata
-  vx <- varMetadata(x)
-  vy <- varMetadata(y)
+              pDataX <- pData(x)
+              pDataY <- pData(y)
+              pData <- combine(pDataX, pDataY)
+              
+              varMetadataX <- varMetadata(x)
+              varMetadataY <- varMetadata(y)
+              ## labelDescription is required, likely a factor with conflicting levels
+              if (is.factor(varMetadataX$labelDescription) &&
+                  is.factor(varMetadataY$labelDescription)) {
+                  f <- factor(c(as.character(varMetadataX$labelDescription),
+                                as.character(varMetadataY$labelDescription)))
+                  varMetadataX$labelDescription <-
+                    factor(as.character(varMetadataX$labelDescription), levels=levels(f))
+                  varMetadataY$labelDescription <-
+                    factor(as.character(varMetadataY$labelDescription), levels=levels(f))
+                }
+              vM <- combine(varMetadataX, varMetadataY)
 
-  vmRownames <- c(row.names(vx),row.names(vy))
-  uniqueRownames <- unique(vmRownames)
-  ## duplRownames <- duplicated(vmRownames)
-  vmColnames <- unique(c(colnames(vx), colnames(vy)))
-
-  if (length(uniqueRownames)!=0) {
-    
-   ## The "I()" is quite important since otherwise as.data.frame will do auto-conversions
-   ## which can be quite painful esp. when the combine function is supposed to be called recursively
-   ## on a series of objects
-
-    vM <- as.data.frame(I(do.call("cbind", lapply(vmColnames, function(nm) {
-      vxrn = vx[uniqueRownames, nm]
-      vyrn = vy[uniqueRownames, nm]
-      whDiff = which(vxrn!=vyrn)
-      if(length(whDiff)>0)
-        stop(paste("AnnotatedDataFrame varMetadata contains conflicting descriptions:",
-                   paste("column:", nm), paste(vxrn, collapse=" "), paste(vyrn, collapse=" "), sep="\n\t  "))
-      ifelse(is.na(vxrn) , vyrn, vxrn)
-      } ))))
-    colnames(vM) <- vmColnames
-    rownames(vM) <- uniqueRownames
-    
-  } else {
-    vM <- data.frame()
-  }
-
-    
-  ## new object
-  new("AnnotatedDataFrame", data=pData, varMetadata=vM)
-})
+              new("AnnotatedDataFrame", data=pData, varMetadata=vM)
+          })

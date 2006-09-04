@@ -280,14 +280,6 @@ testExprs <- function() {
   })
 }
 
-testLabelNames <- function() {
-    DEACTIVATED("no test defined")
-}
-
-testVarMetadata <- function() {
-    DEACTIVATED("no test defined")
-}
-
 testCombine <- function() {
   combineEmpty <- function(s, ...) {
     if (s=="MultiSet") return(TRUE)

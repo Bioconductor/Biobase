@@ -5,7 +5,7 @@
 \alias{updateObject,ANY-method}
 \alias{updateObject,list-method}
 \alias{updateObject,environment-method}
-\alias{updateObjectTo,ANY-method}
+\alias{updateObjectTo,ANY,ANY-method}
 
 \alias{updateObjectFromSlots}
 \alias{getObjectSlots}

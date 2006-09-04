@@ -5,8 +5,8 @@
 ## initialize -- see VersionedClasses
 
 setMethod("initialize", signature(.Object="Versioned"),
-          function(.Object, ..., versions = list()) {
-              .Object <- callNextMethod()
+          function(.Object, versions = list(), ...) {
+              .Object <- callNextMethod(.Object, ...)
               classVersion(.Object)[names(versions)] <- versions
               .Object
           })
