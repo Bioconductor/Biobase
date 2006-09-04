@@ -124,13 +124,14 @@ setClass("annotatedDataset",
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setClass("AnnotatedDataFrame",
          representation(varMetadata = "data.frame",
-                        data = "data.frame" ),
+                        data = "data.frame",
+                        dimLabels = "character"),
          contains=c("Versioned"),
          prototype = prototype(
-           new("Versioned", versions=list(AnnotatedDataFrame="1.0.0")),
+           new("Versioned", versions=list(AnnotatedDataFrame="1.1.0")),
            varMetadata = new( "data.frame" ),
-           data = new( "data.frame" )),
-         validity = function(object) validAnnotatedDataFrame(object))
+           data = new( "data.frame" ),
+           dimLabels=c("rowNames", "columnNames")))
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setClassUnion("AssayData", c("list", "environment"))
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -149,14 +150,18 @@ setClassUnion("AssayData", c("list", "environment"))
 setClass("eSet",
          representation(assayData = "AssayData",
                         phenoData = "AnnotatedDataFrame",
+                        featureData = "AnnotatedDataFrame",
                         experimentData = "MIAME",
                         annotation = "character",
                         "VIRTUAL"),
          contains="VersionedBiobase",
          prototype = prototype(
-           new("VersionedBiobase", versions=c(eSet="1.0.0")),
+           new("VersionedBiobase", versions=c(eSet="1.1.0")),
            assayData = list(), # use initialize to set as env, so different instances have different envs
-           phenoData = new( "AnnotatedDataFrame" ),
+           phenoData = new("AnnotatedDataFrame",
+             dimLabels=c("sampleNames", "sampleColumns")),
+           featureData = new("AnnotatedDataFrame",
+             dimLabels=c("featureNames", "featureColumns")),
            experimentData = new( "MIAME" ),
            annotation = character()))
 setClass("ExpressionSet",               # exprSet-like

@@ -1,13 +1,17 @@
 library("Biobase")
 library("RUnit")
 
+options(warn=1)
 
 ## instantiate here to satisfy RUnit
 
 setClass("SwirlSet", contains="eSet")
 setMethod("initialize", "SwirlSet",
           function(.Object,
-                   phenoData = new("AnnotatedDataFrame"),
+                   assayData = assayDataNew(
+                     R=R, G=G, Rb=Rb, Gb=Gb, ...),
+                   phenoData = annotatedDataFrameFrom(assayData, byrow=FALSE),
+                   featureData = annotatedDataFrameFrom(assayData, byrow=TRUE),
                    experimentData = new("MIAME"),
                    annotation = character(),
                    R = new("matrix"),
@@ -16,13 +20,13 @@ setMethod("initialize", "SwirlSet",
                    Gb = new("matrix"),
                    ... ) {
             callNextMethod(.Object,
-                           assayData = assayDataNew(
-                             R=R, G=G, Rb=Rb, Gb=Gb,
-                             ...),
+                           assayData = assayData,
                            phenoData = phenoData,
+                           featureData = featureData,
                            experimentData = experimentData,
                            annotation = annotation)
           })
+
 setValidity("SwirlSet", function(object) {
   assayDataValidMembers(assayData(object), c("R", "G", "Rb", "Gb"))
 })

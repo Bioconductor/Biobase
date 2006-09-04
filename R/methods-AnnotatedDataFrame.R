@@ -19,6 +19,8 @@ validAnnotatedDataFrame <- function( object ) {
       msg <- paste(msg, "AnnotatedDataFrame colnames of data differ from row.names of varMetadata", sep="\n  ")
     if ( !("labelDescription" %in% colnames(varMetadata(object))))
       msg <- paste(msg, "AnnotatedDataFrame varMetadata missing labelDescription column", sep="\n  ")
+    if (length(dimLabels(object))!=2)
+      msg <- paste(msg, "dimLabels must be a character vector of length 2", sep="\n  ")
     if (is.null(msg)) TRUE else msg
 }
 
@@ -29,6 +31,7 @@ setMethod("updateObject", signature(object="AnnotatedDataFrame"),
               if (verbose) message("updateObject(object = 'AnnotatedDataFrame')")
               if (isVersioned(object) && isCurrent(object)["AnnotatedDataFrame"]) object
               else {
+                  ## version 1.0.0. -> 1.1.0 needs a new slot "dimLabels"
                   to <- new("AnnotatedDataFrame")
                   varMetadata(to) <- updateObject(varMetadata(object))
                   pData(to) <- updateObject(pData(object))
@@ -36,16 +39,42 @@ setMethod("updateObject", signature(object="AnnotatedDataFrame"),
               }
           })
 
+setMethod("annotatedDataFrameFrom",
+          signature(object="AssayData"),
+          function(object, byrow=FALSE, ...) {
+              dims <- assayDataDims(object)
+              data <- 
+                if (all(is.na(dims))) data.frame()
+                else {
+                    n <- if (byrow) dims[1,1] else dims[2,1]
+                    eltNames <-
+                      if (is(object, "environment")) ls(object)
+                      else names(object)
+                    nms <-
+                      if(byrow) rownames(object[[eltNames[[1]]]])
+                      else colnames(object[[eltNames[[1]]]])
+                    data.frame(numeric(n), row.names=nms)[,FALSE]
+                }
+              dimLabels <-
+                if (byrow) c("featureNames", "featureColumns")
+                else c("sampleNames", "sampleColumns")
+              new("AnnotatedDataFrame", data=data, dimLabels=dimLabels)
+          })
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("dim", "AnnotatedDataFrame", function( x ) {
   d <- dim(x@data)
-  names(d) <- c("Samples", "Variables")
+  names(d) <- dimLabels(x)
   d
 })
 
 setMethod("nrow", "AnnotatedDataFrame", function(x) nrow(x@data))
 
 setMethod("ncol", "AnnotatedDataFrame", function(x) ncol(x@data))
+
+setMethod("dimLabels", "AnnotatedDataFrame", function(object) {
+    object@dimLabels
+})
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("pData", "AnnotatedDataFrame", function(object) object@data)
 
@@ -66,6 +95,13 @@ setReplaceMethod("sampleNames", c("AnnotatedDataFrame", "ANY"), function(object,
   object
 })
 
+setMethod("featureNames",
+          signature(object="AnnotatedDataFrame"),
+          function(object) sampleNames(object))
+
+setReplaceMethod("featureNames",
+                 signature(object="AnnotatedDataFrame", value="ANY"),
+                 function(object, value) sampleNames(object) <- value)
 
 setMethod("varLabels", "AnnotatedDataFrame", function(object) colnames(object@data))
 
@@ -155,7 +191,7 @@ selectSome <- function(obj, maxToShow=5) {
 
 setMethod("show", "AnnotatedDataFrame", function(object) {
   nms <- selectSome(sampleNames(object))
-  cat("  sampleNames:", paste(nms, collapse=", "))
+  cat("  ", dimLabels(object)[[1]], ": ", paste(nms, collapse=", "), sep="")
   if (nrow(object)>length(nms))
     cat(" (",nrow(object)," total)", sep="")
   cat("\n  varLabels and descriptions:\n")
@@ -175,6 +211,8 @@ setMethod("show", "AnnotatedDataFrame", function(object) {
 setMethod("combine",
           signature(x="AnnotatedDataFrame", y="AnnotatedDataFrame"),
           function(x, y) {
+              if (!identical(dimLabels(x),dimLabels(y)))
+                stop("AnnotatedDataFrame dimLabels differ")
 
               pDataX <- pData(x)
               pDataY <- pData(y)
@@ -194,5 +232,5 @@ setMethod("combine",
                 }
               vM <- combine(varMetadataX, varMetadataY)
 
-              new("AnnotatedDataFrame", data=pData, varMetadata=vM)
+              new("AnnotatedDataFrame", data=pData, varMetadata=vM, dimLabels=dimLabels(x))
           })

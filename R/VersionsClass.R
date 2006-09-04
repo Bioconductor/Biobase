@@ -78,10 +78,11 @@ setMethod("Compare", signature(e1="character", e2="Versions"),
 
 ## show
 
+setAs("Versions", "character",
+      function(from) {
+          if (length(from)) sapply(from, paste, collapse=".")
+          else "Versioned; no version string"
+      })
+
 setMethod("show", signature(object="Versions"),
-          function(object) {
-              if (length(object))
-                print(sapply(object, paste, collapse="."))
-              else
-                print("Versioned; no version string")
-          })
+          function(object) print(as(object, "character")))

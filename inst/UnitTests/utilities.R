@@ -1,13 +1,13 @@
 ## these assume we're in Biobase/inst/UnitTests
 
 createCurrentInstances <- function(instanceDir = "VersionedClass_data") {
-    nms <- ls(getNamespace("Biobase"),all=TRUE)
-    classes <- gsub(".__C__", "", nms[grep(".__C__", nms)])
+    require("Biobase")
+    classes <- getClasses("package:Biobase")
     isVirtual <- sapply(classes, function(nm) getClass(nm)@virtual)
     nonvirtualClasses <- classes[!isVirtual]
 
     instances <- sub(".Rda", "",
-                     list.files(path=instanceDir, "devel", pattern=".*.Rda"))
+                     list.files(path=file.path(instanceDir, "devel"), pattern=".*.Rda"))
 
     need <- nonvirtualClasses[!nonvirtualClasses %in% instances]
     if (length(need)!=0) {

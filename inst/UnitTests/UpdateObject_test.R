@@ -19,6 +19,8 @@ testUpdateObjectList <- function() {
 }
 
 testUpdateObjectEnv <- function() {
+    opts <- options()
+    options(warn=-1)
     e <- new.env()
     e$x=1
     e$.x=1
@@ -41,6 +43,7 @@ testUpdateObjectEnv <- function() {
     obj <- updateObject(e)
     checkTrue(TRUE==bindingIsLocked("x", obj)) # R bug, 14 May, 2006, fixed
     checkTrue(FALSE==bindingIsLocked(".x", obj))
+    options(opts)
 }
 
 testUpdateObjectDefaultsBroken <- function() {
@@ -83,6 +86,8 @@ testUpdateObjectSetClass <- function() {
 }
 
 testUpdateExpressionSet <- function() {
+    opts <- options()
+    options(warn=-1)
     obj <- new("ExpressionSet")
     checkTrue(identical(obj, updateObject(obj)))
     checkTrue(!identical(new("ExpressionSet"), updateObject(obj))) # different environments
@@ -91,7 +96,7 @@ testUpdateExpressionSet <- function() {
     checkTrue(identical(new("ExpressionSet", storage.mode="list"), updateObject(obj))) # same class -- list
 
     data(sample.ExpressionSet)
-    classVersion(sample.ExpressionSet)["ExpressionSet"] <- "0.0.1"
+    classVersion(sample.ExpressionSet)["eSet"] <- "1.0.0"
     checkException(validObject(sample.ExpressionSet), silent=TRUE)
 
     obj <- updateObject(sample.ExpressionSet)
@@ -100,13 +105,14 @@ testUpdateExpressionSet <- function() {
     checkTrue(validObject(obj))
     checkTrue(identical(lapply(ls(assayData(obj), all=TRUE), function(x) x),
                         lapply(ls(assayData(sample.ExpressionSet),all=TRUE), function(x) x)))
-    checkTrue(!identical(assayData(obj), assayData(sample.ExpressionSet))) # different environments
+    checkTrue(identical(assayData(obj), assayData(sample.ExpressionSet))) # SAME environments ??
     checkTrue(identical(annotation(obj), annotation(sample.ExpressionSet)))
 
     obj1a <- updateObjectTo(sample.ExpressionSet, new("ExpressionSet"))
     ## next better written as(sample.ExpressionSet, "MultiSet")
     obj1b <- updateObjectTo(sample.ExpressionSet, new("MultiSet"))
     obj2 <- updateObject(obj)           # stop after eSet
+    options(opts)
 }
 
 testUpdateExprSet <- function() {
@@ -115,6 +121,8 @@ testUpdateExprSet <- function() {
 }
 
 testUpdateESetMisc <- function() {
+    opts <- options()
+    options(warn=-1)
     data(sample.exprSet)
     obj <- as(sample.exprSet, "ExpressionSet")
 
@@ -123,4 +131,21 @@ testUpdateESetMisc <- function() {
 
     data(eset)
     obj <- as(eset, "ExpressionSet")
+    options(opts)
+}
+
+testUpdatePreviousInstances <- function() {
+    opts <- options("warn")
+    options(warn=-1)
+    on.exit(options(opts))
+
+    rda <- list.files(system.file("UnitTests", "VersionedClass_data", package="Biobase"),
+                       full.names=TRUE, recursive=TRUE, pattern=".*\.Rda")
+    env <- new.env()
+    for (nm in rda) {
+        load(nm, env)
+        eapply(env,
+               function(elt) checkTrue(validObject(updateObject(elt), complete=TRUE)))
+        evalq(rm(list=ls(all=TRUE)), envir=env)
+    }
 }

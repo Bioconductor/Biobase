@@ -23,6 +23,10 @@
 \alias{experimentData<-,eSet,MIAME-method}
 \alias{exprs,eSet-method}
 \alias{exprs<-,eSet,AssayData-method}
+\alias{featureData}
+\alias{featureData,eSet-method}
+\alias{featureData<-}
+\alias{featureData<-,eSet,AnnotatedDataFrame-method}
 \alias{featureNames,eSet-method}
 \alias{featureNames<-,eSet-method}
 \alias{initialize,eSet-method}
@@ -102,6 +106,10 @@
       \item{\code{phenoData}:}{Contains variables describing sample
 	(i.e., columns in \code{assayData})
 	phenotypes.Class: \code{\link{AnnotatedDataFrame-class}}}
+      \item{\code{featureData}:}{Contains variables describing features
+	(i.e., rows in \code{assayData}) unique to this experiment. Use
+	the \code{annotation} slot efficiently reference feature data
+	common to the annotation package used in the experiment.}
       \item{\code{experimentData}:}{Contains details of experimental
 	methods. Class: \code{\link{MIAME-class}}}
       \item{\code{annotation}:}{Label associated with the annotation
@@ -128,6 +136,8 @@
        (\code{dims}) of \code{assayData}.}
      \item{\code{phenoData(object)},
        \code{phenoData(object) <- value}:}{Access and set \code{phenoData}.}
+     \item{\code{featureData(object)},
+       \code{featureData(object) <- value}:}{Access and set \code{featureData}.}
      \item{\code{varLabels(object)}, \code{varLabels(eSet,
 	 value)<-}:}{Access and set variable labels in
        \code{phenoData}.}

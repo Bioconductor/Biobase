@@ -1,17 +1,18 @@
 setMethod("initialize", "ExpressionSet",
           function(.Object,
-                   phenoData = new("AnnotatedDataFrame"),
+                   assayData = assayDataNew(exprs=exprs, ...),
+                   phenoData = annotatedDataFrameFrom(assayData, byrow=FALSE),
+                   featureData = annotatedDataFrameFrom(assayData, byrow=TRUE),
                    experimentData = new("MIAME"),
                    annotation = character(),
                    exprs = new("matrix"),
                    ... ) {
-            callNextMethod(.Object,
-                           assayData = assayDataNew(
-                             exprs=exprs,
-                             ...),
-                           phenoData = phenoData,
-                           experimentData = experimentData,
-                           annotation = annotation)
+              callNextMethod(.Object,
+                             assayData = assayData,
+                             phenoData = phenoData,
+                             featureData = featureData,
+                             experimentData = experimentData,
+                             annotation = annotation)
           })
 
 setAs("exprSet", "ExpressionSet", function(from) {
@@ -47,21 +48,6 @@ setValidity("ExpressionSet", function(object) {
     msg <- validMsg(msg, assayDataValidMembers(assayData(object), c("exprs")))
     if (is.null(msg)) TRUE else msg
 })
-
-setMethod("updateObject", signature(object="ExpressionSet"),
-          function(object, ..., verbose=FALSE) {
-              if (verbose) message("updateObject(object = 'ExpressionSet')")
-              if (isVersioned(object) && all(isCurrent(object)[c("eSet","ExpressionSet")])) {
-                  object
-              } else {
-                  updt <- new("ExpressionSet")
-                  phenoData(updt) <- updateObject(phenoData(object),verbose=verbose)
-                  experimentData(updt) <- updateObject(experimentData(object),verbose=verbose)
-                  annotation(updt) <- updateObject(annotation(object),verbose=verbose)
-                  assayData(updt) <- updateObject(assayData(object),verbose=verbose)
-                  updt
-              }
-          })
 
 setAs("ExpressionSet", "data.frame",
       function (from) data.frame(t(exprs(from)), pData(from)))

@@ -5,36 +5,51 @@ setMethod("initialize",
           signature(.Object="eSet"),
           function( .Object,
                    assayData = assayDataNew(...),
-                   phenoData = new("AnnotatedDataFrame"),
+                   phenoData = annotatedDataFrameFrom(assayData, byrow=FALSE),
+                   featureData = annotatedDataFrameFrom(assayData, byrow=TRUE),
                    experimentData = new( "MIAME" ),
                    annotation = character(),
                    ...) {
-            .Object@assayData <- assayData
-            if (is(phenoData,"phenoData")) {
-              warning("updating phenoData argument to 'AnnotatedDataFrame'", call.=FALSE)
-              phenoData <- as(phenoData,"AnnotatedDataFrame")
-            }
-            .Object@phenoData <- phenoData
-            .Object@experimentData <- experimentData
-            .Object@annotation <- annotation
-            ## coordinate sample names
-            adSampleNames <- sampleNames(assayData)
-            pdSampleNames <- sampleNames(phenoData)
-            if (all(sapply(adSampleNames,is.null)) && is.null(pdSampleNames))
-              sampleNames(.Object) <- 1:dim(assayData)[[2]]
-            else if (all(sapply(adSampleNames,is.null)))
-              sampleNames(.Object) <- pdSampleNames
-            else if (is.null(pdSampleNames)) {
-              nms <- assayDataElementNames(.Object)
-              if (length(nms)==1 ||
-                  (length(nms)>1 && all(adSampleNames[,1]==adSampleNames)))
-                sampleNames(.Object) <- sampleNames(assayData)
-              else
-                stop("conflicting colnames in assayData elements")
-            }
-            validObject(.Object)
-            .Object
-})
+              if (is(phenoData,"phenoData")) {
+                  warning("updating phenoData argument to 'AnnotatedDataFrame'", call.=FALSE)
+                  phenoData <- as(phenoData,"AnnotatedDataFrame")
+              }
+              .Object <- callNextMethod(.Object, assayData=assayData,
+                                        phenoData=phenoData, featureData=featureData,
+                                        experimentData=experimentData, annotation=annotation)
+              ## coordinate sample names
+              adSampleNames <- sampleNames(assayData)
+              pdSampleNames <- sampleNames(phenoData)
+              if (all(sapply(adSampleNames,is.null)) && is.null(pdSampleNames))
+                sampleNames(.Object) <- 1:dim(assayData)[[2]]
+              else if (all(sapply(adSampleNames,is.null)))
+                sampleNames(.Object) <- pdSampleNames
+              else if (is.null(pdSampleNames)) {
+                  nms <- assayDataElementNames(.Object)
+                  if (length(nms)==1 ||
+                      (length(nms)>1 && all(adSampleNames[,1]==adSampleNames)))
+                    sampleNames(.Object) <- sampleNames(assayData)
+                  else
+                    stop("conflicting colnames in assayData elements")
+              }
+              ## where do feature names come from? assayData or featureData
+              adFeatureNames <- featureNames(assayData)
+              fdFeatureNames <- featureNames(featureData)
+              if (all(sapply(adFeatureNames, is.null)) && is.null(fdFeatureNames))
+                featureNames(.Object) <- 1:dim(assayData)[[1]]
+              else if (all(sapply(adFeatureNames, is.null)))
+                featureNames(.Object) <- fdFeatureNames
+              else if (is.null(fdFeatureNames)) {
+                  nms <- assayDataElementNames(.Object)
+                  if (length(nms)==1 ||
+                      (length(nms)>1 && all(adFeatureNames[,1]==adFeatureNames)))
+                    featureNames(.Object) <- adSampleNames
+                  else
+                    stop("conflicting rownames in assayData elements")
+              }
+              validObject(.Object)
+              .Object
+          })
 
 updateOldESet <- function(from, toClass, ...) {  # to MultiExpressionSet
   metadata <- varMetadata(from)
@@ -61,10 +76,17 @@ updateOldESet <- function(from, toClass, ...) {  # to MultiExpressionSet
     sampleNames(assayData(from)) <- sampleNames(phenoData)
   }
   ## reporterNames
-  if (length(from@reporterNames == dim(from)[[1]])) {
-    if (any(sapply(assayData(from),rownames)!=from@reporterNames))
-      warning("creating assayData featureNames from reporterNames")
-    featureNames(assayData(from)) <- from@reporterNames
+  if (length(from@reporterNames) == dim(from)[[1]]) {
+      if (any(sapply(assayData(from),rownames)!=from@reporterNames))
+        warning("creating assayData featureNames from reporterNames")
+      featureNames(assayData(from)) <- from@reporterNames
+  } else {
+      warning("creating numeric assayData featureNames")
+      featureNames(assayData(from)) <- 1:dim(from)[[1]]
+  }
+  if (sum(dups <- duplicated(featureNames(assayData(from))))>0) {
+      warning("removing ", sum(dups), " duplicated featureNames")
+      from@assayData <- lapply(from@assayData, function(elt) elt[!dups,])
   }
   ## description
   description <- from@description
@@ -86,10 +108,11 @@ updateOldESet <- function(from, toClass, ...) {  # to MultiExpressionSet
     warning("reporterInfo data not transfered to '",toClass, "' object")
   ## new object
   object <- new(toClass,
+                assayData = from@assayData,
+                phenoData = phenoData,
+                featureData = annotatedDataFrameFrom(from@assayData, byrow=TRUE),
                 experimentData = description,
                 annotation = from@annotation)
-  assayData(object) <- from@assayData
-  phenoData(object) <- phenoData
   validObject(object)
   object
 }
@@ -104,6 +127,9 @@ updateESetTo <- function(object, template, ..., verbose=FALSE) {
     funcs <- c("assayData", "phenoData", "experimentData", "annotation")
     eval(parse(text=paste(funcs,"(template)<-",
                  "updateObject(", funcs, "(object), ..., verbose=verbose)")))
+    result <- try(featureData(template) <- featureData(object), silent=TRUE)
+    if (class(result)=="try-error")
+      featureData(template) <- annotatedDataFrameFrom(assayData(object), byrow=TRUE)
     vers <- classVersion("eSet")
     classVersion(template)[names(vers)] <- vers # current class version, eSet & 'below' only
     template
@@ -122,9 +148,21 @@ setMethod("updateObject", signature(object="eSet"),
               if (!isVersioned(object)) {
                   object <- updateESetTo(object, new(class(object), storage.mode=storage.mode), ..., verbose=verbose)
                   storageMode(object) <- storage.mode.final
-                  object
+              } else if (classVersion(object)["eSet"]=="1.0.0") {
+                  ## added featureData slot; need to update phenoData
+                  object <- 
+                    new(class(object),
+                        assayData=assayData(object),
+                        phenoData=new("AnnotatedDataFrame",
+                          data=pData(object), varMetadata=varMetadata(object),
+                          dimLabels=c("sampleNames", "sampleColums")),
+                        featureData(object) <- annotatedDataFrameFrom(assayData(object), byrow=TRUE),
+                        experimentData = experimentData(object),
+                        annotation = annotation(object))
               }
-              else stop("cannot update object of class '", class(object), "'")
+              else stop("cannot update object of class '", class(object),
+                        "', claiming to be eSet version '", as(classVersion(object)["eSet"], "character"), "'")
+              object
           })
 
 setMethod("updateObjectTo", signature(object="eSet", template="eSet"), updateESetTo)
@@ -136,15 +174,22 @@ setValidity("eSet", function( object ) {
   msg <- validMsg(msg, isValidVersion(object, "eSet"))
   dims <- dims(object)
   if (!is.na(dims[[1]])) {
+    ## assayData
     if (any( dims[1,] != dims[1,1]))
       msg <- validMsg(msg, "row numbers differ for assayData members")
     if (any(dims[2,] != dims[2,1]))
       msg <- validMsg(msg, "sample numbers differ for assayData members")
+    msg <- validMsg(msg, assayDataValidMembers(assayData(object)))
+    ## featureData
+    if ( dims[1,1] != dim( featureData(object))[[1]] )
+      msg <- validMsg(msg, "feature numbers differ between assayData and featureData")
+    if (!all(featureNames(assayData(object))==featureNames(featureData(object))))
+      msg <- validMsg(msg, "featureNames differ between assayData and featureData")
+    ## phenoData
     if ( dims[2,1] != dim( phenoData( object ))[[1]] )
       msg <- validMsg(msg, "sample numbers differ between assayData and phenoData")
-    if (!all(sampleNames(assayData(object))==sampleNames(object)))
+    if (!all(sampleNames(assayData(object))==sampleNames(phenoData(object))))
       msg <- validMsg(msg, "sampleNames differ between assayData and phenoData")
-    msg <- validMsg(msg, assayDataValidMembers(assayData(object)))
   } else if (dim(phenoData(object))[[1]] != 0 ) {
     msg <- validMsg(msg, "sample numbers differ between assayData and phenoData")
   }
@@ -157,14 +202,12 @@ setMethod("show", "eSet", function(object) {
   cat("Instance of", class( object ), "\n")
   cat("\nassayData\n")
   cat("  Storage mode:", storageMode(object), "\n")
-  nms <- selectSome(featureNames(object))
-  cat("  featureNames:", paste(nms, collapse=", "))
-  if ((len <- length(featureNames(object))) > length(nms))
-    cat(" (", len, " total)", sep="")
-  cat("\n  Dimensions:\n")
+  cat("  Dimensions:\n")
   print(dims(object))
   cat("\nphenoData\n")
   show(phenoData(object))
+  cat("\nfeatureData\n")
+  show(featureData(object))
   cat("\n")
   show(experimentData(object))
   cat("\nAnnotation ")
@@ -184,7 +227,6 @@ setMethod("sampleNames", signature(object="eSet"),
 setReplaceMethod("sampleNames", c("eSet", "ANY"), function(object, value) {
   sampleNames(assayData(object)) <- value
   sampleNames(phenoData(object)) <- value
-  validObject(object)
   object
 })
 
@@ -232,6 +274,8 @@ setMethod("[", "eSet", function(x, i, j, ..., drop = FALSE) {
   }
   if (!missing(j))
     phenoData(x) <- phenoData(x)[j,, ..., drop = drop]
+  if (!missing(i))
+    featureData(x) <- featureData(x)[i,,..., drop=drop]
   ## assayData; implemented here to avoid function call
   orig <- assayData(x)
   storage.mode <- assayDataStorageMode(orig)
@@ -278,6 +322,17 @@ setReplaceMethod("assayData", c( "eSet", "AssayData" ), function(object, value) 
   object@assayData <- value
   object
 })
+
+setMethod("featureData",
+          signature(object="eSet"),
+          function(object) object@featureData)
+
+setReplaceMethod("featureData",
+                 signature(object="eSet", value="AnnotatedDataFrame"),
+                 function(object, value) {
+                     object@featureData <- value
+                     object
+                 })
 
 setMethod("phenoData", "eSet", function(object) object@phenoData)
 
@@ -347,17 +402,18 @@ setReplaceMethod("annotation", signature(object="eSet", value="character"),
                  })
 
 setMethod("combine", c("eSet", "eSet"), function(x, y, ...) {
-  if (class(x) != class(y))
-    stop(paste("objects must be the same class, but are ",
-               class(x), ", ", class(y), sep=""))
-  if (any(annotation(x) != annotation(y)))
-    stop("objects have different annotations: ",
-         annotation(x), ", ", annotation(y))
-  assayData(x) <- combine(assayData(x), assayData(y))
-  phenoData(x) <- combine(phenoData(x), phenoData(y))
-  experimentData(x) <- combine(experimentData(x),experimentData(y))
-  ## annotation -- constant
-  x
+    if (class(x) != class(y))
+      stop(paste("objects must be the same class, but are ",
+                 class(x), ", ", class(y), sep=""))
+    if (any(annotation(x) != annotation(y)))
+      stop("objects have different annotations: ",
+           annotation(x), ", ", annotation(y))
+    assayData(x) <- combine(assayData(x), assayData(y))
+    phenoData(x) <- combine(phenoData(x), phenoData(y))
+    featureData(x) <- combine(featureData(x), featureData(y))
+    experimentData(x) <- combine(experimentData(x),experimentData(y))
+    ## annotation -- constant
+    x
 })
 
 ## 

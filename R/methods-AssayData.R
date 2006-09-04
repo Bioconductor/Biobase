@@ -6,13 +6,6 @@ assayDataNew <- function(storage.mode = c("lockedEnvironment", "environment", "l
                       list = list())
   arglist <- list(...)
   for (nm in names(arglist)) assayData[[nm]] <- arglist[[nm]]
-##   adim <- assayDataDim(assayData)
-##   if (length(adim)!=1 && !is.na(adim)) {
-##     if (adim[[1]]>0 && all(sapply(featureNames(assayData), is.null)))
-##       featureNames(assayData) <- 1:adim[[1]]
-##     if (adim[[2]]>0 && all(sapply(sampleNames(assayData), is.null)))
-##       sampleNames(assayData) <- 1:adim[[2]]
-##   }
   if (storage.mode == "lockedEnvironment") assayDataEnvLock(assayData)
   assayData
 }
@@ -145,44 +138,54 @@ setMethod("combine", c("AssayData", "AssayData"), function(x, y, ...) {
         if (!all({d==dim(y)}[-2]))
           stop("assayData elements have incompatible dimensions: ",
                d, ", ", dim(y))
-        if (2==length(d))
-          cbind(x,y)
-        else
-          stop("Cannot combine AssayData with dim length ", length(dim(x)))
+        if (length(d)==2) {
+            sharedCols <- intersect(colnames(x), colnames(y))
+            if (length(sharedCols)>0) {
+                if (!identical(x[,sharedCols, drop=FALSE], y[,sharedCols, drop=FALSE])) {
+                    diff <- !sapply(sharedCols,
+                                    function(nm) identical(x[, nm, drop=FALSE],
+                                                           y[, nm, drop=FALSE]))
+                    stop("assayData elements must have identical data",
+                         "\n\tnon-conforming sample(s): ", 
+                         paste(sharedCols[diff], collapse=", "), sep="")
+                }
+                cbind(x, y[,colnames(y) %in% setdiff(colnames(y), sharedCols), drop=FALSE])
+            } else cbind(x,y)
+        } else stop("Cannot combine AssayData with dim length ", length(dim(x)))
     }
-  storage.mode <- assayDataStorageMode(x)
-  nmfunc <- if ("environment"==class(x)) ls else names
+    storage.mode <- assayDataStorageMode(x)
+    nmfunc <- if ("environment"==class(x)) ls else names
 
-  if (assayDataDim(x)[[1]] != assayDataDim(y)[[1]])
-    stop("objects have different numbers of features or targets: ",
-         assayDataDim(x)[[1]], ", ", assayDataDim(y)[[1]])
-  if (assayDataStorageMode(y) != storage.mode)
-    stop(paste("assayData must have same storage, but are ",
-               storage.mode, ", ", assayDataStorageMode(y), sep=""))
-  if (length(nmfunc(x)) != length(nmfunc(y)))
-    stop("assayData have different numbers of elements:\n\t",
-         paste(nmfunc(x), collapse=" "), "\n\t",
-         paste(nmfunc(y), collapse=" "))
-  if (!all(nmfunc(x) == nmfunc(y)))
-    stop(paste("assayData have different element names:",
-               paste(nmfunc(x), collapse=" "),
-               paste(nmfunc(y), collapse=" "), sep="\n\t"))
-  if ("list" == storage.mode) {
-    aData <- lapply(names(x), function(nm) combineElement(x[[nm]],y[[nm]]))
-    names(aData) <- names(x)
-  } else {
-    aData <- new.env(parent=emptyenv())
-    for (nm in ls(x)) aData[[nm]] <- combineElement(x[[nm]], y[[nm]])
-    if ("lockedEnvironment" == storage.mode) assayDataEnvLock(aData)
-  }
-  aData
+    if (assayDataDim(x)[[1]] != assayDataDim(y)[[1]])
+      stop("objects have different numbers of features: ",
+           assayDataDim(x)[[1]], ", ", assayDataDim(y)[[1]])
+    if (assayDataStorageMode(y) != storage.mode)
+      stop(paste("assayData must have same storage, but are ",
+                 storage.mode, ", ", assayDataStorageMode(y), sep=""))
+    if (length(nmfunc(x)) != length(nmfunc(y)))
+      stop("assayData have different numbers of elements:\n\t",
+           paste(nmfunc(x), collapse=" "), "\n\t",
+           paste(nmfunc(y), collapse=" "))
+    if (!all(nmfunc(x) == nmfunc(y)))
+      stop(paste("assayData have different element names:",
+                 paste(nmfunc(x), collapse=" "),
+                 paste(nmfunc(y), collapse=" "), sep="\n\t"))
+    if ("list" == storage.mode) {
+        aData <- lapply(names(x), function(nm) combineElement(x[[nm]],y[[nm]]))
+        names(aData) <- names(x)
+    } else {
+        aData <- new.env(parent=emptyenv())
+        for (nm in ls(x)) aData[[nm]] <- combineElement(x[[nm]], y[[nm]])
+        if ("lockedEnvironment" == storage.mode) assayDataEnvLock(aData)
+    }
+    aData
 })
 
 assayDataDim <- function(object) {
   nms <- if (assayDataStorageMode(object) == "list") names(object) else ls(object)
   if ( length( nms ) == 0 ) return( NA )
   d <- dim( object[[ nms[[1]] ]])
-  names(d) <- c( "Rows", "Samples", rep("...", max(length(d)-2, 0)))
+  names(d) <- c( "Features", "Samples", rep("...", max(length(d)-2, 0)))
   d
 }
 
@@ -190,7 +193,7 @@ assayDataDims <- function( object ) {
   nms <- if (assayDataStorageMode(object) == "list") names(object) else ls(object)
   if ( length( nms ) == 0 ) return( NA )
   d = sapply(nms, function(i) dim(object[[i]]))
-  rownames(d) <- c("Rows", "Samples", rep("...", nrow(d)-2))
+  rownames(d) <- c("Features", "Samples", rep("...", nrow(d)-2))
   colnames(d) <- nms
   d[,order(colnames(d)), drop=FALSE]
 }

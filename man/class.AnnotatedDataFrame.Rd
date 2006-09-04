@@ -4,6 +4,8 @@
 \alias{AnnotatedDataFrame}
 \alias{AnnotatedDataFrame-class}
 
+\alias{dimLabels}
+
 \alias{[,AnnotatedDataFrame-method}
 \alias{[[<-,AnnotatedDataFrame-method}
 \alias{[[,AnnotatedDataFrame-method}
@@ -13,6 +15,7 @@
 \alias{initialize,AnnotatedDataFrame-method}
 \alias{coerce,phenoData,AnnotatedDataFrame-method}
 \alias{dim,AnnotatedDataFrame-method}
+\alias{dimLabels,AnnotatedDataFrame-method}
 \alias{ncol,AnnotatedDataFrame-method}
 \alias{pData<-,AnnotatedDataFrame,data.frame-method}
 \alias{pData,AnnotatedDataFrame-method}
@@ -20,6 +23,8 @@
 \alias{varMetadata,AnnotatedDataFrame-method}
 \alias{sampleNames<-,AnnotatedDataFrame-method}
 \alias{sampleNames,AnnotatedDataFrame-method}
+\alias{featureNames,AnnotatedDataFrame-method}
+\alias{featureNames<-,AnnotatedDataFrame-method}
 \alias{show,AnnotatedDataFrame-method}
 \alias{updateObject,AnnotatedDataFrame-method}
 \alias{varLabels<-,AnnotatedDataFrame-method}
@@ -43,7 +48,8 @@
 
   \code{new("AnnotatedDataFrame")}
 
-  \code{new("AnnotatedDataFrame", data=data.frame(), varMetadata=data.frame())}
+  \code{new("AnnotatedDataFrame", data=data.frame(),
+    varMetadata=data.frame(), dimLabels=c("rowNames", "columnNames"))}
 
   \code{AnnotatedDataFrame} instances are created using \code{new}.  The
   initialize method takes two arguments, \code{data} and
@@ -52,7 +58,12 @@
   \code{data.frame} with the number of rows equal to the number of
   columns of the \code{data} argument.  \code{varMetadata} describes
   aspects of each measured variable.
+
+  \code{\link{annotatedDataFrameFrom}} may be a convenient way to create
+  an \code{AnnotatedDataFrame}.
+
 }
+
 \section{Slots}{
   Class-specific slots:
    \describe{
@@ -87,12 +98,19 @@
       \code{varMetadata(<AnnotatedDataFrame>)<-<data.frame>}:}{Set and
       retrieve the meta-data (variables and their descriptions) in the
       \code{AnnotatedDataFrame}}
+    \item{\code{featureNames(<AnnotatedDataFrame>)},
+	\code{featureNames(<AnnotatedDataFrame>)<-<ANY>}:}{Set and
+	  retrieve the feature names in \code{AnnotatedDataFrame}; a
+	  synonym for \code{sampleNames}.}
     \item{\code{sampleNames(<AnnotatedDataFrame>)},
-      \code{sampleNames(<AnnotatedDataFrame>)<-<data.frame>}:}{Set and
-      retrieve the sample names in the \code{AnnotatedDataFrame}}
+      \code{sampleNames(<AnnotatedDataFrame>)<-<ANY>}:}{Set and
+      retrieve the sample names in \code{AnnotatedDataFrame}}
     \item{\code{varLabels(<AnnotatedDataFrame>)},
       \code{varLabels(<AnnotatedDataFrame>)<-<data.frame>}:}{Set and
       retrieve the variable labels in the \code{AnnotatedDataFrame}}
+    \item{\code{dimLabels(<AnnotatedDataFrame>)}}{Retrieve labels used
+      for display of \code{AnnotatedDataFrame}, e.g., \sQuote{rowNames},
+      \sQuote{columnNames}.}
     }
 
   Standard generic methods:

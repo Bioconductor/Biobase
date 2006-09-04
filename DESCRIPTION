@@ -1,6 +1,6 @@
 Package: Biobase
 Title: Biobase: Base functions for Bioconductor
-Version: 1.11.31
+Version: 1.11.32
 Author: R. Gentleman, V. Carey, M. Morgan, S. Falcon
 Description: Functions that are needed by many other packages or which replace R functions. 
 Suggests: tkWidgets

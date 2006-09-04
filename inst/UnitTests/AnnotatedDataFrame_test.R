@@ -154,3 +154,10 @@ testPhenoDataFactors <- function() {
     checkTrue(all(pData(obj)[nrow(obj1)+1:nrow(obj2),colnames(pData(obj2)),drop=FALSE]==
                   pData(obj2)))
 }
+
+testDimLabels <- function() {
+    x <- new("AnnotatedDataFrame")
+    y <- x
+    y@dimLabels <- c("x","y")
+    checkException(combine(x,y), silent=TRUE)
+}

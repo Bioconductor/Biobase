@@ -16,20 +16,26 @@ nonEmptySubclasses <- exprsEnabledSubclasses
 
 modes <- c("lockedEnvironment","environment","list")
 
-.features <- 100
-.samples <- 20
+.features <- 20
+.samples <- 10
 
 helperNew <- function(obj, ...) {
-  .data <- data.frame(numeric(.samples))[,FALSE]
+  .pData <- data.frame(numeric(.samples),
+                       row.names=I(1:.samples))[,FALSE]
+  .fData <- data.frame(numeric(.features),
+                       row.names=I(1:.features))[,FALSE]
   args <- function(names) {
     obj <- lapply(names, function(nm) new("matrix", nr = .features, nc = .samples))
     names(obj) <- names
-    c(obj, list(phenoData = new("AnnotatedDataFrame", data=.data)))
+    c(obj, list(phenoData = new("AnnotatedDataFrame", data=.pData),
+                featureData = new("AnnotatedDataFrame", data=.fData)
+                ))
   }
   argsSnpN <- function(n) {
     list(call = new("array", dim=c(.features,.samples, n)),
          callProbability = new("array", dim=c(.features,.samples, n)),
-         phenoData = new("AnnotatedDataFrame", data=.data))
+         phenoData = new("AnnotatedDataFrame", data=.pData),
+         featuerData = new("AnnotatedDataFrame", data=.fData))
   }
   argsSnpDetail <- function(names) {
     obj <- lapply(names, function(nm) {
@@ -39,7 +45,8 @@ helperNew <- function(obj, ...) {
         new("array",dim=c(.features, .samples, 3))
     })
     names(obj) <- names
-    c(obj, list(phenoData = new("AnnotatedDataFrame", data=.data)))
+    c(obj, list(phenoData = new("AnnotatedDataFrame", data=.pData),
+                featureData = new("AnnotatedDataFrame", data=.fData)))
   }
   dots <- if (length(list(...))>0) list(...) else NULL
   switch(obj,
@@ -150,7 +157,7 @@ testNColSubclasses <- function() {
     })
 }
 
-testSubset <- function() {
+testSubsetEsetSubclasses <- function() {
   subset <- function(s, ...) {
     obj <- helperNew(s, ...)
     obj1 <- obj[1:15, 1:5]
@@ -198,7 +205,7 @@ testShow <- function() {                # just 'does it show'
 testSampleNames <- function() {
   nameCheck <- function( obj ) {
     checkTrue( all( sampleNames( obj ) == sampleNames( phenoData( obj ))))
-    checkException( sampleNames( obj ) <- 1:10, silent=TRUE )
+    checkException( sampleNames( obj ) <- 1:(.features+1), silent=TRUE )
     sampleNames( obj ) <- letters[ 1:dim( obj )[[2]] %% 26 ]
     checkTrue(all(sampleNames(assayData(obj)) == sampleNames(obj)))
     checkTrue(validObject(obj), "original")
@@ -280,7 +287,7 @@ testExprs <- function() {
   })
 }
 
-testCombine <- function() {
+testCombineEsetSubclasses <- function() {
   combineEmpty <- function(s, ...) {
     if (s=="MultiSet") return(TRUE)
     obj1 <- new(s)
@@ -317,13 +324,16 @@ testSetAs <- function() {
     checkTrue(identical(featureNames(new),featureNames(old)))
   }
   checkNewSampleEset <- function(new, old)   {
-    checkTrue(identical(pData(new),pData(old)))
-    checkTrue(all(names(assayData(old)) == names(assayData(new))))
-    mapply(function(x,y) checkTrue(all.equal(x,y,check.attributes=FALSE)),
-           assayData(old), assayData(new))
-    checkTrue(identical(sampleNames(new),old@sampleNames))
-    checkTrue(identical(featureNames(new),old@reporterNames))
+      checkTrue(identical(pData(new),pData(old)))
+      checkTrue(all(names(assayData(old)) == names(assayData(new))))
+      dups <- duplicated(old@reporterNames)
+      mapply(function(x,y) checkTrue(all.equal(x[!dups,],y,check.attributes=FALSE)),
+             assayData(old), assayData(new))
+      checkTrue(identical(sampleNames(new),old@sampleNames))
+      checkTrue(identical(featureNames(new),old@reporterNames[!dups]))
   }
+  opts <- options()
+  options(warn=-1)
   ## would like to be able to specify storage.mode, but how to specify?...
   data(sample.exprSet)
   e <- as(sample.exprSet,"ExpressionSet")
@@ -343,4 +353,5 @@ testSetAs <- function() {
   data(sample.eSet)
   es <- updateOldESet(sample.eSet, "SwirlSet")
   checkNewSampleEset(es, sample.eSet)
+  options(opts)
 }
