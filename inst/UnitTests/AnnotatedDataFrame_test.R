@@ -143,7 +143,7 @@ testValidAnnotatedDataFrame <- function() {
 
 testPhenoDataFactors <- function() {
     data(sample.ExpressionSet)
-    obj1 <- updateObject(sample.ExpressionSet)
+    suppressMessages(obj1 <- updateObject(sample.ExpressionSet))
     obj2 <- obj1
     sampleNames(obj2) <- letters[1:dim(obj1)[[2]]]
     obj1 <- phenoData(obj1)

@@ -29,7 +29,8 @@ setValidity("AnnotatedDataFrame", validAnnotatedDataFrame)
 setMethod("updateObject", signature(object="AnnotatedDataFrame"),
           function(object, ..., verbose=FALSE) {
               if (verbose) message("updateObject(object = 'AnnotatedDataFrame')")
-              if (isVersioned(object) && isCurrent(object)["AnnotatedDataFrame"]) object
+              if (isVersioned(object) && isCurrent(object)["AnnotatedDataFrame"])
+                callNextMethod()
               else {
                   ## version 1.0.0. -> 1.1.0 needs a new slot "dimLabels"
                   to <- new("AnnotatedDataFrame")

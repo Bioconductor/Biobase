@@ -11,6 +11,7 @@
 \alias{Compare,Versions,Versions-method}
 \alias{Compare,Versions,character-method}
 \alias{Compare,character,Versions-method}
+\alias{updateObject,Versions-method}
 \alias{show,Versions-method}
 \alias{coerce,Versions,character-method}
 
@@ -39,8 +40,13 @@
     \item{\code{object[["id"]]}}{Obtain version information \code{"id"} from \code{object}. The result is a list of integers, corresponding to entries in the version string.}
     \item{\code{object[["id"]] <- value}}{Create or update version information \code{"id"} on instance \code{object}.}
     \item{\code{object$id}}{Obtain version information \code{"id"} from \code{object}.The result is a list of integers, corresponding to entries in the version string.}
-    \item{\code{object$id <- value}}{Create or update version information \code{"id"} on instance \code{object}.}
+    \item{\code{object$id <- value}}{Create or update version
+      information \code{"id"} on instance \code{object}.}
     \item{\code{show(object)}}{Display version information.}
+    \item{\code{updateObject(object)}}{Update \code{object} to the
+      current \code{Versions-class} representation. Note that this does \emph{not}
+      update another class that uses \code{Versions-class} to track the
+      class version.}
     \item{\code{as(object, "character")}}{Convert \code{object} to character representation, e.g., \code{1.0.0}}
     \item{\code{object1 < object2}}{Compare \code{object1} and \code{object2} using version class information. Symbols in addition to \code{<} are admissable; see \code{?Ops}}
   }

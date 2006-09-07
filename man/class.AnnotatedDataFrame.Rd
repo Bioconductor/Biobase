@@ -130,11 +130,9 @@
     \item{\code{[<sample>,<variable>}:}{Subset operation, taking two arguments and
       indexing the sample and variable. Returns an
       \code{AnnotatedDataFrame}, i.e., including relevant metadata.}
-    \item{\code{[[<sample>}, \code{$<-<sample>}:}{Selector returning a sample and measured
+    \item{\code{[[<sample>}, \code{$<sample>}:}{Selector returning a sample and measured
       variables.}
-    \item{\code{[[<-<new_sample>}:}{Replace a sample row of data.}
-    \item{\code{$<sample>}:}{Selector returning a sample and measured
-      variables.}
+    \item{\code{[[<-<new_sample>}, \code{$<-<new_sample>}:}{Replace a sample row of data.}
     \item{\code{dim(<AnnotatedDataFrame>)},
       \code{ncol(<AnnotatedDataFrame>)}:}{Number of samples and
       variables (\code{dim}) and variables (\code{ncol}) in the

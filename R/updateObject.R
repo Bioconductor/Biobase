@@ -2,7 +2,12 @@ setMethod("updateObject", signature(object="ANY"),
           function(object, ..., verbose=FALSE) {
               if (verbose)
                   message("updateObject(object = 'ANY') default for object of class '", class(object), "'")
-              object
+              if (!isS4(object) &&
+                  length(getObjectSlots(object)) > 0 &&
+                  !any(class(object) %in% c("data.frame"))) {
+                  message("updateObject(object = 'ANY') default S4 update to class '", class(object), "'")
+                  updateObjectFromSlots(object, ..., verbose=verbose)
+              } else object
           })
 
 setMethod("updateObject", signature(object="list"),
@@ -81,7 +86,7 @@ updateObjectFromSlots <- function(object, objclass = class(object), ..., verbose
       res <- 
         tryCatch({
             obj <- do.call("new", list(objclass))
-            for (slt in joint) slot(obj, slt) <- slot(object, slt)
+            for (slt in joint) slot(obj, slt) <- updateObject(slot(object, slt), ..., verbose=verbose)
             obj
         }, error=errf("failed to add slots to 'new(\"", objclass, "\", ...)'"))
     if (is.null(res))

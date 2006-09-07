@@ -28,9 +28,15 @@
   \code{updateObject} has the following behaviors:
   \describe{
     \item{\code{updateObject(ANY, ..., verbose=FALSE)}}{By default,
-      \code{updateObject} returns the object passed to it. The optional
+      \code{updateObject} uses heuristic methods to determine whether
+      the object should be the `new' S4 type (introduced in R 2.4.0),
+      but is not. If the heuristics indicate an update is required, 
+      the \code{\link{updateObjectFromSlots}} function tries to update the
+	object. The default method returns the original S4 object or the successfully
+	updated object, or issues an error if an update is required but
+	not possible. The optional
       named argument \code{verbose} causes a message to be printed describing
-      the action. Arguments \code{...} are ignored.}
+      the action. Arguments \code{...} are passed to \code{link{updateObjectFromSlots}}.}
     \item{\code{updateObject(list, ..., verbose=FALSE)}}{Visit each element in \code{list},
       applying \code{updateObject(list[[elt]], ..., verbose=verbose)}.}
     \item{\code{updateObject(environment, ..., verbose=FALSE)}}{Visit
@@ -59,7 +65,7 @@
   \code{updateObject(elt, ..., verbose=verbose)}) and used as arguments to
   a call to \code{new(class, ...)}, with \code{...} replaced by slots
   from the original object. If this fails, \code{updateObjectFromSlots}
-  then tries \code{new(class)} and assigning slots of \code{object} to
+  then tries \code{new(class)} and assigns slots of \code{object} to
   the newly created instance.
 
   \code{getObjectSlots(object)} extracts the slot names and contents from

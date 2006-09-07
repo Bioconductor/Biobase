@@ -336,7 +336,7 @@ testSetAs <- function() {
   options(warn=-1)
   ## would like to be able to specify storage.mode, but how to specify?...
   data(sample.exprSet)
-  e <- as(sample.exprSet,"ExpressionSet")
+  suppressMessages(e <- as(sample.exprSet,"ExpressionSet"))
   checkNewAndOld(e,sample.exprSet)
 
   data(sample.exprSet.1)
@@ -351,7 +351,7 @@ testSetAs <- function() {
   checkNewGolubMerge(gm,Golub_Merge)
 
   data(sample.eSet)
-  es <- updateOldESet(sample.eSet, "SwirlSet")
+  suppressMessages(es <- updateOldESet(sample.eSet, "SwirlSet"))
   checkNewSampleEset(es, sample.eSet)
   options(opts)
 }

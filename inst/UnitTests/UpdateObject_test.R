@@ -99,53 +99,123 @@ testUpdateExpressionSet <- function() {
     classVersion(sample.ExpressionSet)["eSet"] <- "1.0.0"
     checkException(validObject(sample.ExpressionSet), silent=TRUE)
 
-    obj <- updateObject(sample.ExpressionSet)
+    suppressMessages(obj <- updateObject(sample.ExpressionSet))
     checkTrue(isVersioned(obj))
     checkTrue(all(isCurrent(obj)))
     checkTrue(validObject(obj))
     checkTrue(identical(lapply(ls(assayData(obj), all=TRUE), function(x) x),
                         lapply(ls(assayData(sample.ExpressionSet),all=TRUE), function(x) x)))
-    checkTrue(identical(assayData(obj), assayData(sample.ExpressionSet))) # SAME environments ??
     checkTrue(identical(annotation(obj), annotation(sample.ExpressionSet)))
 
-    obj1a <- updateObjectTo(sample.ExpressionSet, new("ExpressionSet"))
+    suppressMessages(obj1a <- updateObjectTo(sample.ExpressionSet, new("ExpressionSet")))
     ## next better written as(sample.ExpressionSet, "MultiSet")
-    obj1b <- updateObjectTo(sample.ExpressionSet, new("MultiSet"))
+    suppressMessages(obj1b <- updateObjectTo(sample.ExpressionSet, new("MultiSet")))
     obj2 <- updateObject(obj)           # stop after eSet
     options(opts)
-}
-
-testUpdateExprSet <- function() {
-    data(sample.exprSet)
-    obj <- updateObject(sample.exprSet)
 }
 
 testUpdateESetMisc <- function() {
     opts <- options()
     options(warn=-1)
     data(sample.exprSet)
-    obj <- as(sample.exprSet, "ExpressionSet")
+    suppressMessages(obj <- as(sample.exprSet, "ExpressionSet"))
+    checkTrue(validObject(obj, complete=TRUE))
+    checkTrue(all(sapply(c("phenoData", "experimentData", "featureData"),
+                         function(nm) isS4(eval(parse(text=paste(nm,"(obj)", sep="")))))))
 
     data(sample.eSet)
     obj <- as(sample.eSet, "MultiSet")
+    checkTrue(validObject(obj, complete=TRUE))
+    checkTrue(all(sapply(c("phenoData", "experimentData", "featureData"),
+                         function(nm) isS4(eval(parse(text=paste(nm,"(obj)", sep="")))))))
 
     data(eset)
     obj <- as(eset, "ExpressionSet")
+    checkTrue(validObject(obj, complete=TRUE))
+    checkTrue(all(sapply(c("phenoData", "experimentData", "featureData"),
+                         function(nm) isS4(eval(parse(text=paste(nm,"(obj)", sep="")))))))
+
     options(opts)
 }
 
-testUpdatePreviousInstances <- function() {
+testUpdateMiscPreviousInstances <- function() {
     opts <- options("warn")
     options(warn=-1)
     on.exit(options(opts))
 
     rda <- list.files(system.file("UnitTests", "VersionedClass_data", package="Biobase"),
-                       full.names=TRUE, recursive=TRUE, pattern=".*\.Rda")
-    env <- new.env()
+                       full.names=TRUE, recursive=TRUE, pattern="^([^(ExpressionSet|exprSet)]).*\.Rda")
     for (nm in rda) {
+        env <- new.env(parent=emptyenv())
         load(nm, env)
         eapply(env,
-               function(elt) checkTrue(validObject(updateObject(elt), complete=TRUE)))
-        evalq(rm(list=ls(all=TRUE)), envir=env)
+               function(elt) {
+                   suppressMessages(obj <- updateObject(elt))
+                   checkTrue(isS4(obj))
+                   checkTrue(validObject(obj, complete=TRUE))
+               })
+               
+    }
+}
+
+testUpdatePreviousExprSet <- function() {
+    opts <- options("warn")
+    options(warn=-1)
+    on.exit(options(opts))
+
+    rda <- list.files(system.file("UnitTests", "VersionedClass_data", package="Biobase"),
+                      full.names=TRUE, recursive=TRUE, pattern="^exprSet.*\.Rda")
+
+    for (nm in rda) {
+        env <- new.env(parent=emptyenv())
+        load(nm, env)
+        eapply(env,
+               function(elt) {
+                   suppressMessages(obj <- updateObject(elt))
+                   checkTrue(validObject(obj, complete=TRUE))
+                   ## S4
+                   checkTrue(all(sapply(c("phenoData", "description"),
+                                        function(nm) isS4(eval(parse(text=paste(nm,"(obj)", sep="")))))))
+                   ## content
+                   checkTrue(identical(exprs(obj), exprs(elt)))
+                   checkTrue(identical(pData(phenoData(obj)), pData(phenoData(elt))))
+                   checkTrue(identical(varMetadata(phenoData(obj)), varMetadata(phenoData(elt))))
+                   nms <- names(getSlots("MIAME"))
+                   nms <- nms[!nms %in% ".__classVersion__"]
+                   checkTrue(all(sapply(nms, function(nm)
+                                        identical(slot(description(obj), nm),
+                                                  slot(description(elt), nm)))))
+               })
+    }
+}
+
+testUpdatePreviousExpressionSet <- function() {
+    opts <- options("warn")
+    options(warn=-1)
+    on.exit(options(opts))
+
+    rda <- list.files(system.file("UnitTests", "VersionedClass_data", package="Biobase"),
+                      full.names=TRUE, recursive=TRUE, pattern="^ExpressionSet.*\.Rda")
+
+    for (nm in rda) {
+        env <- new.env(parent=emptyenv())
+        load(nm, env)
+        eapply(env,
+               function(elt) {
+                   suppressMessages(obj <- updateObject(elt))
+                   checkTrue(validObject(obj, complete=TRUE))
+                   ## S4
+                   checkTrue(all(sapply(c("phenoData", "experimentData", "featureData"),
+                                        function(nm) isS4(eval(parse(text=paste(nm,"(obj)", sep="")))))))
+                   ## content
+                   checkTrue(identical(exprs(obj), exprs(elt)))
+                   checkTrue(identical(pData(phenoData(obj)), pData(phenoData(elt))))
+                   checkTrue(identical(varMetadata(phenoData(obj)), varMetadata(phenoData(elt))))
+                   nms <- names(getSlots("MIAME"))
+                   nms <- nms[!nms %in% ".__classVersion__"]
+                   lapply(nms, function(nm)
+                          checkTrue(identical(slot(experimentData(obj), nm),
+                                              slot(experimentData(elt), nm))))
+               })
     }
 }

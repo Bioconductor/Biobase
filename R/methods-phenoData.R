@@ -14,8 +14,8 @@ validator.phenoData <- function(object) {
 setMethod("updateObject", signature(object="phenoData"),
           function(object, ..., verbose=FALSE) {
               if (verbose) message("updateObject(object='phenoData')")
-              object <- callNextMethod()
-              if (isVersioned(object) && isCurrent(object)["phenoData"]) return(object)
+              if (isVersioned(object) && isCurrent(object)["phenoData"])
+                return(callNextMethod())
               new("phenoData",
                   pData = updateObject(pData(object), ..., verbose=verbose),
                   varLabels = updateObject(varLabels(object), ..., verbose=verbose),

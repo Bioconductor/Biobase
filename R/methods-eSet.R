@@ -111,7 +111,7 @@ updateOldESet <- function(from, toClass, ...) {  # to MultiExpressionSet
                 assayData = from@assayData,
                 phenoData = phenoData,
                 featureData = annotatedDataFrameFrom(from@assayData, byrow=TRUE),
-                experimentData = description,
+                experimentData = updateObject(description),
                 annotation = from@annotation)
   validObject(object)
   object
@@ -138,8 +138,8 @@ updateESetTo <- function(object, template, ..., verbose=FALSE) {
 setMethod("updateObject", signature(object="eSet"),
           function(object, ..., verbose=FALSE) {
               if (verbose) message("updateObject(object = 'eSet')")
-              object <- callNextMethod()
-              if (isVersioned(object) && isCurrent(object)["eSet"]) return(object)
+              if (isVersioned(object) && isCurrent(object)["eSet"])
+                return(callNextMethod())
               ## storage.mode likely to be useful to update versioned classes, too
               storage.mode.final <- storageMode(object)
               storage.mode <-
@@ -152,12 +152,12 @@ setMethod("updateObject", signature(object="eSet"),
                   ## added featureData slot; need to update phenoData
                   object <- 
                     new(class(object),
-                        assayData=assayData(object),
+                        assayData=updateObject(assayData(object), ..., verbose=verbose),
                         phenoData=new("AnnotatedDataFrame",
                           data=pData(object), varMetadata=varMetadata(object),
                           dimLabels=c("sampleNames", "sampleColums")),
                         featureData(object) <- annotatedDataFrameFrom(assayData(object), byrow=TRUE),
-                        experimentData = experimentData(object),
+                        experimentData = updateObject(experimentData(object), ..., verbose=verbose),
                         annotation = annotation(object))
               }
               else stop("cannot update object of class '", class(object),

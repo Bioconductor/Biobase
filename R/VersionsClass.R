@@ -26,6 +26,15 @@ setMethod("initialize", signature(.Object="Versions"),
     res
 }
 
+## update
+
+setMethod("updateObject", signature(object="Versions"),
+          function(object, ..., verbose=FALSE) {
+              if (verbose) message("updateObject(object = 'Versions')")
+              if (!isS4(object)) do.call("new", c("Versions", object))
+              else object
+      })
+
 ## access
 
 setMethod("[", signature(x="Versions"),
