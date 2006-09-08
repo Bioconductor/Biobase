@@ -13,7 +13,12 @@ setMethod("updateObject", signature(object="ANY"),
 setMethod("updateObject", signature(object="list"),
           function(object, ..., verbose=FALSE) {
               if (verbose) message("updateObject(object = 'list')")
-              lapply(object, updateObject, ..., verbose=verbose)
+              if ("class" %in% names(attributes(object))) callNextMethod() # old-style S4
+              else {
+                  result <- lapply(object, updateObject, ..., verbose=verbose)
+                  attributes(result) <- attributes(object)
+                  result
+              }
           })
 
 setMethod("updateObject", signature(object="environment"),
@@ -37,6 +42,7 @@ setMethod("updateObject", signature(object="environment"),
                          }
                          NULL
                      })
+              attributes(env) <- attributes(object)
               if (envLocked)
                 lockEnvironment(env)
               env
@@ -67,9 +73,10 @@ updateObjectFromSlots <- function(object, objclass = class(object), ..., verbose
     nulls <- sapply(names(objectSlots), function(slt) is.null(slot(object, slt)))
     objectSlots[nulls] <- NULL
     joint <- intersect(names(objectSlots), classSlots)
-    objectSlots[joint] <- lapply(objectSlots[joint], updateObject, ..., verbose=verbose)
+    toUpdate <- joint[joint!=".Data"]
+    objectSlots[toUpdate] <- lapply(objectSlots[toUpdate], updateObject, ..., verbose=verbose)
     toDrop <- which(!names(objectSlots) %in% classSlots)
-    if (length(toDrop)) {
+    if (length(toDrop) > 0) {
         warning("dropping slot(s) ",
                 paste(names(objectSlots)[toDrop],collapse=", "),
                 " from object = '", class(object), "'")
@@ -77,18 +84,22 @@ updateObjectFromSlots <- function(object, objclass = class(object), ..., verbose
     }
     ## ad-hoc methods for creating new instances
     res <- NULL
-    if (is.null(res))
-      res <- 
-        tryCatch({
-            do.call("new", c(objclass, objectSlots[joint]))
-        }, error=errf("'new(\"", objclass, "\", ...)' from slots failed"))
-    if (is.null(res))
-      res <- 
-        tryCatch({
-            obj <- do.call("new", list(objclass))
-            for (slt in joint) slot(obj, slt) <- updateObject(slot(object, slt), ..., verbose=verbose)
-            obj
-        }, error=errf("failed to add slots to 'new(\"", objclass, "\", ...)'"))
+    if (is.null(res)) {
+        if (verbose) message("heuristic updateObjectFromSlots, method 1")
+        res <- 
+          tryCatch({
+              do.call("new", c(objclass, objectSlots[joint]))
+          }, error=errf("'new(\"", objclass, "\", ...)' from slots failed"))
+    }
+    if (is.null(res)) {
+        if (verbose) message("heuristic updateObjectFromSlots, method 2")
+        res <- 
+          tryCatch({
+              obj <- do.call("new", list(objclass))
+              for (slt in joint) slot(obj, slt) <- updateObject(objectSlots[[slt]], ..., verbose=verbose)
+              obj
+          }, error=errf("failed to add slots to 'new(\"", objclass, "\", ...)'"))
+    }
     if (is.null(res))
       stop("could not updateObject to class '", objclass, "'",
            "\nconsider defining an 'updateObject' method for class '",

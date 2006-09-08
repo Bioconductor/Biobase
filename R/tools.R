@@ -264,8 +264,15 @@ getObjectSlots <- function(object) { # object, rather than class defn, slots
       return(NULL)
     value <- attributes(object)
     value$class <- NULL
-    if(is(object, "vector"))
-      value$.Data <- as.vector(object)
+    if(is(object, "vector")) {
+        .Data <- as.vector(object)
+        attr(.Data, "class") <- NULL
+        attrNames <- c('comment', 'dim', 'dimnames', 'names', 'row.names', 'tsp')
+        for (nm in names(value)[names(value) %in% attrNames])
+          attr(.Data, nm) <- value[[nm]]
+        value <- value[!names(value) %in% attrNames]
+        value$.Data <- .Data
+    }
     value
 }
 
