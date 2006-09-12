@@ -1,10 +1,10 @@
 Package: Biobase
 Title: Biobase: Base functions for Bioconductor
-Version: 1.11.34
+Version: 1.11.35
 Author: R. Gentleman, V. Carey, M. Morgan, S. Falcon
 Description: Functions that are needed by many other packages or which replace R functions. 
 Suggests: tkWidgets
-Depends: R (>= 2.3.0), tools, methods, utils
+Depends: R (>= 2.4.0), tools, methods, utils
 Maintainer: Biocore Team <biocpkgs@lists.fhcrc.org>
 License: LGPL
 Collate: tools.R strings.R environment.R vignettes.R packages.R
