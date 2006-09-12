@@ -24,7 +24,7 @@ setMethod("updateObject", signature(object="exprSet"),
               if (isVersioned(object) && isCurrent(object)["exprSet"])
                 callNextMethod()
               else if (!isVersioned(object))
-                updateObjectFromSlots(object, "exprSet", ..., verbose=verbose)
+                updateObjectFromSlots(object, ..., verbose=verbose)
               else object
           })
 # ==========================================================================
