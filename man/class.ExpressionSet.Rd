@@ -104,7 +104,7 @@
      \item{\code{abstract(ExpressionSet)}:}{See \code{\link{eSet}}}
      \item{\code{annotation(ExpressionSet)}, \code{annotation(ExpressionSet,value)<-}}{See \code{\link{eSet}}}
      \item{\code{combine(ExpressionSet,ExpressionSet)}:}{See \code{\link{eSet}}}
-     \item{\code{storageMode(eSet)}, \code{storageMode(eSet,character)<-}:}{See \code{\link{eSet}}}
+     \item{\code{storageMode(ExpressionSet)}, \code{storageMode(ExpressionSet,character)<-}:}{See \code{\link{eSet}}}
      \item{\code{reporterNames(ExpressionSet)}, \code{reporterNames(ExpressionSet,value)<-}:}{DEPRECATED}
   }
 
@@ -125,6 +125,7 @@
      \item{\code{dim(ExpressionSet)}, \code{ncol}}{See \code{\link{eSet}}}
      \item{\code{ExpressionSet[(index)}:}{See \code{\link{eSet}}}
      \item{\code{ExpressionSet$}, \code{ExpressionSet$<-}}{See \code{\link{eSet}}}
+     \item{\code{ExpressionSet[[i]]}, \code{ExpressionSet[[i]]<-}}{See \code{\link{eSet}}}
   }
 }
 

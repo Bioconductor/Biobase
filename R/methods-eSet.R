@@ -315,6 +315,14 @@ setReplaceMethod("$", "eSet", function(x, name, value) {
   x
 })
 
+setMethod("[[", "eSet", function(x, i, j, ...) phenoData(x)[[i]])
+
+setReplaceMethod("[[", "eSet",
+                 function(x, i, j, ..., value) {
+                     phenoData(x)[[i]] <- value
+                     x
+                 })
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("assayData", "eSet", function(object) object@assayData)
 
