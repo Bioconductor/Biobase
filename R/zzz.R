@@ -13,9 +13,7 @@
                  "Vignettes contain introductory material. To view, type",
                  "'openVignette()' or start with 'help(Biobase)'. For details",
                  "on reading vignettes, see the openVignette help page.\n", sep="\n    "))
-   ##set up menus -- windows only for now
-   if( .Platform$OS.type == "windows" && .Platform$GUI == "Rgui" )
-      addVigs2WinMenu("Biobase") # in vignettes.R
+   addVigs2WinMenu("Biobase") 
 }
 
 .onUnload <- function( libpath ) {
