@@ -161,3 +161,22 @@ testDimLabels <- function() {
     y@dimLabels <- c("x","y")
     checkException(combine(x,y), silent=TRUE)
 }
+
+testNewCovariate <- function() {
+    x <- new("AnnotatedDataFrame",data=data.frame(x=1:10))
+    x$y <- 1:10
+    checkTrue(validObject(x))
+    x[["z"]] <- 1:10
+    checkTrue(validObject(x))
+
+    x <- new("AnnotatedDataFrame",data=data.frame(x=1:10))
+    varMetadata(x)$meta1 <- TRUE
+    x[["w"]] <- letters[1:10]
+    checkTrue(identical(dim(varMetadata(x)), as.integer(c(2,2))))
+    checkTrue(identical(as.vector(varMetadata(x)["x",], "logical"), c(NA,TRUE)))
+
+    x <- new("AnnotatedDataFrame",data=data.frame(x=1:10))
+    pData(x) <- pData(x)[1:5,,drop=FALSE]
+    checkTrue(validObject(x))
+    checkTrue(identical(as.vector(dim(x),"integer"), as.integer(c(5,1))))
+}

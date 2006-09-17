@@ -80,8 +80,8 @@ setMethod("dimLabels", "AnnotatedDataFrame", function(object) {
 setMethod("pData", "AnnotatedDataFrame", function(object) object@data)
 
 setReplaceMethod("pData", c("AnnotatedDataFrame", "data.frame"), function(object, value) {
-  object@data <- value
-  object
+    object@data <- value
+    object
 })
 
 setMethod("sampleNames", "AnnotatedDataFrame", function(object) row.names(object@data))
@@ -126,33 +126,37 @@ setReplaceMethod("varMetadata", c("AnnotatedDataFrame", "data.frame"), function(
   object
 })
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setMethod("[", "AnnotatedDataFrame", function(x, i, j, ..., drop = FALSE) {
-  if (missing(drop)) drop <- FALSE
-  if(missing(j)) {
-    mD <- x@varMetadata
-    pD <- x@data[i,,drop = drop]
-  } else {
-    mD <- x@varMetadata[j,,drop = drop]
-    if( missing( i ))
-      pD <- x@data[,j,drop = drop]
-    else
-      pD <- x@data[i,j,drop = drop]
-  }
- new("AnnotatedDataFrame", data=pD, varMetadata=mD )
-})
+setMethod("[",
+          signature(x="AnnotatedDataFrame"),
+          function(x, i, j, ..., drop) {
+              if (missing(drop)) drop <- FALSE
+              if(missing(j)) {
+                  mD <- x@varMetadata
+                  pD <- x@data[i,,drop = drop]
+              } else {
+                  mD <- x@varMetadata[j,,drop = drop]
+                  if( missing( i ))
+                    pD <- x@data[,j,drop = drop]
+                  else
+                    pD <- x@data[i,j,drop = drop]
+              }
+              new("AnnotatedDataFrame", data=pD, varMetadata=mD )
+          })
 
-setMethod("$", "AnnotatedDataFrame", function(x, name) x@data[[name]] )
+setMethod("$", "AnnotatedDataFrame", function(x, name) pData(x)[[name]] )
 
 setReplaceMethod("$", "AnnotatedDataFrame", function(x, name, value) {
-  x@data[[name]] = value
-  x
+    x[[name]] <- value
+    x
 })
 
-setMethod("[[", "AnnotatedDataFrame", function(x, i, j, ...) x@data[[i]] )
+setMethod("[[", "AnnotatedDataFrame", function(x, i, j, ...) pData(x)[[i]] )
 
 setReplaceMethod("[[", "AnnotatedDataFrame",
    function(x, i, j, ..., value) {
-      x@data[[i]] <- value
+       pData(x)[[i]] <- value
+       if (!i %in% row.names(varMetadata(x)))
+         varMetadata(x)[i,] <- NA
       x
    }
 )
