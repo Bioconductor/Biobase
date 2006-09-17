@@ -76,6 +76,10 @@ addVigs2WinMenu <- function(pkgName) {
                 winMenuAddItem(pkgMenu, item, paste("shell.exec(\"", as.character(i), "\")", sep = ""))
             }
         } ## else
+        ans <- TRUE
+    } else {
+        ans <- FALSE
     }
+    ans
 }
 
