@@ -42,6 +42,16 @@ createPackage <- function(pkgname, destinationDir, originDir, symbolValues,
    return(list(pkgdir=pkgdir))
 }
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+package.version <- function(pkg, lib.loc = NULL) {
+   curWarn <- getOption("warn")
+   on.exit(options(warn=curWarn),add=TRUE)
+   options(warn=-1)
+   desc <- packageDescription(pkg, lib.loc, "Version")
+   if (is.na(desc))
+      stop(paste("Package",pkg,"does not exist"))
+   desc
+}
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 dumpPackTxt <- function (package) {
    # stolen from "library" to get descriptive info out on stdout
    pkgpath <- .find.package(package)
