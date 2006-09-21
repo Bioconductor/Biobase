@@ -65,24 +65,6 @@ setReplaceMethod("storageMode", c("AssayData", "character"), assayDataStorageMod
 
 assayDataEnvLock <- function(assayData) lockEnvironment(assayData, bindings=TRUE)
 
-assayDataElementNames <- function(obj)
-  if (assayDataStorageMode(obj) == "list") names(assayData(obj)) else ls(assayData(obj))
-
-assayDataElement <- function(obj, elt) assayData(obj)[[elt]]
-
-assayDataElementReplace <- function(obj, elt, value) {
-  storage.mode <- assayDataStorageMode(assayData(obj))
-  if ("lockedEnvironment" == storage.mode) {
-    aData <- copyEnv(assayData(obj))
-    aData[[elt]] <- value
-    assayDataEnvLock(aData)
-    assayData(obj) <- aData
-  } else {                              # list, environment
-    assayData(obj)[[elt]] <- value
-  }
-  obj
-}
-
 setMethod("sampleNames", signature(object="AssayData"),
           function(object) {
               if (!length(object))

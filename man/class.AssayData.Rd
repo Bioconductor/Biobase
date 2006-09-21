@@ -11,9 +11,6 @@
 \alias{storageMode,AssayData-method}
 \alias{storageMode<-,AssayData,character-method}
 
-\alias{assayDataElement}
-\alias{assayDataElementNames}
-\alias{assayDataElementReplace}
 \alias{assayDataNew}
 \alias{assayDataValidMembers}
 
@@ -66,11 +63,9 @@
       \code{assayData}, ensuring that the named elements \code{required}
       are present, matrices are of the same dimension, and \code{featureNames} (rownames) are
       consistent (identical or \code{NULL}) across entries.}
-    \item{assayDataElement(object, element)}{Return matrix
-      \code{element} from assayData \code{object}.}
-    \item{assayDataElementReplace(object, element, value)}{Set element \code{element} in assayData \code{object} to matrix \code{value}}
-    \item{assayDataElementNames(object)}{Return element names in
-      assayData \code{object}}
+    \item{assayDataElement(object, element)}{See \code{\link{eSet-class}}}
+    \item{assayDataElementReplace(object, element, value)}{See \code{\link{eSet-class}}}
+    \item{assayDataElementNames(object)}{See \code{\link{eSet-class}}}
   }
 }
 \author{Biocore}

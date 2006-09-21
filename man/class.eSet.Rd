@@ -14,6 +14,9 @@
 \alias{annotation<-,eSet,character-method}
 \alias{assayData,eSet-method}
 \alias{assayData<-,eSet,AssayData-method}
+\alias{assayDataElement}
+\alias{assayDataElementNames}
+\alias{assayDataElementReplace}
 \alias{coerce,exprSet,eSet-method}
 \alias{combine,eSet,ANY-method}
 \alias{combine,eSet,eSet-method}
@@ -199,6 +202,12 @@
    }
    Additional functions:
    \describe{
+    \item{assayDataElement(object, element)}{Return matrix
+      \code{element} from \code{assayData} slot of \code{object}.}
+    \item{assayDataElementReplace(object, element, value)}{Set element
+      \code{element} in \code{assayData} slot of \code{object} to matrix \code{value}}
+    \item{assayDataElementNames(object)}{Return element names in
+      \code{assayData} slot of \code{object}}
      \item{\code{updateOldESet}}{Update versions of \code{eSet}
        constructued using \code{listOrEnv} as \code{assayData} slot
        (before May, 2006).}

@@ -134,6 +134,24 @@ testPreallocSubclasses <- function() {
     })
 }
 
+testInitializeWithNames <- function() {
+    ## do names applied to one component get picked up?
+    exprs <- matrix(1:10, ncol=2, dimnames=list(list(), c("A", "B")))
+    phenoData <- new("AnnotatedDataFrame", data=data.frame(x=1:2, row.names=c("A","B")))
+    obj <- new("ExpressionSet", phenoData=phenoData, exprs=exprs)
+    checkTrue(identical(sampleNames(obj), c("A","B")))
+
+    exprs <- matrix(1:10, ncol=2)
+    phenoData <- new("AnnotatedDataFrame", data=data.frame(x=1:2))
+    obj <- new("ExpressionSet", phenoData=phenoData, exprs=exprs)
+    checkTrue(identical(sampleNames(obj), c("1", "2")))
+
+    exprs <- matrix(1:10, ncol=2)
+    phenoData <- new("AnnotatedDataFrame", data=data.frame(x=1:2, row.names=c("A", "B")))
+    obj <- new("ExpressionSet", phenoData=phenoData, exprs=exprs)
+    checkTrue(identical(sampleNames(obj), c("A", "B")))
+}
+
 testValidation <- function() {
   for (mode in modes)
     lapply(names(allSubclasses), function(s) {
@@ -181,6 +199,20 @@ testAssayDataReplacement <- function() {
     obj <- helperNew(s)
     assayData(obj) <- new.env()
   })
+}
+
+testAssayDataElement <- function() {
+    checkObj <- function(obj) {
+        checkTrue(identical(assayDataElementNames(obj), "exprs"))
+        checkTrue(identical(assayDataElement(obj, "exprs"),
+                            new("matrix",0,dimnames=list(list(),list()))[FALSE,FALSE,drop=FALSE]))
+        m <- matrix(1:10, nrow=2)
+        obj <- assayDataElementReplace(obj, "exprs", m)
+        checkTrue(identical(assayDataElement(obj, "exprs"), m))
+    }
+    checkObj(new("ExpressionSet"))
+    checkObj(new("ExpressionSet", storage.mode="list"))
+    checkObj(new("ExpressionSet", storage.mode="environment"))
 }
 
 testOtherSlots <- function() {

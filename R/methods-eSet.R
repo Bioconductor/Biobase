@@ -14,41 +14,19 @@ setMethod("initialize",
                   warning("updating phenoData argument to 'AnnotatedDataFrame'", call.=FALSE)
                   phenoData <- as(phenoData,"AnnotatedDataFrame")
               }
-              .Object <- callNextMethod(.Object, assayData=assayData,
-                                        phenoData=phenoData, featureData=featureData,
-                                        experimentData=experimentData, annotation=annotation)
               ## coordinate sample names
               adSampleNames <- sampleNames(assayData)
-              pdSampleNames <- sampleNames(phenoData)
-              if (all(sapply(adSampleNames,is.null)) && is.null(pdSampleNames))
-                sampleNames(.Object) <- 1:dim(assayData)[[2]]
-              else if (all(sapply(adSampleNames,is.null)))
-                sampleNames(.Object) <- pdSampleNames
-              else if (is.null(pdSampleNames)) {
-                  nms <- assayDataElementNames(.Object)
-                  if (length(nms)==1 ||
-                      (length(nms)>1 && all(adSampleNames[,1]==adSampleNames)))
-                    sampleNames(.Object) <- sampleNames(assayData)
-                  else
-                    stop("conflicting colnames in assayData elements")
-              }
+              pdSampleNames <- sampleNames(phenoData) # *always* defined
+              if (all(sapply(adSampleNames,is.null)))
+                sampleNames(assayData) <- pdSampleNames
               ## where do feature names come from? assayData or featureData
               adFeatureNames <- featureNames(assayData)
-              fdFeatureNames <- featureNames(featureData)
-              if (all(sapply(adFeatureNames, is.null)) && is.null(fdFeatureNames))
-                featureNames(.Object) <- 1:dim(assayData)[[1]]
-              else if (all(sapply(adFeatureNames, is.null)))
-                featureNames(.Object) <- fdFeatureNames
-              else if (is.null(fdFeatureNames)) {
-                  nms <- assayDataElementNames(.Object)
-                  if (length(nms)==1 ||
-                      (length(nms)>1 && all(adFeatureNames[,1]==adFeatureNames)))
-                    featureNames(.Object) <- adSampleNames
-                  else
-                    stop("conflicting rownames in assayData elements")
-              }
-              validObject(.Object)
-              .Object
+              fdFeatureNames <- featureNames(featureData) # *always* defined
+              if (all(sapply(adFeatureNames, is.null)))
+                featureNames(assayData) <- fdFeatureNames
+              callNextMethod(.Object, assayData=assayData,
+                             phenoData=phenoData, featureData=featureData,
+                             experimentData=experimentData, annotation=annotation)
           })
 
 updateOldESet <- function(from, toClass, ...) {  # to MultiExpressionSet
@@ -330,6 +308,26 @@ setReplaceMethod("assayData", c( "eSet", "AssayData" ), function(object, value) 
   object@assayData <- value
   object
 })
+
+assayDataElementNames <- function(obj) {
+    if (storageMode(obj) == "list") names(assayData(obj))
+    else ls(assayData(obj))
+}
+
+assayDataElement <- function(obj, elt) assayData(obj)[[elt]]
+
+assayDataElementReplace <- function(obj, elt, value) {
+  storage.mode <- storageMode(obj)
+  if ("lockedEnvironment" == storage.mode) {
+    aData <- copyEnv(assayData(obj))
+    aData[[elt]] <- value
+    assayDataEnvLock(aData)
+    assayData(obj) <- aData
+  } else {                              # list, environment
+    assayData(obj)[[elt]] <- value
+  }
+  obj
+}
 
 setMethod("featureData",
           signature(object="eSet"),
