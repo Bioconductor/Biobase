@@ -177,18 +177,22 @@ setValidity("eSet", function( object ) {
 })
 
 setMethod("show", "eSet", function(object) {
-  cat("Instance of", class( object ), "\n")
-  cat("\nassayData\n")
-  cat("  Storage mode:", storageMode(object), "\n")
-  cat("  Dimensions:\n")
-  print(dims(object))
-  cat("\nphenoData\n")
+  cat(class( object ), " (storageMode: ", storageMode(object), ")\n", sep="")
+  adim <- dim(object)
+  if (length(adim)>1)
+  cat("assayData:",
+      if (length(adim)>1) paste(adim[[1]], "features,", adim[[2]], "samples") else NULL,
+      "\n")
+  cat("  element names:", paste(assayDataElementNames(object), collapse=", "), "\n")
+  cat("phenoData\n")
   show(phenoData(object))
-  cat("\nfeatureData\n")
+  cat("featureData\n")
   show(featureData(object))
-  cat("\n")
-  show(experimentData(object))
-  cat("\nAnnotation ")
+  cat("experimentData: use 'experimentData(object)'\n")
+  pmids <- pubMedIds(object)
+  if (length(pmids) > 0 && all(pmids != ""))
+      cat("  pubMedIds:", paste(pmids, sep=", "), "\n")
+  cat("Annotation ")
   show(annotation(object))
 })
 

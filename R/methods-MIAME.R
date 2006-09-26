@@ -37,7 +37,7 @@ setMethod("show", "MIAME",
       pmids = try( pubMedIds(object), silent=TRUE )
       if (!inherits(pmids, "try-error")) cat("  PMIDs:",pmids,"\n")
 # end of dealing!
-      if(object@abstract!="")
+      if(length(object@abstract) > 0 && all(object@abstract!=""))
          cat("\n  Abstract: A",length(strsplit(object@abstract," ")[[1]]),
              "word abstract is available. Use 'abstract' method.\n")
       else

@@ -189,28 +189,60 @@ selectSome <- function(obj, maxToShow=5) {
   if (len > maxToShow) {
     bot <- ceiling(maxToShow/2)
     top <- len-(maxToShow-bot-1)
-    c(obj[1:bot], "...", obj[top:len])
+    nms <- obj[c(1:bot, top:len)]
+    c(nms[1:bot], "...", nms[-c(1:bot)])
   }
   else obj
 }
 
+setMethod("selectSomeIndex",
+          signature(object="data.frame"),
+          function(object, maxToShow=5, byrow=TRUE, ...) {
+              len <-
+                if (byrow) dim(object)[[1]]
+                else dim(object)[[2]]
+              if (maxToShow < 2) maxToShow <- 2
+              if (len > maxToShow) {
+                  bot <- ceiling(maxToShow/2)
+                  top <- len-(maxToShow-bot-1)
+                  list(1:bot, top:len)
+              } else if (len >= 1) list(1:len, NULL)
+              else list(NULL, NULL)
+          })
+
 setMethod("show", "AnnotatedDataFrame", function(object) {
-  nms <- selectSome(sampleNames(object))
-  cat("  ", dimLabels(object)[[1]], ": ", paste(nms, collapse=", "), sep="")
-  if (nrow(object)>length(nms))
-    cat(" (",nrow(object)," total)", sep="")
-  cat("\n  varLabels and descriptions:\n")
-  metadata <- varMetadata(object)
-  vars <- selectSome(varLabels(object), maxToShow=9)
-  meta <- selectSome(as.character(metadata[["labelDescription"]]), maxToShow=9)
-  mapply(function(nm, meta) cat("    ",nm,": ", meta, "\n", sep=""),
-         vars, meta)
-  if (nrow(metadata)>length(meta))
-    cat("    (", nrow(metadata), " total)\n", sep="")
-  if (ncol(metadata)>1) {
-    mnms <- selectSome(colnames(metadata))
-    cat("  varMetadata:", paste(mnms, collapse=", "), "\n")
-  }
+    ## create a simplified object for extracting names
+    idx <- selectSomeIndex(pData(object), maxToShow=3)
+    idy <- selectSomeIndex(pData(object), byrow=FALSE, maxToShow=3)
+    pData <- pData(object)[unlist(idx), unlist(idy), drop=FALSE]
+    rnms <- rownames(pData)
+    nmsx <- if (!is.null(idx[[1]])) 1:length(idx[[1]]) else NULL
+    nms <- c(rnms[nmsx],
+             if (!is.null(idx[[2]])) "..." else NULL,
+             rnms[if (!is.null(nmsx)) -nmsx else NULL])
+    cat("  ", dimLabels(object)[[1]], ": ", paste(nms, collapse=", "), sep="")
+    if (nrow(object)>length(nms))
+      cat(" (",nrow(object)," total)", sep="")
+
+    cat("\n  varLabels and varMetadata:")
+    cnms <- colnames(pData)
+    if (length(cnms)>0) {
+        cat("\n")
+        metadata <- varMetadata(object)
+        nmsy <- if (!is.null(idy[[1]])) 1:length(idy[[1]]) else NULL
+        vars <- c(cnms[nmsy],
+                  if (!is.null(idy[[2]])) "..." else NULL,
+                  cnms[if (!is.null(nmsy)) -nmsy else NULL])
+        meta <- selectSome(as.character(metadata[["labelDescription"]]), maxToShow=3)
+        mapply(function(nm, meta) cat("    ",nm,": ", meta, "\n", sep=""),
+               vars, meta)
+        if (nrow(metadata)>length(meta))
+          cat("    (", nrow(metadata), " total)\n", sep="")
+        if (ncol(metadata)>1) {
+            mnms <- selectSome(colnames(metadata), maxToShow=3)
+            cat("  varMetadata:", paste(mnms, collapse=", "), "\n")
+        }
+    } else cat(" none\n")
 })
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("combine",
