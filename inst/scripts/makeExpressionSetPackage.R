@@ -1,3 +1,19 @@
+ ##take a phenoData object and create a valid - sort of - format
+ ## section for a man page
+ pD2Rd <- function(pD) {
+   if(!inherits(pD, "AnnotatedDataFrame") )
+     stop("only works for AnnotatedDataFrames")
+
+   fmt = "\\format{\n  The format is:\n  An \\code{ExpressionSetObject} with covariates:\n"
+   covs = "\\itemize{"
+   vMD = varMetadata(pD)
+   vL = varLabels(pD)
+   for(i in 1:length(vL) ) {
+     item = paste("\\item \\code{", vL[i], "}: ", vMD[i,1], sep="")
+     covs = paste(covs, item, sep="\n")
+   }
+   paste(fmt, covs, "\n}\n}\n", sep="")     
+ }
 
 
  makeExpressionSetPackage = function(expS, author, filePath=tempdir(),
@@ -33,4 +49,6 @@
 library(ALL)
 data(ALL)
 makeExpressionSetPackage(ALL, author="Robert Gentleman", email="rgentlem@foo")
+
+ x=pD2Rd(phenoData(ALL))
 
