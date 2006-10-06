@@ -173,7 +173,7 @@ setAs("phenoData", "AnnotatedDataFrame", function(from) {
   ## varLabels -- as column in varMetadata,or warn
   varLabels <- varLabels(from)
   if (length(varLabels)>0 && !("labelDescription" %in% colnames(varMetadata)))
-    varMetadata[["labelDescription"]] <- varLabels[cnames]
+    varMetadata[["labelDescription"]] <- as.character(varLabels[cnames])
   else if (length(varLabels)>0)
     warning("contents of varLabels ignored\n", call.=FALSE)
   else
