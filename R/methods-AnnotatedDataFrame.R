@@ -6,6 +6,7 @@ setMethod("initialize", signature(.Object="AnnotatedDataFrame"),
               } else if (!"labelDescription" %in% colnames(varMetadata)) {
                   varMetadata[["labelDescription"]] <- rep(NA, nrow(varMetadata))
               }
+              varMetadata[["labelDescription"]] <- as.character(varMetadata[["labelDescription"]])
               callNextMethod(.Object, data=data, varMetadata=varMetadata, ...)
           })
 
