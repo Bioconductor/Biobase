@@ -27,7 +27,11 @@ rowMedians(imat)
 }
 \details{
  \code{rowMax}, \code{rowMin} and \code{rowMedians} simply call \code{rowQ}
-with the appropriate argument set.
+with the appropriate argument set. 
+
+ The argument \code{which} takes values between 1, for the minimum per row,
+ and \code{ncol(imat)}, for the maximum per row.
+
 }
 \value{
  A vector of length equal to the number of rows of the input matrix containing
