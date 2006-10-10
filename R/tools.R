@@ -89,7 +89,7 @@ copySubstitute = function(src, dest, symbolValues,
    cpSubsCon = function(cin, cout) {
       txt = readLines(cin)
       for (i in seq(along=symbolValues))
-      txt = gsub(nm[i], symbolValues[[i]], txt)
+          txt = gsub(nm[i], symbolValues[[i]], txt, fixed=TRUE)
       ## check for unresolved symbols
       if(!allowUnresolvedSymbols) {
          re = regexpr(paste(symbolDelimiter, ".+", symbolDelimiter, sep=""), txt)
