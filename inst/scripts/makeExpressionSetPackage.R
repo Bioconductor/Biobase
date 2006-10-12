@@ -41,7 +41,7 @@
 
    
    createPackage(pkgname, destinationDir=filePath,
-         originDir = file.path(.path.package("Biobase"), "ExpressionSet"),
+         originDir = system.file(("ExpressionSet", package="Biobase"),
          symbolValues = sym, unlink=TRUE)
  }
 

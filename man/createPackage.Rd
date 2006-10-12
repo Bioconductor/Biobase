@@ -61,7 +61,7 @@ createPackage(pkgname, destinationDir, originDir, symbolValues, unlink=FALSE, qu
 
   res  = createPackage("muses",
            destinationDir = tempdir(),
-           originDir      = file.path(.path.package("Biobase"), "Code"),
+           originDir      = system.file("Code", package="Biobase"),
            symbolValues   = sym,
            unlink = TRUE, quiet = FALSE)
 
