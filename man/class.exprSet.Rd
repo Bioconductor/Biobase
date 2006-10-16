@@ -4,6 +4,7 @@
 \alias{exprSet}
 \alias{exprSet-class}
 
+\alias{intitialize,exprSet-method}
 \alias{abstract,exprSet-method}
 \alias{annotation<-,exprSet,ANY-method}
 \alias{annotation,exprSet-method}

@@ -1,3 +1,9 @@
+setMethod("initialize", "phenoData",
+          function(.Object, ...) {
+              .Deprecated(msg=PHENODATA_DEPR_MSG)
+              callNextMethod(.Object, ...)
+          })
+
 # ==========================================================================
 # phenoData class validator
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -27,6 +33,7 @@ setMethod("pData", "phenoData", function(object) object@pData)
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setReplaceMethod("pData", "phenoData",
    function(object, value) {
+       .Deprecated(msg=PHENODATA_DEPR_MSG)
       object@pData <- value
       object
    }
@@ -34,20 +41,27 @@ setReplaceMethod("pData", "phenoData",
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("$", "phenoData",
    function(x, name) {
+       .Deprecated(msg=PHENODATA_DEPR_MSG)
       x@pData[[name]]
    }
 )
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setReplaceMethod("$", "phenoData",
    function(x, name, value) {
+       .Deprecated(msg=PHENODATA_DEPR_MSG)
       x@pData[[name]] = value
       x
    }
 )
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setMethod("varLabels", "phenoData", function(object) object@varLabels)
+setMethod("varLabels", "phenoData",
+          function(object)  {
+              .Deprecated(msg=PHENODATA_DEPR_MSG)
+              object@varLabels
+          })
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("[", "phenoData", function(x, i, j, ..., drop=FALSE) {
+    .Deprecated(msg=PHENODATA_DEPR_MSG)
       if( missing(drop) ) drop<-FALSE
       vL <- varLabels(x)
       if( missing(j) ) {
@@ -67,10 +81,15 @@ setMethod("[", "phenoData", function(x, i, j, ..., drop=FALSE) {
    }
 )
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setMethod("[[", "phenoData", function(x, i, j, ...) x@pData[[i]])
+setMethod("[[", "phenoData",
+          function(x, i, j, ...) {
+              .Deprecated(msg=PHENODATA_DEPR_MSG)
+              x@pData[[i]]
+          })
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setReplaceMethod("[[", "phenoData",
    function(x, i, j, ..., value) {
+       .Deprecated(msg=PHENODATA_DEPR_MSG)
       x@pData[[i]] <- value
       x
    }
@@ -78,6 +97,7 @@ setReplaceMethod("[[", "phenoData",
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("show", "phenoData",
    function(object) {
+       .Deprecated(msg=PHENODATA_DEPR_MSG)
       dm <- dim(object@pData)
       cat("\tphenoData object with ", dm[2], " variables", sep="")
       cat(" and ", dm[1], " cases\n", sep="")
@@ -94,6 +114,7 @@ setMethod("show", "phenoData",
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("combine", c("phenoData", "phenoData"),
    function(x, y, ...) {
+       .Deprecated(msg=PHENODATA_DEPR_MSG)
       ## merge here will reproduce rows
       nl <- varLabels(x)
       if (dim(pData(x))[2] == dim(pData(y))[2] && all(names(pData(x))==names(pData(y))))
@@ -124,12 +145,14 @@ setMethod("combine", c("phenoData", "phenoData"),
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("combine", "phenoData",
    function(x, y, ...) {
+       .Deprecated(msg=PHENODATA_DEPR_MSG)
       return(x)
    }
 )
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("varMetadata", "phenoData",
    function(object) {
+       .Deprecated(msg=PHENODATA_DEPR_MSG)
       lk <- try(slot(object, "varMetadata"), silent=TRUE)
       if (inherits(lk, "try-error"))
          object@varMetadata <- data.frame()
@@ -141,7 +164,7 @@ setMethod("varMetadata", "phenoData",
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("addVarMetadataEntry", c("phenoData", "character", "character", "ANY"),
    function(object, vname, attname, attval) {
-       .Deprecated()
+       .Deprecated(msg=PHENODATA_DEPR_MSG)
       if (attname == "varName")
          stop("varName should not be used as a metadata attribute name")
       vm <- varMetadata(object)
@@ -161,6 +184,7 @@ setMethod("addVarMetadataEntry", c("phenoData", "character", "character", "ANY")
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("getVarMetadata", c("phenoData", "character", "character"),
    function(object, vname, attname) {
+       .Deprecated(msg=PHENODATA_DEPR_MSG)
       vm <- varMetadata(object)
       row <- which(vm$varName == vname)
       if (length(row)==0)
@@ -174,6 +198,7 @@ setMethod("getVarMetadata", c("phenoData", "character", "character"),
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("getVarMetadata", c("phenoData", "character", "missing"),
    function(object, vname, attname) {
+       .Deprecated(msg=PHENODATA_DEPR_MSG)
       vm <- varMetadata(object)
       row <- which(vm$varName == vname)
       if (length(row)==0)
@@ -184,13 +209,14 @@ setMethod("getVarMetadata", c("phenoData", "character", "missing"),
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("getUnits", c("phenoData", "character"),
    function(object,vname) {
-       .Deprecated()
+       .Deprecated(msg=PHENODATA_DEPR_MSG)
       getVarMetadata(object, vname, "units")
    }
 )
 # --------------------------------------------------------------------------
 setMethod("convertVarLabels", "phenoData",
    function(object) {
+       .Deprecated(msg=PHENODATA_DEPR_MSG)
       if (length(object@varLabels) == 0) {
          warning("no varLabels to convert")
          return(object)

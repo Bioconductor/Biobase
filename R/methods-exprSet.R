@@ -1,3 +1,12 @@
+EXPRSET_DEPR_MSG <- "The exprSet class is deprecated, use ExpressionSet instead"
+PHENODATA_DEPR_MSG <- "The phenoData class is deprecated, use AnnotatedDataFrame (with ExpressionSet) instead"
+
+setMethod("initialize", "exprSet",
+          function(.Object, ...) {
+              .Deprecated(msg=EXPRSET_DEPR_MSG)
+              callNextMethod(.Object, ...)
+          })
+
 # ==========================================================================
 # exprSet Class Validator
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -46,10 +55,14 @@ setMethod("update2MIAME", "exprSet",
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("assayData", "exprSet", function(object) object@exprs)
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setMethod("exprs", "exprSet", function(object) object@exprs)
+setMethod("exprs", "exprSet", function(object) {
+    .Deprecated(msg=EXPRSET_DEPR_MSG)
+    object@exprs
+    })
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setReplaceMethod("exprs", "exprSet",
    function(object, value) {
+       .Deprecated(msg=EXPRSET_DEPR_MSG)
       object@exprs <- value
       return(object)
    }
@@ -59,6 +72,7 @@ setMethod("se.exprs", "exprSet", function(object) object@se.exprs)
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setReplaceMethod("se.exprs", "exprSet",
    function(object, value) {
+       .Deprecated(msg=EXPRSET_DEPR_MSG)
       object@se.exprs <- value
       return(object)
    }
@@ -71,6 +85,7 @@ setMethod("notes", "exprSet", function(object) object@notes)
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setReplaceMethod("notes", "exprSet",
    function(object, value) {
+       .Deprecated(msg=EXPRSET_DEPR_MSG)
       object@notes <- value
       object
   }
@@ -80,6 +95,7 @@ setMethod("description", "exprSet", function(object) object@description)
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setReplaceMethod("description", "exprSet",
    function(object, value) {
+       .Deprecated(msg=EXPRSET_DEPR_MSG)
       object@description <- value
       object
    }
@@ -89,6 +105,7 @@ setMethod("abstract", "exprSet", function(object) abstract(description(object)))
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("sampleNames", "exprSet",
    function(object) {
+       .Deprecated(msg=EXPRSET_DEPR_MSG)
       if (!is.null(colnames(exprs(object))))
          colnames(exprs(object))
       else
@@ -98,6 +115,7 @@ setMethod("sampleNames", "exprSet",
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setReplaceMethod("sampleNames", "exprSet",
    function(object, value) {
+       .Deprecated(msg=EXPRSET_DEPR_MSG)
       dn <- dimnames(object@exprs)
       if( !is.character(value) )
          stop("replacement names must be strings")
@@ -115,6 +133,7 @@ setMethod("featureNames", "exprSet", function(object) row.names(exprs(object)))
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setReplaceMethod("featureNames", "exprSet",
    function(object, value) {
+       .Deprecated(msg=EXPRSET_DEPR_MSG)
       es <- exprs(object)
       row.names(es) <- value
       exprs(object) <- es
@@ -123,6 +142,7 @@ setReplaceMethod("featureNames", "exprSet",
 )
 setMethod("geneNames", "exprSet", function(object) featureNames(object))
 setReplaceMethod("geneNames", "exprSet", function(object, value) {
+    .Deprecated(msg=EXPRSET_DEPR_MSG)
     featureNames(object) <- value
     object
 })
@@ -131,6 +151,7 @@ setMethod("annotation", "exprSet", definition = function(object) object@annotati
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setReplaceMethod("annotation", signature="exprSet",
    definition =  function(object, value) {
+       .Deprecated(msg=EXPRSET_DEPR_MSG)
       object@annotation <- value
       return(object)
    }
@@ -138,6 +159,7 @@ setReplaceMethod("annotation", signature="exprSet",
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("[", "exprSet",
    function(x, i, j, ..., drop=FALSE) {
+       .Deprecated(msg=EXPRSET_DEPR_MSG)
       if(missing(i) && missing(j) && length(list(...))!=0)
         stop("specify genes or samples to subset; use '",
              substitute(x), "$", names(list(...))[[1]],
@@ -185,6 +207,7 @@ setMethod("[", "exprSet",
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("show", "exprSet",
    function(object ) {
+       .Deprecated(msg=EXPRSET_DEPR_MSG)
       dm <-dim(exprs(object))
       ngenes <- dm[1]
       nsamples <- dm[2]
@@ -196,12 +219,14 @@ setMethod("show", "exprSet",
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("iter", signature(object="exprSet", covlab="missing", f="function"),
    function(object, covlab, f) {
+       .Deprecated(msg=EXPRSET_DEPR_MSG)
       apply(exprs(object), 1, f)
    }
 )
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("iter", signature(object="exprSet", covlab="missing", f="list"),
    function(object,covlab,f) {
+       .Deprecated(msg=EXPRSET_DEPR_MSG)
       flist <- f
       llen <- length(flist)
       out <- matrix(NA,nr=nrow(exprs(object)), nc=llen )
@@ -217,6 +242,7 @@ setMethod("iter", signature(object="exprSet", covlab="missing", f="list"),
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("iter", signature(object="exprSet", covlab="character", f="function"),
    function(object, covlab, f) {
+       .Deprecated(msg=EXPRSET_DEPR_MSG)
       ## f assumed to be a function of two arguments,
       ## first is a stratum identifier to be used
       ## in evaluating a statistical contrast by f
@@ -284,18 +310,21 @@ setMethod("iter", signature(object="exprSet", covlab="character", f="function"),
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("split", signature(x="exprSet", f="factor", drop="missing"),
    function(x, f) {
+       .Deprecated(msg=EXPRSET_DEPR_MSG)
       .splitexprSet(x, f)
    }
 )
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("split", signature(x="exprSet", f="vector", drop="missing"),
    function(x, f) {
+       .Deprecated(msg=EXPRSET_DEPR_MSG)
       .splitexprSet(x, f)
    }
 )
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("split", signature(x="phenoData", f="vector", drop="missing"),
    function(x, f) {
+       .Deprecated(msg=PHENODATA_DEPR_MSG)
       lenf <- length(f)
       pD <- pData(x)
       vL <- varLabels(x)
@@ -336,6 +365,7 @@ setMethod("exprs2excel", signature(x="exprSet"),
             append = FALSE, quote = FALSE, sep = ",",
             eol = "\n", na = "NA", dec = ".", row.names = TRUE,
             col.names = NA, qmethod = c("escape", "double")) {
+              .Deprecated(msg=EXPRSET_DEPR_MSG)
       write.table(exprs(x),file = file, append = append,
          quote = quote, sep = sep,eol = eol, na = na, dec = dec,
          row.names = row.names, col.names = col.names, qmethod = qmethod)

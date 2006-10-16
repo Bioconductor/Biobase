@@ -3,6 +3,7 @@
 \alias{class:phenoData}
 
 \alias{phenoData-class}
+\alias{intitialize,exprSet-method}
 \alias{[,phenoData-method}
 \alias{[[<-,phenoData-method}
 \alias{[[,phenoData-method}
