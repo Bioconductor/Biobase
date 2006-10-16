@@ -19,7 +19,10 @@ setMethod("rowQ", signature(imat="ExpressionSet", which="numeric"),
 
 
 setMethod("rowQ", signature(imat="exprSet", which="numeric"),
-          function(imat, which) rowQ(exprs(imat), which))
+          function(imat, which) {
+              .Deprecated(msg=EXPRSET_DEPR_MSG)
+              rowQ(exprs(imat), which)
+              })
 
 
 setMethod("rowMedians", signature(imat="matrix"),
@@ -38,7 +41,10 @@ setMethod("rowMedians", signature(imat="ExpressionSet"),
 
 
 setMethod("rowMedians", signature(imat="exprSet"),
-          function(imat) rowMedians(exprs(imat)))
+          function(imat) {
+              .Deprecated(msg=EXPRSET_DEPR_MSG)
+              rowMedians(exprs(imat))
+              })
 
 
 rowMin <- function(imat)
