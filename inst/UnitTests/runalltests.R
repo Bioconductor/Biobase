@@ -35,7 +35,7 @@ setValidity("SwirlSet", function(object) {
 
 dirs <- '.'
 ## dirs <- system.file("UnitTests", package="Biobase"),
-testFilePat <- ".*_test\.R$"
+testFilePat <- ".*_test\\.R$"
 
 allSuite <- defineTestSuite(name="allSuite",
                             dirs=dirs,
