@@ -96,6 +96,7 @@ Key features in the redesign.
 
 \section{A quick tour}
 <<Biobase,echo=FALSE,results=hide>>=
+options(width=69)
 library(Biobase)
 @ 
 
