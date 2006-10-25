@@ -11,7 +11,6 @@ setClass("aggregator",
       aggfun  = "function"
    ),
    prototype = list(
-      aggenv  = new.env(hash=TRUE),
       initfun = function(name, val) 1,
       aggfun  = function(name, current, val) current + 1
    )

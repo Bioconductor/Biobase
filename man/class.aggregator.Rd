@@ -3,6 +3,7 @@
 \alias{class:aggregator}
 \alias{aggregator}
 \alias{aggregator-class}
+\alias{initialize,aggregator-method}
 
 \alias{aggenv,aggregator-method}
 \alias{aggfun,aggregator-method}

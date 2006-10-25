@@ -20,6 +20,7 @@
 \alias{geneNames,exprSet-method}
 \alias{featureNames<-,exprSet-method}
 \alias{featureNames,exprSet-method}
+\alias{initialize,exprSet-method}
 \alias{iter,exprSet,missing,function-method}
 \alias{iter,exprSet,missing,list-method}
 \alias{iter,exprSet,character,function-method}

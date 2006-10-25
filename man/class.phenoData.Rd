@@ -3,7 +3,6 @@
 \alias{class:phenoData}
 
 \alias{phenoData-class}
-\alias{intitialize,exprSet-method}
 \alias{[,phenoData-method}
 \alias{[[<-,phenoData-method}
 \alias{[[,phenoData-method}
@@ -17,6 +16,7 @@
 \alias{getVarMetadata<-}
 \alias{getVarMetadata,phenoData,character,character-method}
 \alias{getVarMetadata,phenoData,character,missing-method}
+\alias{initialize,phenoData-method}
 \alias{pData<-,phenoData,ANY-method}
 \alias{pData,phenoData-method}
 \alias{phenoData<-,annotatedDataset,phenoData-method}

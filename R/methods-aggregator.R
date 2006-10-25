@@ -1,3 +1,8 @@
+setMethod("initialize",
+          signature(.Object="aggregator"),
+          function(.Object, aggenv=new.env(hash=TRUE), ...) {
+              callNextMethod(.Object, aggenv=aggenv, ...)
+          })
 # ==========================================================================
 setMethod("aggenv", "aggregator", function(object) object@aggenv)
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
