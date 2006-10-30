@@ -37,12 +37,17 @@
    sym = list(AUTHOR = author, VERSION=as.character(version), LICENSE=license,
         TITLE = paste("Experimental Data Package:",pkgname), 
         MAINTAINER = paste(author, ", <", email, ">", sep = ""),
-        BVIEWS = biocViews)
+        BVIEWS = biocViews, DESCRIPTION = "place holder 1",
+        FORMAT = "An instance of the ExpressionSet class")
 
    
-   createPackage(pkgname, destinationDir=filePath,
-         originDir = system.file(("ExpressionSet", package="Biobase"),
+   res = createPackage(pkgname, destinationDir=filePath,
+         originDir = system.file("ExpressionSet", package="Biobase"),
          symbolValues = sym, unlink=TRUE)
+
+   ##save the data file
+   save(expS, file = file.path( res$pkgdir, "data", 
+                          paste(pkgname, ".rda", sep=""))) 
  }
 
 
