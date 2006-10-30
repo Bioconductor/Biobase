@@ -26,3 +26,22 @@ strbreak <- function(x, width=getOption("width"), exdent=2, collapse="\n") {
    return(rv)
 }
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+lcsuff <- function(x, ignore.case = FALSE) {
+    x = as.character(x)
+    if( ignore.case )   
+       x = toupper(x)
+
+    nc = nchar(x, type = "char")
+    n=1
+    for(i in 1:min(nc)) {
+       ss = substr(x, nc-n+1, nc)
+       if( any(ss != ss[1] )) {
+           n = n-1
+           break
+       }
+       n = n + 1
+    }
+    return(substr(x[1], nc-n+1, nc))
+ }
+
