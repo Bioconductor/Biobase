@@ -7,8 +7,8 @@ setMethod("combine",
               else if (all(dim(y)==0)) return(x)
 
               uniqueRows <- unique(c(row.names(x), row.names(y)))
-              uniqueCols <- unique(c(colnames(x), colnames(y)))
-              sharedCols <- intersect(colnames(x), colnames(y))
+              uniqueCols <- unique(c(names(x), names(y)))
+              sharedCols <- intersect(names(x), names(y))
 
               ## check possible to combine
               sharedRows <- intersect(row.names(x), row.names(y))

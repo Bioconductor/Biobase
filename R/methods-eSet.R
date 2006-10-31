@@ -16,14 +16,12 @@ setMethod("initialize",
               }
               ## coordinate sample names
               adSampleNames <- sampleNames(assayData)
-              pdSampleNames <- sampleNames(phenoData) # *always* defined
               if (all(sapply(adSampleNames,is.null)))
-                sampleNames(assayData) <- pdSampleNames
+                sampleNames(assayData) <- sampleNames(phenoData)
               ## where do feature names come from? assayData or featureData
               adFeatureNames <- featureNames(assayData)
-              fdFeatureNames <- featureNames(featureData) # *always* defined
               if (all(sapply(adFeatureNames, is.null)))
-                featureNames(assayData) <- fdFeatureNames
+                featureNames(assayData) <- featureNames(featureData)
               callNextMethod(.Object, assayData=assayData,
                              phenoData=phenoData, featureData=featureData,
                              experimentData=experimentData, annotation=annotation)
@@ -38,8 +36,8 @@ updateOldESet <- function(from, toClass, ...) {  # to MultiExpressionSet
   if (!is.null(metadata[["varName"]])) {
     row.names(metadata) <- metadata[["varName"]]
     metadata[["varName"]] <- NULL
-  } else if (!is.null(colnames(pData(from)))) {
-    row.names(metadata) <- colnames(pData(from))
+  } else if (!is.null(names(pData(from)))) {
+    row.names(metadata) <- names(pData(from))
   }
   if (!is.null(metadata[["varLabels"]])) {
     names(metadata)[names(metadata)=="varLabels"] <- "labelDescription"
@@ -439,67 +437,6 @@ setReplaceMethod("reporterNames", c("eSet", "character"), function(object, value
   .Deprecated("featureNames<-", "Biobase")
   featureNames(object) <- value
 })
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# VC:
-
-#this check should be done at
-# construction time -- if creator doesn't have it right,
-# then no eSet is made.  any manipulations should guaranteed
-# to preserve name validity
-#
-##check to see if the vector x is the right length to
-##replace the sample names in eSet
-##not sure if this should be exported
-
-#eSetValidNames = function(eSet, x) {
-#  if( !is.character(x) ) return(FALSE)
-#  lenx = length(x)
-#  if(nrow(pData(eSet)) != lenx ) return(FALSE)
-#  nc = ncol(eSet)
-#  if(any(nc != lenx)) return(FALSE)
-#  TRUE
-#}
-
-##reset the eList col names - not for export
-
-# VC commented this out -- wants to handle names
-# directly as slots as much as possible
-#seteListColNames = function(eList, names) {
-#  if(is.environment(eList@eList) )
-#    for( j in ls(eList@eList) )
-#       dimnames(j)[[2]] = names
-#  else if (is.list(eList@eList) )
-#    for( j in eList@eList )
-#       dimnames(j)[[2]] = names
-#  else
-#    stop("invalid eList")
-#  eList
-#}
-#
-###should we have column names on the elements of eList
-###and if so how do we control their values
-#setReplaceMethod("sampleNames", "eSet",
-#  function(object, value) {
-#     if( !is.character(value) )
-#       stop("replacement names must be character strings")
-#     if( !eSetValidNames(object, value) )
-#       stop("wrong number of sample names")
-#     object@sampleNames = value
-#     object@eList = seteListColNames(object@eList, names)
-#     object
-#})
-
-# VC -- leave this stuff to another factor, related to varMetadata
-#if( !isGeneric("eMetadata<-") )
-#    setGeneric("eMetadata<-", function(object, value)
-#               standardGeneric("eMetadata<-"))
-#
-#setReplaceMethod("eMetadata", c("eSet", "data.frame"),
-#     function(object, value) {
-#        object@eList@eMetadata <- value
-#        object
-#     })
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("eList", "eSet", function(object) {

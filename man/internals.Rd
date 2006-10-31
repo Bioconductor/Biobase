@@ -17,7 +17,6 @@
 \alias{locked}
 \alias{normControls}
 \alias{otherInfo}
-\alias{preproc}
 \alias{read.pD}
 % \alias{reporterInfo}
 % \alias{reporterInfo<-}

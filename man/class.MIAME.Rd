@@ -10,8 +10,10 @@
 \alias{hybridizations,MIAME-method}
 \alias{normControls,MIAME-method}
 \alias{otherInfo,MIAME-method}
+\alias{preproc}
 \alias{preproc,MIAME-method}
 \alias{preproc<-,MIAME-method}
+\alias{preproc<-}
 \alias{notes,MIAME-method}
 \alias{notes<-,MIAME,list-method}
 \alias{pubMedIds,MIAME-method}
