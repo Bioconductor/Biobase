@@ -35,6 +35,5 @@ resulting package.
  s1 = makeExpressionSetPackage(sample.ExpressionSet, "Foo Bar", 
     version = "1.0.0",  email="foo@bar", packageName = "FooBarPkg")
 
- makeEx
 }
 \keyword{ manip }
