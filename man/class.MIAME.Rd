@@ -11,6 +11,7 @@
 \alias{normControls,MIAME-method}
 \alias{otherInfo,MIAME-method}
 \alias{preproc,MIAME-method}
+\alias{preproc<-,MIAME-method}
 \alias{notes,MIAME-method}
 \alias{notes<-,MIAME,list-method}
 \alias{pubMedIds,MIAME-method}
@@ -59,10 +60,10 @@
       \item{\code{expinfo(MIAME)}:}{An accessor function for \code{name}, \code{lab}, \code{contact}, \code{title}, and \code{url}}
       \item{\code{hybridizations(MIAME)}:}{ An accessor function for \code{hybridizations} }
       \item{\code{normControls(MIAME)}:}{ An accessor function for \code{normControls} }
-      \item{\code{notes(MIAME)}:}{ An accessor function for \code{other}; duplicated here for compatibility with \code{exprSet-class}}
+      \item{\code{notes(MIAME), notes(MIAME) <- value}:}{ Accessor functions for \code{other}; duplicated here for compatibility with \code{exprSet-class}}
       \item{\code{otherInfo(MIAME)}:}{ An accessor function for \code{other} }
-      \item{\code{precproc(MIAME)}:}{ An accessor function for \code{other} }
-      \item{\code{pubMedIds(MIAME)}:}{ An accessor function for \code{pubMedIds}}
+      \item{\code{preproc(MIAME)}:}{ An accessor function for \code{preprocessing} }
+      \item{\code{pubMedIds(MIAME), pubMedIds(MIAME) <- value}:}{ Accessor function for \code{pubMedIds}}
       \item{\code{samples(MIAME)}:}{ An accessor function for
 	\code{samples} }
    }

@@ -56,6 +56,10 @@ setMethod("hybridizations","MIAME",function(object) object@hybridizations)
 setMethod("normControls","MIAME",function(object) object@normControls)
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("preproc","MIAME",function(object) object@preprocessing)
+setReplaceMethod("preproc", "MIAME", function(object, value) {
+    object@preprocessing <- value
+    object
+})
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("pubMedIds","MIAME",function(object) object@pubMedIds)
 
