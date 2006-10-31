@@ -17,7 +17,8 @@
 
 
  makeExpressionSetPackage = function(expS, author, filePath=tempdir(),
-    version = "1.0.0", license, email, biocViews="ExperimentData"  )
+    version = "1.0.0", license, email, biocViews="ExperimentData",
+    packageName  )
  {
    if( !inherits(expS, "ExpressionSet") )
      stop("only works for ExpressionSets")
@@ -32,7 +33,8 @@
    if(missing(license) ) 
       license= "The Artistic License, Version 2.0"
 
-   pkgname = deparse(substitute(expS))
+   if( missing(packageName) )
+       pkgname = deparse(substitute(expS))
 
    sym = list(AUTHOR = author, VERSION=as.character(version), LICENSE=license,
         TITLE = paste("Experimental Data Package:",pkgname), 
@@ -46,8 +48,10 @@
          symbolValues = sym, unlink=TRUE)
 
    ##save the data file
-   save(expS, file = file.path( res$pkgdir, "data", 
+   assign(pkgname, expS)
+   save(list=pkgname, file = file.path( res$pkgdir, "data", 
                           paste(pkgname, ".rda", sep=""))) 
+   return(res)
  }
 
 

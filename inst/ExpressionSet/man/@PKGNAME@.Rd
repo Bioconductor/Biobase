@@ -1,4 +1,4 @@
-\nme{@PKGNAME@}
+\name{@PKGNAME@}
 \docType{data}
 \alias{@PKGNAME@}
 \title{@TITLE@}
