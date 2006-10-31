@@ -122,7 +122,9 @@ dumpPackTxt <- function (package) {
          symbolValues = sym, unlink=TRUE)
 
    ##save the data file
-   outfile = file.path( res$pkgdir, "data", paste(packageName, ".rda", sep=""))
+   datadir = file.path(res$pkgdir, "data")
+   dir.create(datadir, showWarnings=FALSE)
+   outfile = file.path(datadir, paste(packageName, ".rda", sep=""))
    assign(packageName, expS)
    save(list=packageName, file = outfile)
 
