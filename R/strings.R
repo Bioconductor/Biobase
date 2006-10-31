@@ -27,7 +27,7 @@ strbreak <- function(x, width=getOption("width"), exdent=2, collapse="\n") {
 }
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-lcsuff <- function(x, ignore.case = FALSE) {
+lcSuffix <- function(x, ignore.case = FALSE) {
     x = as.character(x)
     if( ignore.case )   
        x = toupper(x)

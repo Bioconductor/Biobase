@@ -1,12 +1,12 @@
-\name{lcsuff}
-\alias{lcsuff}
+\name{lcSuffix}
+\alias{lcSuffix}
 \title{ Compute the longest common suffix. }
 \description{
 The function takes an input character vector and finds the longest
 common suffix.
 }
 \usage{
-lcsuff(x, ignore.case=FALSE)
+lcSuffix(x, ignore.case=FALSE)
 }
 \arguments{
   \item{x}{ A character vector. }
@@ -28,6 +28,6 @@ The common suffix.
 \seealso{ \code{\link{nchar}}, \code{\link{nchar}}}
 \examples{
   s1 = c("ABC.CEL", "DEF.CEL")
-  lcsuff(s1)
+  lcSuffix(s1)
 }
 \keyword{ manip }
