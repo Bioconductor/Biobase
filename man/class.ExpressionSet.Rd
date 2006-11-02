@@ -16,6 +16,7 @@
 \alias{coerce,eSet,ExpressionSet-method}
 \alias{coerce,ExpressionSet,data.frame-method}
 \alias{updateObject,ExpressionSet-method}
+\alias{makeDataPackage,ExpressionSet-method}
 \alias{as.data.frame.ExpressionSet}
 
 \title{
@@ -75,8 +76,6 @@
     \item{\code{as(object,"data.frame")}}{Coerce objects of
       \code{\link{ExpressionSet-class}} to \code{data.frame} by
       transposing the expression matrix and concatenating \code{phenoData}}
-    \item{\code{as.data.frame(object)}}{Coerce
-      \code{ExpressionSet-class} object to \code{data.frame}}
      \item{\code{exprs(ExpressionSet)}, \code{exprs(ExpressionSet,matrix)<-}}{Access and
        set elements named \code{exprs} in the \code{AssayData-class}
        slot.}
@@ -119,6 +118,10 @@
       that \code{exprs} is a member of
       \code{assayData}. \code{checkValidity(ExpressionSet)} imposes this
       validity check, and the validity checks of \code{eSet}.}
+    \item{\code{makeDataPackage(object, author, email,
+	packageName, packageVersion, license, biocViews, filePath,
+	...)}}{Create a data package based on an ExpressionSet
+      object. See \code{\link{makeDataPackage}}.}
      \item{\code{as(exprSet,ExpressionSet)}:}{Coerce \code{exprSet} too \code{ExpressionSet}.}
      \item{\code{as(eSet,ExpressionSet)}:}{Coerce the \code{eSet} portion of an object to \code{ExpressionSet}.}
      \item{\code{show(ExpressionSet)}}{See \code{\link{eSet}}}

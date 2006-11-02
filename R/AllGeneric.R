@@ -43,6 +43,13 @@ setGeneric("hybridizations",  function(object) standardGeneric("hybridizations")
 setGeneric("initfun",         function(object) standardGeneric("initfun"))
 setGeneric("iter",            function(object, covlab, f) standardGeneric("iter"))
 setGeneric("locked",          function(object) standardGeneric("locked"))
+setGeneric("makeDataPackage", function(object, author, email,
+                                       packageName=deparse(substitute(object)),
+                                       packageVersion=package_version("1.0.0"),
+                                       license="The Artistic License, Version 2.0",
+                                       biocViews="ExperimentData",
+                                       filePath=tempdir(), ...) standardGeneric("makeDataPackage"),
+           signature="object")
 setGeneric("normControls",    function(object) standardGeneric("normControls"))
 setGeneric("notes",           function(object) standardGeneric("notes"))
 setGeneric("notes<-",         function(object, value) standardGeneric("notes<-"))

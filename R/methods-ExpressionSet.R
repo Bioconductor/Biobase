@@ -77,3 +77,35 @@ setReplaceMethod("geneNames", signature(object="ExpressionSet",
               ##        call validObject?
               featureNames(object) <- value
           })
+
+setMethod("makeDataPackage",
+          signature(object="ExpressionSet"),
+          function(object, author, email,
+                   packageName, packageVersion, license, biocViews, filePath, ...) {
+              if( missing(email) || !(is.character(email) && (length(email) == 1)
+                                      && grep("@", email) == 1 ) )
+                stop("invalid email address")
+
+              sym = list(
+                AUTHOR = author,
+                VERSION=as.character(package_version(packageVersion)),
+                LICENSE=license,
+                TITLE = paste("Experimental Data Package:",packageName),
+                MAINTAINER = paste(author, ", <", email, ">", sep = ""),
+                BVIEWS = biocViews,
+                DESCRIPTION = "place holder 1",
+                FORMAT = paste("An instance of the", class(object), "class"))
+
+              res = createPackage(packageName, destinationDir=filePath,
+                originDir = system.file("ExpressionSet", package="Biobase"),
+                symbolValues = sym, unlink=TRUE)
+
+              ##save the data file
+              datadir = file.path(res$pkgdir, "data")
+              dir.create(datadir, showWarnings=FALSE)
+              outfile = file.path(datadir, paste(packageName, ".rda", sep=""))
+              assign(packageName, object)
+              save(list=packageName, file = outfile)
+
+              return(res)
+          })
