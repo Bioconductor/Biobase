@@ -94,7 +94,7 @@ setMethod("makeDataPackage",
                 MAINTAINER = paste(author, ", <", email, ">", sep = ""),
                 BVIEWS = biocViews,
                 DESCRIPTION = "place holder 1",
-                FORMAT = paste("An instance of the", class(object), "class"))
+                FORMAT = pD2Rd(phenoData(object)))
 
               res = createPackage(packageName, destinationDir=filePath,
                 originDir = system.file("ExpressionSet", package="Biobase"),

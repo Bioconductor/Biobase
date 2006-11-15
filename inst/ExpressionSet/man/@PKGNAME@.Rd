@@ -6,7 +6,7 @@
 \usage{
 data(@PKGNAME@)
 }
-\format{@FORMAT@}
+@FORMAT@
 \examples{
   data(@PKGNAME@)
 }
