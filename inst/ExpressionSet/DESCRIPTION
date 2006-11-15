@@ -4,5 +4,6 @@ Version: @VERSION@
 Author: @AUTHOR@
 Description: Data Package automatically created on @TODAY@.
 Maintainer: @MAINTAINER@
+Depends: Biobase
 License:  @LICENSE@
 biocViews: @BVIEWS@
