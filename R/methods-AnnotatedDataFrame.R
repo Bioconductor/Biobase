@@ -270,3 +270,39 @@ setMethod("combine",
 
               new("AnnotatedDataFrame", data=pData, varMetadata=vM, dimLabels=dimLabels(x))
           })
+
+read.AnnotatedDataFrame <- function(filename = NULL, sampleNames = NULL,
+                                    widget = getOption("BioC")$Base$use.widgets,...) {
+    ## used by affy
+    if(widget) {
+        ## see read.phenoData for implementation hints
+        stop("sorry, tkWidgets support not available for read.AnnotatedDataFrame")
+    }
+    else {
+        if(is.character(filename) || inherits(filename, "connection")) {
+            pData <- read.table(filename,...)
+            if(!is.null(sampleNames)) row.names(pData) <- sampleNames
+            varLabels <- as.list(rep("read from file",ncol(pData)))
+            names(varLabels) <- names(pData)
+            return(new("AnnotatedDataFrame",
+                       data=pData,
+                       varMetadata=data.frame(
+                         labelDescription=varLabels,
+                         row.names=names(varLabels))))
+        }
+        else {
+            if( !is.null(filename) )
+              stop("incorrect filename given")
+            if(is.null(sampleNames)){
+                return(new("AnnotatedDataFrame")) ##return a blank!
+            } else {
+                pdata <- data.frame(sample=1:length(sampleNames), row.names=sampleNames)
+                return(new("AnnotatedDataFrame",
+                           data=pdata,
+                           varMetadata=data.frame(
+                             labelDescription="arbitrary numbering",
+                             row.names="sample")))
+            }
+        }
+    }
+}
