@@ -184,6 +184,9 @@ setAs("phenoData", "AnnotatedDataFrame", function(from) {
       varMetadata=varMetadata,
       dimLabels=c("sampleNames", "sampleColumns"))
 })
+
+setAs("data.frame", "AnnotatedDataFrame",
+      function(from) new("AnnotatedDataFrame", data=from))
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 selectSome <- function(obj, maxToShow=5) {
   len <- length(obj)
