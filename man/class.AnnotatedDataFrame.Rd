@@ -53,12 +53,14 @@
     varMetadata=data.frame(), dimLabels=c("rowNames", "columnNames"))}
 
   \code{AnnotatedDataFrame} instances are created using \code{new}.  The
-  initialize method takes two arguments, \code{data} and
+  initialize method takes up to three arguments, \code{data} and
   \code{varMetadata}.  \code{data} is a \code{data.frame} of the samples
   (rows) and measured variables (columns).  \code{varMetadata} is a
   \code{data.frame} with the number of rows equal to the number of
   columns of the \code{data} argument.  \code{varMetadata} describes
-  aspects of each measured variable.
+  aspects of each measured variable. \code{dimLabels} provides aesthetic
+  control for labeling rows and columns in the \code{show}
+  method. \code{varMetadata} and \code{dimLabels} can be missing.
 
   \code{as(data.frame, "AnnotatedDataFrame")} coerces a data frame to an
   AnnotatedDataFrame.
