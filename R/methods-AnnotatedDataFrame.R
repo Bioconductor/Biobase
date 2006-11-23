@@ -1,10 +1,13 @@
 setMethod("initialize", signature(.Object="AnnotatedDataFrame"),
           function(.Object, data = data.frame(), varMetadata = data.frame(),...) {
               if (missing(varMetadata)) {
+                  if (!missing(data)) checkClass(data, "data.frame", class(.Object))
                   varMetadata <- data.frame(labelDescription = rep(NA, ncol(data)))
                   row.names(varMetadata) <- as.character(colnames(data))
-              } else if (!"labelDescription" %in% colnames(varMetadata)) {
-                  varMetadata[["labelDescription"]] <- rep(NA, nrow(varMetadata))
+              } else {
+                  checkClass(varMetadata, "data.frame", class(.Object))
+                  if (!"labelDescription" %in% colnames(varMetadata))
+                    varMetadata[["labelDescription"]] <- rep(NA, nrow(varMetadata))
               }
               varMetadata[["labelDescription"]] <- as.character(varMetadata[["labelDescription"]])
               callNextMethod(.Object, data=data, varMetadata=varMetadata, ...)

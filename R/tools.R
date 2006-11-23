@@ -282,6 +282,13 @@ validMsg <- function(msg, result) {
     } else msg
 }
 
+checkClass <- function(object, expected, prefix="", call.=FALSE, ...) {
+    if (identical(possibleExtends(class(object), expected), FALSE))
+      stop(prefix, " '", deparse(substitute(object)),
+           "' is class '", class(object), "' but should be or extend '", expected, "'",
+           call.=call., ...)
+}
+
 ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 userQuery <- function(msg, allowed=c("y","n"), default = "n",

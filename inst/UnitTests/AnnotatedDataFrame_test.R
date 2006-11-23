@@ -181,3 +181,9 @@ testNewCovariate <- function() {
     checkTrue(validObject(x))
     checkTrue(identical(as.vector(dim(x),"integer"), as.integer(c(5,1))))
 }
+
+testBadInitializeArugments <- function() {
+    checkException(new("AnnotatedDataFrame", data=NULL), silent=TRUE)
+    checkException(new("AnnotatedDataFrame", varMetadata=NULL), silent=TRUE)
+    checkException(new("AnnotatedDataFrame", data=data.frame(), varMetadata=NULL), silent=TRUE)
+}

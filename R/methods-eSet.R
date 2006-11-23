@@ -10,10 +10,12 @@ setMethod("initialize",
                    experimentData = new( "MIAME" ),
                    annotation = character(),
                    ...) {
+              if (!missing(assayData)) checkClass(assayData, "AssayData", class(.Object))
               if (is(phenoData,"phenoData")) {
                   warning("updating phenoData argument to 'AnnotatedDataFrame'", call.=FALSE)
                   phenoData <- as(phenoData,"AnnotatedDataFrame")
-              }
+              } else if (!missing(phenoData)) checkClass(phenoData, "AnnotatedDataFrame", class(.Object))
+              if (!missing(featureData)) checkClass(featureData, "AnnotatedDataFrame", class(.Object))
               ## coordinate sample names
               adSampleNames <- sampleNames(assayData)
               if (all(sapply(adSampleNames,is.null)))
@@ -387,7 +389,7 @@ setMethod("notes", signature(object="eSet"),
 
 setReplaceMethod("notes", signature(object="eSet", value="list"),
                  function(object, value) {
-                     otherInfo(experimentData(object)) <- value
+                     notes(experimentData(object)) <- value
                      object
                  })
 
