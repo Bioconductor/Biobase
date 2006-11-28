@@ -30,3 +30,11 @@ testCombineFeatureData <- function() {
     validObject(obj2)
     checkException(combine(obj1, obj2), silent=TRUE)
 }
+
+testAddTextNotes <- function() {
+    eset <- new("ExpressionSet")
+    notes(eset) <- "a note"
+    checkTrue(identical(notes(eset), list("a note")))
+    notes(eset) <- "another"
+    checkTrue(identical(notes(eset), list("a note", "another")))
+}

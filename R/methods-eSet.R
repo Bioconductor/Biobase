@@ -387,7 +387,7 @@ setReplaceMethod("description", signature(object="eSet", value="MIAME"),
 setMethod("notes", signature(object="eSet"),
           function(object) otherInfo(experimentData(object)))
 
-setReplaceMethod("notes", signature(object="eSet", value="list"),
+setReplaceMethod("notes", signature(object="eSet", value="ANY"),
                  function(object, value) {
                      notes(experimentData(object)) <- value
                      object

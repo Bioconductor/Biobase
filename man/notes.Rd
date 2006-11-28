@@ -8,6 +8,10 @@
   These generic functions access notes (unstructured descriptive data)
   associated \code{\link{eSet-class}} or \code{\link{exprSet-class}}.
 
+  \code{notes(<ExpressionSet> <- <character>} is unusual, in that the
+  character vector is appended to the list of notes; use
+  \code{notes(<ExpressionSet>) <- <list>} to entirely replace the list.
+
 }
 \usage{
 notes(object)
@@ -18,7 +22,8 @@ notes(object) <- value
   \item{value}{Character vector containing unstructured information describing the experinement.}
 }
 \value{
-  \code{notes} returns a character vector.
+  \code{notes} returns a list (for \code{ExpressionSet}) or character
+  vector (for \code{exprSet}).
 }
 \author{Biocore}
 

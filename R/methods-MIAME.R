@@ -86,6 +86,12 @@ setReplaceMethod("notes", signature(object="MIAME", value="list"),
                      object@other <- value
                      object
                  })
+
+setReplaceMethod("notes", signature(object="MIAME", value="character"),
+                 function(object, value) {
+                     object@other <- append(object@other, value)
+                     object
+                 })
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 read.MIAME <- function(filename=NULL,widget=getOption("BioC")$Base$use.widgets,...) {
    if(!is.null(filename)) {

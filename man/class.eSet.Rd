@@ -38,7 +38,7 @@
 \alias{getExpData,eSet,character-method}
 \alias{ncol,eSet-method}
 \alias{notes,eSet-method}
-\alias{notes<-,eSet,list-method}
+\alias{notes<-,eSet,ANY-method}
 \alias{pData,eSet-method}
 \alias{pData<-,eSet,data.frame-method}
 \alias{phenoData,eSet-method}
@@ -158,7 +158,11 @@
      \item{\code{experimentData(object)},\code{experimentData(object) <- value}:}{Access
        and set details of experimental methods}
      \item{\code{description(object)},\code{description(object) <- value}:}{Synonymous with experimentData; included for compatibility with \code{exprSet}. }
-     \item{\code{notes(object)},\code{notes(object) <- value}:}{\code{signature(object="eSet", value="list")} Retrieve and set unstructured notes associated with \code{eSet}.}
+     \item{\code{notes(object)},\code{notes(object) <- value}:}{
+       \code{signature(object="eSet", value="list")} Retrieve and set unstructured notes associated with \code{eSet}.
+       \code{signature(object="eSet", value="character")} As with
+       value="list", but \emph{append} value to current list of notes.}
+     
      \item{\code{pubMedIds(object)}, \code{pubMedIds(eSet,value)}}{Access
        and set PMIDs in \code{experimentData}.}
      \item{\code{abstract(object)}:}{Access abstract in
