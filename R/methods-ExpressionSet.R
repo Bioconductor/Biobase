@@ -109,3 +109,11 @@ setMethod("makeDataPackage",
 
               return(res)
           })
+
+setMethod("write.exprs",
+          signature(x="ExpressionSet"),
+          function(x, file="tmp.txt", quote=FALSE,
+                   sep="\t", col.names=NA, ...){
+            write.table(exprs(x), file=file, quote=quote, sep=sep,
+                        col.names=col.names, ...)
+          })

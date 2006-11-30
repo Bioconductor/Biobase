@@ -18,6 +18,7 @@
 \alias{updateObject,ExpressionSet-method}
 \alias{makeDataPackage,ExpressionSet-method}
 \alias{as.data.frame.ExpressionSet}
+\alias{write.exprs,ExpressionSet-method}
 
 \title{
   Class to Contain and Describe High-Throughput Expression Level Assays.
@@ -73,12 +74,16 @@
   \describe{
     \item{\code{as(exprSet,"ExpressionSet")}}{Coerce objects of
       \code{\link{exprSet-class}} to \code{ExpressionSet}}
-    \item{\code{as(object,"data.frame")}}{Coerce objects of
+    \item{\code{as(object,"data.frame")}}{C
+      oerce objects of
       \code{\link{ExpressionSet-class}} to \code{data.frame} by
       transposing the expression matrix and concatenating \code{phenoData}}
      \item{\code{exprs(ExpressionSet)}, \code{exprs(ExpressionSet,matrix)<-}}{Access and
        set elements named \code{exprs} in the \code{AssayData-class}
        slot.}
+     \item{\code{write.exprs(ExpressionSet)}}{Write expression values to
+	 a text file. It takes the same arguments as
+	 \code{write.table}}
     }
 
    Derived from \code{\link{eSet}}:
