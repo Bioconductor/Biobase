@@ -218,6 +218,7 @@ setMethod("featureNames", "eSet", function(object) {
 
 setReplaceMethod("featureNames", "eSet", function(object, value) {
   featureNames(assayData(object)) <- value
+  featureNames(featureData(object)) <- value
   object
 })
 

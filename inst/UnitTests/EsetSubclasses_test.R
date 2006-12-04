@@ -387,3 +387,10 @@ testSetAs <- function() {
   checkNewSampleEset(es, sample.eSet)
   options(opts)
 }
+
+testFeatureNamesReplace <- function() {
+    e <- new("ExpressionSet", exprs=matrix(nrow=5,ncol=2))
+    featureNames(e) <- letters[5:1]
+    checkIdentical(letters[5:1], featureNames(e))
+    checkTrue(validObject(e))
+}

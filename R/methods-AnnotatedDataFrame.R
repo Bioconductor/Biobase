@@ -106,7 +106,10 @@ setMethod("featureNames",
 
 setReplaceMethod("featureNames",
                  signature(object="AnnotatedDataFrame", value="ANY"),
-                 function(object, value) sampleNames(object) <- value)
+                 function(object, value) {
+                     sampleNames(object) <- value
+                     object
+                 })
 
 setMethod("varLabels", "AnnotatedDataFrame", function(object) colnames(object@data))
 
