@@ -176,6 +176,14 @@ setValidity("eSet", function( object ) {
   if (is.null(msg)) TRUE else msg
 })
 
+setMethod("preproc", "eSet", function(object) 
+       preproc(object@experimentData))
+
+setReplaceMethod("preproc", "eSet", function(object, value) {
+        preproc(object@experimentData) <- value
+        object
+})
+
 setMethod("show", "eSet", function(object) {
   cat(class( object ), " (storageMode: ", storageMode(object), ")\n", sep="")
   adim <- dim(object)

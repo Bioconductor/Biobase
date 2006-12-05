@@ -171,10 +171,14 @@ assayDataDim <- function(object) {
   d
 }
 
+##FIXME: RG says I don't know if you should ignore non-matrix objects or
+## not -  for now I have put in an informative error message
 assayDataDims <- function( object ) {
   nms <- if (assayDataStorageMode(object) == "list") names(object) else ls(object)
   if ( length( nms ) == 0 ) return( NA )
   d = sapply(nms, function(i) dim(object[[i]]))
+  if( !is.matrix(d) )
+     stop("some element of assay data is not a matrix")
   rownames(d) <- c("Features", "Samples", rep("...", nrow(d)-2))
   colnames(d) <- nms
   d[,order(colnames(d)), drop=FALSE]
