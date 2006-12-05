@@ -198,10 +198,10 @@ setValidity("eSet", function( object ) {
 })
 
 setMethod("preproc", "eSet", function(object) 
-       preproc(object@experimentData))
+       preproc(experimentData(object)))
 
 setReplaceMethod("preproc", "eSet", function(object, value) {
-        preproc(object@experimentData) <- value
+        preproc(experimentData(object)) <- value
         object
 })
 

@@ -27,8 +27,16 @@
         "AssayData")}: Replace the \code{AssayData} slot of a
       \code{eSet} instance.}
     \item{combine}{\code{signature(x = "AssayData", y = "AssayData")}:
-      Return a new AssayData instance with corresponding elements
-      combined using \code{cbind}.}
+      This method uses \code{cbind} to create new AssayData elements that contain the
+      samples of both arguments \code{x} and \code{y}.
+
+      Both AssayData arguments to combine must have the same collection of
+      elements.  The elements must have identical numbers of rows
+      (features). The numerical contents of any columns (samples)
+      present in the same element of different AssayData must be
+      identical.  The storageMode of the AssayData arguments must be
+      identical, and the function returns an AssayData with storageMode
+      matching the incoming mode. See also \code{\link{combine,eSet,eSet-method}}}
     \item{featureNames}{\code{signature(object = "AssayData")}}
     \item{featureNames<-}{\code{signature(object = "AssayData", value = "ANY")}:
       Return or set the feature names as a character

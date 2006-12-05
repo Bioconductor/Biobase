@@ -45,6 +45,8 @@
 \alias{phenoData<-,eSet,AnnotatedDataFrame-method}
 \alias{pubMedIds,eSet-method}
 \alias{pubMedIds<-,eSet,character-method}
+\alias{preproc,eSet-method}
+\alias{preproc<-,eSet-method}
 \alias{reporterNames,eSet-method}
 \alias{sampleNames,eSet-method}
 \alias{sampleNames<-,eSet-method}
@@ -170,6 +172,11 @@
      \item{\code{annotation(object)},
        \code{annotation(object) <- value}}{Access and set annotation label
        indicating package used in the experiment.}
+     \item{\code{preproc(object)},
+       \code{preproc(object) <- value}:}{\code{signature(object="eSet",
+	 value="list")} Access and set \code{preprocessing} information
+       in the \code{\link{MIAME-class}} object associated with this
+       \code{eSet}.}
      \item{\code{combine(eSet,eSet)}:}{Combine two \code{eSet}
        objects. To be combined, eSets must have identical numbers of
        \code{featureNames}, distinct \code{sampleNames}, and identical \code{annotation}.}

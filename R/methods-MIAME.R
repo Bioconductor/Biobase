@@ -43,7 +43,9 @@ setMethod("show", "MIAME",
       else
          cat("  No abstract available.\n")
       if(any(Index))
-         cat("\n  Information is available on:", paste(tmp[Index],collapse=", "),"\n")
+         cat("  Information is available on:", paste(tmp[Index],collapse=", "),"\n")
+      if (length(notes(object))>0)
+        cat("  Other:\n    ", paste(notes(object), sep="\n    "), "\n")
    }
 )
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
