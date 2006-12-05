@@ -394,3 +394,18 @@ testFeatureNamesReplace <- function() {
     checkIdentical(letters[5:1], featureNames(e))
     checkTrue(validObject(e))
 }
+
+testExtraSlotClassInitialize1 <- function() {
+    ## pass if no error
+    e <- new("ExtraSlotSet")
+}
+
+testExtraSlotClassInitialize2 <- function() {
+    e <- new("ExtraSlotSet", R=new("matrix"),
+             G=new("matrix"), extraSlot="hello",
+             storage.mode="environment")
+    checkEquals("hello", e@extraSlot)
+    checkEquals(c("G", "R"),
+                ls(assayData(e)))
+    checkEquals("environment", storageMode(e))
+}

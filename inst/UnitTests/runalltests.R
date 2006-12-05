@@ -6,6 +6,7 @@ options(warn=1)
 ## instantiate here to satisfy RUnit
 
 setClass("SwirlSet", contains="eSet")
+
 setMethod("initialize", "SwirlSet",
           function(.Object,
                    assayData = assayDataNew(
@@ -30,6 +31,11 @@ setMethod("initialize", "SwirlSet",
 setValidity("SwirlSet", function(object) {
   assayDataValidMembers(assayData(object), c("R", "G", "Rb", "Gb"))
 })
+
+setClass("ExtraSlotSet", contains="eSet",
+         representation=representation(
+           extraSlot="character"))
+
 
 ## RUnit Test Suites
 

@@ -4,13 +4,34 @@
 setMethod("initialize",
           signature(.Object="eSet"),
           function( .Object,
-                   assayData = assayDataNew(...),
+                   assayData,
                    phenoData = annotatedDataFrameFrom(assayData, byrow=FALSE),
                    featureData = annotatedDataFrameFrom(assayData, byrow=TRUE),
                    experimentData = new( "MIAME" ),
                    annotation = character(),
                    ...) {
-              if (!missing(assayData)) checkClass(assayData, "AssayData", class(.Object))
+              if (!missing(assayData))
+                checkClass(assayData, "AssayData", class(.Object))
+              else {
+                  ## NB: Arguments provided in '...' are used to initialize
+                  ## slots if possible (when called from some subclass).
+                  ## Otherwise, extra args in '...' are added as elements
+                  ## to assayData.  We do this to allow subclasses to
+                  ## rely on default contructor behavior for initializing
+                  ## slots.
+                  ##
+                  ##
+                  ## NB2: Extra args to the assayData constructor will
+                  ## be passed along as long as current class doesn't
+                  ## have a slot with a matching name.
+                  mySlots <- slotNames(.Object)
+                  dotArgs <- list(...)
+                  isSlot <- names(dotArgs) %in% mySlots
+                  assayData <- do.call(assayDataNew, dotArgs[!isSlot])
+                  for (s in names(dotArgs)[isSlot]) {
+                      slot(.Object, s) <- dotArgs[[s]]
+                  }
+              }
               if (is(phenoData,"phenoData")) {
                   warning("updating phenoData argument to 'AnnotatedDataFrame'", call.=FALSE)
                   phenoData <- as(phenoData,"AnnotatedDataFrame")
