@@ -5,6 +5,23 @@ options(warn=1)
 
 ## instantiate here to satisfy RUnit
 
+## to test updateObject -- .__a__ is out-of-date during unit tests
+
+setClass("A", 
+         representation=representation(
+           x="numeric"),
+         prototype=list(x=1:5))
+
+.__a__ <- new("A")
+
+setClass("A",
+         representation=representation(
+           x="numeric",
+           y="character"))
+
+
+## eSet- and ExpressionSet-related
+
 setClass("SwirlSet", contains="eSet")
 
 setMethod("initialize", "SwirlSet",
@@ -33,6 +50,10 @@ setValidity("SwirlSet", function(object) {
 })
 
 setClass("ExtraSlotSet", contains="eSet",
+         representation=representation(
+           extraSlot="character"))
+
+setClass("ExtraSlotExpressionSet", contains="ExpressionSet",
          representation=representation(
            extraSlot="character"))
 

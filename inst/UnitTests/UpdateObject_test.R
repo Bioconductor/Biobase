@@ -60,6 +60,14 @@ testUpdateObjectDefaults <- function() {
     checkTrue(!identical(as.numeric(1:10), updateObjectTo(x, integer())))
 }
 
+testUpdateObjectS4 <- function() {
+    checkException(validObject(.__a__), silent=TRUE)      # now out-of-date
+    .__a__@x <- 1:5
+    a <- updateObject(.__a__)
+    checkTrue(validObject(a))
+    checkIdentical(1:5, a@x)
+}
+
 testUpdateObjectSetClass <- function() {
     DEACTIVATED("cannot yet setClass during RUnit")
     setClass("A",
@@ -89,7 +97,7 @@ testUpdateExpressionSet <- function() {
     opts <- options()
     options(warn=-1)
     obj <- new("ExpressionSet")
-    checkTrue(identical(obj, updateObject(obj)))
+    checkTrue(all.equal(obj, updateObject(obj)))
     checkTrue(!identical(new("ExpressionSet"), updateObject(obj))) # different environments
     obj <- new("ExpressionSet", storage.mode="list")
     checkTrue(identical(obj, updateObject(obj)))

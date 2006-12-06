@@ -2,10 +2,8 @@ setMethod("updateObject", signature(object="ANY"),
           function(object, ..., verbose=FALSE) {
               if (verbose)
                   message("updateObject(object = 'ANY') default for object of class '", class(object), "'")
-              if (!isS4(object) &&
-                  length(getObjectSlots(object)) > 0 &&
+              if (length(getObjectSlots(object)) > 0 &&
                   !any(class(object) %in% c("data.frame"))) {
-                  message("updateObject(object = 'ANY') default S4 update to class '", class(object), "'")
                   updateObjectFromSlots(object, ..., verbose=verbose)
               } else object
           })
@@ -53,7 +51,7 @@ updateObjectFromSlots <- function(object, objclass = class(object), ..., verbose
         if (verbose) message("returning original object of class 'environment'")
         return(object)
     }
-    classSlots <- names(getSlots(objclass))
+    classSlots <- slotNames(objclass)
     if (is.null(classSlots)) {
         if (verbose) message("definition of '", objclass, "' has no slots; ",
                              "returning original object")
