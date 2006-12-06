@@ -45,25 +45,43 @@ setMethod("updateObject", signature(object="AnnotatedDataFrame"),
           })
 
 setMethod("annotatedDataFrameFrom",
-          signature(object="AssayData"),
+          signature(object="matrix"),
           function(object, byrow=FALSE, ...) {
-              dims <- assayDataDims(object)
-              data <- 
-                if (all(is.na(dims))) data.frame()
-                else {
-                    n <- if (byrow) dims[1,1] else dims[2,1]
-                    eltNames <-
-                      if (is(object, "environment")) ls(object)
-                      else names(object)
-                    nms <-
-                      if(byrow) rownames(object[[eltNames[[1]]]])
-                      else colnames(object[[eltNames[[1]]]])
-                    data.frame(numeric(n), row.names=nms)[,FALSE]
-                }
+              dims <- dim(object)
+              if (is.null(dims) || all(dims==0))
+                annotatedDataFrameFrom(NULL, byrow=byrow, ...)
+              else {
+                  n <- if (byrow) dims[1] else dims[2]
+                  nms <-
+                    if(byrow) rownames(object)
+                    else colnames(object)
+                    data <- data.frame(numeric(n), row.names=nms)[,FALSE]
+                  dimLabels <-
+                    if (byrow) c("featureNames", "featureColumns")
+                    else c("sampleNames", "sampleColumns")
+                  new("AnnotatedDataFrame", data=data, dimLabels=dimLabels)
+              }
+          })
+
+setMethod("annotatedDataFrameFrom",
+          signature(object="NULL"),
+          function(object, byrow=FALSE, ...) {
               dimLabels <-
                 if (byrow) c("featureNames", "featureColumns")
                 else c("sampleNames", "sampleColumns")
-              new("AnnotatedDataFrame", data=data, dimLabels=dimLabels)
+              new("AnnotatedDataFrame", data=data.frame(), dimLabels=dimLabels)
+          })
+
+setMethod("annotatedDataFrameFrom",
+          signature(object="AssayData"),
+          function(object, byrow=FALSE, ...) {
+              eltNames <-
+                if (is(object, "environment")) ls(object)
+                else names(object)
+              if (length(eltNames)==0)
+                annotatedDataFrameFrom(NULL, byrow=byrow, ...)
+              else
+                annotatedDataFrameFrom(object[[eltNames[1]]], byrow=byrow, ...)
           })
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -187,3 +187,43 @@ testBadInitializeArugments <- function() {
     checkException(new("AnnotatedDataFrame", varMetadata=NULL), silent=TRUE)
     checkException(new("AnnotatedDataFrame", data=data.frame(), varMetadata=NULL), silent=TRUE)
 }
+
+testAnnotatedDataFrameFrom <- function() {
+    ## empty matrix
+    m <- matrix(0,0,0)
+    a <- annotatedDataFrameFrom(m, byrow=TRUE)
+    checkTrue(validObject(a))
+    checkTrue(all.equal(c(0,0), as.vector(dim(a))))
+    a <- annotatedDataFrameFrom(m, byrow=FALSE)
+    checkTrue(validObject(a))
+    checkTrue(all.equal(c(0,0), as.vector(dim(a))))
+    ## matrix
+    m <- matrix(0,5,10, dimnames=list(letters[1:5], LETTERS[1:10]))
+    a <- annotatedDataFrameFrom(m, byrow=TRUE)
+    checkIdentical(letters[1:5], sampleNames(a))
+    a <- annotatedDataFrameFrom(m, byrow=FALSE)
+    checkIdentical(LETTERS[1:10], sampleNames(a))
+    ## assayData -- empty env
+    ad <- assayDataNew()
+    checkTrue(validObject(annotatedDataFrameFrom(ad, byrow=TRUE)))
+    checkTrue(validObject(annotatedDataFrameFrom(ad, byrow=FALSE)))
+    ## assayData -- empty list
+    ad <- assayDataNew(storage.mode="list")
+    checkIdentical("list", storageMode(ad))
+    checkTrue(validObject(annotatedDataFrameFrom(ad, byrow=TRUE)))
+    checkTrue(validObject(annotatedDataFrameFrom(ad, byrow=FALSE)))
+    ## assayData -- non-empty env
+    ad <- assayDataNew(m=m)
+    checkIdentical("lockedEnvironment", storageMode(ad))
+    a <- annotatedDataFrameFrom(ad, byrow=TRUE)
+    checkIdentical(letters[1:5], sampleNames(a))
+    a <- annotatedDataFrameFrom(ad, byrow=FALSE)
+    checkIdentical(LETTERS[1:10], sampleNames(a))
+    ## assayData -- non-empty list
+    ad <- assayDataNew(m=m, storage.mode="list")
+    checkIdentical("list", storageMode(ad))
+    a <- annotatedDataFrameFrom(ad, byrow=TRUE)
+    checkIdentical(letters[1:5], sampleNames(a))
+    a <- annotatedDataFrameFrom(ad, byrow=FALSE)
+    checkIdentical(LETTERS[1:10], sampleNames(a))
+}
