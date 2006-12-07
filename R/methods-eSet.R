@@ -178,34 +178,27 @@ setMethod("updateObject", signature(object="eSet"),
 setMethod("updateObjectTo", signature(object="eSet", template="eSet"), updateESetTo)
 
 setValidity("eSet", function( object ) {
-  msg <- NULL
-  if (!is(object, "eSet"))
-    msg <- validMsg(msg, paste("cannot validate object of class", class( object )))
-  msg <- validMsg(msg, isValidVersion(object, "eSet"))
-  dims <- dims(object)
-  if (!is.na(dims[[1]])) {
-    ## assayData
-    if (any( dims[1,] != dims[1,1]))
-      msg <- validMsg(msg, "row numbers differ for assayData members")
-    if (any(dims[2,] != dims[2,1]))
-      msg <- validMsg(msg, "sample numbers differ for assayData members")
-    msg <- validMsg(msg, assayDataValidMembers(assayData(object)))
-    ## featureData
-    if ( dims[1,1] != dim( featureData(object))[[1]] )
-      msg <- validMsg(msg, "feature numbers differ between assayData and featureData")
-    if (!all(featureNames(assayData(object))==featureNames(featureData(object))))
-      msg <- validMsg(msg, "featureNames differ between assayData and featureData")
-    ## phenoData
-    if ( dims[2,1] != dim( phenoData( object ))[[1]] )
-      msg <- validMsg(msg, "sample numbers differ between assayData and phenoData")
-    if (!all(sampleNames(assayData(object))==sampleNames(phenoData(object))))
-      msg <- validMsg(msg, "sampleNames differ between assayData and phenoData")
-  } else if (dim(phenoData(object))[[1]] != 0 ) {
-    msg <- validMsg(msg, "sample numbers differ between assayData and phenoData")
-  }
-  ##   if (length(object) != 0 && length(reporterNames(object)) != d[1,1])
-  ##     return("number of assayData rows different from number of reporterNames")
-  if (is.null(msg)) TRUE else msg
+    msg <- validMsg(NULL, isValidVersion(object, "eSet"))
+    dims <- dims(object)
+    if (!is.na(dims[[1]])) {
+        ## assayData
+        if (any( dims[1,] != dims[1,1]))
+          msg <- validMsg(msg, "row numbers differ for assayData members")
+        if (any(dims[2,] != dims[2,1]))
+          msg <- validMsg(msg, "sample numbers differ for assayData members")
+        msg <- validMsg(msg, assayDataValidMembers(assayData(object)))
+        ## featureData
+        if ( dims[1,1] != dim( featureData(object))[[1]] )
+          msg <- validMsg(msg, "feature numbers differ between assayData and featureData")
+        if (!all(featureNames(assayData(object))==featureNames(featureData(object))))
+          msg <- validMsg(msg, "featureNames differ between assayData and featureData")
+        ## phenoData
+        if ( dims[2,1] != dim( phenoData( object ))[[1]] )
+          msg <- validMsg(msg, "sample numbers differ between assayData and phenoData")
+        if (!all(sampleNames(assayData(object))==sampleNames(phenoData(object))))
+          msg <- validMsg(msg, "sampleNames differ between assayData and phenoData")
+    }
+    if (is.null(msg)) TRUE else msg
 })
 
 setMethod("preproc", "eSet", function(object) 
