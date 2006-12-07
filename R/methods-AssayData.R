@@ -87,16 +87,26 @@ setMethod("sampleNames", signature(object="AssayData"),
           })
 
 setReplaceMethod("sampleNames", c("AssayData", "ANY"), function(object, value) {
-  switch(assayDataStorageMode(object),
-         lockedEnvironment = {
-           object <- copyEnv(object)
-           for (nm in ls(object)) colnames(object[[nm]]) <- value
-           assayDataEnvLock(object)
-         },
-         environment = for (nm in ls(object)) colnames(object[[nm]]) <- value,
-         list = for (nm in names(object)) colnames(object[[nm]]) <- value
-         )
-  object
+    dims <- 
+      switch(assayDataStorageMode(object),
+             lockedEnvironment=,
+             environment = eapply(object, ncol),
+             list = lapply(object, ncol))
+    if (length(dims)==0 && length(value) !=0)
+      stop("no elements to assign sampleNames in 'AssayData'")
+    if (!all(dims==length(value)))
+      stop("'value' length (", length(value),
+           ") must equal sample number in AssayData (",dims[[1]], ")")
+    switch(assayDataStorageMode(object),
+           lockedEnvironment = {
+               object <- copyEnv(object)
+               for (nm in ls(object)) colnames(object[[nm]]) <- value
+               assayDataEnvLock(object)
+           },
+           environment = for (nm in ls(object)) colnames(object[[nm]]) <- value,
+           list = for (nm in names(object)) colnames(object[[nm]]) <- value
+           )
+    object
 })
 
 setMethod("featureNames", signature(object="AssayData"),
