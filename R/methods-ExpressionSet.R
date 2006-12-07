@@ -1,18 +1,34 @@
 setMethod("initialize", "ExpressionSet",
           function(.Object,
-                   assayData = assayDataNew(exprs=exprs, ...),
+                   assayData,
                    phenoData = annotatedDataFrameFrom(assayData, byrow=FALSE),
                    featureData = annotatedDataFrameFrom(assayData, byrow=TRUE),
                    experimentData = new("MIAME"),
                    annotation = character(),
                    exprs = new("matrix"),
                    ... ) {
-              callNextMethod(.Object,
-                             assayData = assayData,
-                             phenoData = phenoData,
-                             featureData = featureData,
-                             experimentData = experimentData,
-                             annotation = annotation)
+              if (missing(assayData)) {
+                  if (missing(phenoData))
+                    phenoData <- annotatedDataFrameFrom(exprs, byrow=FALSE)
+                  if (missing(featureData))
+                    featureData <- annotatedDataFrameFrom(exprs, byrow=TRUE)
+                  callNextMethod(.Object,
+                                 phenoData=phenoData,
+                                 featureData=featureData,
+                                 experimentData=experimentData,
+                                 annotation=annotation,
+                                 exprs=exprs,
+                                 ...)
+              } else if (missing(exprs)) {
+                  callNextMethod(.Object,
+                                 assayData = assayData,
+                                 phenoData = phenoData,
+                                 featureData = featureData,
+                                 experimentData = experimentData,
+                                 annotation = annotation,
+                                 ...)
+              } else stop("provide at most one of 'assayData' or 'exprs' to initialize ExpressionSet",
+                          call.=FALSE)
           })
 
 setAs("exprSet", "ExpressionSet", function(from) {

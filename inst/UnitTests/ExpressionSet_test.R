@@ -38,3 +38,29 @@ testAddTextNotes <- function() {
     notes(eset) <- "another"
     checkTrue(identical(notes(eset), list("a note", "another")))
 }
+
+testExtraSlotExpressionClassInitialize1 <- function() {
+    ## pass if no error
+    checkTrue(validObject(new("ExtraSlotExpressionSet")))
+}
+
+testExtraSlotExpressionClassInitialize2 <- function() {
+    e <- new("ExtraSlotExpressionSet",
+             exprs=new("matrix"),
+             extraSlot="hello",
+             storage.mode="environment")
+    checkEquals("hello", e@extraSlot)
+    checkEquals("exprs", ls(assayData(e)))
+    checkEquals("environment", storageMode(e))
+}
+
+testExtraSlotExpressionClassInitialize3 <- function() {
+    e <- new("ExtraSlotExpressionSet",
+             assayData=assayDataNew(
+               exprs=new("matrix"),
+               storage.mode="environment"),
+             extraSlot="hello")
+    checkEquals("hello", e@extraSlot)
+    checkEquals("exprs", ls(assayData(e)))
+    checkEquals("environment", storageMode(e))
+}

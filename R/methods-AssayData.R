@@ -7,6 +7,8 @@ assayDataNew <- function(storage.mode = c("lockedEnvironment", "environment", "l
   arglist <- list(...)
   for (nm in names(arglist)) assayData[[nm]] <- arglist[[nm]]
   if (storage.mode == "lockedEnvironment") assayDataEnvLock(assayData)
+  msg <- assayDataValidMembers(assayData)
+  if (!is.logical(msg)) stop(msg)
   assayData
 }
 
@@ -18,9 +20,19 @@ assayDataValidMembers <- function(assayData, required) {
         absent <- required[ !(required %in% names)]
         if (length(absent) != 0)
           msg <- paste(msg, 
-                       paste("missing '", absent ,"' in assayData" , sep = "", collapse = "\n\t"),
+                       paste("missing '", absent ,"' in AssayData" , sep = "", collapse = "\n\t"),
                        sep="\n")
     }
+    nms <-
+      if (storageMode=="list") names(assayData)
+      else ls(assayData)
+    dimsOk <-
+      sapply(nms, function(elt)
+             tryCatch(length(dim(assayData[[elt]]))>1,
+                      error=function(err) FALSE))
+    if (!all(dimsOk)) 
+      msg <- c(msg, paste("'AssayData' elements with invalid dimensions: '",
+                          paste(nms[!dimsOk], collapse="' '"), "'", sep=""))
     if (length(assayData)>1) {
         nms <-
           if (storageMode == "list") lapply(assayData, rownames)
@@ -28,7 +40,7 @@ assayDataValidMembers <- function(assayData, required) {
         if (!all(sapply(nms, is.null))) 
           if (any(sapply(nms, is.null)) ||
               any(nms[[1]] != unlist(nms[-1], use.names=FALSE)))
-            msg <- paste(msg, "featureNames differ between AssayData members", sep="\n")
+            msg <- c(msg, "featureNames differ between AssayData members")
     }
     if (is.null(msg)) TRUE else msg
 }
@@ -177,8 +189,6 @@ assayDataDims <- function( object ) {
   nms <- if (assayDataStorageMode(object) == "list") names(object) else ls(object)
   if ( length( nms ) == 0 ) return( NA )
   d = sapply(nms, function(i) dim(object[[i]]))
-  if( !is.matrix(d) )
-     stop("some element of assay data is not a matrix")
   rownames(d) <- c("Features", "Samples", rep("...", nrow(d)-2))
   colnames(d) <- nms
   d[,order(colnames(d)), drop=FALSE]

@@ -8,35 +8,42 @@ setMethod("initialize",
                    phenoData = annotatedDataFrameFrom(assayData, byrow=FALSE),
                    featureData = annotatedDataFrameFrom(assayData, byrow=TRUE),
                    experimentData = new( "MIAME" ),
-                   annotation = character(),
+                   annotation = character(0),
                    ...) {
-              if (!missing(assayData))
-                checkClass(assayData, "AssayData", class(.Object))
+              ## NB: Arguments provided in '...' are used to initialize
+              ## slots if possible (when called from some subclass).
+              ## Otherwise, extra args in '...' are added as elements
+              ## to assayData.  We do this to allow subclasses to
+              ## rely on default contructor behavior for initializing
+              ## slots.
+              ##
+              ## NB2: Extra args to the assayData constructor will
+              ## be passed along as long as current class doesn't
+              ## have a slot with a matching name.
+              mySlots <- slotNames(.Object)
+              dotArgs <- list(...)
+              isSlot <- names(dotArgs) %in% mySlots
+              if (missing(assayData))
+                assayData <- do.call(assayDataNew, dotArgs[!isSlot], envir=parent.frame())
               else {
-                  ## NB: Arguments provided in '...' are used to initialize
-                  ## slots if possible (when called from some subclass).
-                  ## Otherwise, extra args in '...' are added as elements
-                  ## to assayData.  We do this to allow subclasses to
-                  ## rely on default contructor behavior for initializing
-                  ## slots.
-                  ##
-                  ##
-                  ## NB2: Extra args to the assayData constructor will
-                  ## be passed along as long as current class doesn't
-                  ## have a slot with a matching name.
-                  mySlots <- slotNames(.Object)
-                  dotArgs <- list(...)
-                  isSlot <- names(dotArgs) %in% mySlots
-                  assayData <- do.call(assayDataNew, dotArgs[!isSlot])
-                  for (s in names(dotArgs)[isSlot]) {
-                      slot(.Object, s) <- dotArgs[[s]]
-                  }
+                  checkClass(assayData, "AssayData", class(.Object))
+                  nms <- 
+                    if (storageMode(assayData)=="list") names(assayData)
+                    else ls(assayData)
+                  dupNames <- nms %in% names(dotArgs[!isSlot])
+                  if (any(dupNames))
+                    warning("initialize argument '",
+                            paste(nms[dupNames], collapse="' "),
+                            "' also present in 'assayData'; argument ignored")
               }
               if (is(phenoData,"phenoData")) {
                   warning("updating phenoData argument to 'AnnotatedDataFrame'", call.=FALSE)
                   phenoData <- as(phenoData,"AnnotatedDataFrame")
-              } else if (!missing(phenoData)) checkClass(phenoData, "AnnotatedDataFrame", class(.Object))
-              if (!missing(featureData)) checkClass(featureData, "AnnotatedDataFrame", class(.Object))
+              } else if (!missing(phenoData)) {
+                  checkClass(phenoData, "AnnotatedDataFrame", class(.Object))
+              }
+              if (!missing(featureData))
+                checkClass(featureData, "AnnotatedDataFrame", class(.Object))
               ## coordinate sample names
               adSampleNames <- sampleNames(assayData)
               if (all(sapply(adSampleNames,is.null)))
@@ -45,7 +52,11 @@ setMethod("initialize",
               adFeatureNames <- featureNames(assayData)
               if (all(sapply(adFeatureNames, is.null)))
                 featureNames(assayData) <- featureNames(featureData)
-              callNextMethod(.Object, assayData=assayData,
+              ## create new instance from 'extra' dotArgs, and from instance
+              for (s in names(dotArgs)[isSlot])
+                   slot(.Object, s) <- dotArgs[[s]]
+              callNextMethod(.Object,
+                             assayData=assayData,
                              phenoData=phenoData, featureData=featureData,
                              experimentData=experimentData, annotation=annotation)
           })

@@ -401,11 +401,34 @@ testExtraSlotClassInitialize1 <- function() {
 }
 
 testExtraSlotClassInitialize2 <- function() {
-    e <- new("ExtraSlotSet", R=new("matrix"),
-             G=new("matrix"), extraSlot="hello",
+    e <- new("ExtraSlotSet", R=matrix(0,5,3),
+             G=matrix(0,5,3), extraSlot="hello",
              storage.mode="environment")
     checkEquals("hello", e@extraSlot)
     checkEquals(c("G", "R"),
                 ls(assayData(e)))
     checkEquals("environment", storageMode(e))
+}
+
+testExtraSlotClassInitialize3 <- function() {
+    e <- new("ExtraSlotSet",
+             assayData=assayDataNew(
+               R=new("matrix"),
+               G=new("matrix"),
+               storage.mode="environment"),
+             extraSlot="hello")
+    checkEquals("hello", e@extraSlot)
+    checkEquals(c("G", "R"), ls(assayData(e)))
+    checkEquals("environment", storageMode(e))
+}
+
+testExtraSlotClassInitialize4 <- function() {
+    oldopts <- options()
+    options(warn=2)
+    on.exit(options(oldopts))
+    checkException(new("ExtraSlotSet",
+                       assayData=assayDataNew(
+                         R=matrix(0,3,5),
+                         storage.mode="environment"),
+                       R=new("matrix")), silent=TRUE)
 }
