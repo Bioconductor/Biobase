@@ -13,7 +13,7 @@ createPackage <- function(pkgname, destinationDir, originDir, symbolValues,
          stop(paste("'", a, "' must be a character vector of length 1.", sep=""))
    ## check whether destinationDir, originDir exist and are directories
    for (a in c("destinationDir", "originDir"))
-      if(!file.info(get(a))$isdir)
+      if(!file.exists(get(a)) || !file.info(get(a))$isdir)
          stop(paste("'", a, "' must be a directory (", get(a), ")\n.", sep=""))
    ## locate / remove / create destination directory
    pkgdir = file.path(destinationDir, pkgname)
