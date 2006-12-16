@@ -14,33 +14,30 @@ assayDataNew <- function(storage.mode = c("lockedEnvironment", "environment", "l
 
 assayDataValidMembers <- function(assayData, required) {
     msg <- NULL
-    storageMode <- assayDataStorageMode(assayData)
+    eltNames <-
+      if ("list" == assayDataStorageMode(assayData)) names(assayData)
+      else ls(assayData)
     if (!missing(required)) {
-        names <- if (storageMode == "list") names(assayData) else ls(assayData)
-        absent <- required[ !(required %in% names)]
+        absent <- required[!required %in% eltNames]
         if (length(absent) != 0)
           msg <- paste(msg, 
-                       paste("missing '", absent ,"' in AssayData" , sep = "", collapse = "\n\t"),
+                       paste("'AssayData' missing '", absent ,"'" , sep = "", collapse = "\n\t"),
                        sep="\n")
     }
-    nms <-
-      if (storageMode=="list") names(assayData)
-      else ls(assayData)
     dimsOk <-
-      sapply(nms, function(elt)
+      sapply(eltNames, function(elt)
              tryCatch(length(dim(assayData[[elt]]))>1,
                       error=function(err) FALSE))
     if (!all(dimsOk)) 
       msg <- c(msg, paste("'AssayData' elements with invalid dimensions: '",
-                          paste(nms[!dimsOk], collapse="' '"), "'", sep=""))
+                          paste(eltNames[!dimsOk], collapse="' '"), "'", sep=""))
     if (length(assayData)>1) {
-        nms <-
-          if (storageMode == "list") lapply(assayData, rownames)
-          else eapply(assayData, rownames)
-        if (!all(sapply(nms, is.null))) 
-          if (any(sapply(nms, is.null)) ||
-              any(nms[[1]] != unlist(nms[-1], use.names=FALSE)))
-            msg <- c(msg, "featureNames differ between AssayData members")
+        eltRowNames <- rownames(assayData[[eltNames[[1]]]])
+        rowNamesOk <- 
+          all(sapply(eltNames[-1], function(elt)
+                     all(eltRowNames == rownames(assayData[[elt]]))))
+        if (!rowNamesOk)
+          msg <- c(msg, "'AssayData' elements with different featureNames")
     }
     if (is.null(msg)) TRUE else msg
 }
