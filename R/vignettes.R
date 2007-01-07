@@ -20,8 +20,11 @@ getPkgVigs <- function(package=NULL) {
           if (file.exists(x)) {
              vigs <- .readRDS(x)
              if (nrow(vigs) > 0) {
-                vigPaths <- file.path(dirname(x),"..", "doc", vigs[,"PDF"])
-                names(vigPaths) <- vigs[,"Title"]
+                pdfname = vigs[, "PDF"]
+                tit     = vigs[, "Title"]
+                vigPaths = ifelse(pdfname=="", as.character(NA),
+                             file.path(dirname(x), "..", "doc", pdfname))
+                names(vigPaths) = ifelse(tit=="", "(no title)", tit)
                 vigPaths
              } # else NULL
           } # else NULL
@@ -33,23 +36,26 @@ getPkgVigs <- function(package=NULL) {
 openVignette <- function(package=NULL) {
     vigFiles <- getPkgVigs(package)
     if(is.null(vigFiles)) {
-      warning(package, " contains no vignettes")
+      warning(paste(sep="", "No vignettes found",
+       ifelse(is.null(package), ".\n", sprintf(" for package%s %s.\n",
+          ifelse(length(package)==1, "", "s"), paste(package, collapse=", ")))))
     } else {
-      names <- names(vigFiles)
-      ##indent a little
-      names <- paste("",names)
+      nm <- paste("",names(vigFiles))  ##indent a little
+      
       ##FIXME: why set names to NULL?
       names(vigFiles) <- NULL
-      index <- menu(names, title="Please select (by number) a vignette")
+      index <- menu(nm, title="Please select (by number) a vignette")
 
       if (index > 0) {
-        ## Need to switch on the file extension
-        ext <- strsplit(vigFiles[index],"\\.")[[1]]
-        switch(ext[length(ext)],
-           "pdf" = openPDF(vigFiles[index]),
-           "html"= browseURL(paste("file://",vigFiles[index],sep="")),
-           stop("Don't know how to handle this vignette")
-        )
+        vi = vigFiles[index]
+        if(!is.na(vi)) {
+          openPDF(i)
+          cat("Opening", vi, "\n")
+          ## browseURL(paste("file://", vigFiles[index],sep=""))
+        } else {
+          stop("Sorry, this vignette seems to be corrupted on your system, cannot open it.\n",
+               "You might try to install the package.")
+        }
       }
     }
 }
