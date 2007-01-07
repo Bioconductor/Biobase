@@ -49,7 +49,7 @@ openVignette <- function(package=NULL) {
       if (index > 0) {
         vi = vigFiles[index]
         if(!is.na(vi)) {
-          openPDF(i)
+          openPDF(vi)
           cat("Opening", vi, "\n")
           ## browseURL(paste("file://", vigFiles[index],sep=""))
         } else {
