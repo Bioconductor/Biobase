@@ -309,7 +309,7 @@ read.AnnotatedDataFrame <- function(filename = NULL, sampleNames = NULL,
         if(is.character(filename) || inherits(filename, "connection")) {
             pData <- read.table(filename,...)
             if(!is.null(sampleNames)) row.names(pData) <- sampleNames
-            varLabels <- as.list(rep("read from file",ncol(pData)))
+            varLabels <- rep("read from file",ncol(pData))
             names(varLabels) <- names(pData)
             return(new("AnnotatedDataFrame",
                        data=pData,
