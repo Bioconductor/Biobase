@@ -188,6 +188,32 @@ testBadInitializeArugments <- function() {
     checkException(new("AnnotatedDataFrame", data=data.frame(), varMetadata=NULL), silent=TRUE)
 }
 
+testNewWithVarMetadata <- function() {
+    df <- data.frame(x=1:6,
+                     y=rep(c("Low", "High"),3),
+                     z=I(LETTERS[1:6]),
+                     row.names=paste("Sample", 1:6, sep="_"))
+    metaData <- data.frame(labelDescription=c(
+                             "Numbers",
+                             "Factor levels",
+                             "Character"))
+    ## standard
+    obj <- new("AnnotatedDataFrame",
+               data=df, varMetadata=metaData)
+    checkTrue(validObject(obj))
+    ## varMetadata with inconsistent row names -- silent conversion
+    row.names(metaData) <- 1:3
+    obj <- new("AnnotatedDataFrame",
+               data=df, varMetadata=metaData)
+    checkTrue(validObject(obj))
+    checkTrue(all(row.names(varMetadata(obj))==names(pData(obj))))
+    ## build up piece-wise
+    obj <- new("AnnotatedDataFrame")
+    pData(obj) <- df
+    varMetadata(obj) <- metaData
+    checkTrue(validObject(obj))
+}
+
 testAnnotatedDataFrameFrom <- function() {
     ## empty matrix
     m <- matrix(0,0,0)

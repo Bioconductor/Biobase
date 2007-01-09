@@ -8,6 +8,7 @@ setMethod("initialize", signature(.Object="AnnotatedDataFrame"),
                   checkClass(varMetadata, "data.frame", class(.Object))
                   if (!"labelDescription" %in% colnames(varMetadata))
                     varMetadata[["labelDescription"]] <- rep(NA, nrow(varMetadata))
+                  row.names(varMetadata) <- names(data)
               }
               varMetadata[["labelDescription"]] <- as.character(varMetadata[["labelDescription"]])
               callNextMethod(.Object, data=data, varMetadata=varMetadata, ...)
@@ -112,7 +113,7 @@ setReplaceMethod("sampleNames", c("AnnotatedDataFrame", "ANY"), function(object,
   if (length(value) != dim(object@data)[[1]])
     stop(paste("number of new names (",
                length(value),
-               ") should equal number of rows in phenoData (",
+               ") should equal number of rows in AnnotatedDataFrame (",
                dim( object )[[1]], ")",sep=""))
   row.names(object@data) <- value
   object
@@ -135,7 +136,7 @@ setReplaceMethod("varLabels", c("AnnotatedDataFrame", "ANY"), function(object, v
   if (length(value) != dim(object@data)[[2]])
     stop(paste("number of new varLabels (",
                length(value),
-               ") should equal number of columns in phenoData (",
+               ") should equal number of columns in AnnotatedDataFrame (",
                dim(object)[[2]], ")", sep=""))
   colnames(object@data) <- value
   row.names(object@varMetadata) <- value
@@ -147,6 +148,8 @@ setMethod("varMetadata", "AnnotatedDataFrame", function(object) object@varMetada
 setReplaceMethod("varMetadata", c("AnnotatedDataFrame", "data.frame"), function(object, value) {
   if (!("labelDescription" %in% colnames(value)))
     warning("varMetadata must have column named 'labelDescription'")
+  if (ncol(pData(object))>0)
+    row.names(value) <- names(pData(object))
   object@varMetadata <- value
   object
 })

@@ -32,18 +32,18 @@
 \alias{varLabels,AnnotatedDataFrame-method}
 
 \title{
-  Class to Contain Measured Variables and Their Meta-Data Description.
+  Class Containing Measured Variables and Their Meta-Data Description.
 }
 
 \description{
-  \code{AnnotatedDataFrame}s consist of two parts. There is a collection
+  An \code{AnnotatedDataFrame} consists of two parts. There is a collection
   of samples and the values of variables measured on those
   samples. There is also a description of each variable measured. The
   components of an \code{AnnotatedDataFrame} can be accessed with
-  \code{\link{phenoData}} and \code{\link{varMetadata}}.
+  \code{\link{pData}} and \code{\link{varMetadata}}.
 }
 \section{Extends}{
-   None
+   Versioned
 }
 \section{Creating Objects}{
 
@@ -53,17 +53,18 @@
     varMetadata=data.frame(), dimLabels=c("rowNames", "columnNames"))}
 
   \code{AnnotatedDataFrame} instances are created using \code{new}.  The
-  initialize method takes up to three arguments, \code{data} and
-  \code{varMetadata}.  \code{data} is a \code{data.frame} of the samples
-  (rows) and measured variables (columns).  \code{varMetadata} is a
-  \code{data.frame} with the number of rows equal to the number of
-  columns of the \code{data} argument.  \code{varMetadata} describes
-  aspects of each measured variable. \code{dimLabels} provides aesthetic
-  control for labeling rows and columns in the \code{show}
-  method. \code{varMetadata} and \code{dimLabels} can be missing.
+  initialize method takes up to three arguments, \code{data},
+  \code{varMetadata}, and \code{dimLabels}.  \code{data} is a
+  \code{data.frame} of the samples (rows) and measured variables
+  (columns).  \code{varMetadata} is a \code{data.frame} with the number
+  of rows equal to the number of columns of the \code{data} argument.
+  \code{varMetadata} describes aspects of each measured
+  variable. \code{dimLabels} provides aesthetic control for labeling rows
+  and columns in the \code{show} method. \code{varMetadata} and
+  \code{dimLabels} can be missing.
 
-  \code{as(data.frame, "AnnotatedDataFrame")} coerces a data frame to an
-  AnnotatedDataFrame.
+  \code{as(data.frame, "AnnotatedDataFrame")} coerces a \code{data.frame} to an
+  \code{AnnotatedDataFrame}.
 
   \code{\link{annotatedDataFrameFrom}} may be a convenient way to create
   an \code{AnnotatedDataFrame} from \code{\link{AssayData-class}}.
@@ -150,7 +151,30 @@
 \author{V.J. Carey, after initial design by R. Gentleman }
 
 \seealso{
-  \code{\link{eSet}}, \code{\link{ExpressionSet}}
+  \code{\link{eSet}}, \code{\link{ExpressionSet}},
+  \code{\link{read.AnnotatedDataFrame}}
 }
+\examples{
+df <- data.frame(x=1:6,
+                 y=rep(c("Low", "High"),3),
+                 z=I(LETTERS[1:6]),
+                 row.names=paste("Sample", 1:6, sep="_"))
+metaData <-
+  data.frame(labelDescription=c(
+               "Numbers",
+               "Factor levels",
+               "Characters"))
+                       
+new("AnnotatedDataFrame")
+new("AnnotatedDataFrame", data=df)
+new("AnnotatedDataFrame",
+    data=df, varMetadata=metaData)
 
+as(df, "AnnotatedDataFrame")
+
+obj <- new("AnnotatedDataFrame")
+pData(obj) <- df
+varMetadata(obj) <- metaData
+validObject(obj)
+}
 \keyword{classes}
