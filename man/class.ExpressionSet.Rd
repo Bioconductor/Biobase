@@ -35,22 +35,33 @@
 }
 \section{Creating Objects}{
 
-  \code{new('ExpressionSet',
-    phenoData = [AnnotatedDataFrame],
-    experimentData = [MIAME],
-    annotation = [character],
-    exprs = [matrix],
-    ...)
-  }
+  \code{new("ExpressionSet")}
+
+  \code{new("ExpressionSet",
+    phenoData = new("AnnotatedDataFrame"),
+    featureData = new("AnnotatedDataFrame"),
+    experimentData = new("MIAME"),
+    annotation = character(0),
+    exprs = new("matrix"))
+  } creates an \code{ExpressionSet} with \code{assayData} implicitly
+  created with \code{exprs}.
+
+  \code{new("ExpressionSet",
+    assayData = assayDataNew(exprs=new("matrix")),
+    phenoData = new("AnnotatedDataFrame"),
+    featureData = new("AnnotatedDataFrame"),
+    experimentData = new("MIAME"),
+    annotation = character(0))
+  } creates an \code{ExpressionSet} with \code{assayData} provided explicitly.
 
   \code{as([exprSet],"ExpressionSet")}
 
   \code{ExpressionSet} instances are usually created through
   \code{new("ExpressionSet", ...)}. Usually the arguments to \code{new}
   include \code{exprs} (a matrix of expression data, with features
-  corresponding to rows and samples to columns), \code{phenoData},
+  corresponding to rows and samples to columns), \code{phenoData}, \code{featureData},
   \code{experimentData}, and \code{annotation}. 
-  \code{phenoData}, \code{experimentData}, and \code{annotation} can be
+  \code{phenoData}, \code{featureData}, \code{experimentData}, and \code{annotation} can be
   missing, in which case they are assigned default values.
 }
 \section{Slots}{
@@ -64,6 +75,7 @@
 	identical size (e.g., representing measurement errors) may
 	also be included in \code{assayData}. Class:\code{\link{AssayData-class}}}
       \item{\code{phenoData}:}{See \code{\link{eSet}}}
+      \item{\code{featureData}:}{See \code{\link{eSet}}}
       \item{\code{experimentData}:}{See \code{\link{eSet}}}
       \item{\code{annotation}:}{See \code{\link{eSet}}}
   }
@@ -140,12 +152,15 @@
 \author{Biocore team}
 
 \seealso{
-  \code{\link{eSet-class}}, \code{\link{ExpressionSet-class}}
+  \code{\link{eSet-class}}, \code{\link{ExpressionSet-class}}.
 }
 
 \examples{
 # create an instance of ExpressionSet
 new("ExpressionSet")
+
+new("ExpressionSet",
+    exprs=matrix(runif(1000), nrow=100, ncol=10))
 
 # update an existing ExpressionSet
 data(sample.ExpressionSet)
