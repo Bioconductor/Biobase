@@ -298,7 +298,7 @@ setMethod("combine",
               new("AnnotatedDataFrame", data=pData, varMetadata=vM, dimLabels=dimLabels(x))
           })
 
-read.AnnotatedDataFrame <- function(filename = NULL, sampleNames = NULL,
+read.AnnotatedDataFrame <- function(filename = NULL, sampleNames = character(0),
                                     widget = getOption("BioC")$Base$use.widgets,...) {
     ## used by affy
     if(widget) {
@@ -307,28 +307,29 @@ read.AnnotatedDataFrame <- function(filename = NULL, sampleNames = NULL,
     }
     else {
         if(is.character(filename) || inherits(filename, "connection")) {
-            pData <- read.table(filename,...)
-            if(!is.null(sampleNames)) row.names(pData) <- sampleNames
-            varLabels <- rep("read from file",ncol(pData))
-            names(varLabels) <- names(pData)
+            pData <- read.table(filename, ...)
+            if(0!=length(sampleNames))
+              row.names(pData) <- sampleNames
             return(new("AnnotatedDataFrame",
                        data=pData,
                        varMetadata=data.frame(
-                         labelDescription=varLabels,
-                         row.names=names(varLabels))))
+                         labelDescription=rep("read from file", ncol(pData)),
+                         row.names=names(pData))))
         }
         else {
-            if( !is.null(filename) )
-              stop("incorrect filename given")
-            if(is.null(sampleNames)){
+            if(!is.null(filename))
+              stop("incorrect 'filename' given")
+            if(0==length(sampleNames)){
                 return(new("AnnotatedDataFrame")) ##return a blank!
             } else {
-                pdata <- data.frame(sample=1:length(sampleNames), row.names=sampleNames)
+                pData <- data.frame(
+                             sample=1:length(sampleNames),
+                             row.names=sampleNames)
                 return(new("AnnotatedDataFrame",
-                           data=pdata,
+                           data=pData,
                            varMetadata=data.frame(
                              labelDescription="arbitrary numbering",
-                             row.names="sample")))
+                             row.names=names(pData))))
             }
         }
     }
