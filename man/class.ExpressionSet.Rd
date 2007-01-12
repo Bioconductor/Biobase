@@ -86,8 +86,7 @@
   \describe{
     \item{\code{as(exprSet,"ExpressionSet")}}{Coerce objects of
       \code{\link{exprSet-class}} to \code{ExpressionSet}}
-    \item{\code{as(object,"data.frame")}}{C
-      oerce objects of
+    \item{\code{as(object,"data.frame")}}{Coerce objects of
       \code{\link{ExpressionSet-class}} to \code{data.frame} by
       transposing the expression matrix and concatenating \code{phenoData}}
      \item{\code{exprs(ExpressionSet)}, \code{exprs(ExpressionSet,matrix)<-}}{Access and
