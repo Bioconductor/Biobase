@@ -20,11 +20,11 @@
 \concept{varLabels}
 
 \title{
-   Virtual Superset for 'exprSet', 'eSet' etc.
+   Virtual superset for 'exprSet'.
 }
 
 \description{
-   This virtual class is used to derive classes \code{exprSet}, \code{eSet}. It defines the \code{phenoData} specific methods
+   This virtual class is used to derive the \code{exprSet} class. It defines the \code{phenoData} specific methods
 }
 
 \section{Objects from the Class}{A virtual Class: No objects may be created from it.}
@@ -54,7 +54,7 @@
   }
 
 \seealso{
-   \code{\link{exprSet}}, \code{\link{eSet}}, \code{\link{phenoData}}
+   \code{\link{exprSet}}, \code{\link{phenoData}}
 }
 
 \keyword{classes}
