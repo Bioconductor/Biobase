@@ -29,5 +29,12 @@ The common suffix.
 \examples{
   s1 = c("ABC.CEL", "DEF.CEL")
   lcSuffix(s1)
+
+
+CHK <- stopifnot
+CHK(".CEL" == lcSuffix(s1))
+CHK("bc" == lcSuffix(c("abc", "abc", "333abc", "bc")))
+CHK("c" == lcSuffix(c("c", "abc", "xxxc")))
+CHK("" == lcSuffix(c("c", "abc", "xxx")))
 }
 \keyword{ manip }

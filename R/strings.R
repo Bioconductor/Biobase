@@ -28,20 +28,20 @@ strbreak <- function(x, width=getOption("width"), exdent=2, collapse="\n") {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 lcSuffix <- function(x, ignore.case = FALSE) {
-    x = as.character(x)
+    x <- as.character(x)
     if( ignore.case )   
-       x = toupper(x)
+       x <- toupper(x)
 
-    nc = nchar(x, type = "char")
-    n=1
+    nc <- nchar(x, type="char")
     for(i in 1:min(nc)) {
-       ss = substr(x, nc-n+1, nc)
+        ## The +1 and +2 are because substr is funny
+       ss = substr(x, nc - i + 1, nc)
        if( any(ss != ss[1] )) {
-           n = n-1
-           break
+           if (i == 1L)                 # trailing char mismatch
+             return("")
+           return(substr(x[1], nc - i + 2, nc))
        }
-       n = n + 1
     }
-    return(substr(x[1], nc-n+1, nc))
+    return(substr(x[1], nc - i + 1, nc))
  }
 
