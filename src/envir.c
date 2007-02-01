@@ -1,6 +1,7 @@
 /* Copyright R. Gentleman, 2003 */
 
 #include <Rinternals.h>
+#include <Rdefines.h>
 #include <R_ext/RConverters.h>
 #include <R_ext/Utils.h>
 
@@ -96,6 +97,18 @@ SEXP rowQ(SEXP inmat, SEXP which)
   }
   UNPROTECT(2);
   return(ans);
+}
+
+SEXP unsafe_set_slot(SEXP obj, SEXP slot, SEXP value)
+{
+    /* Set an S4 object's slot without copying.
+
+       This is unsafe because it changes obj in place.
+    */
+    if (NAMED(value))
+        value = duplicate(value);
+    SET_SLOT(obj, slot, value);
+    return obj;
 }
 
 #ifdef ALLDONENOW

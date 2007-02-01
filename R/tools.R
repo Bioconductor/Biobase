@@ -315,3 +315,8 @@ userQuery <- function(msg, allowed=c("y","n"), default = "n",
     return(default)
   }
 }
+
+
+unsafeSetSlot <- function(obj, slot, value) {
+    invisible(.Call("unsafe_set_slot", obj, slot, value))
+}
