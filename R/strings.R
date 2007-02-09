@@ -59,3 +59,8 @@ lcPrefix <- function(x, ignore.case=FALSE) {
     }
     substr(x[1], 1, i)
 }
+
+
+lcPrefixC <- function(x, ignore.case=FALSE) {
+    .Call("lc_prefix", x, ignore.case)
+}

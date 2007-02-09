@@ -2,6 +2,7 @@
 
 \alias{lcSuffix}
 \alias{lcPrefix}
+\alias{lcPrefixC}
 
 \title{Compute the longest common prefix or suffix of a string}
 
@@ -12,6 +13,7 @@ strings in a character vector.
 
 \usage{
 lcPrefix(x, ignore.case=FALSE)
+lcPrefixC(x, ignore.case=FALSE)
 lcSuffix(x, ignore.case=FALSE)
 }
 \arguments{
@@ -25,6 +27,10 @@ objects, like microarrays, that often have a common suffix, such as .CEL.
 
 There are some potential problems with the approach used if
 multibyte character encodings are being used.
+
+\code{lcPrefixC} is a faster implementation in C.  It only handles
+ascii characters.
+
 }
 \value{
 The common prefix or suffix.
@@ -52,6 +58,11 @@ CHK("ab" == lcPrefix(c("abcd", "abcd123", "ab", "abc", "abc333333")))
 CHK("a" == lcPrefix(c("abcd", "abcd123", "ax")))
 CHK("a" == lcPrefix(c("a", "abcd123", "ax")))
 CHK("" == lcPrefix(c("a", "abc", "xxx")))
+
+CHK("ab" == lcPrefixC(c("abcd", "abcd123", "ab", "abc", "abc333333")))
+CHK("a" == lcPrefixC(c("abcd", "abcd123", "ax")))
+CHK("a" == lcPrefixC(c("a", "abcd123", "ax")))
+CHK("" == lcPrefixC(c("a", "abc", "xxx")))
 
 }
 \keyword{ manip }

@@ -7,6 +7,7 @@ SEXP listToEnv(SEXP, SEXP);
 SEXP listLen(SEXP);
 SEXP rowQ(SEXP, SEXP);
 SEXP unsafe_set_slot(SEXP obj, SEXP slot, SEXP value);
+SEXP lc_prefix(SEXP, SEXP);
 
 /* Automate using sed or something. */
 #if _MSC_VER >= 1000
@@ -18,6 +19,7 @@ __declspec(dllexport)
 	{"listLen", (DL_FUNC)&listLen, 1},
 	{"rowQ", (DL_FUNC)&rowQ, 2},
 	{"unsafe_set_slot", (DL_FUNC)&unsafe_set_slot, 3},
+	{"lc_prefix", (DL_FUNC)&lc_prefix, 2},
         {NULL, NULL, 0},
     };
 

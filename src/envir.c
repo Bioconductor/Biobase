@@ -111,6 +111,70 @@ SEXP unsafe_set_slot(SEXP obj, SEXP slot, SEXP value)
     return obj;
 }
 
+SEXP lc_prefix(SEXP x, SEXP ignoreCase)
+{
+    /* probably does not work for non-C locale */
+    int i, j, nc, min_nc, done, ucase;
+    char *prefix, *first, c;
+    SEXP ans;
+
+    x = coerceVector(x, STRSXP);
+    if (length(x) < 2)
+        return x;
+    PROTECT(x);
+
+    if (!isLogical(ignoreCase))
+        error("invalid arg, 'ignoreCase' must be logical");
+    ucase = LOGICAL(ignoreCase)[0];
+    if (ucase == NA_LOGICAL)
+        error("invalid arg, 'ignoreCase' must be TRUE or FALSE");
+
+    min_nc = strlen(CHAR(STRING_ELT(x, 0)));
+    for (i = 1; i < length(x); i++) {
+        ans = STRING_ELT(x, i);
+        if (ans == NA_STRING)
+            error("lc_prefix cannot handle NA");
+        nc = strlen(CHAR(ans));
+        if (nc < min_nc)
+            min_nc = nc;
+    }
+
+    /* init to last char in x[1] */
+    first = CHAR(STRING_ELT(x, 0));
+    prefix = (char *)Calloc(min_nc, char);
+    if (ucase)
+        prefix[0] = toupper(first[0]);
+    else
+        prefix[0] = first[0];
+    done = 0;
+    for (i = 0; i < min_nc; i++) {
+        for (j = 0; j < length(x); j++) {
+            c = CHAR(STRING_ELT(x, j))[i];
+            if (ucase)
+                c = toupper(c);
+            if (c != prefix[i]) {
+                if (i == 0)
+                    prefix[0] = '\0';
+                else
+                    prefix[i] = '\0';
+                done = 1;
+                break;
+            }
+        }
+        if (done || i+1 >= min_nc)
+            break;
+        if (ucase)
+            prefix[i+1] = toupper(first[i+1]);
+        else
+            prefix[i+1] = first[i+1];
+    }
+
+    ans = mkString(prefix);
+    Free(prefix);
+    UNPROTECT(1);
+    return ans;
+}
+
 #ifdef ALLDONENOW
 ##looks like we need to either expose some of the ls functionality 
 ##or copy a lot of code - my preference is to expose the ls
