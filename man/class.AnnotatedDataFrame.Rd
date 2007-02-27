@@ -138,7 +138,9 @@
      \item{\code{show(<AnnotatedDataFrame>)}}{Abbreviated display of object}
     \item{\code{[<sample>,<variable>}:}{Subset operation, taking two arguments and
       indexing the sample and variable. Returns an
-      \code{AnnotatedDataFrame}, i.e., including relevant metadata.}
+      \code{AnnotatedDataFrame}, i.e., including relevant
+      metadata. Unlike a \code{data.frame}, setting \code{drop=TRUE}
+      generates an error. }
     \item{\code{[[<sample>}, \code{$<sample>}:}{Selector returning a sample and measured
       variables.}
     \item{\code{[[<-<new_sample>}, \code{$<-<new_sample>}:}{Replace a sample row of data.}

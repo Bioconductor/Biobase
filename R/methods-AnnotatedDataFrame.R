@@ -157,7 +157,9 @@ setReplaceMethod("varMetadata", c("AnnotatedDataFrame", "data.frame"), function(
 setMethod("[",
           signature(x="AnnotatedDataFrame"),
           function(x, i, j, ..., drop) {
-              if (missing(drop)) drop <- FALSE
+              if (missing(drop)) drop = FALSE
+              else if (drop)
+                stop("'AnnotatedDataFrame' does not support drop = TRUE")
               if(missing(j)) {
                   mD <- x@varMetadata
                   pD <- x@data[i,,drop = drop]
