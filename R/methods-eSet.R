@@ -365,7 +365,7 @@ assayDataElementReplace <- function(obj, elt, value) {
                assayData(obj) <- aData
            },
            "environment" = {
-               if (is.null(value)) rm(list=elt, aData)
+               if (is.null(value)) rm(list=elt, envir=assayData(obj))
                else assayData(obj)[[elt]] <- value
            },
            list = assayData(obj)[[elt]] <- value)
