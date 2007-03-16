@@ -40,6 +40,7 @@ setMethod("isVersioned", signature(object="ANY"),
 setMethod("isVersioned", signature(object="character"),
           function(object) {
               ## need to check getNamespace("Biobase") during Biobase installation
+              nchar(object) > 0 && 
               (isClass(object) ||
                isClass(object, where=getNamespace("Biobase"))) &&
               extends(getClass(object), "Versioned")
