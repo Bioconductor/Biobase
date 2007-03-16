@@ -355,16 +355,21 @@ assayDataElementNames <- function(obj) {
 assayDataElement <- function(obj, elt) assayData(obj)[[elt]]
 
 assayDataElementReplace <- function(obj, elt, value) {
-  storage.mode <- storageMode(obj)
-  if ("lockedEnvironment" == storage.mode) {
-    aData <- copyEnv(assayData(obj))
-    aData[[elt]] <- value
-    assayDataEnvLock(aData)
-    assayData(obj) <- aData
-  } else {                              # list, environment
-    assayData(obj)[[elt]] <- value
-  }
-  obj
+    storage.mode <- storageMode(obj)
+    switch(storageMode(obj),
+           "lockedEnvironment" = {
+               aData <- copyEnv(assayData(obj))
+               if (is.null(value)) rm(list=elt, envir=aData)
+               else aData[[elt]] <- value
+               assayDataEnvLock(aData)
+               assayData(obj) <- aData
+           },
+           "environment" = {
+               if (is.null(value)) rm(list=elt, aData)
+               else assayData(obj)[[elt]] <- value
+           },
+           list = assayData(obj)[[elt]] <- value)
+    obj
 }
 
 setMethod("featureData",
