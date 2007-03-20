@@ -100,12 +100,14 @@ listLen <- function(list)
    .Call("listLen", list, PACKAGE="Biobase")
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 l2e <- function(vals, envir) {
-   if(missing(envir)) envir <- new.env(hash=TRUE)
+   if(missing(envir))
+     envir <- new.env(hash=TRUE, parent=emptyenv(), size=length(vals) * 1.20)
    .Call("listToEnv", vals, envir, PACKAGE="Biobase")
 }
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 copyEnv <- function(oldEnv, newEnv=new.env(hash=TRUE,
-                    parent=parent.env(oldEnv)), all.names=FALSE) {
+                    parent=parent.env(oldEnv), size=length(oldEnv) * 1.20),
+                    all.names=FALSE) {
    oldVals <- as.list(oldEnv, all.names)
    l2e(oldVals, newEnv)
 }
