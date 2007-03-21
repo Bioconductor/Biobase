@@ -92,29 +92,34 @@ multiassign <- function (x, value, envir = parent.frame(), inherits = FALSE) {
       }
    }
 }
-# ==========================================================================
-# RG:
-# Functions for lists -> in C for efficiency
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
+
+#### Functions for lists and environments
+
 listLen <- function(list)
    .Call("listLen", list, PACKAGE="Biobase")
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
+.new_env_size <- function(n) {
+    ## helper function returns suggested size for new environments that
+    ## will be used as hashtables given expected number of elements 'n'.
+    max(29L, as.integer(n * 1.20))
+}
+
 l2e <- function(vals, envir) {
-   if(missing(envir)) {
-       size <- max(29L, length(vals) * 1.20)
-       envir <- new.env(hash=TRUE, parent=emptyenv(), size=size)
-   }
+   if(missing(envir))
+     envir <- new.env(hash=TRUE, parent=emptyenv(),
+                      size=.new_env_size(length(vals)))
    .Call("listToEnv", vals, envir, PACKAGE="Biobase")
 }
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-copyEnv <- function(oldEnv, newEnv=new.env(hash=TRUE,
-                              parent=parent.env(oldEnv),
-                              size=max(length(oldEnv) * 1.20, 29L)),
-                    all.names=FALSE) {
-   oldVals <- as.list(oldEnv, all.names)
-   l2e(oldVals, newEnv)
+
+copyEnv <- function(oldEnv, newEnv, all.names=FALSE) {
+    ## FIXME: we should put this in C to reduce the copying.
+    if (missing(newEnv))
+      newEnv <- new.env(hash=TRUE,
+                        parent=parent.env(oldEnv),
+                        size=.new_env_size(length(oldEnv)))
+    oldVals <- as.list(oldEnv, all.names)
+    l2e(oldVals, newEnv)
 }
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-
-
