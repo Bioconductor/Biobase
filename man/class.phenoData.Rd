@@ -44,7 +44,7 @@
 \section{Slots}{
   \describe{
     \item{\code{pData}:}{Object of class 'data.frame'. The data. }
-    \item{\code{varLabels}:}{Object of class 'list'. Obtional long labels for the different variables. }
+    \item{\code{varLabels}:}{Object of class 'list'. Optional long labels for the different variables. }
     \item{\code{varMetadata}:}{Object of class 'data.frame'. A data frame with a column named varNames and arbitrarily many additional columns. }
   }
 }
