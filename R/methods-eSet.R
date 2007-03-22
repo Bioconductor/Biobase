@@ -27,7 +27,7 @@ setMethod("initialize",
                 assayData <- do.call(assayDataNew, dotArgs[!isSlot], envir=parent.frame())
               else {
                   checkClass(assayData, "AssayData", class(.Object))
-                  nms <- 
+                  nms <-
                     if (storageMode(assayData)=="list") names(assayData)
                     else ls(assayData)
                   dupNames <- nms %in% names(dotArgs[!isSlot])
@@ -160,7 +160,7 @@ setMethod("updateObject", signature(object="eSet"),
                   storageMode(object) <- storage.mode.final
               } else if (classVersion(object)["eSet"]=="1.0.0") {
                   ## added featureData slot; need to update phenoData
-                  object <- 
+                  object <-
                     new(class(object),
                         assayData=updateObject(assayData(object), ..., verbose=verbose),
                         phenoData=new("AnnotatedDataFrame",
@@ -201,7 +201,7 @@ setValidity("eSet", function( object ) {
     if (is.null(msg)) TRUE else msg
 })
 
-setMethod("preproc", "eSet", function(object) 
+setMethod("preproc", "eSet", function(object)
        preproc(experimentData(object)))
 
 setReplaceMethod("preproc", "eSet", function(object, value) {
@@ -272,12 +272,6 @@ setReplaceMethod("varMetadata", c("eSet", "data.frame"), function(object, value)
 setMethod("dim", "eSet", function(x) assayDataDim(assayData(x)))
 
 setMethod("dims", "eSet", function(object) assayDataDims(assayData(object)))
-
-setMethod("ncol", "eSet", function(x) {
-  d <- dim( x )
-  if (length(d) == 1 && is.na(d)) d
-  else d[[2]]
-})
 
 setMethod("[", "eSet", function(x, i, j, ..., drop = FALSE) {
   if (missing(drop)) drop <- FALSE
@@ -465,9 +459,9 @@ setMethod("combine", c("eSet", "eSet"), function(x, y, ...) {
     x
 })
 
-## 
+##
 ## Deprecated
-## 
+##
 
 setMethod("reporterNames", "eSet", function(object) {
   .Deprecated("featureNames", "Biobase")

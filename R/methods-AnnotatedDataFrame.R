@@ -92,10 +92,6 @@ setMethod("dim", "AnnotatedDataFrame", function( x ) {
   d
 })
 
-setMethod("nrow", "AnnotatedDataFrame", function(x) nrow(x@data))
-
-setMethod("ncol", "AnnotatedDataFrame", function(x) ncol(x@data))
-
 setMethod("dimLabels", "AnnotatedDataFrame", function(object) {
     object@dimLabels
 })
@@ -285,7 +281,7 @@ setMethod("combine",
               pDataX <- pData(x)
               pDataY <- pData(y)
               pData <- combine(pDataX, pDataY)
-              
+
               varMetadataX <- varMetadata(x)
               varMetadataY <- varMetadata(y)
               ## labelDescription is required, likely a factor with conflicting levels

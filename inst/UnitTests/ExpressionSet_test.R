@@ -8,18 +8,14 @@ testCombineFeatureData <- function() {
     pData(featureData(obj1))[["x"]] <- FALSE
     pData(featureData(obj1))[["y"]] <- FALSE
     varMetadata(featureData(obj1)) <-
-      rbind(varMetadata(featureData(obj1)),
-            x=list(labelDescription="the x"),
-            y=list(labelDescription="the y"))
+      data.frame(labelDescription=c("the x", "the y"), row.names=c("x", "y"))
     validObject(obj1)
 
     sampleNames(obj2) <- letters[1:dim(obj1)[[2]]]
     pData(featureData(obj2))[["y"]] <- FALSE
     pData(featureData(obj2))[["z"]] <- TRUE
     varMetadata(featureData(obj2)) <-
-      rbind(varMetadata(featureData(obj2)),
-            y=list(labelDescription="the y"),
-            z=list(labelDescription="the z"))
+        data.frame(labelDescription=c("the y", "the z"), row.names=c("y", "z"))
     validObject(obj2)
     obj <- combine(obj1,obj2)
     checkTrue(all(varLabels(featureData(obj1)) %in% varLabels(featureData(obj))))
