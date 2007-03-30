@@ -2,7 +2,7 @@
 % likely to be overwritten.
 %
 %\VignetteDepends{Biobase}
-%\VignetteIndexEntry{An introduction to Biobase and ExprssionSets}
+%\VignetteIndexEntry{An introduction to Biobase and ExpressionSets}
 %\VignetteKeywords{tutorial, environment, graphics, ExpressionSet}
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
