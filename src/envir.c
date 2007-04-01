@@ -16,14 +16,15 @@ SEXP listLen(SEXP x)
 {
   SEXP ans;
   int i;
+  int *lens;
 
-  if( !Rf_isNewList(x) )
-    error("Would you please supply a list.");
+  if (!Rf_isNewList(x))
+      error("arg 'x' must be a 'list', not '%s'", type2char(TYPEOF(x)));
 
   PROTECT(ans = allocVector(INTSXP, length(x)));
-
-  for(i=0; i<length(x); i++)
-    INTEGER(ans)[i] = length(VECTOR_ELT(x, i));
+  lens = INTEGER(ans);
+  for(i = 0; i < length(x); i++)
+    lens[i] = length(VECTOR_ELT(x, i));
   UNPROTECT(1);
   return(ans);
 }
