@@ -2,7 +2,6 @@
 \alias{copyEnv}
 
 \alias{l2e}
-\alias{listLen}
 
 \title{List-Environment interactions}
 
@@ -13,7 +12,6 @@
 
 \usage{
 copyEnv(oldEnv, newEnv, all.names=FALSE)
-listLen(list)
 l2e(vals, envir)
 }
 
@@ -27,15 +25,9 @@ l2e(vals, envir)
   \item{vals}{A named list of objects to assign into an environment}
   \item{all.names}{Whether to retrieve objects with names that start
     with a dot.}
-  \item{list}{A list}
 }
 
 \details{
-  \code{listLen}: This function returns a vector of the same lenght as
-  the list containng the lengths of each element of the supplied
-  argument.
-
-  
   \code{l2e}: This function takes a named list and assigns all of its
   elements into an environment (using the names to name the objects).
   Unless you have an existing environment which you want to reuse, it
@@ -44,7 +36,6 @@ l2e(vals, envir)
   
   \code{copyEnv}: This function will make a copy of the contents from
   \code{oldEnv} and place them into \code{newEnv}.
-
 }
 
 \author{Jeff Gentry and R. Gentleman}

@@ -18,12 +18,12 @@ SEXP listLen(SEXP x)
   int i;
 
   if( !Rf_isNewList(x) )
-    error("require a list");
+    error("Would you please supply a list.");
 
-  PROTECT(ans = allocVector(REALSXP, length(x)));
+  PROTECT(ans = allocVector(INTSXP, length(x)));
 
   for(i=0; i<length(x); i++)
-    REAL(ans)[i] = length(VECTOR_ELT(x, i));
+    INTEGER(ans)[i] = length(VECTOR_ELT(x, i));
   UNPROTECT(1);
   return(ans);
 }
