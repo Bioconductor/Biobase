@@ -115,11 +115,9 @@ l2e <- function(vals, envir) {
 }
 
 copyEnv <- function(oldEnv, newEnv, all.names=FALSE) {
-    ## FIXME: we should put this in C to reduce the copying.
     if (missing(newEnv))
       newEnv <- new.env(hash=TRUE,
                         parent=parent.env(oldEnv),
                         size=.new_env_size(length(oldEnv)))
-    oldVals <- as.list(oldEnv, all.names)
-    l2e(oldVals, newEnv)
+    .Call(copyEnv_sym, oldEnv, newEnv, all.names)
 }

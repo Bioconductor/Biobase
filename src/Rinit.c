@@ -3,6 +3,7 @@
 #include <R_ext/RConverters.h>
 #include <R_ext/Rdynload.h>
 
+SEXP copyEnv(SEXP e1, SEXP e2, SEXP all);
 SEXP listToEnv(SEXP, SEXP);
 SEXP listLen(SEXP);
 SEXP rowQ(SEXP, SEXP);
@@ -15,6 +16,7 @@ __declspec(dllexport)
 #endif
 
     static const R_CallMethodDef R_CallDef[] = {
+        {"copyEnv", (DL_FUNC)&copyEnv, 3},
         {"listToEnv", (DL_FUNC)&listToEnv, 2},
 	{"listLen", (DL_FUNC)&listLen, 1},
 	{"rowQ", (DL_FUNC)&rowQ, 2},

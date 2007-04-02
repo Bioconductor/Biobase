@@ -1,4 +1,4 @@
-useDynLib(Biobase)
+useDynLib(Biobase, copyEnv_sym=copyEnv)
 
 import(tools)
 
