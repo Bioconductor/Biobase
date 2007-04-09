@@ -210,3 +210,13 @@ setClass("exprSet",
    validity = function(object) validExprSet(object)
 )
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+setClass("ScalarCharacter",
+         contains="character",
+         validity=function(object) {
+             if (length(object) != 1L)
+               "ScalarCharacter must have length one"
+             else
+               TRUE
+         },
+         prototype="")

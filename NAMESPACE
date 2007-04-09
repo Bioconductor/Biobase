@@ -7,7 +7,7 @@ exportClasses(aggregator, container, eSet, phenoData,
               annotatedDataset, AssayData, data.frameOrNULL,
               exprMatrix, exprSet, AnnotatedDataFrame,
               Versions, VersionsNull, Versioned, VersionedBiobase,
-              ExpressionSet, MultiSet, SnpSet)
+              ExpressionSet, MultiSet, SnpSet, ScalarCharacter)
 
 exportMethods("[", "[[", "$", abstract, addVarMetadataEntry, aggenv, aggfun,
               annotatedDataFrameFrom, annotation, coerce,
