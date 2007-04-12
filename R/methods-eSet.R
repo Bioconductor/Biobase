@@ -366,6 +366,8 @@ assayDataElementReplace <- function(obj, elt, value) {
     obj
 }
 
+`assayDataElement<-` <- assayDataElementReplace
+
 setMethod("featureData",
           signature(object="eSet"),
           function(object) object@featureData)

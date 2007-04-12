@@ -15,6 +15,7 @@
 \alias{assayData,eSet-method}
 \alias{assayData<-,eSet,AssayData-method}
 \alias{assayDataElement}
+\alias{assayDataElement<-}
 \alias{assayDataElementNames}
 \alias{assayDataElementReplace}
 \alias{coerce,exprSet,eSet-method}
@@ -215,6 +216,8 @@
    \describe{
     \item{assayDataElement(object, element)}{Return matrix
       \code{element} from \code{assayData} slot of \code{object}.}
+    \item{assayDataElement(object, element) <- value)}{Set element
+      \code{element} in \code{assayData} slot of \code{object} to matrix \code{value}}
     \item{assayDataElementReplace(object, element, value)}{Set element
       \code{element} in \code{assayData} slot of \code{object} to matrix \code{value}}
     \item{assayDataElementNames(object)}{Return element names in
