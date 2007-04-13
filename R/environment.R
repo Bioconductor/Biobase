@@ -53,8 +53,7 @@ biocReposList <- function() {
     reposList <- c(bioc=mkurl("bioc"),
                    aData=mkurl("data/annotation"),
                    eData=mkurl("data/experiment"),
-                   oh=mkurl("omegahat"),
-                   mo=mkurl("monograph"),
+                   extra=mkurl("extra"),
                    cran="http://cran.fhcrc.org")
     reposList
 }
