@@ -133,3 +133,49 @@ setMethod("write.exprs",
             write.table(exprs(x), file=file, quote=quote, sep=sep,
                         col.names=col.names, ...)
           })
+
+readExpressionSet <- function(exprsFile,
+                              phenoDataFile=character(0),
+                              experimentDataFile=character(0),
+                              notesFile=character(0),
+                              annotation=character(0),
+                              ## arguments to read.* methods 
+                              exprsArgs=list(...),
+                              phenoDataArgs=list(...),
+                              experimentDataArgs=list(...),
+                              notesArgs=list(...),
+                              ## widget
+                              widget = getOption("BioC")$Base$use.widgets,
+                              ...) {
+    if (!missing(widget) && widget != FALSE)
+        stop("sorry, widgets not yet available")
+    ## exprs
+    if (missing(exprsFile))
+        stop("exprs can not be missing!")
+    exprsArgs$file=exprsFile
+    exprs <- as.matrix(do.call("read.table", exprsArgs))
+    obj <- new("ExpressionSet", exprs=exprs)
+    ## phenoData
+    if (!missing(phenoDataFile))
+        phenoDataArgs$file=phenoDataFile
+    if (is.null(phenoDataArgs$sampleNames))
+        phenoDataArgs$sampleNames=colnames(exprs)
+    if (!is.null(phenoDataArgs$file))
+        phenoData(obj) <- do.call("read.AnnotatedDataFrame", phenoDataArgs)
+    ## experimentData
+    if (!missing(experimentDataFile))
+        experimentDataArgs$file=experimentDataFile
+    if (!is.null(experimentDataArgs$file))
+        experimentData(obj) <- do.call("read.MIAME", experimentDataArgs)
+    ## annotation
+    if (!missing(annotation))
+        annotation(obj) <- annotation
+    ## notes
+    if (!missing(notesFile))
+        notesArgs$file=notesFile
+    if (!is.null(notesArgs$file))
+        notes(obj) <- readLines(notesFile)
+    validObject(obj)
+    obj
+}
+

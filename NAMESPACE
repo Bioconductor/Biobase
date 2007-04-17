@@ -38,6 +38,7 @@ export("Aggregate",
        "getPkgVigs", "isUnique", "l2e", "listLen", "matchpt",
        "multiassign", "note", "openPDF","openVignette", "package.version",
        "reverseSplit", "rowMax", "rowMedians", "rowMin", "rowQ",
-       "read.exprSet", "read.phenoData", "read.AnnotatedDataFrame", "read.MIAME", "read.pD",
+       read.exprSet, read.phenoData, read.pD, # to be deprecated
+       readExpressionSet, read.AnnotatedDataFrame, read.MIAME,
        "selectSome", "strbreak", "testBioCConnection", "lcSuffix", "lcPrefix", "lcPrefixC",
        "updateOldESet", "updateObjectFromSlots", "userQuery")

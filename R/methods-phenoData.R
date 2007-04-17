@@ -265,6 +265,7 @@ read.pD = function(filename = NULL, ...) {
 read.phenoData <- function(filename = NULL, sampleNames = NULL,
                            widget = getOption("BioC")$Base$use.widgets,...) {
 
+    .Deprecated(msg="read.phenoData is deprecated, use read.AnnotatedDataFrame instead")
    if(widget) {
       require("tkWidgets") || stop("Package tkWidgets unavailable")
       if(!is.null(filename))
