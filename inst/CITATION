@@ -1,5 +1,3 @@
-citHeader("To cite GOstats in publications use:")
-
 citEntry(entry="Article",
   author ="Robert C Gentleman and Vincent J. Carey and Douglas M. Bates and others",
 title ="Bioconductor: Open software development for computational biology and bioinformatics",
