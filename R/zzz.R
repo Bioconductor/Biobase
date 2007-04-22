@@ -11,8 +11,8 @@
 .onAttach <- function(libname, pkgname) {
    message(paste("\nWelcome to Bioconductor\n",
                  "Vignettes contain introductory material. To view, type",
-                 "'openVignette()' or start with 'help(Biobase)'. For details",
-                 "on reading vignettes, see the openVignette help page.\n", sep="\n    "))
+                 "'openVignette()'. To cite Bioconductor, see",
+                 "'citation(\"Biobase\")' and for packages 'citation(pkgname)'.\n", sep="\n  "))
    addVigs2WinMenu("Biobase") 
 }
 
