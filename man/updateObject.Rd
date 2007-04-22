@@ -106,8 +106,10 @@ data(sample.ExpressionSet)
 obj <- updateObject(sample.ExpressionSet)
 
 ## generally, use 'as' to coerce objects between classes
+\dontrun{
 data(sample.eSet)
 obj <- as(sample.eSet, "MultiSet")
+}
 
 setClass("UpdtA", representation(x="numeric"), contains="data.frame")
 setMethod("updateObject", signature(object="UpdtA"),

@@ -109,6 +109,7 @@
 new("MultiSet")
 
 # update existing eSet class to MultiSet
+\dontrun{
 data(sample.eSet)
 multiSet <- as(sample.eSet,"MultiSet")
 multiSet
@@ -118,6 +119,7 @@ featureNames(multiSet)[1:10]
 sampleNames(multiSet)[1:5]
 phenoData(multiSet)
 experimentData(multiSet)
+}
 }
 
 \keyword{classes}

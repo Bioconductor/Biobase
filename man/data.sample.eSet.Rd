@@ -21,7 +21,9 @@ The phenoData and standard error estimates (se.exprs) are made up.
 The information in the "description" slot is fake.  
 }
 \examples{
+\dontrun{
 data(sample.eSet)
 updateOldESet(sample.eSet,"MultiSet")
+}
 }
 \keyword{datasets}
