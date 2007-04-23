@@ -107,19 +107,6 @@
 \examples{
 # create an instance of ExpressionSet
 new("MultiSet")
-
-# update existing eSet class to MultiSet
-\dontrun{
-data(sample.eSet)
-multiSet <- as(sample.eSet,"MultiSet")
-multiSet
-
-# information about assay and sample data
-featureNames(multiSet)[1:10]
-sampleNames(multiSet)[1:5]
-phenoData(multiSet)
-experimentData(multiSet)
-}
 }
 
 \keyword{classes}

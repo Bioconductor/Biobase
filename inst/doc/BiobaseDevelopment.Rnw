@@ -394,12 +394,10 @@ requirements of \eSet{}, but the developer does not explicitly invoke
 validity checking of the parts of the data structure inherited from
 \eSet{}.
 
-Developers often want to create a subclass of \eSet, \ExpressionSet,
-or other classes in the \eSet{} hierarchy. We will use the
-\emph{Swirl} data set in the \Robject{sample.eSet} data set. 
-
 \subsection{Implementing a new class: a \Rclass{SwirlSet} example}
-The \emph{Swril} data setcontains four elements in the
+
+We want the \emph{Swirl} data set (see the \Robject{SW} two color data
+set that motivates this class) to contain four elements in the
 \Robject{assayData} slot: \Robject{R}, \Robject{G}, \Robject{Rb},
 \Robject{Gb}. To derive a class from \eSet{} for this data, we create
 a class, and provide initializaation and validation methods.

@@ -105,10 +105,10 @@ getObjectSlots(object)
 data(sample.ExpressionSet)
 obj <- updateObject(sample.ExpressionSet)
 
-## generally, use 'as' to coerce objects between classes
 \dontrun{
-data(sample.eSet)
-obj <- as(sample.eSet, "MultiSet")
+## generally, use 'as' to coerce objects between classes
+data(sample.exprSet)
+obj <- as(sample.exprSet, "ExpressionSet")
 }
 
 setClass("UpdtA", representation(x="numeric"), contains="data.frame")

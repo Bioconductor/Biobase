@@ -25,8 +25,7 @@
   \code{\link{package.version}}
 
   Data sets: \code{\link{aaMap}}, \code{\link{sample.ExpressionSet}},
-  \code{\link{sample.exprSet}}, \code{\link{sample.eSet}},
-  \code{\link{geneData}}.
+  \code{\link{sample.exprSet}}, \code{\link{geneData}}.
 
   Introductory information is available from vignettes, type
   \code{openVignette()}.
