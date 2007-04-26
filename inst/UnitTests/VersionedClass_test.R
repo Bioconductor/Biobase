@@ -78,15 +78,17 @@ testDevelInstanceArchived <- function() {
 
 testDevelInstanceIsCurrent <- function() {
     ## overall class is current
+    instanceEnv <- new.env(parent=emptyenv())
     lapply(nonvirtualClasses, function(cls) {
         cls <- paste(cls, ".Rda", sep="")
-        load(file.path(instanceDir, "devel", cls), parent.frame(2))
+        load(file.path(instanceDir, "devel", cls), instanceEnv)
     })
     instances <-
       sub(".Rda", "",
           list.files(path=file.path(instanceDir, "devel"), pattern=".*.Rda"))
     current <- sapply(instances, function(obj) {
-        all(isCurrent(get(obj))[obj])
+        vers <- isCurrent(get(obj, env=instanceEnv))[c("S4", obj)]
+        all(vers[!is.na(vers)])
     })
     currentv <- current[!is.na(current)]
     checkTrue(all(currentv), msg=paste(names(currentv)[!currentv], collapse=" "))

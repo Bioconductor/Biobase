@@ -22,6 +22,8 @@ setValidity("Versioned", function(object) {
 
 isValidVersion <- function(object, nm) {# utility
     msg <- NULL
+    if (!isS4(object))
+      msg <- validMsg(msg, "not an S4 object")
     if (isVersioned(object) && !all(isCurrent(object)[nm])) {
         vers <- isCurrent(object)[nm]
         vers[is.na(vers)] <- FALSE
@@ -40,7 +42,7 @@ setMethod("isVersioned", signature(object="ANY"),
 setMethod("isVersioned", signature(object="character"),
           function(object) {
               ## need to check getNamespace("Biobase") during Biobase installation
-              nchar(object) > 0 && 
+              length(object) > 0 && nchar(object)>0 &&
               (isClass(object) ||
                isClass(object, where=getNamespace("Biobase"))) &&
               extends(getClass(object), "Versioned")
@@ -63,7 +65,14 @@ setMethod("classVersion", signature(object="character"),
 
 setMethod("classVersion", signature(object="Versioned"),
           function(object) {
-              if (isVersioned(object)) object@.__classVersion__
+              if (isVersioned(object)) {
+                  if (isS4(object@.__classVersion__))
+                      object@.__classVersion__
+                  else
+                      ## force update to S4 instance
+                      ## user needs to recognize need for update
+                      updateObject(object@.__classVersion__)
+              }
               else callNextMethod()
           })
 
@@ -89,6 +98,7 @@ setMethod("isCurrent", signature(object="Versioned", value="character"),
                   res <- FALSE
                   names(res) <- value
               }
+              res <- c(S4=isS4(object), res)
               res
           })
 
