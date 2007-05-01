@@ -144,7 +144,9 @@
        column numbers (\code{ncol}), or dimensions of all memebers
        (\code{dims}) of \code{assayData}.}
      \item{\code{phenoData(object)},
-       \code{phenoData(object) <- value}:}{Access and set \code{phenoData}.}
+       \code{phenoData(object) <- value}:}{Access and set
+	   \code{phenoData}. Adding new columns to \code{phenoData} is often
+	   more easily done with \code{eSetObject[["columnName"]] <- value}.}
      \item{\code{featureData(object)},
        \code{featureData(object) <- value}:}{Access and set \code{featureData}.}
      \item{\code{varLabels(object)}, \code{varLabels(eSet,
@@ -154,7 +156,8 @@
        \code{varMetadata(object) <- value}:}{Access and set descriptions of
        variables in \code{phenoData}.}
      \item{\code{pData(object)}, \code{pData(object) <- value}:}{Access and set
-       sample data information}
+       sample data information. Adding new columns to \code{pData} is often
+	   more easily done with \code{eSetObject[["columnName"]] <- value}.}
      \item{\code{varMetadata(object)},
        \code{varMetadata(eSet,value)}}{Access and set metadata describing
        variables reported in \code{pData}}
