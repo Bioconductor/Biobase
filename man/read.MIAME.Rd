@@ -6,7 +6,7 @@
 }
 
 \description{
-   Reads MIAME information from a file or using a widget.}
+   Reads MIAME information from a file or using a widget.
 }
 
 \usage{
@@ -35,7 +35,7 @@ read.MIAME(filename = NULL, widget = getOption("BioC")$Base$use.widgets, ...)
   Alternatively a widget can be used.
 }
 \value{An object of class \code{\link{MIAME}}.}
-}
+
 \author{Rafael Irizarry <rafa@jhu.edu>}
 
 \seealso{\code{\link{MIAME}},\code{\link[tkWidgets]{tkMIAME}} }
@@ -45,10 +45,4 @@ miame <- read.MIAME(widget=FALSE) ##creates an empty instance
 show(miame)
 }
 \keyword{file}
-
-
-
-
-
-
 

@@ -50,7 +50,7 @@ combine(x, y, ...)
   \code{\link{AnnotatedDataFrame}},
   \code{\link{AssayData}}, \code{\link{MIAME}}, and \code{\link{eSet}}
   classes and subclasses.
-}}
+}
 \value{
   A single value of the same class as the most specific common ancestor
   (in class terms) of the input values. This will contain the

@@ -36,7 +36,7 @@ ascii characters.
 The common prefix or suffix.
 }
 \author{ R. Gentleman }
-}
+
 \seealso{ \code{\link{nchar}}, \code{\link{nchar}}}
 \examples{
 s1 <- c("ABC.CEL", "DEF.CEL")
