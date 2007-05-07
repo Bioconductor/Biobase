@@ -318,7 +318,7 @@ setMethod("[", "eSet", function(x, i, j, ..., drop = FALSE) {
   x
 })
 
-setMethod("$", "eSet", function(x, name) phenoData(x)[[name]] )
+setMethod("$", "eSet", function(x, name) "$"(phenoData(x), name) )
 
 setReplaceMethod("$", "eSet", function(x, name, value) {
   phenoData(x)[[name]] = value

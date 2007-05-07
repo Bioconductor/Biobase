@@ -42,7 +42,7 @@ setReplaceMethod("pData", "phenoData",
 setMethod("$", "phenoData",
    function(x, name) {
        .Deprecated(msg=PHENODATA_DEPR_MSG)
-      x@pData[[name]]
+      "$"(x@pData, name)
    }
 )
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

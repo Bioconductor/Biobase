@@ -8,7 +8,7 @@ setReplaceMethod("$", "annotatedDataset",
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("$", "annotatedDataset",
    function(x, name) {
-      (x@phenoData)@pData[[name]]
+      "$"((x@phenoData)@pData, name)
    }
 )
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

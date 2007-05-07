@@ -182,7 +182,7 @@ setMethod("[",
               new("AnnotatedDataFrame", data=pD, varMetadata=mD )
           })
 
-setMethod("$", "AnnotatedDataFrame", function(x, name) pData(x)[[name]] )
+setMethod("$", "AnnotatedDataFrame", function(x, name) "$"(pData(x), name) )
 
 setReplaceMethod("$", "AnnotatedDataFrame", function(x, name, value) {
     x[[name]] <- value
