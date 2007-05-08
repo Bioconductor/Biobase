@@ -60,3 +60,12 @@ testExtraSlotExpressionClassInitialize3 <- function() {
     checkEquals("exprs", ls(assayData(e)))
     checkEquals("environment", storageMode(e))
 }
+
+testDollar <- function() {
+    data(sample.ExpressionSet)
+    s1 <- sample.ExpressionSet$sex
+    s2 <- sample.ExpressionSet$se       # we expect partial matching to work
+    checkTrue(!is.null(s1), msg="$sex broken")
+    checkTrue(!is.null(s2), msg="$se broken (pmatch)")
+    checkEquals(s1, s2, msg="pmatch equality")
+}

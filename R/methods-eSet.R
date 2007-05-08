@@ -318,7 +318,11 @@ setMethod("[", "eSet", function(x, i, j, ..., drop = FALSE) {
   x
 })
 
-setMethod("$", "eSet", function(x, name) "$"(phenoData(x), name) )
+## $ stops dispatching ?!
+##setMethod("$", "eSet", function(x, name) `$`(phenoData(x), name))
+setMethod("$", "eSet", function(x, name) {
+    eval(substitute(phenoData(x)$NAME_ARG, list(NAME_ARG=name)))
+})
 
 setReplaceMethod("$", "eSet", function(x, name, value) {
   phenoData(x)[[name]] = value

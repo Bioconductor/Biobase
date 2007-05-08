@@ -182,7 +182,10 @@ setMethod("[",
               new("AnnotatedDataFrame", data=pD, varMetadata=mD )
           })
 
-setMethod("$", "AnnotatedDataFrame", function(x, name) "$"(pData(x), name) )
+##setMethod("$", "AnnotatedDataFrame", function(x, name) `$`(pData(x), name))
+setMethod("$", "AnnotatedDataFrame", function(x, name) {
+    eval(substitute(pData(x)$NAME_ARG, list(NAME_ARG=name)))
+})
 
 setReplaceMethod("$", "AnnotatedDataFrame", function(x, name, value) {
     x[[name]] <- value
