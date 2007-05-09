@@ -343,6 +343,33 @@ testCombineEsetSubclasses <- function() {
 }
 
 testSetAs <- function() {
+    setClass("SwirlSet", contains="eSet", where=.GlobalEnv)
+    
+    setMethod("initialize", "SwirlSet",
+              function(.Object,
+                       assayData = assayDataNew(
+                         R=R, G=G, Rb=Rb, Gb=Gb, ...),
+                       phenoData = annotatedDataFrameFrom(assayData, byrow=FALSE),
+                       featureData = annotatedDataFrameFrom(assayData, byrow=TRUE),
+                       experimentData = new("MIAME"),
+                       annotation = character(),
+                       R = new("matrix"),
+                       G = new("matrix"),
+                       Rb = new("matrix"),
+                       Gb = new("matrix"),
+                       ... ) {
+                  callNextMethod(.Object,
+                                 assayData = assayData,
+                                 phenoData = phenoData,
+                                 featureData = featureData,
+                                 experimentData = experimentData,
+                                 annotation = annotation)
+              }, where=.GlobalEnv)
+
+    setValidity("SwirlSet", function(object) {
+        assayDataValidMembers(assayData(object), c("R", "G", "Rb", "Gb"))
+    }, where=.GlobalEnv)
+
   checkNewAndOld <- function(new, old) {
     checkTrue(identical(pData(new),pData(old)))
     checkTrue(all.equal(exprs(new),exprs(old),check.attributes=FALSE))
@@ -386,6 +413,7 @@ testSetAs <- function() {
   suppressMessages(es <- updateOldESet(sample.eSet, "SwirlSet"))
   checkNewSampleEset(es, sample.eSet)
   options(opts)
+    removeClass("SwirlSet", where=.GlobalEnv)
 }
 
 testFeatureNamesReplace <- function() {
@@ -396,11 +424,20 @@ testFeatureNamesReplace <- function() {
 }
 
 testExtraSlotClassInitialize1 <- function() {
+    setClass("ExtraSlotSet", contains="eSet",
+             representation=representation(
+               extraSlot="character"),
+             where=.GlobalEnv)
     ## pass if no error
     e <- new("ExtraSlotSet")
+    removeClass("ExtraSlotSet", where=.GlobalEnv)
 }
 
 testExtraSlotClassInitialize2 <- function() {
+    setClass("ExtraSlotSet", contains="eSet",
+             representation=representation(
+               extraSlot="character"),
+             where=.GlobalEnv)
     e <- new("ExtraSlotSet", R=matrix(0,5,3),
              G=matrix(0,5,3), extraSlot="hello",
              storage.mode="environment")
@@ -408,9 +445,14 @@ testExtraSlotClassInitialize2 <- function() {
     checkEquals(c("G", "R"),
                 ls(assayData(e)))
     checkEquals("environment", storageMode(e))
+    removeClass("ExtraSlotSet", where=.GlobalEnv)
 }
 
 testExtraSlotClassInitialize3 <- function() {
+    setClass("ExtraSlotSet", contains="eSet",
+             representation=representation(
+               extraSlot="character"),
+             where=.GlobalEnv)
     e <- new("ExtraSlotSet",
              assayData=assayDataNew(
                R=new("matrix"),
@@ -420,9 +462,14 @@ testExtraSlotClassInitialize3 <- function() {
     checkEquals("hello", e@extraSlot)
     checkEquals(c("G", "R"), ls(assayData(e)))
     checkEquals("environment", storageMode(e))
+    removeClass("ExtraSlotSet", where=.GlobalEnv)
 }
 
 testExtraSlotClassInitialize4 <- function() {
+    setClass("ExtraSlotSet", contains="eSet",
+             representation=representation(
+               extraSlot="character"),
+             where=.GlobalEnv)
     oldopts <- options()
     options(warn=2)
     on.exit(options(oldopts))
@@ -431,4 +478,5 @@ testExtraSlotClassInitialize4 <- function() {
                          R=matrix(0,3,5),
                          storage.mode="environment"),
                        R=new("matrix")), silent=TRUE)
+    removeClass("ExtraSlotSet", where=.GlobalEnv)
 }

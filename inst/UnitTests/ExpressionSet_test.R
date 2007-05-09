@@ -36,11 +36,20 @@ testAddTextNotes <- function() {
 }
 
 testExtraSlotExpressionClassInitialize1 <- function() {
+    setClass("ExtraSlotExpressionSet", contains="ExpressionSet",
+             representation=representation(
+               extraSlot="character"),
+             where=.GlobalEnv)
     ## pass if no error
     checkTrue(validObject(new("ExtraSlotExpressionSet")))
+    removeClass("ExtraSlotExpressionSet", where=.GlobalEnv)
 }
 
 testExtraSlotExpressionClassInitialize2 <- function() {
+    setClass("ExtraSlotExpressionSet", contains="ExpressionSet",
+             representation=representation(
+               extraSlot="character"),
+             where=.GlobalEnv)
     e <- new("ExtraSlotExpressionSet",
              exprs=new("matrix"),
              extraSlot="hello",
@@ -48,9 +57,14 @@ testExtraSlotExpressionClassInitialize2 <- function() {
     checkEquals("hello", e@extraSlot)
     checkEquals("exprs", ls(assayData(e)))
     checkEquals("environment", storageMode(e))
+    removeClass("ExtraSlotExpressionSet", where=.GlobalEnv)
 }
 
 testExtraSlotExpressionClassInitialize3 <- function() {
+    setClass("ExtraSlotExpressionSet", contains="ExpressionSet",
+             representation=representation(
+               extraSlot="character"),
+             where=.GlobalEnv)
     e <- new("ExtraSlotExpressionSet",
              assayData=assayDataNew(
                exprs=new("matrix"),
@@ -59,6 +73,7 @@ testExtraSlotExpressionClassInitialize3 <- function() {
     checkEquals("hello", e@extraSlot)
     checkEquals("exprs", ls(assayData(e)))
     checkEquals("environment", storageMode(e))
+    removeClass("ExtraSlotExpressionSet", where=.GlobalEnv)
 }
 
 testDollar <- function() {

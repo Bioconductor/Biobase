@@ -1,6 +1,7 @@
 testUpdateObjectList <- function() {
-    DEACTIVATED("cannot yet setClass during RUnit")
-    setClass("A", representation(x="numeric"), prototype(x=1:10))
+    setClass("A",
+             representation(x="numeric"), prototype(x=1:10),
+             where=.GlobalEnv)
     a <- new("A")
     l <- list(a,a)
     checkTrue(identical(l, updateObject(l)))
@@ -10,12 +11,14 @@ testUpdateObjectList <- function() {
                   if (verbose) message("updateObject object = 'A'")
                   object@x <- -object@x
                   object
-              })
+              },
+              where=.GlobalEnv)
 
     obj <- updateObject(l)
     checkTrue(identical(lapply(l, function(elt) { elt@x <- -elt@x; elt }),
                         obj))
-    removeMethod("updateObject", "A")
+    removeMethod("updateObject", "A", where=.GlobalEnv)
+    removeClass("A", where=.GlobalEnv)
 }
 
 testUpdateObjectEnv <- function() {
@@ -61,24 +64,38 @@ testUpdateObjectDefaults <- function() {
 }
 
 testUpdateObjectS4 <- function() {
+    setClass("A", 
+             representation=representation(
+               x="numeric"),
+             prototype=list(x=1:5),
+             where=.GlobalEnv)
+    .__a__ <- new("A")
+    setClass("A",
+             representation=representation(
+               x="numeric",
+               y="character"),
+             where=.GlobalEnv)
     checkException(validObject(.__a__), silent=TRUE)      # now out-of-date
     .__a__@x <- 1:5
     a <- updateObject(.__a__)
     checkTrue(validObject(a))
     checkIdentical(1:5, a@x)
+    removeClass("A", where=.GlobalEnv)
 }
 
 testUpdateObjectSetClass <- function() {
-    DEACTIVATED("cannot yet setClass during RUnit")
     setClass("A",
              representation(x="numeric"),
-             prototype=prototype(x=1:10))
+             prototype=prototype(x=1:10),
+             where=.GlobalEnv)
     a <- new("A")
     checkTrue(identical(a,updateObject(a)))
     a1 <- new("A",x=10:1)
     checkTrue(identical(a, updateObjectTo(a, a1)))
 
-    setClass("B", representation(x="numeric"))
+    setClass("B",
+             representation(x="numeric"),
+             where=.GlobalEnv)
     b <- new("B")
     checkException(updateObjectTo(a, b), silent=TRUE)
 
@@ -86,11 +103,13 @@ testUpdateObjectSetClass <- function() {
         b <- new("B")
         b@x <- from@x
         b
-    })
+    }, where=.GlobalEnv)
     obj <- updateObjectTo(a,b)
     checkTrue(class(obj)=="B")
     checkIdentical(obj@x, a@x)
-    removeMethod("coerce", c("A","B"))
+    removeMethod("coerce", c("A","B"), where=.GlobalEnv)
+    removeClass("B", where=.GlobalEnv)
+    removeClass("A", where=.GlobalEnv)
 }
 
 testUpdateExpressionSet <- function() {
