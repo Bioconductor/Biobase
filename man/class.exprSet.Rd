@@ -26,7 +26,7 @@
 \alias{iter,exprSet,character,function-method}
 \alias{notes<-,exprSet,ANY-method}
 \alias{notes,exprSet-method}
-\alias{sampleNames<-,exprSet-method}
+\alias{sampleNames<-,exprSet,ANY-method}
 \alias{sampleNames,exprSet-method}
 \alias{se.exprs<-,exprSet-method}
 \alias{se.exprs,exprSet-method}

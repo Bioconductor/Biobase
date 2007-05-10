@@ -8,6 +8,8 @@ setGeneric("annotatedDataFrameFrom", function(object, byrow, ...) standardGeneri
 setGeneric("as.data.frame.exprSet", function(x, row.names=NULL, optional=FALSE, ...) standardGeneric("as.data.frame.exprSet"))
 setGeneric("assayData",       function(object)standardGeneric("assayData"))
 setGeneric("assayData<-",     function(object, value) standardGeneric("assayData<-"))
+setGeneric("channelNames",    function(object, ...) standardGeneric("channelNames"))
+setGeneric("channel",         function(object, name, ...) standardGeneric("channel"))
 setGeneric("combine",
    function(x, y, ...) {
       if (length(list(...)) > 0)
@@ -71,6 +73,7 @@ setGeneric("sampleNames<-",   function(object, value) standardGeneric("sampleNam
 setGeneric("samples",         function(object) standardGeneric("samples"))
 setGeneric("se.exprs",        function(object) standardGeneric("se.exprs"))
 setGeneric("se.exprs<-",      function(object, value) standardGeneric("se.exprs<-"))
+setGeneric("selectChannels",  function(object, names, ...) standardGeneric("selectChannels"))
 setGeneric("split")
 setGeneric("selectSomeIndex",   function(object, ...) standardGeneric("selectSomeIndex"))
 setGeneric("storageMode",     function(object) standardGeneric("storageMode"))

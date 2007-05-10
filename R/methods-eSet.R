@@ -345,12 +345,12 @@ setReplaceMethod("assayData", c( "eSet", "AssayData" ), function(object, value) 
   object
 })
 
-assayDataElementNames <- function(obj) {
-    if (storageMode(obj) == "list") names(assayData(obj))
-    else ls(assayData(obj))
+assayDataElementNames <- function(object) {
+    if (storageMode(object) == "list") names(assayData(object))
+    else ls(assayData(object))
 }
 
-assayDataElement <- function(obj, elt) assayData(obj)[[elt]]
+assayDataElement <- function(object, elt) assayData(object)[[elt]]
 
 assayDataElementReplace <- function(obj, elt, value) {
     storage.mode <- storageMode(obj)

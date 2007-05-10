@@ -168,6 +168,16 @@ setClass("ExpressionSet",               # exprSet-like
          prototype = prototype(
            new("VersionedBiobase",
                versions=c(classVersion("eSet"), ExpressionSet="1.0.0"))))
+setClass("NChannelSet",
+         contains = "eSet",
+         prototype = prototype(
+           new("VersionedBiobase",
+               versions=c(classVersion("eSet"), NChannelSet="1.0.0")),
+           phenoData = new("AnnotatedDataFrame",
+             data=data.frame(),
+             varMetadata=data.frame(
+               labelDescription=character(0),
+               channelDescription=factor()))))
 setClass("MultiSet",                    # any element in assayData slot
          contains = "eSet",
          prototype = prototype(

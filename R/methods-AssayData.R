@@ -70,9 +70,43 @@ assayDataStorageModeReplace <- function(object, value) {
            }, list = as.list(object))
 }
 
-setReplaceMethod("storageMode", c("AssayData", "character"), assayDataStorageModeReplace)
+setReplaceMethod("storageMode",
+                 signature=c(object="AssayData", value="character"),
+                 assayDataStorageModeReplace)
 
-assayDataEnvLock <- function(assayData) lockEnvironment(assayData, bindings=TRUE)
+assayDataEnvLock <- function(assayData)
+  lockEnvironment(assayData, bindings=TRUE)
+
+assayDataSubsetElements <-
+  function(object, elts, storageMode = assayDataStorageMode(object)) {
+    if (any(duplicated(elts)))
+      stop("'AssayData' element names must be unique")
+    names <-
+        if (storageMode(object)=="list") names(object)
+        else ls(object)
+    if (!all(elts %in% names))
+      stop("'AssayData' missing elements: '",
+           paste(elts[!elts %in% names], collapse="', '", sep=""), "'")
+    switch(storageMode,
+           lockedEnvironment = {
+               assayData <- new.env(parent = emptyenv())
+               for (nm in elts) assayData[[nm]] <- object[[nm]]
+               assayDataEnvLock(assayData)
+               assayData
+           },
+           environment = {
+               assayData <- new.env(parent = emptyenv())
+               for (nm in elts) assayData[[nm]] <- object[[nm]]
+               assayData
+           },
+           list = {
+               object[elts]
+           })
+}
+
+setMethod("assayData",
+          signature=signature(object="AssayData"),
+          function(object) object)
 
 setMethod("sampleNames", signature(object="AssayData"),
           function(object) {
@@ -105,6 +139,27 @@ setReplaceMethod("sampleNames", c("AssayData", "ANY"), function(object, value) {
            )
     object
 })
+
+setReplaceMethod("sampleNames",
+                 signature=signature(
+                   object="AssayData",
+                   value="list"),
+                 function(object, value) {
+                     switch(assayDataStorageMode(object),
+                            lockedEnvironment = {
+                                object <- copyEnv(object)
+                                for (nm in names(value))
+                                  colnames(object[[nm]]) <- value[[nm]]
+                                assayDataEnvLock(object)
+                            }, environment = {
+                                for (nm in names(value))
+                                  colnames(object[[nm]]) <- value[[nm]]
+                            }, list= {
+                                for (nm in names(value))
+                                  colnames(object[[nm]]) <- value[[nm]]
+                            })
+                     object
+                 })
 
 setMethod("featureNames", signature(object="AssayData"),
           function(object) {

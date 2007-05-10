@@ -22,7 +22,7 @@
 \alias{pData,AnnotatedDataFrame-method}
 \alias{varMetadata<-,AnnotatedDataFrame,data.frame-method}
 \alias{varMetadata,AnnotatedDataFrame-method}
-\alias{sampleNames<-,AnnotatedDataFrame-method}
+\alias{sampleNames<-,AnnotatedDataFrame,ANY-method}
 \alias{sampleNames,AnnotatedDataFrame-method}
 \alias{featureNames,AnnotatedDataFrame-method}
 \alias{featureNames<-,AnnotatedDataFrame-method}

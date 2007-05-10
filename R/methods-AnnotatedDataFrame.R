@@ -194,15 +194,17 @@ setReplaceMethod("$", "AnnotatedDataFrame", function(x, name, value) {
 
 setMethod("[[", "AnnotatedDataFrame", function(x, i, j, ...) pData(x)[[i]] )
 
-setReplaceMethod("[[", "AnnotatedDataFrame",
-   function(x, i, j, ..., value) {
-       pData(x)[[i]] <- value
-       if (!i %in% row.names(varMetadata(x)))
-         varMetadata(x)[i,] <- NA
-      x
-   }
-)
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+setReplaceMethod("[[",
+                 signature=signature(x="AnnotatedDataFrame"),
+                 function(x, i, j, ..., value) {
+                     pData(x)[[i]] <- value
+                     if (!i %in% row.names(varMetadata(x)))
+                       varMetadata(x)[i,] <- NA
+                     for (metadata in names(list(...)))
+                       varMetadata(x)[i, metadata] <- list(...)[[metadata]]
+                     x
+                 })
+
 setAs("phenoData", "AnnotatedDataFrame", function(from) {
   ## data
   data <- pData(from)

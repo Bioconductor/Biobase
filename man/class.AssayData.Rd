@@ -3,11 +3,13 @@
 \alias{AssayData-class}
 \alias{AssayData}
 
+\alias{assayData,AssayData-method}
 \alias{combine,AssayData,AssayData-method}
 \alias{featureNames,AssayData-method}
 \alias{featureNames<-,AssayData-method}
 \alias{sampleNames,AssayData-method}
-\alias{sampleNames<-,AssayData-method}
+\alias{sampleNames<-,AssayData,ANY-method}
+\alias{sampleNames<-,AssayData,list-method}
 \alias{storageMode,AssayData-method}
 \alias{storageMode<-,AssayData,character-method}
 
@@ -23,9 +25,6 @@
 
 \section{Methods}{
   \describe{
-    \item{assayData<-}{\code{signature(object = "eSet", value =
-        "AssayData")}: Replace the \code{AssayData} slot of a
-      \code{eSet} instance.}
     \item{combine}{\code{signature(x = "AssayData", y = "AssayData")}:
       This method uses \code{cbind} to create new AssayData elements that contain the
       samples of both arguments \code{x} and \code{y}.

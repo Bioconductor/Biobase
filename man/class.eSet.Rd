@@ -50,7 +50,7 @@
 \alias{preproc<-,eSet-method}
 \alias{reporterNames,eSet-method}
 \alias{sampleNames,eSet-method}
-\alias{sampleNames<-,eSet-method}
+\alias{sampleNames<-,eSet,ANY-method}
 \alias{show,eSet-method}
 \alias{storageMode,eSet-method}
 \alias{storageMode<-,eSet,character-method}
@@ -161,6 +161,10 @@
      \item{\code{varMetadata(object)},
        \code{varMetadata(eSet,value)}}{Access and set metadata describing
        variables reported in \code{pData}}
+     \item{\code{assayData(object), assayData(object) <- value}:}{
+       \code{signature(object = "eSet", value = "AssayData")}: Access
+       and replace the \code{AssayData} slot of a
+       \code{eSet} instance.}
      \item{\code{experimentData(object)},\code{experimentData(object) <- value}:}{Access
        and set details of experimental methods}
      \item{\code{description(object)},\code{description(object) <- value}:}{Synonymous with experimentData; included for compatibility with \code{exprSet}. }
