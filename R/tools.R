@@ -316,7 +316,13 @@ userQuery <- function(msg, allowed=c("y","n"), default = "n",
   }
 }
 
-
 unsafeSetSlot <- function(obj, slot, value) {
+    
+    ## This function _assumes_ that there is exactly on references to
+    ## 'obj'; the number of references is not usually detectable from
+    ## casual perusal of the code, because R only maintains the
+    ## _illusion_ of pass by value. Use this with the greatest care,
+    ## if at all.
+
     invisible(.Call("unsafe_set_slot", obj, slot, value))
 }

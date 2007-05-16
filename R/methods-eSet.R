@@ -204,10 +204,13 @@ setValidity("eSet", function( object ) {
 setMethod("preproc", "eSet", function(object)
        preproc(experimentData(object)))
 
-setReplaceMethod("preproc", "eSet", function(object, value) {
-        preproc(experimentData(object)) <- value
-        object
-})
+setReplaceMethod("preproc",
+                 signature=signature(object="eSet"),
+                 function(object, value) {
+                     ed <- experimentData(object)
+                     preproc(ed) <- value
+                     unsafeSetSlot(object, "experimentData", ed)
+                 })
 
 setMethod("show", "eSet", function(object) {
   cat(class( object ), " (storageMode: ", storageMode(object), ")\n", sep="")
@@ -231,43 +234,64 @@ setMethod("show", "eSet", function(object) {
 
 setMethod("storageMode", "eSet", function(object) storageMode(assayData(object)))
 
-setReplaceMethod("storageMode", c("eSet", "character"), function(object, value) {
-  storageMode(assayData(object)) <- value
-  object
-})
+setReplaceMethod("storageMode",
+                 signature=signature(
+                   object="eSet", value="character"),
+                 function(object, value) {
+                     ad <- assayData(object)
+                     storageMode(ad) <- value
+                     unsafeSetSlot(object, "assayData", ad)
+                 })
 
-setMethod("sampleNames", signature(object="eSet"),
+setMethod("sampleNames",
+          signature(object="eSet"),
           function(object) sampleNames(phenoData(object)))
 
-setReplaceMethod("sampleNames", c("eSet", "ANY"), function(object, value) {
-  sampleNames(assayData(object)) <- value
-  sampleNames(phenoData(object)) <- value
-  object
-})
+setReplaceMethod("sampleNames",
+                 signature=signature(object="eSet", value="ANY"),
+                 function(object, value) {
+                     ad <- assayData(object)
+                     sampleNames(ad) <- value
+                     pd <- phenoData(object)
+                     sampleNames(pd) <- value
+                     unsafeSetSlot(object, "assayData", ad)
+                     unsafeSetSlot(object, "phenoData", pd)
+                 })
 
-setMethod("featureNames", "eSet", function(object) {
-  featureNames(assayData(object))
-})
+setMethod("featureNames",
+          signature=signature(object="eSet"),
+          function(object) featureNames(assayData(object)))
 
-setReplaceMethod("featureNames", "eSet", function(object, value) {
-  featureNames(assayData(object)) <- value
-  featureNames(featureData(object)) <- value
-  object
-})
+setReplaceMethod("featureNames",
+                 signature=signature(object="eSet", value="ANY"),
+                 function(object, value) {
+                     ad <- assayData(object)
+                     featureNames(ad) <- value
+                     fd <- featureData(object)
+                     featureNames(fd) <- value
+                     unsafeSetSlot(object, "assayData", ad)
+                     unsafeSetSlot(object, "featureData", fd)
+                 })
 
 setMethod("varLabels", "eSet", function(object) varLabels(phenoData(object)))
 
-setReplaceMethod("varLabels", "eSet", function(object, value) {
-  varLabels(phenoData(object)) <- value
-  object
-})
+setReplaceMethod("varLabels",
+                 signature=signature(object="eSet"),
+                 function(object, value) {
+                     pd <- phenoData(object)
+                     varLabels(pd) <- value
+                     unsafeSetSlot(object, "phenoData", pd)
+                 })
 
 setMethod("varMetadata", "eSet", function(object) varMetadata(phenoData(object)))
 
-setReplaceMethod("varMetadata", c("eSet", "data.frame"), function(object, value) {
-  varMetadata(phenoData(object)) <- value
-  object
-})
+setReplaceMethod("varMetadata",
+                 signature=signature(object="eSet", value="data.frame"),
+                 function(object, value) {
+                     pd <- phenoData(object)
+                     varMetadata(pd) <- value
+                     unsafeSetSlot(object, "phenoData", pd)
+                 })
 
 setMethod("dim", "eSet", function(x) assayDataDim(assayData(x)))
 
@@ -340,10 +364,13 @@ setReplaceMethod("[[", "eSet",
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("assayData", "eSet", function(object) object@assayData)
 
-setReplaceMethod("assayData", c( "eSet", "AssayData" ), function(object, value) {
-  object@assayData <- value
-  object
-})
+setReplaceMethod("assayData",
+                 signature=signature(
+                   object="eSet",
+                   value="AssayData"),
+                 function(object, value) {
+                     unsafeSetSlot(object, "assayData", value)
+                 })
 
 assayDataElementNames <- function(object) {
     if (storageMode(object) == "list") names(assayData(object))
@@ -377,39 +404,55 @@ setMethod("featureData",
           function(object) object@featureData)
 
 setReplaceMethod("featureData",
-                 signature(object="eSet", value="AnnotatedDataFrame"),
+                 signature=signature(
+                   object="eSet",
+                   value="AnnotatedDataFrame"),
                  function(object, value) {
-                     object@featureData <- value
-                     object
+                     unsafeSetSlot(object, "featureData", value)
                  })
 
 setMethod("phenoData", "eSet", function(object) object@phenoData)
 
-setReplaceMethod("phenoData", c("eSet", "AnnotatedDataFrame"), function(object, value) {
-  object@phenoData <- value
-  object
-})
+setReplaceMethod("phenoData",
+                 signature=signature(
+                   object="eSet",
+                   value="AnnotatedDataFrame"),
+                 function(object, value) {
+                     unsafeSetSlot(object, "phenoData", value)
+                 })
 
 setMethod("pData", "eSet", function(object) pData(phenoData(object)))
 
-setReplaceMethod("pData", c("eSet","data.frame"), function(object, value) {
-  pData(phenoData(object)) <- value
-  object
-})
+setReplaceMethod("pData",
+                 signature=signature(
+                   object="eSet",
+                   value="data.frame"),
+                 function(object, value) {
+                     pd <- phenoData(object)
+                     pData(pd) <- value
+                     unsafeSetSlot(object, "phenoData", pd)
+                 })
 
 setMethod("varMetadata", "eSet", function(object) varMetadata(phenoData(object)))
 
-setReplaceMethod("varMetadata", c("eSet","data.frame"), function(object, value) {
-  varMetadata(phenoData(object)) <- value
-  object
-})
+setReplaceMethod("varMetadata",
+                 signature=signature(
+                   object="eSet",
+                   value="data.frame"),
+                 function(object, value) {
+                     pd <- phenoData(object)
+                     varMetadata(pd) <- value
+                     unsafeSetSlot(object, "phenoData", pd)
+                 })
 
 setMethod("experimentData", signature(object="eSet"), function(object) object@experimentData)
 
-setReplaceMethod("experimentData", signature(object="eSet",value="MIAME"),
+setReplaceMethod("experimentData",
+                 signature=signature(
+                   object="eSet",
+                   value="MIAME"),
                  function(object, value) {
-                     object@experimentData <- value
-                     object
+                     unsafeSetSlot(object, "experimentData", value)
                  })
 
 setMethod("description", signature(object="eSet"),
@@ -417,37 +460,50 @@ setMethod("description", signature(object="eSet"),
               experimentData(object)
           })
 
-setReplaceMethod("description", signature(object="eSet", value="MIAME"),
+setReplaceMethod("description",
+                 signature=signature(
+                   object="eSet",
+                   value="MIAME"),
                  function(object, value) {
-                     object@experimentData <- value
-                     object
+                     unsafeSetSlot(object, "experimentData", value)
                  })
 
 setMethod("notes", signature(object="eSet"),
           function(object) otherInfo(experimentData(object)))
 
-setReplaceMethod("notes", signature(object="eSet", value="ANY"),
+setReplaceMethod("notes",
+                 signature=signature(
+                   object="eSet",
+                   value="ANY"),
                  function(object, value) {
-                     notes(experimentData(object)) <- value
-                     object
+                     ed <- experimentData(object)
+                     notes(ed) <- value
+                     unsafeSetSlot(object, "experimentData", ed)
                  })
 
 setMethod("pubMedIds", signature(object="eSet"),
           function(object) pubMedIds(experimentData(object)))
 
-setReplaceMethod("pubMedIds", signature("eSet","character"), function(object, value) {
-  pubMedIds(experimentData(object)) <- value
-  object
-})
+setReplaceMethod("pubMedIds",
+                 signature=signature(
+                   object="eSet",
+                   value="character"),
+                 function(object, value) {
+                     ed <- experimentData(object)
+                     pubMedIds(ed) <- value
+                     unsafeSetSlot(object, "experimentData", ed)
+                 })
 
 setMethod("abstract", "eSet", function(object) abstract(experimentData(object)))
 
 setMethod("annotation", "eSet", definition = function(object) object@annotation)
 
-setReplaceMethod("annotation", signature(object="eSet", value="character"),
+setReplaceMethod("annotation",
+                 signature=signature(
+                   object="eSet",
+                   value="character"),
                  function(object, value) {
-                     object@annotation <- value
-                     object
+                     unsafeSetSlot(object, "annotation", value)
                  })
 
 setMethod("combine", c("eSet", "eSet"), function(x, y, ...) {
