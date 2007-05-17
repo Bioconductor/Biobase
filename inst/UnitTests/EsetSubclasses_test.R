@@ -480,3 +480,13 @@ testExtraSlotClassInitialize4 <- function() {
                        R=new("matrix")), silent=TRUE)
     removeClass("ExtraSlotSet", where=.GlobalEnv)
 }
+
+testEsetUnsafeSetSlot <- function() {
+    library(Biobase)
+    data(sample.ExpressionSet)
+    orig <- sampleNames(sample.ExpressionSet)
+    obj <- sample.ExpressionSet
+    obj <- `sampleNames<-`(obj, letters[1:26])
+    checkIdentical(sampleNames(obj), letters[1:26])
+    checkIdentical(sampleNames(sample.ExpressionSet), orig)
+}
