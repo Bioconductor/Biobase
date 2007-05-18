@@ -8,7 +8,7 @@ exportClasses(aggregator, container, eSet, phenoData,
               exprMatrix, exprSet, AnnotatedDataFrame,
               Versions, VersionsNull, Versioned, VersionedBiobase,
               ExpressionSet, MultiSet, SnpSet, NChannelSet,
-              ScalarCharacter)
+              ScalarObject, ScalarInteger, ScalarNumeric, ScalarCharacter)
 
 exportMethods("[", "[[", "$", abstract, addVarMetadataEntry, aggenv, aggfun,
               annotatedDataFrameFrom, annotation,
@@ -37,7 +37,7 @@ export("Aggregate",
        assayDataElement, assayDataElementReplace, "assayDataElement<-",
        "biocReposList", "cache", "copyEnv", "copySubstitute", "getObjectSlots",
        "createPackage", "df2pD", "dumpPackTxt", "esApply",
-       "getPkgVigs", "isUnique", "l2e", "listLen", "matchpt",
+       "getPkgVigs", "isUnique", "l2e", "listLen", "matchpt", "mkScalar",
        "multiassign", "note", "openPDF","openVignette", "package.version",
        "reverseSplit", "rowMax", "rowMedians", "rowMin", "rowQ",
        read.exprSet, read.phenoData, read.pD, # to be deprecated

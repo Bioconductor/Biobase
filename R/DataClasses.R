@@ -221,12 +221,19 @@ setClass("exprSet",
 )
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-setClass("ScalarCharacter",
-         contains="character",
+setClass("ScalarObject", contains="VIRTUAL",
          validity=function(object) {
              if (length(object) != 1L)
-               "ScalarCharacter must have length one"
+               paste(class(object), "must have length one")
              else
                TRUE
-         },
+         })
+
+setClass("ScalarCharacter", contains=c("ScalarObject", "character"),
          prototype="")
+
+setClass("ScalarInteger", contains=c("ScalarObject", "integer"),
+         prototype=as.integer(NA))
+
+setClass("ScalarNumeric", contains=c("ScalarObject", "numeric"),
+         prototype=as.double(NA))
