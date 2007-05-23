@@ -353,3 +353,33 @@ read.AnnotatedDataFrame <- function(filename = NULL, sampleNames = character(0),
         }
     }
 }
+
+
+read.AnnotatedDataFrame2 <- function(filename,
+                                    sep = "\t", header = TRUE, quote = "", as.is = TRUE, 
+                                    row.names = 1L,
+                                    varmetadata.char="#", ...) {
+  
+  if(!(is.character(varmetadata.char)&&(identical(nchar(varmetadata.char), 1L))))
+    stop("Invalid  'varmetadata.char'")
+
+  ## read phenoData table (the lines without leading "#")
+  pData = read.table(filename, sep=sep, header=header, quote=quote, as.is=as.is, 
+    row.names=row.names, comment.char=varmetadata.char, ...)
+  
+  ## read varMetadata section (the lines with leading "#")
+  vmd = grep(paste("^",  varmetadata.char, sep=""), readLines(filename), value=TRUE)
+  svmd = strsplit(vmd, ":")
+  varNames = sub("^# *", "", sapply(svmd, "[", 1L))
+  varMetad = sapply(svmd, "[", 2L)
+
+  mt = match(colnames(pData), varNames)
+  varMetad = ifelse(!is.na(mt), varMetad[mt], "read from file")
+  
+  new("AnnotatedDataFrame",
+      data=pData,
+      varMetadata=data.frame(labelDescription=varMetad, row.names=colnames(pData)))
+  
+}
+
+
