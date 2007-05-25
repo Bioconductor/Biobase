@@ -317,54 +317,70 @@ setMethod("combine",
               new("AnnotatedDataFrame", data=pData, varMetadata=vM, dimLabels=dimLabels(x))
           })
 
-read.AnnotatedDataFrame <- function(filename = NULL, sampleNames = character(0),
-                                    widget = getOption("BioC")$Base$use.widgets,...) {
-    ## used by affy
-    if(widget) {
-        ## see read.phenoData for implementation hints
-        stop("sorry, tkWidgets support not available for read.AnnotatedDataFrame")
-    }
-    else {
-        if(is.character(filename) || inherits(filename, "connection")) {
-            pData <- read.table(filename, ...)
-            if(0!=length(sampleNames))
-              row.names(pData) <- sampleNames
-            return(new("AnnotatedDataFrame",
-                       data=pData,
-                       varMetadata=data.frame(
-                         labelDescription=rep("read from file", ncol(pData)),
-                         row.names=names(pData))))
-        }
-        else {
-            if(!is.null(filename))
-              stop("incorrect 'filename' given")
-            if(0==length(sampleNames)){
-                return(new("AnnotatedDataFrame")) ##return a blank!
-            } else {
-                pData <- data.frame(
-                             sample=1:length(sampleNames),
-                             row.names=sampleNames)
-                return(new("AnnotatedDataFrame",
-                           data=pData,
-                           varMetadata=data.frame(
-                             labelDescription="arbitrary numbering",
-                             row.names=names(pData))))
-            }
-        }
-    }
-}
 
+## the following was the old implementation, used until version 1.15.12
+##
+## read.AnnotatedDataFrame <- function(filename = NULL, sampleNames = character(0),
+#                                     widget = getOption("BioC")$Base$use.widgets,...) {
+#     ## used by affy
+#     if(widget) {
+#         ## see read.phenoData for implementation hints
+#         stop("sorry, tkWidgets support not available for read.AnnotatedDataFrame")
+#     }
+#     else {
+#         if(is.character(filename) || inherits(filename, "connection")) {
+#             pData <- read.table(filename, ...)
+#             if(0!=length(sampleNames))
+#               row.names(pData) <- sampleNames
+#             return(new("AnnotatedDataFrame",
+#                        data=pData,
+#                        varMetadata=data.frame(
+#                          labelDescription=rep("read from file", ncol(pData)),
+#                          row.names=names(pData))))
+#         }
+#         else {
+#             if(!is.null(filename))
+#               stop("incorrect 'filename' given")
+#             if(0==length(sampleNames)){
+#                 return(new("AnnotatedDataFrame")) ##return a blank!
+#             } else {
+#                 pData <- data.frame(
+#                              sample=1:length(sampleNames),
+#                              row.names=sampleNames)
+#                 return(new("AnnotatedDataFrame",
+#                            data=pData,
+#                            varMetadata=data.frame(
+#                              labelDescription="arbitrary numbering",
+#                              row.names=names(pData))))
+#             }
+#         }
+#     }
+# }
 
-read.AnnotatedDataFrame2 <- function(filename,
-                                    sep = "\t", header = TRUE, quote = "", as.is = TRUE, 
-                                    row.names = 1L,
-                                    varmetadata.char="#", ...) {
+read.AnnotatedDataFrame = function(filename, path,
+                                   sep = "\t", header = TRUE, quote = "", stringsAsFactors = FALSE, 
+                                   row.names = 1L,
+                                   varmetadata.char="#",
+                                   widget = getOption("BioC")$Base$use.widgets,
+                                   sampleNames = character(0),
+                                   ...) {
   
   if(!(is.character(varmetadata.char)&&(identical(nchar(varmetadata.char), 1L))))
     stop("Invalid  'varmetadata.char'")
 
+  ## For backward (or forward?) compatibility:
+  if(widget)
+    stop("Sorry: tkWidgets support is not available for read.AnnotatedDataFrame")
+    ## see read.phenoData for implementation hints
+
+  if(length(sampleNames)>0)
+    stop("'sampleNames' argument is not supported, please provide the sample",
+         "names in the input file and use the option 'row.names'.")
+
   ## read phenoData table (the lines without leading "#")
-  pData = read.table(filename, sep=sep, header=header, quote=quote, as.is=as.is, 
+  if(!missing(path))
+    filename = file.path(path, filename)
+  pData = read.table(filename, sep=sep, header=header, quote=quote, stringsAsFactors=stringsAsFactors, 
     row.names=row.names, comment.char=varmetadata.char, ...)
   
   ## read varMetadata section (the lines with leading "#")
@@ -373,12 +389,18 @@ read.AnnotatedDataFrame2 <- function(filename,
   varNames = sub("^# *", "", sapply(svmd, "[", 1L))
   varMetad = sapply(svmd, "[", 2L)
 
+  ## link varMetadata names with pData colnames
   mt = match(colnames(pData), varNames)
-  varMetad = ifelse(!is.na(mt), varMetad[mt], "read from file")
+  varMetad = ifelse(!is.na(mt), varMetad[mt], "")
+
+  vmd = data.frame(labelDescription=varMetad, row.names=colnames(pData))
+
+  ## add provenance information. Alapping it on as an attribute is a bit tacky, if Martin likes the idea
+  ## at all, maybe this can be made a proper slot...
+  provenance = sprintf("Read from file %s on %s at %s.", filename, Sys.info()["nodename"], date())
+  attr(vmd, "provenance") = provenance
   
-  new("AnnotatedDataFrame",
-      data=pData,
-      varMetadata=data.frame(labelDescription=varMetad, row.names=colnames(pData)))
+  new("AnnotatedDataFrame", data=pData, varMetadata=vmd)
   
 }
 

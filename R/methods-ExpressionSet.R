@@ -135,33 +135,44 @@ setMethod("write.exprs",
           })
 
 readExpressionSet <- function(exprsFile,
-                              phenoDataFile=character(0),
-                              experimentDataFile=character(0),
-                              notesFile=character(0),
-                              annotation=character(0),
+                              phenoDataFile,
+                              experimentDataFile,
+                              notesFile,
+                              path,
+                              annotation,
                               ## arguments to read.* methods 
-                              exprsArgs=list(...),
-                              phenoDataArgs=list(...),
-                              experimentDataArgs=list(...),
-                              notesArgs=list(...),
+                              exprsArgs=list(sep=sep, header=header, row.names=row.names, quote=quote, ...),
+                              phenoDataArgs=list(sep=sep, header=header, row.names=row.names, quote=quote, stringsAsFactors=stringsAsFactors, ...),
+                              experimentDataArgs=list(sep=sep, header=header, row.names=row.names, quote=quote, stringsAsFactors=stringsAsFactors, ...),
+                              sep = "\t", header = TRUE, quote = "", stringsAsFactors = FALSE, row.names = 1L,
                               ## widget
                               widget = getOption("BioC")$Base$use.widgets,
                               ...) {
     if (!missing(widget) && widget != FALSE)
         stop("sorry, widgets not yet available")
+    
     ## exprs
     if (missing(exprsFile))
         stop("exprs can not be missing!")
     exprsArgs$file=exprsFile
-    exprs <- as.matrix(do.call("read.table", exprsArgs))
-    obj <- new("ExpressionSet", exprs=exprs)
+    ex = as.matrix(do.call("read.table", exprsArgs))
+
     ## phenoData
     if (!missing(phenoDataFile))
         phenoDataArgs$file=phenoDataFile
-    if (is.null(phenoDataArgs$sampleNames))
-        phenoDataArgs$sampleNames=colnames(exprs)
-    if (!is.null(phenoDataArgs$file))
-        phenoData(obj) <- do.call("read.AnnotatedDataFrame", phenoDataArgs)
+    pd = do.call("read.AnnotatedDataFrame", phenoDataArgs)
+    
+    if (!identical(sampleNames(pd), colnames(ex)))
+      stop("Column names of expression matrix must be identical to\n",
+           "the sample names of the phenodata table.\n",
+           "You could use 'options(error=recover)' to compare the",
+           "values of 'sampleNames(pd)' and 'colnames(ex)'.\n")
+                       
+    obj = new("ExpressionSet", exprs=ex, phenoData=pd)
+
+
+    ## FIXME: these should probably added to obj before, or simultaneously to, exprs;
+    ##   as is this can provoke a lot of copying
     ## experimentData
     if (!missing(experimentDataFile))
         experimentDataArgs$file=experimentDataFile
@@ -172,9 +183,8 @@ readExpressionSet <- function(exprsFile,
         annotation(obj) <- annotation
     ## notes
     if (!missing(notesFile))
-        notesArgs$file=notesFile
-    if (!is.null(notesArgs$file))
         notes(obj) <- readLines(notesFile)
+
     validObject(obj)
     obj
 }
