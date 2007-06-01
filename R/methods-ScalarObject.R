@@ -13,6 +13,8 @@ setMethod("show", "ScalarObject",
 
 setMethod("show", "ScalarCharacter",
           function(object) {
-              cat(sprintf('"%s"\n', object))
+              if (is.na(object))
+                  cat(NA, "\n")
+              else
+                  cat(sprintf('"%s"\n', object))
           })
-
