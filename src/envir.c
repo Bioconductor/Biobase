@@ -138,7 +138,8 @@ SEXP lc_prefix(SEXP x, SEXP ignoreCase)
 {
     /* XXX: x must be a character vector containing ASCII only */
     int i, j, nc, min_nc, done, ucase;
-    char *prefix, *first, c;
+    char *prefix, c;
+    const char *first;
     SEXP ans;
 
     x = coerceVector(x, STRSXP);
