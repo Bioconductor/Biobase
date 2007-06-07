@@ -360,13 +360,13 @@ setMethod("combine",
 read.AnnotatedDataFrame = function(filename, path,
                                    sep = "\t", header = TRUE, quote = "", stringsAsFactors = FALSE, 
                                    row.names = 1L,
-                                   varmetadata.char="#",
+                                   varMetadata.char="#",
                                    widget = getOption("BioC")$Base$use.widgets,
                                    sampleNames = character(0),
                                    ...) {
   
-  if(!(is.character(varmetadata.char)&&(identical(nchar(varmetadata.char), 1L))))
-    stop("Invalid  'varmetadata.char'")
+  if(!(is.character(varMetadata.char)&&(identical(nchar(varMetadata.char), 1L))))
+    stop("Invalid  'varMetadata.char'")
 
   ## For backward (or forward?) compatibility:
   if(widget)
@@ -381,10 +381,10 @@ read.AnnotatedDataFrame = function(filename, path,
   if(!missing(path))
     filename = file.path(path, filename)
   pData = read.table(filename, sep=sep, header=header, quote=quote, stringsAsFactors=stringsAsFactors, 
-    row.names=row.names, comment.char=varmetadata.char, ...)
+    row.names=row.names, comment.char=varMetadata.char, ...)
   
   ## read varMetadata section (the lines with leading "#")
-  vmd = grep(paste("^",  varmetadata.char, sep=""), readLines(filename), value=TRUE)
+  vmd = grep(paste("^",  varMetadata.char, sep=""), readLines(filename), value=TRUE)
   svmd = strsplit(vmd, ":")
   varNames = sub("^# *", "", sapply(svmd, "[", 1L))
   varMetad = sapply(svmd, "[", 2L)

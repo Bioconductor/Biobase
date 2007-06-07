@@ -12,7 +12,7 @@
 read.AnnotatedDataFrame(filename, path,
      sep = "\t", header = TRUE, quote = "", stringsAsFactors = FALSE, 
      row.names = 1L,
-     varmetadata.char="#",
+     varMetadata.char="#",
      widget = getOption("BioC")$Base$use.widgets,
      sampleNames = character(0), ...) 
 }
@@ -23,7 +23,7 @@ read.AnnotatedDataFrame(filename, path,
   \item{row.names}{this argument gets passed on to
     \code{\link{read.table}} and will be used for the row names of the
     phenoData slot.}
-  \item{varmetadata.char}{lines beginning with this character are used
+  \item{varMetadata.char}{lines beginning with this character are used
     for the \code{varMetadata} slot. See examples.}
   \item{sep, header, quote, stringsAsFactors, ...}{further arguments that get passed on to
     \code{\link{read.table}}.}
@@ -36,11 +36,13 @@ read.AnnotatedDataFrame(filename, path,
 }
 \details{
   The function \code{\link{read.table}} is used to read
-  \code{pData}. The argument \code{varmetadata.char} is passed on to
+  \code{pData}. The argument \code{varMetadata.char} is passed on to
   that function as its argument \code{comment.char}.
-  Lines beginning with  \code{varmetadata.char} are expected to contain
-  further textual information on the column headers in \code{pData},
-  see examples.
+  Lines beginning with  \code{varMetadata.char} are expected to contain
+  further information on the column headers of \code{pData}.
+  The format is of the form: \code{# variable: textual explanation of the
+    variable, units, measurement method, etc.} (assuming that \code{#}
+  is the value of \code{varMetadata.char}). See also examples.
 }
 
 \value{
