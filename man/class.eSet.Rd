@@ -163,11 +163,14 @@
        variables reported in \code{pData}}
      \item{\code{assayData(object), assayData(object) <- value}:}{
        \code{signature(object = "eSet", value = "AssayData")}: Access
-       and replace the \code{AssayData} slot of a
-       \code{eSet} instance.}
+       and replace the \code{AssayData} slot of an
+       \code{eSet} instance. \code{assayData} returns a list or
+       environment; elements in \code{assayData} not accessible in other
+       ways (e.g., via \code{exprs} applied directly to the \code{eSet})
+       can most reliably be accessed with, e.g., \code{assayData(obj)[["se.exprs"]]}.}
      \item{\code{experimentData(object)},\code{experimentData(object) <- value}:}{Access
        and set details of experimental methods}
-     \item{\code{description(object)},\code{description(object) <- value}:}{Synonymous with experimentData; included for compatibility with \code{exprSet}. }
+     \item{\code{description(object)},\code{description(object) <- value}:}{Synonymous with experimentData; included for compatibility with \code{exprSet}.}
      \item{\code{notes(object)},\code{notes(object) <- value}:}{
        \code{signature(object="eSet", value="list")} Retrieve and set unstructured notes associated with \code{eSet}.
        \code{signature(object="eSet", value="character")} As with

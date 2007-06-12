@@ -63,6 +63,7 @@
   }
   Additional functions operating on \code{AssayData} include:
   \describe{
+    \item{assayData[[name]]}{Select element \code{name} from \code{assayData}.}
     \item{assayDataNew(storage.mode = c("lockedEnvironment",
 	"environment", "list"), ...)}{Use \code{storage.mode} to create a
       new list or environment containing the named elements in \code{...}}
