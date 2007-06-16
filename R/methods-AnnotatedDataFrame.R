@@ -268,10 +268,13 @@ setMethod("show", "AnnotatedDataFrame", function(object) {
     rnms <- rownames(pData)
     nms <- c(rnms[idx[[1]]], idx[[2]],
              if (!is.null(idx[[1]])) rnms[-idx[[1]]] else NULL)
-    cat("  ", dimLabels(object)[[1]], ": ", paste(nms, collapse=", "), sep="")
+    
+    outs = paste("  ", dimLabels(object)[[1]], ": ",
+      paste(nms, collapse=", "), sep="")
     if (nrow(object)>length(nms))
-      cat(" (",nrow(object)," total)", sep="")
-
+      outs = c(outs, paste(" (",nrow(object)," total)", sep=""))
+    cat(strbreak(outs))
+    
     cat("\n  varLabels and varMetadata:")
     cnms <- colnames(pData)
     if (length(cnms)>0) {
@@ -279,8 +282,11 @@ setMethod("show", "AnnotatedDataFrame", function(object) {
         metadata <- varMetadata(object)
         vars <- c(cnms[idy[[1]]], idy[[2]], cnms[-idy[[1]]])
         meta <- selectSome(as.character(metadata[["labelDescription"]]), maxToShow=4)
-        mapply(function(nm, meta) cat("    ",nm,": ", meta, "\n", sep=""),
-               vars, meta)
+        mapply(function(nm, meta) {
+          outs = paste("    ",nm,": ", meta, "\n", sep="")
+          cat(strbreak(outs))
+          }, vars, meta)
+               
         if (nrow(metadata)>length(meta))
           cat("    (", nrow(metadata), " total)\n", sep="")
         if (ncol(metadata)>1) {
