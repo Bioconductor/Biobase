@@ -42,8 +42,10 @@ setMethod("initialize",
               } else if (!missing(phenoData)) {
                   checkClass(phenoData, "AnnotatedDataFrame", class(.Object))
               }
+              dimLabels(phenoData) <- c("sampleNames", "sampleColumns")
               if (!missing(featureData))
                 checkClass(featureData, "AnnotatedDataFrame", class(.Object))
+              dimLabels(featureData) <- c("featureNames", "featureColumsn")
               ## coordinate sample names
               adSampleNames <- sampleNames(assayData)
               if (all(sapply(adSampleNames,is.null)))
@@ -164,8 +166,7 @@ setMethod("updateObject", signature(object="eSet"),
                     new(class(object),
                         assayData=updateObject(assayData(object), ..., verbose=verbose),
                         phenoData=new("AnnotatedDataFrame",
-                          data=pData(object), varMetadata=varMetadata(object),
-                          dimLabels=c("sampleNames", "sampleColums")),
+                          data=pData(object), varMetadata=varMetadata(object)),
                         featureData(object) <- annotatedDataFrameFrom(assayData(object), byrow=TRUE),
                         experimentData = updateObject(experimentData(object), ..., verbose=verbose),
                         annotation = annotation(object))

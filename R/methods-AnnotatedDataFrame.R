@@ -109,6 +109,15 @@ setMethod("dimLabels", "AnnotatedDataFrame", function(object) {
     object@dimLabels
 })
 
+setReplaceMethod("dimLabels",
+                 signature=signature(
+                   object="AnnotatedDataFrame",
+                   value="character"),
+                 function(object, value) {
+                     object@dimLabels <- value
+                     object
+                 })
+
 setMethod("pData", "AnnotatedDataFrame", function(object) object@data)
 
 setReplaceMethod("pData", c("AnnotatedDataFrame", "data.frame"), function(object, value) {
@@ -179,7 +188,8 @@ setMethod("[",
                   else
                     pD <- x@data[i,j,drop = drop]
               }
-              new("AnnotatedDataFrame", data=pD, varMetadata=mD )
+              new("AnnotatedDataFrame",
+                  data=pD, varMetadata=mD, dimLabels=dimLabels(x))
           })
 
 ##setMethod("$", "AnnotatedDataFrame", function(x, name) `$`(pData(x), name))
@@ -320,7 +330,8 @@ setMethod("combine",
                 }
               vM <- combine(varMetadataX, varMetadataY)
 
-              new("AnnotatedDataFrame", data=pData, varMetadata=vM, dimLabels=dimLabels(x))
+              new("AnnotatedDataFrame",
+                  data=pData, varMetadata=vM, dimLabels=dimLabels(x))
           })
 
 

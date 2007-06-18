@@ -5,6 +5,7 @@
 \alias{AnnotatedDataFrame-class}
 
 \alias{dimLabels}
+\alias{dimLabels<-}
 
 \alias{[,AnnotatedDataFrame-method}
 \alias{[[<-,AnnotatedDataFrame-method}
@@ -17,6 +18,7 @@
 \alias{coerce,phenoData,AnnotatedDataFrame-method}
 \alias{dim,AnnotatedDataFrame-method}
 \alias{dimLabels,AnnotatedDataFrame-method}
+\alias{dimLabels<-,AnnotatedDataFrame,character-method}
 \alias{ncol,AnnotatedDataFrame-method}
 \alias{pData<-,AnnotatedDataFrame,data.frame-method}
 \alias{pData,AnnotatedDataFrame-method}
@@ -115,10 +117,12 @@
     \item{\code{varLabels(<AnnotatedDataFrame>)},
       \code{varLabels(<AnnotatedDataFrame>)<-<data.frame>}:}{Set and
       retrieve the variable labels in the \code{AnnotatedDataFrame}}
-    \item{\code{dimLabels(<AnnotatedDataFrame>)}}{Retrieve labels used
-      for display of \code{AnnotatedDataFrame}, e.g., \sQuote{rowNames},
-      \sQuote{columnNames}.}
-    }
+    \item{
+      \code{dimLabels(<AnnotatedDataFrame>)},
+      \code{dimLabels(<AnnotatedDataFrame>) <- <character>}}{Retrieve
+      labels used for display of \code{AnnotatedDataFrame}, e.g.,
+      \sQuote{rowNames}, \sQuote{columnNames}.}
+  }
 
   Standard generic methods:
   \describe{
