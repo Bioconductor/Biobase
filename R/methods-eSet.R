@@ -214,25 +214,33 @@ setReplaceMethod("preproc",
                      object
                  })
 
-setMethod("show", "eSet", function(object) {
-  cat(class( object ), " (storageMode: ", storageMode(object), ")\n", sep="")
-  adim <- dim(object)
-  if (length(adim)>1)
-  cat("assayData:",
-      if (length(adim)>1) paste(adim[[1]], "features,", adim[[2]], "samples") else NULL,
-      "\n")
-  cat("  element names:", paste(assayDataElementNames(object), collapse=", "), "\n")
-  cat("phenoData\n")
-  show(phenoData(object))
-  cat("featureData\n")
-  show(featureData(object))
-  cat("experimentData: use 'experimentData(object)'\n")
-  pmids <- pubMedIds(object)
-  if (length(pmids) > 0 && all(pmids != ""))
-      cat("  pubMedIds:", paste(pmids, sep=", "), "\n")
-  cat("Annotation ")
-  show(annotation(object))
-})
+setMethod("show",
+          signature=signature(object="eSet"),
+          function(object) {
+              cat(class( object ), " (storageMode: ", storageMode(object), ")\n", sep="")
+              adim <- dim(object)
+              if (length(adim)>1)
+                  cat("assayData:",
+                      if (length(adim)>1)
+                      paste(adim[[1]], "features,",
+                            adim[[2]], "samples") else NULL,
+                      "\n")
+              cat("  element names:",
+                  paste(assayDataElementNames(object), collapse=", "), "\n")
+              .showAnnotatedDataFrame(phenoData(object),
+                                      labels=list(object="phenoData"))
+              .showAnnotatedDataFrame(featureData(object),
+                                      labels=list(
+                                        object="featureData",
+                                        sampleNames="featureNames",
+                                        varLabels="fvarLabels",
+                                        varMetadata="fvarMetadata"))
+              cat("experimentData: use 'experimentData(object)'\n")
+              pmids <- pubMedIds(object)
+              if (length(pmids) > 0 && all(pmids != ""))
+                  cat("  pubMedIds:", paste(pmids, sep=", "), "\n")
+              cat("Annotation:", annotation(object), "\n")
+          })
 
 setMethod("storageMode", "eSet", function(object) storageMode(assayData(object)))
 
@@ -274,28 +282,6 @@ setReplaceMethod("featureNames",
                      featureNames(ad) <- value
                      object@featureData <- fd
                      unsafeSetSlot(object, "assayData", ad)
-                 })
-
-setMethod("varLabels", "eSet", function(object) varLabels(phenoData(object)))
-
-setReplaceMethod("varLabels",
-                 signature=signature(object="eSet"),
-                 function(object, value) {
-                     pd <- phenoData(object)
-                     varLabels(pd) <- value
-                     object@phenoData <- pd
-                     object
-                 })
-
-setMethod("varMetadata", "eSet", function(object) varMetadata(phenoData(object)))
-
-setReplaceMethod("varMetadata",
-                 signature=signature(object="eSet", value="data.frame"),
-                 function(object, value) {
-                     pd <- phenoData(object)
-                     varMetadata(pd) <- value
-                     object@phenoData <- pd
-                     object
                  })
 
 setMethod("dim", "eSet", function(x) assayDataDim(assayData(x)))
@@ -405,19 +391,6 @@ assayDataElementReplace <- function(obj, elt, value) {
 
 `assayDataElement<-` <- assayDataElementReplace
 
-setMethod("featureData",
-          signature(object="eSet"),
-          function(object) object@featureData)
-
-setReplaceMethod("featureData",
-                 signature=signature(
-                   object="eSet",
-                   value="AnnotatedDataFrame"),
-                 function(object, value) {
-                     object@featureData <- value
-                     object
-                 })
-
 setMethod("phenoData", "eSet", function(object) object@phenoData)
 
 setReplaceMethod("phenoData",
@@ -442,7 +415,9 @@ setReplaceMethod("pData",
                      object
                  })
 
-setMethod("varMetadata", "eSet", function(object) varMetadata(phenoData(object)))
+setMethod("varMetadata",
+          signature=signature(object="eSet"),
+          function(object) varMetadata(phenoData(object)))
 
 setReplaceMethod("varMetadata",
                  signature=signature(
@@ -452,6 +427,79 @@ setReplaceMethod("varMetadata",
                      pd <- phenoData(object)
                      varMetadata(pd) <- value
                      object@phenoData <- pd
+                     object
+                 })
+
+setMethod("varLabels",
+          signature=signature(object="eSet"),
+          function(object) varLabels(phenoData(object)))
+
+setReplaceMethod("varLabels",
+                 signature=signature(
+                   object="eSet",
+                   value="ANY"),
+                 function(object, value) {
+                     pd <- phenoData(object)
+                     varLabels(pd) <- value
+                     object@phenoData <- pd
+                     object
+                 })
+
+setMethod("featureData",
+          signature(object="eSet"),
+          function(object) object@featureData)
+
+setReplaceMethod("featureData",
+                 signature=signature(
+                   object="eSet",
+                   value="AnnotatedDataFrame"),
+                 function(object, value) {
+                     object@featureData <- value
+                     object
+                 })
+
+setMethod("fData",
+          signature=signature(object="eSet"),
+          function(object) pData(featureData(object)))
+
+setReplaceMethod("fData",
+                 signature=signature(
+                   object="eSet",
+                   value="data.frame"),
+                 function(object, value) {
+                     fd <- featureData(object)
+                     pData(fd) <- value
+                     object@featureData <- fd
+                     object
+                 })
+
+setMethod("fvarMetadata",
+          signature=signature(object="eSet"),
+          function(object) varMetadata(featureData(object)))
+
+setReplaceMethod("fvarMetadata",
+                 signature=signature(
+                   object="eSet",
+                   value="data.frame"),
+                 function(object, value) {
+                     fd <- featureData(object)
+                     varMetadata(fd) <- value
+                     object@featureData <- fd
+                     object
+                 })
+
+setMethod("fvarLabels",
+          signature=signature(object="eSet"),
+          function(object) varLabels(featureData(object)))
+
+setReplaceMethod("fvarLabels",
+                 signature=signature(
+                   object="eSet",
+                   value="ANY"),
+                 function(object, value) {
+                     pd <- featureData(object)
+                     varLabels(pd) <- value
+                     object@featureData <- pd
                      object
                  })
 

@@ -29,12 +29,16 @@
 \alias{experimentData<-,eSet,MIAME-method}
 \alias{exprs,eSet-method}
 \alias{exprs<-,eSet,AssayData-method}
-\alias{featureData}
 \alias{featureData,eSet-method}
-\alias{featureData<-}
 \alias{featureData<-,eSet,AnnotatedDataFrame-method}
 \alias{featureNames,eSet-method}
 \alias{featureNames<-,eSet-method}
+\alias{fData,eSet-method}
+\alias{fData<-,eSet,data.frame-method}
+\alias{fvarLabels,eSet-method}
+\alias{fvarLabels<-,eSet-method}
+\alias{fvarMetadata,eSet-method}
+\alias{fvarMetadata<-,eSet,data.frame-method}
 \alias{initialize,eSet-method}
 \alias{getExpData,eSet,character-method}
 \alias{ncol,eSet-method}
@@ -143,24 +147,32 @@
      \item{\code{dims(object)}:}{Access the common dimensions (\code{dim}) or
        column numbers (\code{ncol}), or dimensions of all memebers
        (\code{dims}) of \code{assayData}.}
+
      \item{\code{phenoData(object)},
        \code{phenoData(object) <- value}:}{Access and set
 	   \code{phenoData}. Adding new columns to \code{phenoData} is often
 	   more easily done with \code{eSetObject[["columnName"]] <- value}.}
-     \item{\code{featureData(object)},
-       \code{featureData(object) <- value}:}{Access and set \code{featureData}.}
-     \item{\code{varLabels(object)}, \code{varLabels(eSet,
-	 value)<-}:}{Access and set variable labels in
-       \code{phenoData}.}
-     \item{\code{varMetadata(object)},
-       \code{varMetadata(object) <- value}:}{Access and set descriptions of
-       variables in \code{phenoData}.}
      \item{\code{pData(object)}, \code{pData(object) <- value}:}{Access and set
        sample data information. Adding new columns to \code{pData} is often
 	   more easily done with \code{eSetObject[["columnName"]] <- value}.}
      \item{\code{varMetadata(object)},
        \code{varMetadata(eSet,value)}}{Access and set metadata describing
        variables reported in \code{pData}}
+     \item{\code{varLabels(object)}, \code{varLabels(eSet,
+	     value)<-}:}{Access and set variable labels in
+       \code{phenoData}.}
+
+     \item{\code{featureData(object)},
+       \code{featureData(object) <- value}:}{Access and set \code{featureData}.}
+     \item{\code{fData(object)}, \code{fData(object) <- value}:}{Access and set
+       feature data information.}
+     \item{\code{fvarMetadata(object)},
+       \code{fvarMetadata(eSet,value)}}{Access and set metadata describing
+       features reported in \code{fData}}
+     \item{\code{fvarLabels(object)},
+       \code{fvarLabels(eSet, value)<-}:}{Access and set variable labels in
+       \code{featureData}.} 
+
      \item{\code{assayData(object), assayData(object) <- value}:}{
        \code{signature(object = "eSet", value = "AssayData")}: Access
        and replace the \code{AssayData} slot of an

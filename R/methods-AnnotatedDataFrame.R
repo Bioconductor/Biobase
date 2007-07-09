@@ -270,7 +270,13 @@ setMethod("selectSomeIndex",
               else list(NULL, NULL, NULL)
           })
 
-setMethod("show", "AnnotatedDataFrame", function(object) {
+.showAnnotatedDataFrame <- function(object, labels=list(0)) {
+    lbls <- list(object=paste("An object of class \"",
+                   class(object), "\"", sep=""),
+                 sampleNames=dimLabels(object)[[1]],
+                 varMetadata="varMetadata",
+                 varLabels="varLabels")
+    lbls[names(labels)] <- labels
     ## create a simplified object for extracting names
     idx <- selectSomeIndex(pData(object), maxToShow=4)
     idy <- selectSomeIndex(pData(object), byrow=FALSE, maxToShow=4)
@@ -278,14 +284,15 @@ setMethod("show", "AnnotatedDataFrame", function(object) {
     rnms <- rownames(pData)
     nms <- c(rnms[idx[[1]]], idx[[2]],
              if (!is.null(idx[[1]])) rnms[-idx[[1]]] else NULL)
-    
-    outs = paste("  ", dimLabels(object)[[1]], ": ",
+
+    cat(lbls$object, "\n", sep="")
+    outs = paste("  ", lbls$sampleNames, ": ",
       paste(nms, collapse=", "), sep="")
     if (nrow(object)>length(nms))
-      outs = c(outs, paste(" (",nrow(object)," total)", sep=""))
+        outs = c(outs, paste(" (",nrow(object)," total)", sep=""))
     cat(strbreak(outs))
     
-    cat("\n  varLabels and varMetadata:")
+    cat("\n  ", lbls$varLabels, " and ", lbls$varMetadata, " description:", sep="")
     cnms <- colnames(pData)
     if (length(cnms)>0) {
         cat("\n")
@@ -293,19 +300,24 @@ setMethod("show", "AnnotatedDataFrame", function(object) {
         vars <- c(cnms[idy[[1]]], idy[[2]], cnms[-idy[[1]]])
         meta <- selectSome(as.character(metadata[["labelDescription"]]), maxToShow=4)
         mapply(function(nm, meta) {
-          outs = paste("    ",nm,": ", meta, "\n", sep="")
-          cat(strbreak(outs))
-          }, vars, meta)
-               
+            outs = paste("    ",nm,": ", meta, "\n", sep="")
+            cat(strbreak(outs))
+        }, vars, meta)
+        
         if (nrow(metadata)>length(meta))
-          cat("    (", nrow(metadata), " total)\n", sep="")
+            cat("    (", nrow(metadata), " total)\n", sep="")
         if (ncol(metadata)>1) {
-            mnms <- selectSome(colnames(metadata), maxToShow=4)
-            cat("  varMetadata:", paste(mnms, collapse=", "), "\n")
+            mnms <- selectSome(colnames(metadata)[-1], maxToShow=4)
+            cat("  additional ", lbls$varMetadata, ": ", paste(mnms, collapse=", "),
+                "\n", sep="")
         }
     } else cat(" none\n")
-})
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+}
+
+setMethod("show",
+          signature=signature(object="AnnotatedDataFrame"),
+          function(object) .showAnnotatedDataFrame(object))
+
 setMethod("combine",
           signature(x="AnnotatedDataFrame", y="AnnotatedDataFrame"),
           function(x, y) {

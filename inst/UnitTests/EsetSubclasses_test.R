@@ -490,3 +490,32 @@ testEsetUnsafeSetSlot <- function() {
     checkIdentical(sampleNames(obj), letters[1:26])
     checkIdentical(sampleNames(sample.ExpressionSet), orig)
 }
+
+testEsetfeatureDataAccess <- function() {
+    data(sample.ExpressionSet)
+    checkTrue(all(dim(fData(sample.ExpressionSet))==c(500,0)))
+    checkTrue(all(dim(fvarMetadata(sample.ExpressionSet))==c(0,1)))
+    checkTrue(length(fvarLabels(sample.ExpressionSet))==0)
+
+    adf <- new("AnnotatedDataFrame",
+               data=data.frame(x=rep(0,500)),
+               varMetadata=data.frame(labelDescription=c("X")))
+    
+    obj <- sample.ExpressionSet
+    featureData(obj) <- adf
+    featureNames(obj) <- featureNames(obj)
+    checkTrue(validObject(obj))
+    checkTrue(all(dim(fData(obj))==c(500,1)))
+    checkTrue(all(dim(fvarMetadata(obj))==c(1,1)))
+    checkTrue(fvarLabels(obj)=="x")
+
+    obj <- sample.ExpressionSet
+    fData(obj) <- pData(adf)
+    checkTrue(all(dim(fData(obj))==c(500,1)))
+    checkTrue(all(fData(obj)==pData(adf))) # Names differ
+    fvarMetadata(obj) <- varMetadata(adf)
+    checkTrue(all(dim(fvarMetadata(obj))==c(1,1)))
+    checkTrue(all.equal(fvarMetadata(obj), varMetadata(adf), check.attributes=FALSE))
+    fvarLabels(obj) <- "y"
+    checkTrue(fvarLabels(obj)=="y")
+}

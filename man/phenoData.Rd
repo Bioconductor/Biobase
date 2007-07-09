@@ -12,7 +12,7 @@
   eSet and exprSet-derived classes.}
 \description{
   These generic functions access the phenotypic data (e.g., covariates)
-  and meta-data (e.g., descriptions of covariates associated with an
+  and meta-data (e.g., descriptions of covariates) associated with an
   experiment. 
 }
 \usage{
@@ -27,7 +27,7 @@ pData(object) <- value
 }
 \arguments{
   \item{object}{Object, possibly derived from \code{\link{eSet-class}}
-    or \code{\link{AnnotatedDataFrame-class}}}
+    or \code{\linkS4class{AnnotatedDataFrame}}.}
   \item{value}{Value to be assigned to corresponding object.}
 }
 \value{
