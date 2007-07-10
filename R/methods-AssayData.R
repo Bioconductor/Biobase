@@ -37,7 +37,7 @@ assayDataValidMembers <- function(assayData, required) {
           all(sapply(eltNames[-1], function(elt)
                      all(eltRowNames == rownames(assayData[[elt]]))))
         if (!rowNamesOk)
-          msg <- c(msg, "'AssayData' elements with different featureNames")
+          msg <- c(msg, "'AssayData' elements with different rowNames")
     }
     if (is.null(msg)) TRUE else msg
 }
@@ -107,6 +107,13 @@ assayDataSubsetElements <-
 setMethod("assayData",
           signature=signature(object="AssayData"),
           function(object) object)
+
+.assayDataDimnames <- function(assayData) {
+    switch(storageMode(assayData),
+           lockedEnvironment=,
+           environment=eapply(assayData, dimnames),
+           list=lapply(assayData, dimnames))
+}
 
 setMethod("sampleNames", signature(object="AssayData"),
           function(object) {

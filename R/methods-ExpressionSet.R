@@ -12,24 +12,49 @@ setMethod("initialize", "ExpressionSet",
                     phenoData <- annotatedDataFrameFrom(exprs, byrow=FALSE)
                   if (missing(featureData))
                     featureData <- annotatedDataFrameFrom(exprs, byrow=TRUE)
-                  callNextMethod(.Object,
-                                 phenoData=phenoData,
-                                 featureData=featureData,
-                                 experimentData=experimentData,
-                                 annotation=annotation,
-                                 exprs=exprs,
-                                 ...)
+                  .Object <- callNextMethod(.Object,
+                                            phenoData=phenoData,
+                                            featureData=featureData,
+                                            experimentData=experimentData,
+                                            annotation=annotation,
+                                            exprs=exprs,
+                                            ...)
               } else if (missing(exprs)) {
-                  callNextMethod(.Object,
-                                 assayData = assayData,
-                                 phenoData = phenoData,
-                                 featureData = featureData,
-                                 experimentData = experimentData,
-                                 annotation = annotation,
-                                 ...)
+                  .Object <- callNextMethod(.Object,
+                                            assayData = assayData,
+                                            phenoData = phenoData,
+                                            featureData = featureData,
+                                            experimentData = experimentData,
+                                            annotation = annotation,
+                                            ...)
               } else stop("provide at most one of 'assayData' or 'exprs' to initialize ExpressionSet",
                           call.=FALSE)
+              .harmonizeDimnames(.Object)
           })
+
+.harmonizeDimnames <- function(object) {
+    err <- function(conflicts)
+        stop("assayData element dimnames conflict: ",
+             paste(names(conflicts), collapse=", "))
+    okNames <- list(featureNames(featureData(object)),
+                    sampleNames(phenoData(object)))
+    dimNames <- .assayDataDimnames(assayData(object))
+    dimConflict <- function(dimNames, okNames, dim) {
+        nm <- lapply(dimNames, "[[", dim)
+        isConflict <- !sapply(nm, identical, okNames[[dim]])
+        isNull <- sapply(nm, is.null)
+        if (all(!isConflict & !isNull))
+            return (FALSE)
+        if (any(isConflict & !isNull))
+            err(isConflict[!isNull])
+        TRUE
+    }
+    if (dimConflict(dimNames, okNames, 1))
+        featureNames(assayData(object)) <- okNames[[1]]
+    if (dimConflict(dimNames, okNames, 2))
+        sampleNames(assayData(object)) <- okNames[[2]]
+    object
+}
 
 setAs("exprSet", "ExpressionSet", function(from) {
   desc <- description(from)

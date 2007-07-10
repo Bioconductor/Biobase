@@ -84,3 +84,41 @@ testDollar <- function() {
     checkTrue(!is.null(s2), msg="$se broken (pmatch)")
     checkEquals(s1, s2, msg="pmatch equality")
 }
+
+testHarmonizeAssayDataDimnames <- function() {
+    checkCreation <- function(exprs, se.exprs) {
+        es <- new("ExpressionSet", exprs=exprs, se.exprs=se.exprs)
+        checkTrue(validObject(es))
+        okNames <- list(featureNames(featureData(es)),
+                        sampleNames(phenoData(es)))
+        dimNames <- Biobase:::.assayDataDimnames(assayData(es))
+        checkTrue(all(sapply(dimNames, identical, okNames)))
+
+        ## 'harmonize' when a single element present
+        es <- new("ExpressionSet", exprs=se.exprs)
+        checkTrue(validObject(es))
+    }
+
+    se.exprs <- matrix(0, 5, 2)
+    exprs <- matrix(0, 5, 2)
+    dimnames(exprs) <- list(LETTERS[1:5], letters[1:2])
+
+    dimnames(se.exprs) <- NULL
+    checkCreation(exprs, se.exprs)
+
+    dimnames(se.exprs) <- list(LETTERS[1:5], NULL)
+    checkCreation(exprs, se.exprs)
+
+    dimnames(se.exprs) <- list(NULL, letters[1:2])
+    checkCreation(exprs, se.exprs)
+
+    ## errors
+    dimnames(se.exprs) <- list(letters[1:5], letters[1:2])
+    checkException(checkCreation(exprs, se.exprs), silent=TRUE)
+
+    dimnames(se.exprs) <- list(LETTERS[1:5], LETTERS[1:2])
+    checkException(checkCreation(exprs, se.exprs), silent=TRUE)
+
+    dimnames(se.exprs) <- list(letters[1:5], LETTERS[1:2])
+    checkException(checkCreation(exprs, se.exprs), silent=TRUE)
+}
