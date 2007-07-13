@@ -112,7 +112,12 @@ setMethod("selectChannels",
               varMetadata(phenoData)[["channel"]] <-
                 factor(metadata[okMetadata], levels=names)
               initialize(object,
-                         assayData = assayData, phenoData = phenoData)
+                         assayData = assayData,
+                         phenoData = phenoData,
+                         featureData = featureData(object),
+                         experimentData=experimentData(object),
+                         annotation=annotation(object),
+                         ...)
           })
 
 setMethod("sampleNames",

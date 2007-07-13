@@ -43,9 +43,10 @@
     experimentData = new("MIAME"),
     annotation = character(0),
     exprs = new("matrix"))
-  } creates an \code{ExpressionSet} with \code{assayData} implicitly
-  created to contain \code{exprs}. In this form the only required named
-  argument \code{exprs} is required. Additional named matrix arguments
+  }
+
+  This creates an \code{ExpressionSet} with \code{assayData} implicitly
+  created to contain \code{exprs}. Additional named matrix arguments
   with the same dimensions as \code{exprs} are added to
   \code{assayData}; the row and column names of these additional
   matricies should match those of \code{exprs}. 
@@ -56,7 +57,9 @@
     featureData = new("AnnotatedDataFrame"),
     experimentData = new("MIAME"),
     annotation = character(0))
-  } creates an \code{ExpressionSet} with \code{assayData} provided
+  }
+
+  This creates an \code{ExpressionSet} with \code{assayData} provided
   explicitly. In this form, the only required named argument is
   \code{assayData}.
 
