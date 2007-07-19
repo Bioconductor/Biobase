@@ -17,13 +17,19 @@ setMethod("combine",
                   switch(class(x[[nm]])[[1]],
                          factor= {
                              if (identical(levels(x[[nm]]), levels(y[[nm]])) &&
-                                 identical(x[sharedRows, nm, drop=FALSE],
-                                           y[sharedRows, nm, drop=FALSE])) TRUE
+                                 (identical(x[sharedRows, nm, drop=FALSE],
+                                            y[sharedRows, nm, drop=FALSE]) ||
+                                  length(sharedRows) == 0)
+                                 ) TRUE
                              else FALSE
                          },
                          ordered=,
                          identical(x[sharedRows, nm, drop=FALSE],
-                                   y[sharedRows, nm, drop=FALSE]))
+                                   y[sharedRows, nm, drop=FALSE]),
+                         ## if not a factor, we assume that there is
+                         ## nothing to prevent "combine"
+                         TRUE
+                         )
               })
               if (!all(ok))
                 stop("data.frames contain conflicting data:",

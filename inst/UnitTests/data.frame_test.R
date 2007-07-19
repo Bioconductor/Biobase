@@ -22,6 +22,17 @@ testCombineDf <- function() {
     checkException(combine(x,y), silent=TRUE)
 }
 
+testCombineDfNoSharedRows <- function() {
+    dfA <- data.frame(label=rep("x", 2), row.names=1:2)
+    dfB <- data.frame(label=rep("x", 3), row.names=3:5)
+    dfC <- data.frame(label=rep("x", 4), row.names=6:9)
+
+    dfAB <- combine(dfA, dfB)
+    checkEquals(as.character(1:5), rownames(dfAB))
+    dfABC <- combine(dfAB, dfC)
+    checkEquals(as.character(1:9), rownames(dfABC))
+}
+
 testNoRow <- function() {
     x <- data.frame(x=1,y=letters[1])[FALSE,]
     y <- data.frame(z=1,y=letters[1])[FALSE,]
