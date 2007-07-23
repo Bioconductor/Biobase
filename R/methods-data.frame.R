@@ -17,19 +17,18 @@ setMethod("combine",
                   switch(class(x[[nm]])[[1]],
                          factor= {
                              if (identical(levels(x[[nm]]), levels(y[[nm]])) &&
-                                 (identical(x[sharedRows, nm, drop=FALSE],
-                                            y[sharedRows, nm, drop=FALSE]) ||
-                                  length(sharedRows) == 0)
-                                 ) TRUE
+                                 identical(x[sharedRows, nm, drop=FALSE],
+                                           y[sharedRows, nm, drop=FALSE])) TRUE
                              else FALSE
                          },
+                         ## ordered and non-factor columns need to
+                         ## satisfy the following identity; it seems
+                         ## possible that ordered could be treated
+                         ## differently, but these have not been
+                         ## encountered.
                          ordered=,
                          identical(x[sharedRows, nm, drop=FALSE],
-                                   y[sharedRows, nm, drop=FALSE]),
-                         ## if not a factor, we assume that there is
-                         ## nothing to prevent "combine"
-                         TRUE
-                         )
+                                   y[sharedRows, nm, drop=FALSE]))
               })
               if (!all(ok))
                 stop("data.frames contain conflicting data:",
@@ -46,9 +45,9 @@ setMethod("combine",
                   y <- y[row.names(x),,drop=FALSE]
                   row.names(y) <- row.names(x)
               }
-              
+
               ## make colnames of merged data robust
-              if (length(uniqueCols)>0) 
+              if (length(uniqueCols)>0)
                 extLength <- max(nchar(sub(".*\\.", "", uniqueCols)))+1
               else extLength <- 1
               extX <- paste(c(".", rep("x", extLength)), collapse="")
@@ -71,9 +70,13 @@ setMethod("combine",
                            },
                            ifelse(is.na(z[[nmx]]), z[[nmy]], z[[nmx]]))
               }
-              
+
               ## tidy
-              row.names(z) <- z$Row.names
+              row.names(z) <-
+                  if (is.integer(attr(x, "row.names")) &&
+                      is.integer(attr(y, "row.names")))
+                      as.integer(z$Row.names)
+              else z$Row.names
               z$Row.names <- NULL
               z[uniqueRows, uniqueCols, drop=FALSE]
           })

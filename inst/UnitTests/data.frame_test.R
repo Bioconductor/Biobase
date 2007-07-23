@@ -22,7 +22,7 @@ testCombineDf <- function() {
     checkException(combine(x,y), silent=TRUE)
 }
 
-testCombineDfNoSharedRows <- function() {
+testCombineDfPreserveNumericRows <- function() {
     dfA <- data.frame(label=rep("x", 2), row.names=1:2)
     dfB <- data.frame(label=rep("x", 3), row.names=3:5)
     dfC <- data.frame(label=rep("x", 4), row.names=6:9)
