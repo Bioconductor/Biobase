@@ -11,14 +11,16 @@ setMethod("combine",
               sharedCols <- intersect(names(x), names(y))
 
               ## check possible to combine
+              alleq <- function(x, y)
+                  all.equal(x, y, check.attributes=FALSE)
               sharedRows <- intersect(row.names(x), row.names(y))
               ok <- sapply(sharedCols, function(nm) {
                   if (class(x[[nm]]) != class(y[[nm]])) return(FALSE)
                   switch(class(x[[nm]])[[1]],
                          factor= {
-                             if (identical(levels(x[[nm]]), levels(y[[nm]])) &&
-                                 identical(x[sharedRows, nm, drop=FALSE],
-                                           y[sharedRows, nm, drop=FALSE])) TRUE
+                             if (alleq(levels(x[[nm]]), levels(y[[nm]])) &&
+                                 alleq(x[sharedRows, nm, drop=FALSE],
+                                       y[sharedRows, nm, drop=FALSE])) TRUE
                              else FALSE
                          },
                          ## ordered and non-factor columns need to
@@ -27,8 +29,8 @@ setMethod("combine",
                          ## differently, but these have not been
                          ## encountered.
                          ordered=,
-                         identical(x[sharedRows, nm, drop=FALSE],
-                                   y[sharedRows, nm, drop=FALSE]))
+                         alleq(x[sharedRows, nm, drop=FALSE],
+                               y[sharedRows, nm, drop=FALSE]))
               })
               if (!all(ok))
                 stop("data.frames contain conflicting data:",

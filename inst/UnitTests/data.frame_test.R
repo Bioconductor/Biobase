@@ -25,12 +25,14 @@ testCombineDf <- function() {
 testCombineDfPreserveNumericRows <- function() {
     dfA <- data.frame(label=rep("x", 2), row.names=1:2)
     dfB <- data.frame(label=rep("x", 3), row.names=3:5)
-    dfC <- data.frame(label=rep("x", 4), row.names=6:9)
-
     dfAB <- combine(dfA, dfB)
-    checkEquals(as.character(1:5), rownames(dfAB))
-    dfABC <- combine(dfAB, dfC)
-    checkEquals(as.character(1:9), rownames(dfABC))
+    ## preserve integer row names if possible
+    checkEquals(1:5, attr(dfAB, "row.names"))
+
+    ## silently coerce row.names to character
+    dfC <- data.frame(label=rep("x", 2), row.names=as.character(3:4))
+    dfAC <- combine(dfA, dfC)
+    checkEquals(as.character(1:4), attr(dfAC, "row.names"))
 }
 
 testNoRow <- function() {
