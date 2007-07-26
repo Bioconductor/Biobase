@@ -71,13 +71,48 @@ ALL
 
 \section{An alternative to the current show method}
 
+It could be nice to tell the package from which the dataset
+was loaded.
+
+<<mkprov>>=
+dataSource = function(dsn) {
+ if (!is(dsn, "character")) dsn = try(deparse(substitute(dsn)))
+ if (inherits(dsn, "try-error")) stop("can't parse dsn arg")
+ dd = data()$results
+ if (is.na(match(dsn, dd[,"Item"]))) return(NULL)
+ paste("package:", dd[ dd[,"Item"] == dsn, "Package" ], sep="")
+}
+ 
+
 <<newmeth,echo=FALSE,results=hide>>=
 setGeneric("peek", function(x,maxattr=10)standardGeneric("peek"))
-setMethod("peek", c("eSet", "missing"), function(x,maxattr=10) 
-   peek(x, 10)
-)
 setMethod("peek", c("eSet", "numeric"), function(x,maxattr=10) {
- cat(deparse(substitute(x)),":\n")
+ ds = dataSource(deparse(substitute(x)))
+ if (!is.null(ds)) ds = paste(" [from ", ds, "]", sep="")
+  else ds = ""
+ cat(deparse(substitute(x)), ds, ":\n", sep="")
+ cat("Platform annotation: ", annotation(x),"\n")
+ cat("primary assay results are:\n")
+ print(dim(x))
+ cat("sample attributes are:\n")
+   vn = rownames(varMetadata(x))
+   ld = substr(varMetadata(x)$labelDescription,1,50)
+   dd = data.frame("labelDescription[truncated]"=ld)
+   rownames(dd) = vn
+ if ((ndd <- nrow(dd)) <= maxattr) show(dd)
+ else {
+    cat("first", maxattr, "of", ndd, "attributes:\n")
+    show(dd[1:maxattr,,drop=FALSE])
+    }
+ cat("----------\n")
+ cat("use varTable to see values/freqs of all sample attributes\n")
+ cat("----------\n")
+})
+setMethod("peek", c("eSet", "missing"), function(x,maxattr=10) {
+ ds = dataSource(deparse(substitute(x)))
+ if (!is.null(ds)) ds = paste(" [from ", ds, "]", sep="")
+  else ds = ""
+ cat(deparse(substitute(x)), ds, ":\n", sep="")
  cat("Platform annotation: ", annotation(x),"\n")
  cat("primary assay results are:\n")
  print(dim(x))
@@ -114,8 +149,7 @@ We use \texttt{peek} to get a concise view:
 <<lka>>=
 peek(ALL)
 @
-NB -- the 'x' in the rendering seems to be a bug in Sweave.
-In use, the name of the eSet will be given.
+
 
 \section{Sample characterization}
 
