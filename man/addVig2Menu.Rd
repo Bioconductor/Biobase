@@ -27,8 +27,6 @@ addVigs2WinMenu(pkgName)
 }
 
 \author{Jianhua Zhang and Jeff Gentry}
-\note{The functions are part of the Bioconductor project at Dana-Farber
-  Cancer Institute to provide Bioinformatics functionalities through R}
 
 \examples{
     # Only works for windows now

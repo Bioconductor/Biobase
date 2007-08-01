@@ -30,9 +30,6 @@ read.exprSet(exprs, se.exprs, phenoData, annotation, description, notes, seps = 
 }
 \author{Jianhua Zhang}
 
-\note{
-   This function is part of the Bioconductor project at Dana-Farber Cancer Institute to provide bioinformatics functionalities through R
-}
 \seealso{
    \code{\link{exprSet}}, \code{\link{phenoData}}, \code{\link{MIAME}}, \code{\link{read.phenoData}}, \code{\link{read.MIAME}}
 }
