@@ -7,10 +7,6 @@
 #include <Rdefines.h>
 #include <float.h>
 
-#ifndef DBL_MAX
-#define DBL_MAX 1e37
-#endif
-
 #define INDEX(i, j, n) ((i) + (j)*(n))
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -35,7 +31,7 @@ SEXP matchpt(SEXP x, SEXP y) {
     PROTECT(res = allocVector(REALSXP, nptx * 2));
     for (i = 0; i < nptx; i++) {
         index = i;
-        mdist = DBL_MAX;
+        mdist = R_PosInf;
         for (j = 0; j < npty; j++) {
             if (useY == 0 && i == j) continue;
             dist = 0;
