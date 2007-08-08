@@ -7,6 +7,10 @@
 #include <Rdefines.h>
 #include <float.h>
 
+#ifndef DBL_MAX
+#define DBL_MAX 1e37
+#endif
+
 #define INDEX(i, j, n) ((i) + (j)*(n))
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
