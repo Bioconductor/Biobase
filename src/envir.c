@@ -4,7 +4,7 @@
 #include <Rdefines.h>
 #include <R_ext/RConverters.h>
 #include <R_ext/Utils.h>
-
+#include <ctype.h>
 /* 
    speed up the conversion, this could become as.environment at some
    time

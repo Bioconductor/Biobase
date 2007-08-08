@@ -5,6 +5,7 @@
 
 #include <Rinternals.h>
 #include <Rdefines.h>
+#include <float.h>
 
 #define INDEX(i, j, n) ((i) + (j)*(n))
 
