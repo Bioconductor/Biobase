@@ -195,23 +195,25 @@ isUnique = function(x){
 }
 ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ## O.Sklyar, EBI, 2006
-matchpt <- function(x, y = NULL) {
+matchpt <- function(x, y) {
     if (is.vector(x))
-        x <- matrix(as.double(x), ncol = 1, nrow = length(x))
-    if (!is.matrix(x))
-        stop("x must be a matrix in call to nn (nearest neighbour)")
+        x <- matrix(x, ncol = 1, nrow = length(x))
+    if (!(is.matrix(x)&&is.numeric(x)))
+        stop("'x' must be a numeric matrix.")
     dims <- dim(x)
     if (length(dims) != 2)
-        stop("wrong argument dimensions")
-    if (!is.null(y)) {
+        stop("'x' must be 2-dimensional") ## is this not redundant with is.matrix?
+    if (!missing(y)) {
         if (is.vector(y))
-            y <- matrix(as.double(y), ncol = 1, nrow = length(y))
-        if (!is.matrix(y))
-            stop("y must be a matrix in call to nn (nearest neighbour)")
+            y <- matrix(y, ncol = 1, nrow = length(y))
+        if (!(is.matrix(y)&&is.numeric(y)))
+            stop("y must be a numeric matrix.")
         if (length(dims) != length(dim(y)))
-            stop("x and y must have the same dimensionality")
+            stop("x and y must have the same dimensionality.")
         if (dims[[2]] != dim(y)[[2]])
-            stop("x and y must have the same dimensionality")
+            stop("x and y must have the same number of rows.")
+    } else {
+        y <- NULL
     }
     res <- .Call("matchpt", x, y, PACKAGE = "Biobase")
     colnames(res) <- c("index", "distance")
