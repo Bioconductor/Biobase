@@ -13,7 +13,7 @@
 SEXP matchpt(SEXP x, SEXP y) {
     int * dimx;
     int * dimy;
-    double dist, mdist, tmp;
+    double dist, mdist, tmp, * dres, *dx, *dy=NULL;
     int i, j, k, index, nptx, npty, ncol, useY;
     SEXP res, newDim;
 
@@ -29,6 +29,9 @@ SEXP matchpt(SEXP x, SEXP y) {
         useY = 0;
     ncol = dimx[1];
     PROTECT(res = allocVector(REALSXP, nptx * 2));
+    dres = REAL(res);
+    dx = REAL(x);
+    if ( useY == 1 ) dy = REAL(y);
     for (i = 0; i < nptx; i++) {
         index = i;
         mdist = R_PosInf;
@@ -37,9 +40,9 @@ SEXP matchpt(SEXP x, SEXP y) {
             dist = 0;
             for (k = 0; k < ncol; k++) {
                 if (useY == 1)
-                    tmp = REAL(x)[INDEX(i, k, nptx)] - REAL(y)[INDEX(j, k, npty)];
+                    tmp = dx[INDEX(i, k, nptx)] - dy[INDEX(j, k, npty)];
                 else
-                    tmp = REAL(x)[INDEX(i, k, nptx)] - REAL(x)[INDEX(j, k, nptx)];
+                    tmp = dx[INDEX(i, k, nptx)] - dx[INDEX(j, k, nptx)];
                 dist += tmp * tmp;
             }
             dist = sqrt(dist);
@@ -48,8 +51,8 @@ SEXP matchpt(SEXP x, SEXP y) {
                 mdist = dist;
             }
         }
-        REAL(res)[INDEX(i, 0, nptx)] = index + 1;
-        REAL(res)[INDEX(i, 1, nptx)] = mdist;
+        dres[INDEX(i, 0, nptx)] = index + 1;
+        dres[INDEX(i, 1, nptx)] = mdist;
     }
     PROTECT(newDim = allocVector(INTSXP, 2));
     INTEGER(newDim)[0] = nptx;
