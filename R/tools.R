@@ -217,6 +217,8 @@ matchpt <- function(x, y) {
     }
     res <- .Call("matchpt", x, y, PACKAGE = "Biobase")
     colnames(res) <- c("index", "distance")
+    index <- which( is.infinite(res[,2]))
+    if (length(index) > 0) res[index,1] = NA
     return(res)
 }
 ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
