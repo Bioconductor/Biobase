@@ -11,7 +11,7 @@
 }
 
 \usage{
-    matchpt(x, y = NULL)
+    matchpt(x, y)
 }
 \arguments{
     \item{x}{A matrix (or a vector) of coordinates. Rows represent different points in ND space, where N is
