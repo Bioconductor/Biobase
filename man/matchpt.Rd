@@ -4,38 +4,45 @@
 
 \docType{function}
 
-\title{Finds Nearest Neighbours for Sets of Points given by NxD Coordinates}
+\title{Nearest neighbor search.}
 \description{
-    Finds nearest neighbours (using Euclidian distance) for sets of points given by coordinates. Can be used to match
-    one dataset agains another or to locate nearest neighbours within a single dataset.
+    Find the nearest neighbors of a set of query points in the same
+    or another set of points in an
+    n-dimensional real vector space, using the Euclidean distance.
 }
 
 \usage{
     matchpt(x, y)
 }
 \arguments{
-    \item{x}{A matrix (or a vector) of coordinates. Rows represent different points in ND space, where N is
-    the number of columns, and thus coordinates. If argument y is not given, match will be performed within x-dataset.}
-    \item{y}{If given a matrix (or a vector) of the same space (same N), that could however have different number
-    of points. If given this argument is used to match x against it.}
+  \item{x}{A matrix (or vector) of coordinates.
+    Each row represents a point in an \code{ncol(x)}-dimensional real
+    vector space.}
+  \item{y}{Optional, matrix (or vector) with the same number of columns
+    as \code{x}.}
 }
 
+\details{
+  If \code{y} is provided, the function searches the nearest
+  neighbors of the points in \code{x} in \code{y}.
+  If \code{y} is missing, it searches the nearest neighbors of the
+  points in \code{x} in \code{x}.
+
+  The implementation is simple and of complexity \code{nrow(x)} times
+  \code{nrow(y)}. For larger problems, please consider one of the many
+  more efficient nearest neighbor search algorithms.
+ }
+ 
 \value{
-    A matrix of 2 columns and n rows, where n is the number of points in argument x. First column - index of the nearest
-    neighbour, second column - distance to the nearest neighbour. If y is given, index corresponds to the index in y-dataset, if
-    only x is given, then in x.
-}
-
-\source{
-    The C code for this routine is available in \code{src/matchpt.c} of this package.
-}
-
-\references{
-    Oleg Sklyar, EBI 2006
+  A matrix with 2 columns and \code{nrow(x)} rows.
+  The first column is the index of the nearest neighbour,
+  the second column the distance to the nearest neighbour.
+  If \code{y} was given, the index is a row number in \code{y},
+  otherwise, in \code{x}.
 }
 
 \author{
-    Oleg Sklyar, \email{osklyar@ebi.ac.uk}
+    Oleg Sklyar \email{osklyar@ebi.ac.uk}
 }
 
 \examples{
