@@ -200,6 +200,12 @@ matchpt <- function(x, y) {
         x <- matrix(x, ncol = 1, nrow = length(x))
     if (!(is.matrix(x)&&is.numeric(x)))
         stop("'x' must be a numeric matrix.")
+    if (is.integer(x)) {
+      if (is.matrix(x))
+        x = matrix(as.numeric(x), ncol=ncol(x), nrow=nrow(x))
+      else
+        x = as.numeric(x)
+    }
     dims <- dim(x)
     if (length(dims) != 2)
         stop("'x' must be 2-dimensional") ## is this not redundant with is.matrix?
@@ -212,6 +218,12 @@ matchpt <- function(x, y) {
             stop("x and y must have the same dimensionality.")
         if (dims[[2]] != dim(y)[[2]])
             stop("x and y must have the same number of rows.")
+        if (is.integer(y)) {
+          if (is.matrix(y))
+            y = matrix(as.numeric(y), ncol=ncol(y), nrow=nrow(y))
+          else
+            y = as.numeric(y)
+        }
     } else {
         y <- NULL
     }
