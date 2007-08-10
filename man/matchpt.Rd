@@ -23,10 +23,12 @@
 }
 
 \details{
-  If \code{y} is provided, the function searches the nearest
-  neighbors of the points in \code{x} in \code{y}.
-  If \code{y} is missing, it searches the nearest neighbors of the
-  points in \code{x} in \code{x}.
+  If \code{y} is provided, the function searches
+  for each point in \code{x} its nearest neighbor in \code{y}.
+  If \code{y} is missing, it searches
+  for each point in \code{x} its nearest neighbor in \code{x},
+  excluding that point itself.
+  In the case of ties, only the neighbor with the smaller index is given.
 
   The implementation is simple and of complexity \code{nrow(x)} times
   \code{nrow(y)}. For larger problems, please consider one of the many
