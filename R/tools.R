@@ -196,59 +196,31 @@ isUnique = function(x){
 ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ## O.Sklyar, EBI, 2006
 matchpt <- function(x, y) {
-    if (is.vector(x))
-        x <- matrix(x, ncol = 1, nrow = length(x))
-    if (!(is.matrix(x)&&is.numeric(x)))
-        stop("'x' must be a numeric matrix.")
-    if (is.integer(x)) {
-      if (is.matrix(x))
-        x = matrix(as.numeric(x), ncol=ncol(x), nrow=nrow(x))
-      else
-        x = as.numeric(x)
-    }
-    dims <- dim(x)
-    if (length(dims) != 2)
-        stop("'x' must be 2-dimensional") ## is this not redundant with is.matrix?
-    if (!missing(y)) {
-        if (is.vector(y))
-            y <- matrix(y, ncol = 1, nrow = length(y))
-        if (!(is.matrix(y)&&is.numeric(y)))
-            stop("y must be a numeric matrix.")
-        if (length(dims) != length(dim(y)))
-            stop("x and y must have the same dimensionality.")
-        if (dims[[2]] != dim(y)[[2]])
-            stop("x and y must have the same number of rows.")
-        if (is.integer(y)) {
-          if (is.matrix(y))
-            y = matrix(as.numeric(y), ncol=ncol(y), nrow=nrow(y))
-          else
-            y = as.numeric(y)
-        }
-    } else {
-        y <- NULL
-    }
-    res <- .Call("matchpt", x, y, PACKAGE = "Biobase")
-    colnames(res) <- c("index", "distance")
-    index <- which( is.infinite(res[,2]))
-    if (length(index) > 0) res[index,1] = NA
-    return(res)
-}
-## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-## W.Huber, EBI, 2006
-cache_old <- function(name, expr) {
-    .Deprecated("cache, but with different args, see man page")
-  if(!(is.character(name) && length(name)==1))
-    stop("'name' must be a single character string.")
-  cachefile <- paste("tmp-", name, ".RData", sep="")
-  if(file.exists(cachefile)) {
-    load(cachefile)
+  storage.mode(x)="double"
+  if (is.vector(x))
+    x <- matrix(x, ncol = 1L, nrow = length(x))
+  if (!(is.matrix(x) && is.numeric(x)))
+    stop("'x' must be a numeric matrix.")
+
+  if (!missing(y)) {
+    storage.mode(y)="double"
+    if (is.vector(y))
+      y <- matrix(y, ncol = 1L, nrow = length(y))
+    if (!(is.matrix(y) && is.numeric(y)))
+      stop("y must be a numeric matrix.")
+    if (ncol(x) != ncol(y))
+      stop("x and y must have the same number of columns.")
   } else {
-    assign(name, expr)
-    save(list=name, file=cachefile, compress=TRUE)
+    y <- NULL
   }
-  get(name)
+  
+  res <- .Call("matchpt", x, y, PACKAGE = "Biobase")
+  res <- as.data.frame(res)
+  rownames(res) <- rownames(x)
+  return(res)
 }
 
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 cache <- function(expr, dir=".", prefix="tmp_R_cache_", name) {
     pexpr <- parse(text=deparse(substitute(expr)))
     pexpr <- as.list(pexpr[[1]])

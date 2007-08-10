@@ -11,27 +11,33 @@
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 SEXP matchpt(SEXP x, SEXP y) {
     int * dimx;
-    int * dimy;
-    double dist, mdist, tmp, * dres, *dx, *dy=NULL;
-    int i, j, k, index, nptx, npty, ncol, noY=1;
-    SEXP res, newDim;
+
+    double dist, mdist, tmp, *dx, *dy, *pd;
+    int i, j, k, index, nptx, npty, ncol, noY, *pidx;
+    SEXP res, namesres, idx, d;
 
     dimx = INTEGER(GET_DIM(x));
     nptx = dimx[0];
-    npty = nptx;
-    dx = REAL(x);
-    dy = dx;
-    if (y != R_NilValue) {
-        dy = REAL(y);
-        dimy = INTEGER(GET_DIM(y));
-        npty = dimy[0];
-        noY = 0;
-    }
     ncol = dimx[1];
-    PROTECT(res = allocVector(REALSXP, nptx * 2));
-    dres = REAL(res);
-    for (i = 0; i < nptx; i++) {
-        index = -1;
+    dx = REAL(x);
+
+    if (y != R_NilValue) {
+      dy = REAL(y);
+      npty = INTEGER(GET_DIM(y))[0];
+      noY = 0;
+    } else {
+      dy = dx;
+      npty = nptx;
+      noY = 1;
+    }
+
+    PROTECT(d   = allocVector(REALSXP, nptx));
+    PROTECT(idx = allocVector(INTSXP,  nptx));
+    pd    = REAL(d);
+    pidx  = INTEGER(idx);
+
+    for (i = 0; i<nptx; i++) {
+        index = NA_INTEGER;
         mdist = R_PosInf;
         for (j = 0; j < npty; j++) {
             if (noY && i == j) continue;
@@ -41,17 +47,24 @@ SEXP matchpt(SEXP x, SEXP y) {
                 dist += tmp * tmp;
             }
             if (dist < mdist) {
-                index = j;
+                index = j+1;
                 mdist = dist;
             }
         }
-        dres[INDEX(i, 0, nptx)] = index + 1;
-        dres[INDEX(i, 1, nptx)] = sqrt(mdist);
+        pidx[i] = index;
+        pd[i]   = sqrt(mdist);
     }
-    PROTECT(newDim = allocVector(INTSXP, 2));
-    INTEGER(newDim)[0] = nptx;
-    INTEGER(newDim)[1] = 2;
-    SET_DIM(res, newDim);
-    UNPROTECT(2);
+    
+    /* return value: a list with two elements, idx and d */
+    PROTECT(res = allocVector(VECSXP, 2));
+    SET_VECTOR_ELT(res, 0, idx);
+    SET_VECTOR_ELT(res, 1, d);
+
+    PROTECT(namesres = allocVector(STRSXP, 2));
+    SET_STRING_ELT(namesres, 0, mkChar("index"));
+    SET_STRING_ELT(namesres, 1, mkChar("distance"));
+    setAttrib(res, R_NamesSymbol, namesres);
+
+    UNPROTECT(4);
     return res;
 }
