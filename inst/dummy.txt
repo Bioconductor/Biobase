@@ -1,1 +1,0 @@
-Just adding and removing this to verify that I got write permission to the SVN. /Henrik B
