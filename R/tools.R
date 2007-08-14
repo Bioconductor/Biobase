@@ -88,8 +88,11 @@ copySubstitute = function(src, dest, symbolValues,
    ## cin and cout are single files or connections
    cpSubsCon = function(cin, cout) {
       txt = readLines(cin)
-      for (i in seq(along=symbolValues))
+      for (i in seq(along=symbolValues)) {
           txt = gsub(nm[i], symbolValues[[i]], txt, fixed=TRUE)
+          if (any(is.na(txt)))
+              stop("trying to replace ", nm[i], " by an NA")
+      }
       ## check for unresolved symbols
       if(!allowUnresolvedSymbols) {
          re = regexpr(paste(symbolDelimiter, ".+", symbolDelimiter, sep=""), txt)
@@ -108,8 +111,11 @@ copySubstitute = function(src, dest, symbolValues,
    ## Substitution on filenames
    subsFileName = function(x) {
       res = gsub(removeExtension, "", x)
-      for (i in seq(along=symbolValues))
+      for (i in seq(along=symbolValues)) {
          res = gsub(nm[i], symbolValues[[i]], res)
+         if (any(is.na(res)))
+             stop("trying to replace ", nm[i], " by an NA")
+      }
       return(res)
    }
    ## Iterate over character vectors of filenames and
