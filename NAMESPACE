@@ -35,6 +35,7 @@ exportMethods("[", "[[", "$", abstract, addVarMetadataEntry, aggenv, aggfun,
 
 export("Aggregate",
        "addVigs2WinMenu",
+       "anyMissing",
        "as.data.frame.ExpressionSet",
        "assayDataNew", "assayDataValidMembers",
        assayDataElementNames,

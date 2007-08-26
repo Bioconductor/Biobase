@@ -1,7 +1,29 @@
+setGeneric("rowMedians", function(imat, na.rm=FALSE) {
+  standardGeneric("rowMedians")
+})
+
+
+setMethod("rowMedians", signature(imat="matrix"), function(imat, na.rm=FALSE) {
+  na.rm <- as.logical(na.rm);
+  hasNAs <- TRUE;  # Add as an argument? /2007-08-24
+  .Call("rowMedians", imat, na.rm, hasNAs, PACKAGE="Biobase");
+})
+
+
+setMethod("rowMedians", signature(imat="ExpressionSet"), function(imat, na.rm=FALSE) {
+  rowMedians(exprs(imat), na.rm=na.rm);
+})
+
+
+setMethod("rowMedians", signature(imat="exprSet"), function(imat, na.rm=FALSE) {
+  .Deprecated(msg=EXPRSET_DEPR_MSG);
+  rowMedians(exprs(imat), na.rm=na.rm);
+})
+
+
+
+
 setGeneric("rowQ", function(imat, which) standardGeneric("rowQ"))
-
-
-setGeneric("rowMedians", function(imat) standardGeneric("rowMedians"))
 
 
 setMethod("rowQ", signature(imat="matrix", which="numeric"),
@@ -24,27 +46,6 @@ setMethod("rowQ", signature(imat="exprSet", which="numeric"),
               rowQ(exprs(imat), which)
               })
 
-
-setMethod("rowMedians", signature(imat="matrix"),
-          function(imat) {
-              nr <- ncol(imat)
-              half <- (nr + 1)/2
-              if (nr%%2 == 1)
-                return(rowQ(imat, half))
-              else
-                return((rowQ(imat, half) + rowQ(imat, half+1))/2)
-          })
-
-
-setMethod("rowMedians", signature(imat="ExpressionSet"),
-          function(imat) rowMedians(exprs(imat)))
-
-
-setMethod("rowMedians", signature(imat="exprSet"),
-          function(imat) {
-              .Deprecated(msg=EXPRSET_DEPR_MSG)
-              rowMedians(exprs(imat))
-              })
 
 
 rowMin <- function(imat)

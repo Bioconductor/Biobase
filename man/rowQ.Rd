@@ -5,10 +5,6 @@
 \alias{rowQ,exprSet,numeric-method}
 \alias{rowMin}
 \alias{rowMax}
-\alias{rowMedians}
-\alias{rowMedians,matrix-method}
-\alias{rowMedians,ExpressionSet-method}
-\alias{rowMedians,exprSet-method}
 
 \title{A function to compute empirical row quantiles.}
 \description{
@@ -19,7 +15,6 @@
 rowQ(imat, which)
 rowMax(imat)
 rowMin(imat)
-rowMedians(imat)
 }
 \arguments{
   \item{imat}{Either a matrix or an \code{exprSet}. }
@@ -39,7 +34,11 @@ the requested quantiles.
 }
 \author{ R. Gentleman }
 
-\seealso{ \code{\link{colSums}} }
+\seealso{
+ \code{\link{rowMedians}}.
+ \code{rowMeans()} in \code{\link[base]{colSums}}().
+}
+
 \examples{
  data(sample.exprSet)
  rowMin(sample.exprSet)
