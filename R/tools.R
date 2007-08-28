@@ -320,3 +320,36 @@ unsafeSetSlot <- function(obj, slot, value) {
 
     invisible(.Call("unsafe_set_slot", obj, slot, value))
 }
+
+subListExtract <- function(L, name, simplify=FALSE, keep.names=TRUE) {
+    ## Return a list or vector obtained by extracting the element named
+    ## 'name' from each inner list of L.
+    ##
+    ## L - list
+    ## name - character vector length 1, name of inner list element
+    ## simplify - return an atomic vector or error if TRUE
+    ## keep.names - if TRUE, keep names of L on result
+    ##
+    ## this is just a mockup, to play with the desired interface
+    ## and behavior.  will be replaced with a C version.
+    .Call(sublist_extract, L, name, simplify, keep.names)
+    
+##     f <- function(x) {
+##         wh <- match(name, names(x), 0)
+##         if (wh > 0)
+##           x[[wh]]
+##         else                            # would be nice to have index in msg
+##           stop("bad inner list, no element named ", name)
+##     }
+
+##     if (!simplify)
+##       ans <- lapply(L, f)
+##     else {
+##         ans <- sapply(L, f)
+##         if (is.list(ans))
+##           stop("unable to simplify")
+##     }
+##     if (!keep.names)
+##       names(ans) <- NULL
+##     ans
+}

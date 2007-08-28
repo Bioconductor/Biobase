@@ -1,4 +1,4 @@
-useDynLib(Biobase, copyEnv_sym=copyEnv)
+useDynLib(Biobase, copyEnv_sym=copyEnv, sublist_extract)
 
 import(tools)
 
@@ -47,5 +47,6 @@ export("Aggregate",
        "reverseSplit", "rowMax", "rowMedians", "rowMin", "rowQ",
        read.exprSet, read.phenoData, read.pD, # to be deprecated
        readExpressionSet, read.AnnotatedDataFrame, read.MIAME,
-       "selectSome", "strbreak", "testBioCConnection", "lcSuffix", "lcPrefix", "lcPrefixC",
+       "selectSome", "strbreak", "subListExtract", "testBioCConnection",
+       "lcSuffix", "lcPrefix", "lcPrefixC",
        "updateOldESet", "updateObjectFromSlots", "userQuery")
