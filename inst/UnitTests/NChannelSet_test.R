@@ -81,13 +81,31 @@ testNew5a <- function() {
     varMetadata <- data.frame(labelDescription=character(ncol(data)),
                               channel=factor(
                                 rep("__ALL__", ncol(data)),
-                                levels=c("R", "G")))
+                                levels=c("R", "G", "_ALL_")))
     phenoData <- new("AnnotatedDataFrame",
                      data=data, varMetadata=varMetadata)
     obj <- new("NChannelSet",
                assayData=assayData, phenoData=phenoData)
 }
                              
+testNew6 <- function() {
+    ## silently add 'channel' to varMetadata
+    R <- matrix(0, 10, 5)
+    G <- matrix(1, 10, 5)
+    assayData <- assayDataNew(R=R, G=G)
+    data <- data.frame(x=numeric(ncol(R)))
+    phenoData <- new("AnnotatedDataFrame", data=data)
+    obj <- new("NChannelSet",
+               assayData=assayData, phenoData=phenoData)
+    checkTrue(validObject(obj))
+
+    varMetadata <- data.frame(labelDescription=character(ncol(data)))
+    phenoData <- new("AnnotatedDataFrame", data=data)
+    obj <- new("NChannelSet",
+               assayData=assayData, phenoData=phenoData)
+    checkTrue(validObject(obj))
+}
+
 testDifferentSampleNames <- function() {
     ## channels have different identifiers
     assayData <- assayDataNew(R = matrix(0,10,5,
@@ -151,13 +169,13 @@ testSelectChannelsCommonPhenoData <- function() {
     checkIdentical("R", channelNames(objR))
     checkTrue(all(c("r", "both") %in% names(pData(objR)) &
                   !"g" %in% names(pData(objR))))
-    checkIdentical("R", levels(varMetadata(objR)[["channel"]]))
+    checkIdentical(c("R", "_ALL_"), levels(varMetadata(objR)[["channel"]]))
 
     objG <- selectChannels(obj, "G")
     checkIdentical("G", channelNames(objG))
     checkTrue(all(c("g", "both") %in% names(pData(objG)) &
                   !"r" %in% names(pData(objG))))
-    checkIdentical("G", levels(varMetadata(objG)[["channel"]]))
+    checkIdentical(c("G", "_ALL_"), levels(varMetadata(objG)[["channel"]]))
 
     objRG <- selectChannels(obj, c("R", "G"))
     checkTrue(all(c("R", "G") %in% channelNames(objRG)))

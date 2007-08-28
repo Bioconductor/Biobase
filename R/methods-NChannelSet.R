@@ -11,9 +11,11 @@ setMethod("initialize",
               }
               if (missing(phenoData)) {
                   phenoData <- annotatedDataFrameFrom(assayData, byrow=FALSE)
+              }
+              if (is.null(varMetadata(phenoData)[["channel"]])) {
                   varMetadata(phenoData)[["channel"]] <- 
-                    factor(rep("_ALL_", nrow(varMetadata(phenoData))),
-                           levels=assayDataElementNames(assayData))
+                      factor(rep("_ALL_", nrow(varMetadata(phenoData))),
+                             levels=c(assayDataElementNames(assayData), "_ALL_"))
               }
               ## ensure sample names OK -- all assayData with names;
               ## phenoData with correct names from assayData
@@ -58,7 +60,11 @@ setValidity("NChannelSet",
                                          "'", sep="")
                             msg <- validMsg(msg, txt)
                         }
+                        
                     }
+                    if (!("_ALL_" %in% levels(channel)))
+                        msg <- validMsg(msg,
+                                        "\n  'NChannelSet' varMetadata 'channel' requires '_ALL_' as a level")
                 }
                 if (is.null(msg)) TRUE else msg
             })
@@ -110,7 +116,7 @@ setMethod("selectChannels",
               phenoData <- phenoData(object)[,okMetadata]
               ## reduce factor levels
               varMetadata(phenoData)[["channel"]] <-
-                factor(metadata[okMetadata], levels=names)
+                factor(metadata[okMetadata], levels=unique(c(names, "_ALL_")))
               initialize(object,
                          assayData = assayData,
                          phenoData = phenoData,
