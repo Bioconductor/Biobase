@@ -9,8 +9,6 @@ setMethod("initialize", "phenoData",
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 validator.phenoData <- function(object) {
     msg <- NULL
-    if (!isCurrent(object))
-        msg <- c(msg, "missing 'Versioned' base class; use updateObject")
     dm <- dim(object@pData)
     if(dm[2] != length(object@varLabels) )
         msg <- c(msg,"number of varLabels not equal to number of columns of pData data.frame")

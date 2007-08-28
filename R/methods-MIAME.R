@@ -45,7 +45,7 @@ setMethod("show", "MIAME",
       if(any(Index))
          cat("  Information is available on:", paste(tmp[Index],collapse=", "),"\n")
       if (length(notes(object))>0)
-        cat("  Other:\n    ", paste(notes(object), sep="\n    "), "\n")
+        cat("  notes:\n    ", paste(notes(object), sep="\n    "), "\n")
    }
 )
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
