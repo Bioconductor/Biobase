@@ -141,6 +141,8 @@ SEXP sublist_extract(SEXP L, SEXP namev, SEXP simplify, SEXP keep_names)
     checkScalarLogical(keep_names, 0);
 
     if (LOGICAL(simplify)[0]) {
+        if (!length(L))
+            error("can't extract from an empty list when simplify=TRUE");
         el = list_el(VECTOR_ELT(L, 0), name);
         if (length(el) != 1)
             error("unable to simplify, element 0 has length %d", length(el));

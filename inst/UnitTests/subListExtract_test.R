@@ -65,3 +65,10 @@ test_extract_bad_inner <- function() {
 
     checkException(subListExtract(L, "i"), silent=TRUE)
 }
+
+test_extract_from_empty <- function() {
+    checkEquals(list(), subListExtract(list(), "foo"))
+
+    ## but you can't simplify
+    checkException(subListExtract(list(), "foo", simplify=TRUE))
+}
