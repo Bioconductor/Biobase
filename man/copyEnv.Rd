@@ -22,7 +22,8 @@ l2e(vals, envir)
   \item{envir}{An environment to get/set values to.  For \code{l2e}
   this can be left missing and a new \code{environment} of an
   appropriate size will be returned.}
-  \item{vals}{A named list of objects to assign into an environment}
+  \item{vals}{A named list of objects to assign into an environment.
+    The names must not include \code{NA} or \code{""}.}
   \item{all.names}{Whether to retrieve objects with names that start
     with a dot.}
 }

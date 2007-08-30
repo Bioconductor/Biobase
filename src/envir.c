@@ -54,26 +54,30 @@ SEXP copyEnv(SEXP e1, SEXP e2, SEXP all)
 
 SEXP listToEnv(SEXP x, SEXP env)
 {
-  SEXP name, nm, nx;
+  SEXP name, nm, nx, sym;
   int i;
 
   if( !Rf_isNewList(x) )
-    error("require a list");
-
+      error("first argument must be a list, found %s",
+            type2char(TYPEOF(x)));
 
   if( !isEnvironment(env) )
-    error("second argument must be an environment");
-
+      error("second argument must be an environment, found %s",
+            type2char(TYPEOF(env)));
 
   PROTECT(nm = getAttrib(x, R_NamesSymbol));
   if( length(nm) != length(x) )
     error("all elements must have names");
 
-
   for( i=0; i<length(nm); i++) {
-    name = Rf_install(CHAR(STRING_ELT(nm, i)));
+    name = STRING_ELT(nm, i);
+    if (name == NA_STRING)
+        error("list element %d has NA as name", i + 1);
+    if (length(name) == 0)
+        error("list element %d has \"\" as name", i + 1);
+    sym = Rf_install(CHAR(name));
     PROTECT(nx = Rf_duplicate(VECTOR_ELT(x, i)));
-    Rf_defineVar(name, nx, env);
+    Rf_defineVar(sym, nx, env);
     UNPROTECT(1);
   }
 
