@@ -23,3 +23,10 @@ test_no_NA_keys <- function() {
     checkException(l2e(L))
 }
 
+test_non_unique_names <- function() {
+    L <- as.list(1:3)
+    names(L) <- c("a", "b", "b")
+    checkException(tryCatch(l2e(L),
+                   warning=function(w) stop("found my error")),
+                   silent=TRUE)
+}

@@ -82,6 +82,8 @@ SEXP listToEnv(SEXP x, SEXP env)
   }
 
   UNPROTECT(1);
+  if (length(nm) != length(env))
+      warning("encountered duplicate names in input list");
   return(env);
 }
 
