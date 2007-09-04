@@ -57,8 +57,43 @@ testClassVersionReplace <- function() {
 
   obj <- ref
   classVersion(obj) <- y
-  checkTrue(all(classVersion(obj)[names(classVersion(ref))] != classVersion(ref)))
   checkTrue(classVersion(obj)["y"] == "1.0.1")
+}
+
+testClassVersionSubset <- function() {
+    obj <- new("Versions", x="1.0.0")
+    checkTrue(obj[1]=="1.0.0")
+    checkTrue(obj["x"]=="1.0.0")
+    checkException(obj["y"], silent=TRUE)
+}
+
+testClassVersionCompare <- function() {
+    obj <- new("Versions", x="1.0.0", y="2.0.1")
+    checkTrue(all(obj == c(x="1.0.0", y="2.0.1")))
+    checkTrue(all(obj == c(y="2.0.1", x="1.0.0")),
+              msg="versions in different order")
+    checkTrue(!any(obj == c(y="1.0.0", x="2.0.1")),
+              msg="incorrectly named elements")
+    checkTrue(!all(obj == c(y="1.0.0", x="1.0.0")),
+              msg="one element incorrect elements")
+    checkException(all(obj == c(x="1.0.0", z="2.0.1")),
+                   msg="different version elements",
+                   silent=TRUE)
+    checkException(obj == c(x="1.0.0"),
+                   msg="different version lengths",
+                   silent=TRUE)
+
+    ## as above, but comparing version objects
+    checkTrue(all(obj == new("Versions", x="1.0.0", y="2.0.1")))
+    checkTrue(all(obj == new("Versions", y="2.0.1", x="1.0.0")))
+    checkTrue(!any(obj == new("Versions", x="2.0.1", y="1.0.0")))
+    checkTrue(!all(obj == new("Versions", x="1.0.0", y="1.0.0")))
+    checkException(all(obj == new("Versions", x="1.0.0", z="2.0.1")),
+                   msg="different version elements",
+                   silent=TRUE)
+    checkException(obj == new("Versions", x="1.0.0"),
+                   msg="different version lengths",
+                   silent=TRUE)
 }
 
 testIsCurrent <- function() {

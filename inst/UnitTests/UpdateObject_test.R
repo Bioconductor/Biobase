@@ -49,11 +49,6 @@ testUpdateObjectEnv <- function() {
     options(opts)
 }
 
-testUpdateObjectDefaultsBroken <- function() {
-    x <- 1:10
-    checkTrue(class(updateObjectTo(x, numeric())) == "numeric")
-}
-
 testUpdateObjectDefaults <- function() {
     x <- 1:10
     checkTrue(identical(x, updateObject(x)))

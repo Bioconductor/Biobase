@@ -1,7 +1,7 @@
 ## ==========================================================================
 ## Versions: version string information
 ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-## methods and class defined together so avaiable for prototypes elsewhere
+## methods and class defined together so available for prototypes elsewhere
 
 setClass("Versions", contains="list")
 
@@ -20,8 +20,11 @@ setMethod("initialize", signature(.Object="Versions"),
     res <- list()
     for (i in seq(along=versions))
       res[i] <-
-        if (!is.character(versions[[i]]) && .isValidVersion(versions[[i]])) versions[i]
-        else unclass(package_version(versions[[i]]))
+        if (!is.character(versions[[i]]) &&
+            .isValidVersion(versions[[i]]))
+            versions[i]
+        else
+            unclass(numeric_version(versions[[i]]))
     names(res) <- names(versions)
     res
 }
@@ -37,8 +40,20 @@ setMethod("updateObject", signature(object="Versions"),
 
 ## access
 
-setMethod("[", signature(x="Versions"),
-          function(x, i, j, ..., drop = FALSE) as(callNextMethod(),"Versions"))
+setMethod("[",
+          signature=signature(x="Versions"),
+          function(x, i, j, ..., drop = FALSE) {
+              ## 'dispatch' on i to avoid S4 complaint about j 'missing'
+              if (is(i, "character") &&
+                  !all(i %in% names(x))) {
+                  bad <- unique(i[!i %in% names(x)])
+                  cl <- deparse(match.call()[[2]])
+                  stop(sprintf("'[' indices '%s' not found in '%s'",
+                               paste(bad, collapse="', '"),
+                               cl))
+              }
+              as(callNextMethod(), "Versions")
+          })
 
 ## assign
 
@@ -67,22 +82,49 @@ setReplaceMethod("$", signature(x="Versions"),
 
 ## Compare
 
-setMethod("Compare", signature(e1="Versions", e2="Versions"),
+.as.numeric_version <- function(x)
+    numeric_version(as(x, "character"))
+    
+.canVersionCompare <- function(e1, e2) {
+    if (length(e1) != length(e2))
+        stop(sprintf("cannot compare versions with length '%d', '%d'",
+                     length(e1), length(e2)))
+    if (length(e1)>1 &&
+        (!all(names(e1) %in% names(e2)) ||
+         !all(names(e2) %in% names(e1))))
+        stop("cannot compare versions with different names")
+    TRUE
+}
+
+setMethod("Compare",
+          signature=signature(
+            e1="Versions",
+            e2="Versions"),
           function(e1, e2) {
-              class(e1) <- "package_version"
-              class(e2) <- "package_version"
+              .canVersionCompare(e1, e2)
+              e2 <- e2[names(e1)]
+              e1 <- .as.numeric_version(e1)
+              e2 <- .as.numeric_version(e2)
               callNextMethod(e1, e2)
           })
 
-setMethod("Compare", signature(e1="Versions", e2="character"),
+setMethod("Compare",
+          signature=signature(
+            e1="Versions",
+            e2="character"),
           function(e1, e2) {
-              class(e1) <- "package_version"
-              e2 <- .asValidVersions(e2)
-              class(e2) <- "package_version"
+              .canVersionCompare(e1, e2)
+              if (length(e2) > 1)
+                  e2 <- e2[names(e1)]
+              e1 <- .as.numeric_version(e1)
+              e2 <- numeric_version(e2)
               callNextMethod(e1, e2)
           })
 
-setMethod("Compare", signature(e1="character", e2="Versions"),
+setMethod("Compare",
+          signature=signature(
+            e1="character",
+            e2="Versions"),
           function(e1, e2) callGeneric(e2,e1))
 
 ## show
