@@ -11,15 +11,22 @@ selectSome(obj, maxToShow=5)
   \item{obj}{ vector }
   \item{maxToShow}{ number of elements to render}
 }
-%\details{
-%}
+\details{This function can be used in 'show' methods
+to give users exemplars of the tokens used in a vector.
+For example, an \code{\link{ExpressionSet}} built from
+a yeast experiment might have features enumerated using
+systematic gene names (e.g., YPR181C) or standard gene names (e.g., SEC23).
+The \code{\link{show}} method for \code{\link{ExpressionSet}} uses
+\code{selectSome} to alert the user to the tokens used, and thereby
+to indicate what vocabulary must be understood to work with the feature names.
+}
 \value{
-string coercion with ellipsis intercalated
-
-
+A string vector with at most \code{maxToShow} plus 1 elements,
+where an ellipsis ("...") is included to indicate incompleteness
+of the excerpt.
 }
 %\references{  }
-\author{Biocore}
+\author{Martin Morgan <mtmorgan@fhcrc.org>}
 %\note{  }
 
 
@@ -28,4 +35,4 @@ string coercion with ellipsis intercalated
 \examples{
 selectSome(1:20)
 }
-\keyword{ models }
+\keyword{ utilities }
