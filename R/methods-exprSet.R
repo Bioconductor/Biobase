@@ -390,17 +390,17 @@ doAsDataFrame <- function(x, row.names=NA, optional=NA) {
 }
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("as.data.frame.exprSet", signature(x="exprSet"), doAsDataFrame)
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# FIXME: move to method for eSet, exprSet
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-esApply <- function(X, MARGIN, FUN, ...) {
-   if ((!is(X, "exprSet")) && (!is(X, "eSet")))
-      stop("arg1 must be of class exprSet")
-   e1 <- new.env(parent=environment(FUN))
-   multiassign(names(pData(X)), pData(X), env=e1)
-   environment(FUN) <- e1
-   apply(exprs(X), MARGIN, FUN, ...)
+
+.esApply <- function(X, MARGIN, FUN, ...) {
+    e1 <- new.env(parent=environment(FUN))
+    multiassign(names(pData(X)), pData(X), env=e1)
+    environment(FUN) <- e1
+    apply(exprs(X), MARGIN, FUN, ...)
 }
+
+setMethod("esApply",
+          signature=signature(X="exprSet"),
+          .esApply)
 # ==========================================================================
 # A function to read exprSet from text a text file. The function
 # assumes that exprs and se.exprs are tab separated text files.

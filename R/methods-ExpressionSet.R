@@ -119,6 +119,15 @@ setReplaceMethod("geneNames", signature(object="ExpressionSet",
               featureNames(object) <- value
           })
 
+setMethod("esApply",
+          signature=signature(X="ExpressionSet"),
+          function(X, MARGIN, FUN, ...) {
+              FUN <- match.fun(FUN)
+              cll <- substitute(apply(exprs(X), MARGIN, FUN, ...))
+              eval(cll, pData(X), enclos=parent.frame())
+          })
+
+
 setMethod("makeDataPackage",
           signature(object="ExpressionSet"),
           function(object, author, email,
