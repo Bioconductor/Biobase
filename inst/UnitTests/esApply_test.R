@@ -6,22 +6,6 @@ test_esApply_base <- function() {
     checkIdentical(target, current)
 }
 
-test_esApply_local_args <- function() {
-    data(sample.ExpressionSet)
-    f <- function(x, t) {
-        xx <- split(x, t)
-        mean(xx[[1]]) - mean(xx[[2]])
-    }
-    target <- with(pData(sample.ExpressionSet),
-                   apply(exprs(sample.ExpressionSet), 1, f, sex))
-    current<- esApply(sample.ExpressionSet, 1, f, sex)
-    checkIdentical(target, current, msg="unnamed local arg")
-
-    target <- with(pData(sample.ExpressionSet),
-                   apply(exprs(sample.ExpressionSet), 1, f, t=sex))
-    checkIdentical(current, target, msg="named local arg")
-}
-
 test_esApply_lexical_scope <- function() {
     data(sample.ExpressionSet)
     f <- function() {
@@ -31,6 +15,37 @@ test_esApply_lexical_scope <- function() {
     target <- with(pData(sample.ExpressionSet),
                    apply(exprs(sample.ExpressionSet), 1, f()))
     current <- esApply(sample.ExpressionSet, 1, f())
+    checkIdentical(target, current)
+}
+
+test_esApply_local_scope <- function() {
+    data(sample.ExpressionSet)
+    target <- with(pData(sample.ExpressionSet),
+                   apply(exprs(sample.ExpressionSet), 1,
+                         function(x) {
+                             xx <- split(x, sex)
+                             mean(xx[[1]]) - mean(xx[[2]])
+                         }))
+    current <- esApply(sample.ExpressionSet, 1,
+                        function(x) {
+                            xx <- split(x, sex)
+                            mean(xx[[1]]) - mean(xx[[2]])
+                        })
+    checkIdentical(target, current)
+
+    f <- function(x) {
+        xx <- split(x, sex)
+        mean(xx[[1]]) - mean(xx[[2]])
+    }
+    current <- esApply(sample.ExpressionSet, 1, f)
+    checkIdentical(target, current)
+
+    f <- function(x, s) {
+        xx <- split(x, s)
+        mean(xx[[1]])-mean(xx[[2]])
+    }
+    sex=sample.ExpressionSet[["sex"]]
+    current <- esApply(sample.ExpressionSet, 1, f, s=sex)
     checkIdentical(target, current)
 }
 

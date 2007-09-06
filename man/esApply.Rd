@@ -2,38 +2,73 @@
 \alias{esApply}
 
 \title{
-   Apply for the Expression Data in 'exprSet'
+  An apply-like function for ExpressionSet and related structures.
 }
 
 \description{
-   \code{esApply} is a wrapper to apply for use with \code{exprSet}s and \code{eSet}s. Because the application of a function to the rows of the expression array usually involves variables in the \code{phenoData} slot we have used a special evaluation paradigm here. The function \code{FUN} may reference any data in phenoData by name.
-
-   Consider defining the function as a method for 'exprSet', 'eSet'
+   \code{esApply} is a wrapper to \code{apply} for use with \code{ExpressionSet}s and
+   (deprecated) \code{exprSet}s. The application of a function to rows
+   of an expression array usually involves variables in
+   \code{pData}. \code{esApply} uses a special evaluation paradigm
+   to make this easy. The function \code{FUN} may reference any data in
+   \code{pData} by name.
 }
 \usage{
 esApply(X, MARGIN, FUN, ...)
 }
 
 \arguments{
-   \item{X}{An instance of class \code{\link{exprSet}}. It is assumed that \code{X} has information on gene expression for G genes in N tissue samples. }
-   \item{MARGIN}{The margin to apply to, either 1 for rows or 2 for columns.}
+   \item{X}{An instance of class \code{\link{ExpressionSet}} or
+     (deprecated) \code{exprSet}.}
+   \item{MARGIN}{The margin to apply to, either 1 for rows (samples) or
+     2 for columns (features).}
    \item{FUN}{Any function }
-   \item{...}{Additional parameters for \code{FUN}}
+   \item{...}{Additional parameters for \code{FUN}.}
 }
 
 \details{
-   The \code{phenoData} from \code{X} is installed in an environment. This environment is installed as the environment of \code{FUN}. This will then provide bindings for any symbols in \code{FUN} that are the same as the names of the \code{phenoData} of \code{X}. If \code{FUN} has an environment already it is retained but placed after the newly created environment. Some variable shadowing could occur under these circumstances.
+  The \code{pData} from \code{X} is installed in an
+  environment. This environment is installed as the environment of
+  \code{FUN}. This will then provide bindings for any symbols in
+  \code{FUN} that are the same as the names of the \code{pData} of
+  \code{X}. If \code{FUN} has an environment already it is retained but
+  placed after the newly created environment. Some variable shadowing
+  could occur under these circumstances.
 }
+
 \value{
-   The result of \code{apply(exprs(X),MARGIN, FUN, ...)}.
+  The result of \code{with(pData(x), apply(exprs(X), MARGIN, FUN, ...))}.
 }
-\author{ V.J. Carey <stvjc@channing.harvard.edu>, R. Gentleman }
+
+\author{V.J. Carey <stvjc@channing.harvard.edu>, R. Gentleman }
 
 \seealso{
-   \code{\link{apply}}, \code{\link{exprSet}}
+  \code{\link{apply}}, \code{\link{ExpressionSet}}
 }
 
 \examples{
+data(sample.ExpressionSet)
+## sum columns of exprs
+res <- esApply(sample.ExpressionSet, 1, sum)
+
+## t-test, spliting samples by 'sex'
+f <- function(x) {
+    xx <- split(x, sex)
+    t.test(xx[[1]], xx[[2]])$p.value
+}
+res <- esApply(sample.ExpressionSet, 1, f)
+    
+## same, but using a variable passed in the function call
+
+f <- function(x, s) {
+    xx <- split(x, s)
+    mean(xx[[1]])-mean(xx[[2]])
+}
+sex=sample.ExpressionSet[["sex"]]
+res <- esApply(sample.ExpressionSet, 1, f, s=sex)
+
+## Earlier examples, with (deprecated) sample.exprSet.1
+
 data(sample.exprSet.1)
 
 # we know that eset has covariates in the pData called "cov1" and "cov2"

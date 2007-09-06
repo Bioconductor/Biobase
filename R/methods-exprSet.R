@@ -391,13 +391,6 @@ doAsDataFrame <- function(x, row.names=NA, optional=NA) {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("as.data.frame.exprSet", signature(x="exprSet"), doAsDataFrame)
 
-.esApply <- function(X, MARGIN, FUN, ...) {
-    e1 <- new.env(parent=environment(FUN))
-    multiassign(names(pData(X)), pData(X), env=e1)
-    environment(FUN) <- e1
-    apply(exprs(X), MARGIN, FUN, ...)
-}
-
 setMethod("esApply",
           signature=signature(X="exprSet"),
           .esApply)

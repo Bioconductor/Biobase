@@ -119,14 +119,19 @@ setReplaceMethod("geneNames", signature(object="ExpressionSet",
               featureNames(object) <- value
           })
 
+.esApply <- function(X, MARGIN, FUN, ...) {
+    parent <- environment(FUN)
+    if (is.null(parent))
+        parent <- emptyenv()
+    e1 <- new.env(parent=parent)
+    multiassign(names(pData(X)), pData(X), env=e1)
+    environment(FUN) <- e1
+    apply(exprs(X), MARGIN, FUN, ...)
+}
+
 setMethod("esApply",
           signature=signature(X="ExpressionSet"),
-          function(X, MARGIN, FUN, ...) {
-              FUN <- match.fun(FUN)
-              cll <- substitute(apply(exprs(X), MARGIN, FUN, ...))
-              eval(cll, pData(X), enclos=parent.frame())
-          })
-
+          .esApply)
 
 setMethod("makeDataPackage",
           signature(object="ExpressionSet"),

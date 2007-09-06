@@ -13,6 +13,7 @@
 \alias{[,exprSet-method}
 \alias{description<-,exprSet,ANY-method}
 \alias{description,exprSet-method}
+\alias{esApply,exprSet-method}
 \alias{exprs2excel,exprSet-method}
 \alias{exprs<-,exprSet,ANY-method}
 \alias{exprs,exprSet-method}
@@ -107,6 +108,7 @@
       \item{\code{sampleNames(exprSet)} and \code{sampleNames(exprSet, value)<-}:}{Methods to access/update \code{dimnames} of the \code{exprs} slot }
       \item{\code{geneNames(exprSet)} and \code{geneNames(exprSet, value)<-}:}{Methods to access/update \code{row.names} of the \code{exprs} slot - gene names }
       \item{\code{featureNames(exprSet)} and \code{featureNames(exprSet, value)<-}:}{Methods to access/update \code{row.names} of the \code{exprs} slot; use \code{featureNames} in preference to \code{geneNames}, to allow easier transition to new Biobase classes like \code{\link{ExpressionSet-class}}.}
+      \item{\code{esApply(exprSet, MARGIN, FUN, ...)}}{'apply'-like function to conveniently operate on \code{exprSet} objects. See \code{\link{esApply}}.}
       \item{\code{write.exprs(exprSet,...)}:}{Writes the expression levels to file. It takes the same arguments as \code{\link{write.table}}. If called with no arguments it is equivalent to \code{write.table(exprs(exprSet),file="tmp.txt",quote=FALSE,sep="\t")}.}
       \item{\code{exprs2excel(exprSet,...)}:}{Writes the expression levels to \code{csv} file. This file will open nicely in excel. It takes the same arguments as \code{\link{write.table}}. If called with no arguments it is equivalent to \code{write.table(exprs(exprSet),file="tmp.csv", sep = ",", col.names = NA)}.}
       \item{\code{as.data.frame.exprSet(exprSet, row.names = NA, optional = NA)}:}{Converts \code{exprSet} into a \code{data.frame}. In the return value, the first column is called \code{exprs} and contains the values returned by the method \code{exprs()}. The second column is called genenames and contains the values returned by the method \code{geneNames()}. The other columns will depend on the contents of the \code{\link{phenoData}} slot.}

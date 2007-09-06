@@ -15,6 +15,7 @@
 \alias{coerce,exprSet,ExpressionSet-method}
 \alias{coerce,eSet,ExpressionSet-method}
 \alias{coerce,ExpressionSet,data.frame-method}
+\alias{esApply,ExpressionSet-method}
 \alias{updateObject,ExpressionSet-method}
 \alias{makeDataPackage,ExpressionSet-method}
 \alias{as.data.frame.ExpressionSet}
@@ -101,6 +102,9 @@
      \item{\code{exprs(ExpressionSet)}, \code{exprs(ExpressionSet,matrix)<-}}{Access and
        set elements named \code{exprs} in the \code{AssayData-class}
        slot.}
+     \item{\code{esApply(ExpressionSet, MARGIN, FUN,
+         ...)}}{'apply'-like function to conveniently operate on
+       \code{ExpressionSet} objects. See \code{\link{esApply}}.}
      \item{\code{write.exprs(ExpressionSet)}}{Write expression values to
 	 a text file. It takes the same arguments as
 	 \code{write.table}}
