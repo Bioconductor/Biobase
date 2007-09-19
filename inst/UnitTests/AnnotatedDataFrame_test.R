@@ -135,12 +135,6 @@ testNoSharedCols <- function() {
     
 }
 
-testValidAnnotatedDataFrame <- function() {
-    obj <- obj1
-    pData(obj)[["Z"]] <- NA
-    checkException(validObject(obj, complete=TRUE), silent=TRUE)
-}
-
 testPhenoDataFactors <- function() {
     data(sample.ExpressionSet)
     suppressMessages(obj1 <- updateObject(sample.ExpressionSet))
@@ -180,6 +174,18 @@ testNewCovariate <- function() {
     pData(x) <- pData(x)[1:5,,drop=FALSE]
     checkTrue(validObject(x))
     checkTrue(identical(as.vector(dim(x),"integer"), as.integer(c(5,1))))
+}
+
+testNewCovariateOnEmptyADF <- function() {
+    adf <- new("AnnotatedDataFrame",
+               data=data.frame(1:3)[,FALSE,drop=FALSE])
+    ## was failing to create varMetadata labelDescription
+    pData(adf)$x <- 1:3
+    checkTrue(validObject(adf, complete=TRUE))
+
+    obj <- obj1
+    pData(obj)[["Z"]] <- NA
+    checkTrue(validObject(obj, complete=TRUE))
 }
 
 testBadInitializeArugments <- function() {

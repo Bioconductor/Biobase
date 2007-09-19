@@ -120,10 +120,21 @@ setReplaceMethod("dimLabels",
 
 setMethod("pData", "AnnotatedDataFrame", function(object) object@data)
 
-setReplaceMethod("pData", c("AnnotatedDataFrame", "data.frame"), function(object, value) {
-    object@data <- value
-    object
-})
+setReplaceMethod("pData",
+                 signature=signature(
+                   object="AnnotatedDataFrame",
+                   value="data.frame"),
+                 function(object, value) {
+                     object@data <- value
+                     ## need to update varMetadata?
+                     names <- names(value)
+                     notOk <- !names %in% row.names(varMetadata(object))
+                     if (sum(notOk) > 0) {
+                         names <- names[notOk]
+                         varMetadata(object)[names,] <- NA
+                     }
+                     object
+                 })
 
 setMethod("sampleNames", "AnnotatedDataFrame", function(object) row.names(object@data))
 
@@ -208,8 +219,6 @@ setReplaceMethod("[[",
                  signature=signature(x="AnnotatedDataFrame"),
                  function(x, i, j, ..., value) {
                      pData(x)[[i]] <- value
-                     if (!i %in% row.names(varMetadata(x)))
-                       varMetadata(x)[i,] <- NA
                      for (metadata in names(list(...)))
                        varMetadata(x)[i, metadata] <- list(...)[[metadata]]
                      x
