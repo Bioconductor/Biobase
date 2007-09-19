@@ -86,17 +86,46 @@ testDollar <- function() {
 }
 
 testHarmonizeAssayDataDimnames <- function() {
-    checkCreation <- function(exprs, se.exprs) {
+    checkHarmonizeOne <- function(exprs) {
+        es <- new("ExpressionSet", exprs=exprs)
+        checkTrue(validObject(es))
+    }
+    checkHarmonizeTwo <- function (exprs, se.exprs) {
         es <- new("ExpressionSet", exprs=exprs, se.exprs=se.exprs)
         checkTrue(validObject(es))
         okNames <- list(featureNames(featureData(es)),
                         sampleNames(phenoData(es)))
         dimNames <- Biobase:::.assayDataDimnames(assayData(es))
         checkTrue(all(sapply(dimNames, identical, okNames)))
+    }
+    checkCreation <- function(exprs, se.exprs) {
+        checkHarmonizeOne(exprs)
+        checkHarmonizeTwo(exprs, se.exprs)
 
-        ## 'harmonize' when a single element present
-        es <- new("ExpressionSet", exprs=se.exprs)
-        checkTrue(validObject(es))
+        ## names on both dimnames
+        nexprs <- exprs
+        dimnames(nexprs) <- lapply(dimnames(nexprs), function(x) {
+            names(x) <- letters[seq(1, length(x))]
+            x
+        })        
+        checkHarmonizeOne(nexprs)
+        checkHarmonizeTwo(nexprs, se.exprs)
+
+        ## names on colnames
+        nexprs <- exprs
+        cnms <- colnames(nexprs)
+        names(cnms) <- letters[seq(1, length(cnms))]
+        colnames(nexprs) <- cnms
+        checkHarmonizeOne(nexprs)
+        checkHarmonizeTwo(nexprs, se.exprs)
+
+        ## names on rownames
+        nexprs <- exprs
+        rnms <- rownames(nexprs)
+        names(rnms) <- letters[seq(1, length(rnms))]
+        rownames(nexprs) <- rnms
+        checkHarmonizeOne(nexprs)
+        checkHarmonizeTwo(nexprs, se.exprs)
     }
 
     se.exprs <- matrix(0, 5, 2)

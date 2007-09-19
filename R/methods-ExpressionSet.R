@@ -41,9 +41,12 @@ setMethod("initialize", "ExpressionSet",
     dimNames <- .assayDataDimnames(assayData(object))
     dimConflict <- function(dimNames, okNames, dim) {
         nm <- lapply(dimNames, "[[", dim)
-        isConflict <- !sapply(nm, identical, okNames[[dim]])
+        isConflict <- !sapply(nm, function(x, y) {
+            is.null(x) || all.equal(x, y, check.attr=FALSE)
+        }, okNames[[dim]])
+        isNamed <- sapply(lapply(nm, names), length) > 0
         isNull <- sapply(nm, is.null)
-        if (all(!isConflict & !isNull))
+        if (all(!isConflict & !isNamed & !isNull))
             return (FALSE)
         if (any(isConflict & !isNull))
             err(isConflict[!isNull])
