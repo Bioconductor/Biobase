@@ -15,7 +15,10 @@ openPDF(file, bg=TRUE)
   Currently this function works on Windows and Unix platforms.  Under
   Windows, whatever program is associated with the file extension will
   be used.  Under Unix, the function will use the program named in the
-  option "pdfViewer" (default is 'acroread').
+%  option "pdfViewer" (default is 'acroread'). -- the code checks pdfviewer!
+% and that's the option that options() documents.
+  option "pdfviewer" (see \code{help(options)} for information on
+how this is set.)
 
   The \code{bg} argument is only interpreted on Unix.
 }
