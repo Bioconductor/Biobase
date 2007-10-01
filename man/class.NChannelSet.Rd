@@ -10,14 +10,14 @@
 \alias{selectChannels,NChannelSet,character-method}
 \alias{initialize,NChannelSet-method}
 
-\title{Class to contain data from N channel array technologies}
+\title{Class to contain data from multiple channel array technologies}
 
 \description{
   Container for high-throughput assays and experimental meta-data. Data
   are from experiments where a single \sQuote{chip} contains several
-  different \sQuote{channels}. All channels on a chip have the same set of
-  \sQuote{features}. An experiment consists of a collection of several
-  N-channel chips; each chip is a \sQuote{sample}.
+  (more than 1) different \sQuote{channels}. All channels on a chip have
+  the same set of\sQuote{features}. An experiment consists of a
+  collection of several N-channel chips; each chip is a \sQuote{sample}.
 
   An \code{NChannelSet} provides a way to coordinate assay data
   (expression values) with phenotype information and references to chip
