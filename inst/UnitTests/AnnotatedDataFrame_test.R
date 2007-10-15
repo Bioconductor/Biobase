@@ -176,6 +176,22 @@ testNewCovariate <- function() {
     checkTrue(identical(as.vector(dim(x),"integer"), as.integer(c(5,1))))
 }
 
+testReplaceCovariates <- function() {
+    ## previously tried to update rather than replace varMetadata
+    adf <- new("AnnotatedDataFrame", data=data.frame(x=1:3))
+    pData(adf) <- data.frame(y=1:3)
+    checkTrue(validObject(adf))
+    checkEquals("y", varLabels(adf))
+
+    pData(adf)[,"z"] <- 3:1
+    checkTrue(validObject(adf))
+    checkEquals(c("y","z"), varLabels(adf))
+
+    pData(adf)[,"y"] <- NULL
+    checkTrue(validObject(adf))
+    checkEquals("z", varLabels(adf))
+}
+
 testNewCovariateOnEmptyADF <- function() {
     adf <- new("AnnotatedDataFrame",
                data=data.frame(1:3)[,FALSE,drop=FALSE])

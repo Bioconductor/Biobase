@@ -125,15 +125,11 @@ setReplaceMethod("pData",
                    object="AnnotatedDataFrame",
                    value="data.frame"),
                  function(object, value) {
-                     object@data <- value
-                     ## need to update varMetadata?
-                     names <- names(value)
-                     notOk <- !names %in% row.names(varMetadata(object))
-                     if (sum(notOk) > 0) {
-                         names <- names[notOk]
-                         varMetadata(object)[names,] <- NA
-                     }
-                     object
+                     varMetadata <-
+                         varMetadata(object)[names(value),,drop=FALSE]
+                     row.names(varMetadata) <- names(value)
+                     new("AnnotatedDataFrame",
+                         data=value, varMetadata=varMetadata)
                  })
 
 setMethod("sampleNames", "AnnotatedDataFrame", function(object) row.names(object@data))
