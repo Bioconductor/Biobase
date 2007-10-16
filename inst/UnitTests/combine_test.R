@@ -1,0 +1,39 @@
+testCombineOne <- function() {
+    data(sample.ExpressionSet)
+    checkIdentical(sample.ExpressionSet,
+                   combine(sample.ExpressionSet))
+}
+
+testCombineTwo <- function() {
+    data(sample.ExpressionSet)
+    x <- sample.ExpressionSet
+    checkTrue(all.equal(x, combine(x[,1:5],x[,seq(6, ncol(x))])))
+}
+
+testCombineThree <- function() {
+    data(sample.ExpressionSet)
+    x <- sample.ExpressionSet
+    y <- combine(x[,1:5],x[, 6:10], x[,seq(11, ncol(x))])
+    checkTrue(all.equal(x, y))
+}
+
+testCombineThreeDF <- function() {
+    ## data.frame's are tricky, because c(df, list(...)) unlists df
+    x <- data.frame(x=1:5,
+                    y=factor(letters[1:5], levels=letters[1:8]),
+                    row.names=letters[1:5])
+    y <- data.frame(z=3:7,
+                    y=factor(letters[3:7], levels=letters[1:8]),
+                    row.names=letters[3:7])
+    w <- data.frame(w=4:8,
+                    y=factor(letters[4:8], levels=letters[1:8]),
+                    row.names=letters[4:8])
+    res <- combine(w, x, y)
+
+    e <- data.frame(w=c(4:8, rep(NA, 3)),
+                    y=c(letters[c(4:8, 1:3)]),
+                    x=c(4:5, rep(NA, 3), 1:3),
+                    z=as.integer(c(4:7, rep(NA, 3), 3)),
+                    row.names=letters[c(4:8, 1:3)])
+    checkIdentical(e, res)
+}

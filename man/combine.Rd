@@ -1,5 +1,6 @@
 \name{combine}
 \alias{combine}
+\alias{combine,ANY,missing-method}
 \alias{combine,data.frame,data.frame-method}
 \concept{combine phenoData}
 
@@ -34,6 +35,8 @@ combine(x, y, ...)
 }
 \section{Methods}{
   \describe{
+    \item{\code{combine(x=ANY, missing)}}{Return the first (x) argument
+      unchanged.}
     \item{\code{combine(data.frame, data.frame)}}{Combines two
       \code{data.frame} objects so that the resulting \code{data.frame}
       contains all rows and columns of the original objects. Rows and
@@ -62,12 +65,17 @@ combine(x, y, ...)
 
 \examples{
   x <- data.frame(x=1:5,
-          y=factor(letters[1:5], levels=letters[1:7]),
+          y=factor(letters[1:5], levels=letters[1:8]),
           row.names=letters[1:5])
   y <- data.frame(z=3:7,
-          y=factor(letters[3:7], levels=letters[1:7]),
+          y=factor(letters[3:7], levels=letters[1:8]),
           row.names=letters[3:7])
   combine(x,y)
+
+  w <- data.frame(w=4:8,
+         y=factor(letters[4:8], levels=letters[1:8]),
+         row.names=letters[4:8])
+  combine(w, x, y)
 
   # y is converted to 'factor' with different levels
   x <- data.frame(x=1:5,y=letters[1:5], row.names=letters[1:5])

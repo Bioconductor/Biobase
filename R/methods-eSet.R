@@ -569,20 +569,23 @@ setReplaceMethod("annotation",
                      object
                  })
 
-setMethod("combine", c("eSet", "eSet"), function(x, y, ...) {
-    if (class(x) != class(y))
-      stop(paste("objects must be the same class, but are ",
-                 class(x), ", ", class(y), sep=""))
-    if (any(annotation(x) != annotation(y)))
-      stop("objects have different annotations: ",
-           annotation(x), ", ", annotation(y))
-    assayData(x) <- combine(assayData(x), assayData(y))
-    phenoData(x) <- combine(phenoData(x), phenoData(y))
-    featureData(x) <- combine(featureData(x), featureData(y))
-    experimentData(x) <- combine(experimentData(x),experimentData(y))
-    ## annotation -- constant
-    x
-})
+setMethod("combine",
+          signature=signature(
+            x="eSet", y="eSet"),
+          function(x, y, ...) {
+              if (class(x) != class(y))
+                stop(paste("objects must be the same class, but are ",
+                           class(x), ", ", class(y), sep=""))
+              if (any(annotation(x) != annotation(y)))
+                stop("objects have different annotations: ",
+                     annotation(x), ", ", annotation(y))
+              assayData(x) <- combine(assayData(x), assayData(y))
+              phenoData(x) <- combine(phenoData(x), phenoData(y))
+              featureData(x) <- combine(featureData(x), featureData(y))
+              experimentData(x) <- combine(experimentData(x),experimentData(y))
+              ## annotation -- constant
+              x
+          })
 
 ##
 ## Deprecated

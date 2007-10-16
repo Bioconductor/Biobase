@@ -11,13 +11,14 @@ setGeneric("assayData<-",     function(object, value) standardGeneric("assayData
 setGeneric("channelNames",    function(object, ...) standardGeneric("channelNames"))
 setGeneric("channel",         function(object, name, ...) standardGeneric("channel"))
 setGeneric("combine",
-   function(x, y, ...) {
-      if (length(list(...)) > 0)
-         combine( x, combine( y, combine(...) ) )
-      else
-         standardGeneric("combine")
-   }
-)
+           function(x, y, ...) {
+               if (length(list(...)) > 0) {
+                   callGeneric(x, do.call("callGeneric",
+                                          list(y, ...)))
+               } else {
+                   standardGeneric("combine")
+               }
+           })
 setGeneric("content",         function(object) standardGeneric("content"))
 setGeneric("convertVarLabels",function(object) standardGeneric("convertVarLabels"))
 setGeneric("description",     function(object) standardGeneric("description"))
