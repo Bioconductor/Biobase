@@ -37,3 +37,19 @@ testCombineThreeDF <- function() {
                     row.names=letters[c(4:8, 1:3)])
     checkIdentical(e, res)
 }
+
+testCombineWithNamedArgs <- function() {
+    x <- data.frame(x=1:5,
+                    y=factor(letters[1:5], levels=letters[1:8]),
+                    row.names=letters[1:5])
+    y <- data.frame(z=3:7,
+                    y=factor(letters[3:7], levels=letters[1:8]),
+                    row.names=letters[3:7])
+    w <- data.frame(w=4:8,
+                    y=factor(letters[4:8], levels=letters[1:8]),
+                    row.names=letters[4:8])
+    checkIdentical(combine(w, y, x), combine(w, x, y=y))
+    checkIdentical(combine(w, y, x), combine(w, y=y, x))
+    checkIdentical(combine(x, y, w), combine(w, y=y, x=x))
+    checkIdentical(combine(x, y, w), combine(y=y, x=x, w))
+}
