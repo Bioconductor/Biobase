@@ -49,4 +49,4 @@ export("Aggregate",
        readExpressionSet, read.AnnotatedDataFrame, read.MIAME,
        "selectSome", "strbreak", "subListExtract", "testBioCConnection",
        "lcSuffix", "lcPrefix", "lcPrefixC",
-       "updateOldESet", "updateObjectFromSlots", "userQuery")
+       "updateOldESet", "updateObjectFromSlots", "userQuery", "validMsg")

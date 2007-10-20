@@ -186,10 +186,12 @@ testReplaceCovariates <- function() {
     pData(adf)[,"z"] <- 3:1
     checkTrue(validObject(adf))
     checkEquals(c("y","z"), varLabels(adf))
+    checkEquals(data.frame(y=1:3, z=3:1), pData(adf))
 
     pData(adf)[,"y"] <- NULL
     checkTrue(validObject(adf))
     checkEquals("z", varLabels(adf))
+    checkEquals(data.frame(z=3:1), pData(adf))
 }
 
 testNewCovariateOnEmptyADF <- function() {
