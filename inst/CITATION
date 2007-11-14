@@ -8,6 +8,7 @@ title ="Bioconductor: Open software development for computational biology and bi
   url =          "http://genomebiology.com/2004/5/10/R80",
   textVersion = paste(
  "Bioconductor: Open software development for computational biology",
- "and bioinformatics", "R. Gentleman, V. J. Carey, D. M. Bates, and others,", 
+ "and bioinformatics", "R. Gentleman, V. J. Carey, D. M. Bates, B.Bolstad, 
+  M. Dettling, S. Dudoit, B. Ellis, L. Gautier, Y. Ge, and others",
   "2004, Genome Biology, Vol. 5, R80")
 )
