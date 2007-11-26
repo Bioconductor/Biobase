@@ -112,3 +112,11 @@ testColNamesSuffix <- function() {
     checkDataFramesEqual(obj,
                          data.frame(a=1:5, a.x=letters[1:5], a.y=LETTERS[1:5], b=5:1))
 }
+
+testFactorLevels <- function() {
+    obj1 <- data.frame(a=factor(c("M", "F"), levels=c("F", "M")))
+    obj2 <- data.frame(a=factor(c("M", "F"), levels=c("M", "F")))
+    suppressWarnings(checkException(combine(obj1, obj2), silent=TRUE))
+    obj2$a <- obj1$a
+    checkTrue(validObject(combine(obj1, obj2)))
+}

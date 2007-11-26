@@ -1,6 +1,6 @@
 setMethod("combine",
           signature(x="data.frame", y="data.frame"),
-          function(x, y) {
+          function(x, y, ...) {
               if (all(dim(x)==0) && all(dim(y)==0))
                 return(x)
               else if (all(dim(x)==0)) return(y)
@@ -11,17 +11,28 @@ setMethod("combine",
               sharedCols <- intersect(names(x), names(y))
 
               ## check possible to combine
-              alleq <- function(x, y)
-                  all.equal(x, y, check.attributes=FALSE)
+              alleq <- function(x, y) {
+                  res <- all.equal(x, y, check.attributes=FALSE)
+                  if (!is.logical(res))  {
+                      warning(res)
+                      FALSE
+                  } else TRUE
+              }
               sharedRows <- intersect(row.names(x), row.names(y))
               ok <- sapply(sharedCols, function(nm) {
                   if (class(x[[nm]]) != class(y[[nm]])) return(FALSE)
                   switch(class(x[[nm]])[[1]],
                          factor= {
-                             if (alleq(levels(x[[nm]]), levels(y[[nm]])) &&
-                                 alleq(x[sharedRows, nm, drop=FALSE],
-                                       y[sharedRows, nm, drop=FALSE])) TRUE
-                             else FALSE
+                             if (!alleq(levels(x[[nm]]), levels(y[[nm]]))) {
+                                 warning("data frame column '", nm,
+                                         "' levels not all.equal")
+                                 FALSE
+                             } else if (!alleq(x[sharedRows, nm, drop=FALSE],
+                                               y[sharedRows, nm, drop=FALSE])) {
+                                 warning("data frame column '", nm,
+                                         "' shared row not all equal")
+                                 FALSE
+                             } else TRUE
                          },
                          ## ordered and non-factor columns need to
                          ## satisfy the following identity; it seems
@@ -29,8 +40,12 @@ setMethod("combine",
                          ## differently, but these have not been
                          ## encountered.
                          ordered=,
-                         alleq(x[sharedRows, nm, drop=FALSE],
-                               y[sharedRows, nm, drop=FALSE]))
+                         if (!alleq(x[sharedRows, nm, drop=FALSE],
+                                    y[sharedRows, nm, drop=FALSE])) {
+                             warning("data frame column '", nm,
+                                     "' shared rows nt all equal")
+                             FALSE
+                         } else TRUE)
               })
               if (!all(ok))
                 stop("data.frames contain conflicting data:",
