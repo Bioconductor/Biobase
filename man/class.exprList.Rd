@@ -27,6 +27,4 @@ around objects that might get altered.
 
 \seealso{
 \code{\link{list}},\code{\link{environment}},\code{\link{eSet}} }
-\examples{
-}
 \keyword{classes}

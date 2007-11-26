@@ -30,9 +30,6 @@
 \source{
   Affymetrix GeneChip Expression Analysis Data Analysis Fundamentals (\url{http://www.affymetrix.com/Auth/support/downloads/manuals/data_analysis_fundamentals_manual.pdf})
 }
-\references{
-  ~~ possibly secondary sources and usages ~~
-}
 \examples{
 data(reporter)
 ## maybe str(reporter) ; plot(reporter) ...

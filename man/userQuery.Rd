@@ -20,6 +20,4 @@ userQuery(msg, allowed = c("y", "n"), default = "n", case.sensitive = FALSE)
   The input from the user
 }
 \author{Jeff Gentry}
-\examples{
-}
 \keyword{utilities}
