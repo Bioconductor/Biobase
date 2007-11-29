@@ -198,9 +198,18 @@ your expectations. At a minimum, check the class and dimensions of
 class(exprs)
 dim(exprs)
 colnames(exprs)
-head(exprs)
+head(exprs[,1:5])
 @ 
 %% 
+
+At this point, we can create a minimal \Rclass{ExpressionSet} object:
+<<ExpressionSet-basic>>=
+minimalSet <- new("ExpressionSet", exprs=exprs)
+@ 
+% 
+We'll get more benefit from expression sets by creating a richer
+object that coordinates phenotypic and other data with our expression
+data, as outlined in the following sections.
 
 \subsection{Phenotypic data}
 
@@ -389,7 +398,8 @@ object of appropriate class for the argument. See the help page for
 
 We created a rich data object to coordinate diverse sources of
 information. Less rich objects can be created by providing less
-information. A minimal expression set can be created with
+information. As mentioned earlier, a minimal expression set can be
+created with
 <<ExpressionSet-minimal>>=
 minimalSet <- new("ExpressionSet", exprs=exprs)
 @ 
