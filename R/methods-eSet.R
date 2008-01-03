@@ -348,7 +348,7 @@ setMethod("[[", "eSet", function(x, i, j, ...) phenoData(x)[[i]])
 
 setReplaceMethod("[[", "eSet",
                  function(x, i, j, ..., value) {
-                     phenoData(x)[[i]] <- value
+                     phenoData(x)[[i, ...]] <- value
                      x
                  })
 

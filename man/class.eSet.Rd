@@ -232,7 +232,10 @@
      \item{\code{object[(index)}:}{Conducts subsetting of matrices and
        phenoData components }
      \item{\code{object$name}, \code{object$name<-value}}{Access and set \code{name} column in \code{phenoData}}
-     \item{\code{object[[i]]}, \code{object[[i]]<-value}}{Access and set column \code{i} (character or numeric index) in \code{phenoData}}
+     \item{\code{object[[i, ...]]}, \code{object[[i, ...]]<-value}}{Access and set column \code{i} (character or
+       numeric index) in \code{phenoData}. The ... argument can include
+       named variables (especially \code{labelDescription}) to be added
+       to varMetadata.}
    }
    Additional functions:
    \describe{

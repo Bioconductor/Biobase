@@ -145,9 +145,12 @@
       \code{AnnotatedDataFrame}, i.e., including relevant
       metadata. Unlike a \code{data.frame}, setting \code{drop=TRUE}
       generates an error. }
-    \item{\code{[[<sample>}, \code{$<sample>}:}{Selector returning a sample and measured
-      variables.}
-    \item{\code{[[<-<new_sample>}, \code{$<-<new_sample>}:}{Replace a sample row of data.}
+    \item{\code{[[<variable>}, \code{$<variable>}:}{Selector returning a
+      variable (column of \code{pData}).}
+    \item{\code{[[<variable>, ...]]<-<new_value>},
+      \code{$<variable> <- <new_value>}:}{Replace or add a variable to
+      \code{pData}. ... can include named arguments (especially
+      \code{labelDescription}) to be added to \code{varMetadata}.}
     \item{\code{dim(<AnnotatedDataFrame>)},
       \code{ncol(<AnnotatedDataFrame>)}:}{Number of samples and
       variables (\code{dim}) and variables (\code{ncol}) in the

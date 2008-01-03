@@ -85,6 +85,16 @@ testDollar <- function() {
     checkEquals(s1, s2, msg="pmatch equality")
 }
 
+testSubset2 <- function() {
+    data(sample.ExpressionSet)
+    es <- sample.ExpressionSet
+    x <- runif(ncol(es))
+    ldesc <- "Random variate"
+    es[["RVar", labelDescription=ldesc]] <- x
+    checkEquals(es[["RVar"]], x)
+    checkEquals(varMetadata(es)["RVar", "labelDescription"], ldesc)
+}
+
 testHarmonizeAssayDataDimnames <- function() {
     checkHarmonizeOne <- function(exprs) {
         es <- new("ExpressionSet", exprs=exprs)

@@ -43,7 +43,7 @@ setMethod("combine",
                          if (!alleq(x[sharedRows, nm, drop=FALSE],
                                     y[sharedRows, nm, drop=FALSE])) {
                              warning("data frame column '", nm,
-                                     "' shared rows nt all equal")
+                                     "' shared rows not all equal")
                              FALSE
                          } else TRUE)
               })
