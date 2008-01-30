@@ -6,7 +6,7 @@ Description: Functions that are needed by many other packages or which replace R
 Suggests: tkWidgets, ALL
 Depends: R (>= 2.6.0), tools, methods, utils
 Maintainer: Biocore Team c/o BioC user list <bioconductor@stat.math.ethz.ch>
-License: The Artistic License, Version 2.0
+License: Artistic-2.0
 Collate: tools.R strings.R environment.R vignettes.R packages.R
          AllGeneric.R
          VersionsClass.R 
