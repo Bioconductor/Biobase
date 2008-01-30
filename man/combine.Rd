@@ -43,11 +43,12 @@ combine(x, y, ...)
       columns in the returned value are unique, that is, a row or column
       represented in both arguments is represented only once in the
       result. To perform this operation, \code{combine} makes sure that data
-      in shared rows and columns is identical in the two
-      data.frames. Data diffrences in shared rows and columns cause an
+      in shared rows and columns are identical in the two
+      data.frames. Data differences in shared rows and columns cause an
       error. \code{combine} issues a warning when a column is a
       \code{\link{factor}} and the levels of the factor in the two
-      \code{data.frame}s are different; the returned value may be recoded.}
+      \code{data.frame}s are different; this will usually result in an
+      error, as illustrated in the example.}
   }
   Additional \code{combine} methods are defined for
   \code{\link{AnnotatedDataFrame}},
@@ -78,9 +79,19 @@ combine(x, y, ...)
   combine(w, x, y)
 
   # y is converted to 'factor' with different levels
-  x <- data.frame(x=1:5,y=letters[1:5], row.names=letters[1:5])
-  y <- data.frame(z=3:7,y=letters[3:7], row.names=letters[3:7])
-  try(combine(x,y))
+  df1 <- data.frame(x=1:5,y=letters[1:5], row.names=letters[1:5])
+  df2 <- data.frame(z=3:7,y=letters[3:7], row.names=letters[3:7])
+  try(combine(df1, df2)) # fails
+  # solution 1: ensure identical levels
+  y1 <- factor(letters[1:5], levels=letters[1:7])
+  y2 <- factor(letters[3:7], levels=letters[1:7])
+  df1 <- data.frame(x=1:5,y=y1, row.names=letters[1:5])
+  df2 <- data.frame(z=3:7,y=y2, row.names=letters[3:7])
+  combine(df1, df2)
+  # solution 2: force column to be 'character'
+  df1 <- data.frame(x=1:5,y=I(letters[1:5]), row.names=letters[1:5])
+  df2 <- data.frame(z=3:7,y=I(letters[3:7]), row.names=letters[3:7])
+  combine(df1, df2)
 }
 
 \keyword{manip}
