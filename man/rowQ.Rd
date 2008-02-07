@@ -17,7 +17,7 @@ rowMax(imat)
 rowMin(imat)
 }
 \arguments{
-  \item{imat}{Either a matrix or an \code{exprSet}. }
+  \item{imat}{Either a matrix or an \code{ExpressionSet}. }
   \item{which}{An integer indicating which order statistic should be returned.}
 }
 \details{
@@ -40,8 +40,7 @@ the requested quantiles.
 }
 
 \examples{
- data(sample.exprSet)
- rowMin(sample.exprSet)
- rowQ(sample.exprSet, 4)
+ data(sample.ExpressionSet)
+ rowMin(sample.ExpressionSet)
+ rowQ(sample.ExpressionSet, 4)
 }
-\keyword{ manip }

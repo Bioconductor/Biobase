@@ -5,12 +5,12 @@
 \alias{experimentData}
 \alias{experimentData<-}
 
-\title{Retrieve feature and sample names from eSets and exprSets.}
+\title{Retrieve Meta-data from eSets and ExpressionSets.}
 
 \description{
-  These generic functions access the feature names (typically, gene or
-  SNP identifiers) and sample names stored in an object derived from the
-  \code{\link{eSet-class}} or \code{\link{exprSet-class}}.
+  These generic functions access generic data, abstracts, PubMed IDs
+ and experiment data from instances of the 
+  \code{\link{eSet-class}} or \code{\link{ExpressionSet-class}}.
 }
 
 \usage{
@@ -21,7 +21,8 @@ experimentData(object)
 experimentData(object) <- value
 }
 \arguments{
-  \item{object}{Object, possibly derived from \code{eSet-class} or \code{MIAME-class}}
+  \item{object}{Object, possibly derived from \code{eSet-class} or 
+    \code{MIAME-class}}
   \item{value}{Value to be assigned; see class of \code{object} (e.g.,
     \code{\link{eSet-class}}) for specifics.}
 }
@@ -37,6 +38,7 @@ experimentData(object) <- value
 }
 \author{Biocore}
 
-\seealso{\code{\link{exprSet-class}}, \code{\link{eSet-class}}, \code{\link{MIAME-class}}}
+\seealso{\code{\link{ExpressionSet-class}}, \code{\link{eSet-class}}, 
+   \code{\link{MIAME-class}}}
 
 \keyword{manip}
