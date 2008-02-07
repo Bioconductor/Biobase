@@ -5,12 +5,11 @@
 \title{Annotate eSet data.}
 \description{
 This generic function handles methods for adding and retrieving
-`annotation' and `description' information for eSets. An annotation is the name of the
-file describing the chip used for the experiment.
+`annotation' and `description' information for eSets. An annotation is the name of the file describing the chip used for the experiment.
 }
 \usage{
 annotation(object)
-annotation(object) <- "hgu95av3"
+annotation(object) <- "hgu95av2"
 
 }
 \arguments{
@@ -22,7 +21,7 @@ annotation(object) <- "hgu95av3"
 }
 \author{Biocore}
 
-\seealso{\code{\link{exprSet-class}}, \code{\link{eSet-class}},
+\seealso{\code{\link{eSet-class}},
   \code{\link{ExpressionSet-class}}, \code{\link{SnpSet-class}}}
 
 \keyword{manip}

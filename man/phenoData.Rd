@@ -9,7 +9,7 @@
 \alias{pData<-}
 
 \title{Retrieve information on experimental phenotypes recorded in
-  eSet and exprSet-derived classes.}
+  eSet and ExpressionSet-derived classes.}
 \description{
   These generic functions access the phenotypic data (e.g., covariates)
   and meta-data (e.g., descriptions of covariates) associated with an
@@ -40,6 +40,7 @@ pData(object) <- value
 }
 \author{Biocore}
 
-\seealso{\code{\link{exprSet}}, \code{\link{eSet-class}}, \code{\link{ExpressionSet-class}}, \code{\link{SnpSet-class}}}
+\seealso{\code{\link{eSet-class}}, \code{\link{ExpressionSet-class}}, 
+  \code{\link{SnpSet-class}}}
 
 \keyword{manip}

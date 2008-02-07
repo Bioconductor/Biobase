@@ -65,7 +65,7 @@
       \item{\code{normControls(MIAME)}:}{ An accessor function for \code{normControls} }
       \item{\code{notes(MIAME), notes(MIAME) <- value}:}{ Accessor
 	functions for \code{other}; duplicated here for compatibility
-	with \code{exprSet-class}. \code{notes(MIAME) <- character}
+	with the \code{exprSet} class. \code{notes(MIAME) <- character}
 	\emph{appends} character to notes; use \code{notes(MIAME) <-
 	  list} to replace the notes entirely.}
       \item{\code{otherInfo(MIAME)}:}{ An accessor function for \code{other} }
