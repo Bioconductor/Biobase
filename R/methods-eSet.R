@@ -32,9 +32,9 @@ setMethod("initialize",
                     else ls(assayData)
                   dupNames <- nms %in% names(dotArgs[!isSlot])
                   if (any(dupNames))
-                    warning("initialize argument '",
-                            paste(nms[dupNames], collapse="' "),
-                            "' also present in 'assayData'; argument ignored")
+                    warning("initialize argument(s) '",
+                            paste(nms[dupNames], collapse="' '"),
+                            "' also present in 'assayData'; argument(s) ignored")
               }
               if (is(phenoData,"phenoData")) {
                   warning("updating phenoData argument to 'AnnotatedDataFrame'", call.=FALSE)

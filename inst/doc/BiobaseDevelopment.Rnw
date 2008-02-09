@@ -424,7 +424,7 @@ setMethod("initialize", "SwirlSet",
 
 The structure of the \Rfunction{initialize} method is a bit different
 from those often seen in \R{}. Often, \Rfunction{initialize} has only
-\Robject{.Object} as a named arguments, or, if there are other named
+\Robject{.Object} as a named argument, or, if there are other named
 arguments, they correspond to slot names. Here our initialize method
 accepts four arguments, named after the \Robject{assayData} elements.
 Inside the \Rfunction{initialize} method, the named arguments are

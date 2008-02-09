@@ -1,0 +1,15 @@
+        **************************************************
+        *                                                *
+        *              2.7 SERIES NEWS                   *
+        *                                                *
+        **************************************************
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o 'combine' on data.frame columns with mismatched levels causes a
+    warning, rather than error.
+
+
+NEW FEATURES
+
+    o None
