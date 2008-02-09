@@ -12,14 +12,24 @@ testCombineDf <- function() {
     checkDataFramesEqual(x, z[1:5, colnames(x)])
     checkDataFramesEqual(y, z[3:7, colnames(y)])
 
-    ## two variants of non-matching factor codings
-    x <- data.frame(x=1:5, y=letters[1:5], row.names=letters[1:5])
-    y <- data.frame(z=3:7, y=letters[3:7], row.names=letters[3:7])
-    checkException(combine(x,y), silent=TRUE)
+    ## an error -- content mismatch
+    x <- data.frame(x=1:3, y=letters[1:3], row.names=letters[1:3])
+    y <- data.frame(z=2:4, y=letters[1:3], row.names=letters[2:4])
+    checkException(suppressWarnings(combine(x,y)), silent=TRUE)
 
-    x <- data.frame(x=1:5,y=letters[1:5], row.names=letters[1:5])
-    y <- data.frame(z=3:7,y=letters[1:5], row.names=letters[3:7])
+    ## a warning -- level coercion
+    oldw <- options("warn")
+    options(warn=2)
+    on.exit(options(oldw))
+    x <- data.frame(x=1:2, y=letters[1:2], row.names=letters[1:2])
+    y <- data.frame(z=2:3, y=letters[2:3], row.names=letters[2:3])
     checkException(combine(x,y), silent=TRUE)
+    options(oldw)
+    checkDataFramesEqual(suppressWarnings(combine(x,y)),
+                         data.frame(x=c(1:2, NA),
+                                    y=letters[1:3],
+                                    z=c(NA, 2:3),
+                                    row.names=letters[1:3]))
 }
 
 testCombineDfPreserveNumericRows <- function() {
@@ -111,12 +121,4 @@ testColNamesSuffix <- function() {
     obj <- combine(obj1, obj2)
     checkDataFramesEqual(obj,
                          data.frame(a=1:5, a.x=letters[1:5], a.y=LETTERS[1:5], b=5:1))
-}
-
-testFactorLevels <- function() {
-    obj1 <- data.frame(a=factor(c("M", "F"), levels=c("F", "M")))
-    obj2 <- data.frame(a=factor(c("M", "F"), levels=c("M", "F")))
-    suppressWarnings(checkException(combine(obj1, obj2), silent=TRUE))
-    obj2$a <- obj1$a
-    checkTrue(validObject(combine(obj1, obj2)))
 }

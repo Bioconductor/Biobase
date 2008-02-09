@@ -1,6 +1,6 @@
 testCombineFeatureData <- function() {
     data(sample.ExpressionSet)          # use as source for exprs data
-    suppressMessages(obj <- updateObject(sample.ExpressionSet)[1:20,1:10])
+    suppressWarnings(obj <- updateObject(sample.ExpressionSet)[1:20,1:10])
 
     obj1 <- new("ExpressionSet", phenoData=phenoData(obj), exprs=exprs(obj))
     obj2 <- obj1
@@ -24,7 +24,7 @@ testCombineFeatureData <- function() {
     ## conflicting feature pData
     pData(featureData(obj2))[["y"]] <- TRUE
     validObject(obj2)
-    checkException(combine(obj1, obj2), silent=TRUE)
+    checkException(suppressWarnings(combine(obj1, obj2)), silent=TRUE)
 }
 
 testAddTextNotes <- function() {

@@ -25,12 +25,14 @@ setMethod("combine",
                          factor= {
                              if (!alleq(levels(x[[nm]]), levels(y[[nm]]))) {
                                  warning("data frame column '", nm,
-                                         "' levels not all.equal")
-                                 FALSE
+                                         "' levels not all.equal",
+                                         call.=FALSE)
+                                 TRUE
                              } else if (!alleq(x[sharedRows, nm, drop=FALSE],
                                                y[sharedRows, nm, drop=FALSE])) {
                                  warning("data frame column '", nm,
-                                         "' shared row not all equal")
+                                         "' shared rows not all equal",
+                                         call.=FALSE)
                                  FALSE
                              } else TRUE
                          },

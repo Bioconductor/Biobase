@@ -38,9 +38,9 @@ check <- function(obj1, obj2, obj) {
     checkVarMetadata(varMetadata(obj1), varMetadata(obj2), varMetadata(obj))
 }
 checkUnchangedPData <- function(p1, p2, p) {
-    checkTrue(all(lapply(colnames(p1),
+    checkTrue(all(sapply(colnames(p1),
                          function(nm) identical(p[1:dim(p1)[[1]],nm], p1[,nm]))))
-    checkTrue(all(lapply(colnames(p2),
+    checkTrue(all(sapply(colnames(p2),
                          function(nm) identical(p[dim(p1)[[1]] + 1:dim(p1)[[1]],nm], p2[,nm]))))
 }
 
@@ -50,7 +50,7 @@ testEmptyCombine <- function() {
 }
 
 testAnnotatedDataFrameCombine <- function() {
-    options(warn=-1)
+    oldw <- options("warn")
     ## duplicate sampleNames
     checkTrue(identical(obj1, combine(obj1,obj1)))
 
@@ -63,7 +63,10 @@ testAnnotatedDataFrameCombine <- function() {
     ## warning about coercing pData factors
     obj2a <- obj2
     pData(obj2a)[["x"]] <- factor(letters[1:10])
+    on.exit(options(oldw))
+    options(warn=2)
     checkException(combine(obj1,obj2a), silent=TRUE)
+    options(oldw)
 
     ## varMetadata with different numbers of columns
     obj4 <- obj2
@@ -83,7 +86,7 @@ testAnnotatedDataFrameCombine <- function() {
     obj3 <- obj2
     varMetadata(obj3)[,1:2] <- varMetadata(obj3)[,4:3]
     colnames(varMetadata(obj3)) <- colnames(varMetadata(obj2))
-    checkException(combine(obj1, obj3), silent=TRUE)
+    checkException(suppressWarnings(combine(obj1, obj3)), silent=TRUE)
 
     ## varMetadata extra columns
     obj5 <- obj2
@@ -96,9 +99,8 @@ testAnnotatedDataFrameCombine <- function() {
 
     ## varMetadata with conflicting information (NAs)
     obj6 <- obj2
-    varMetadata(obj6)["class"] <- NA
     varMetadata(obj6)[2,"typeof"] <- NA
-    checkException(combine(obj1, obj6), silent=TRUE)
+    checkException(suppressWarnings(combine(obj1, obj6)), silent=TRUE)
 }
 
 testVarMetadataAssign <- function() {
@@ -115,11 +117,15 @@ testMetadataFactors <- function() {
     rownames(pd) = "Z"
     a = new("AnnotatedDataFrame", data=pd,  varMetadata=vmd)
 
-    ## factor recode should throw an error
+    ## factor recode should throw a warning
+    oldw=options("warn")
+    on.exit(options(oldw))
+    options(warn=2)
     pd  = data.frame(covar=LETTERS[1])
     rownames(pd) = LETTERS[1]
     b = new("AnnotatedDataFrame", data=pd,  varMetadata=vmd)
     checkException(combine(a,b), silent=TRUE)
+    options(oldw)
 }
 
 testNoSharedCols <- function() {
@@ -137,7 +143,7 @@ testNoSharedCols <- function() {
 
 testPhenoDataFactors <- function() {
     data(sample.ExpressionSet)
-    suppressMessages(obj1 <- updateObject(sample.ExpressionSet))
+    suppressWarnings(obj1 <- updateObject(sample.ExpressionSet))
     obj2 <- obj1
     sampleNames(obj2) <- letters[1:dim(obj1)[[2]]]
     obj1 <- phenoData(obj1)

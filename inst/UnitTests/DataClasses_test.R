@@ -3,5 +3,5 @@ testNew <- function() {
     nms <- ls(getNamespace("Biobase"),all=TRUE)
     classes <- gsub(".__C__", "", nms[grep(".__C__", nms)])
     isVirtual <- sapply(classes, function(nm) getClass(nm)@virtual)
-    lapply(classes[!isVirtual], new)
+    res <- lapply(classes[!isVirtual], function(x) suppressWarnings(new(x)))
 }

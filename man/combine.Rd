@@ -44,11 +44,10 @@ combine(x, y, ...)
       represented in both arguments is represented only once in the
       result. To perform this operation, \code{combine} makes sure that data
       in shared rows and columns are identical in the two
-      data.frames. Data differences in shared rows and columns cause an
+      data.frames. Data differences in shared rows and columns usually cause an
       error. \code{combine} issues a warning when a column is a
       \code{\link{factor}} and the levels of the factor in the two
-      \code{data.frame}s are different; this will usually result in an
-      error, as illustrated in the example.}
+      data.frames are different.}
   }
   Additional \code{combine} methods are defined for
   \code{\link{AnnotatedDataFrame}},
