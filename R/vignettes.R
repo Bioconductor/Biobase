@@ -27,9 +27,10 @@ getPkgVigs = function(package=NULL) {
         file.path(dirname(dirname(vigrds[j])), "doc", f))
       tit = v[, "Title"]
       tit[tit==""] = as.character(NA)
-      rv= data.frame(package  = I(pkgs[j]),
-                     filename = I(f),
-                     title    = I(tit))
+      rv= data.frame(package  = pkgs[j],
+                     filename = f,
+                     title    = tit,
+                     stringsAsFactors=FALSE)
       pkgVigs[[j]] = rv
     }
   } ## for j
