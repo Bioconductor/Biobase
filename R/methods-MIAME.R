@@ -44,9 +44,20 @@ setMethod("show", "MIAME",
          cat("  No abstract available.\n")
       if(any(Index))
          cat("  Information is available on:", paste(tmp[Index],collapse=", "),"\n")
-      if (length(notes(object))>0)
-        cat("  notes:\n    ", paste(notes(object), sep="\n    "), "\n")
-   }
+      nO = notes(object)
+      if (length(nO) > 0) {
+        cat("  notes:\n" )
+        if( is.list(nO) ) {
+           nms = names(nO)
+           ##a print width for the values, so we stay inside the margins
+           pw = options("width")[[1]] - 6
+           for(i in 1:length(nO) ) {
+              cat("   ", nms[i], ":", sep="")
+              cat("     ", strbreak(nO[[i]], width=pw, exdent=0), sep="\n      ")
+           }
+        }
+      }
+}
 )
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("abstract","MIAME",function(object) object@abstract)
