@@ -408,7 +408,7 @@ setMethod("esApply",
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 read.exprSet <- function(exprs, se.exprs, phenoData, annotation,
                          description, notes, seps = "\t" ) {
-    .Deprecated(msg='read.exprSet is deprecated, use readExpresionSet instead')
+    .Deprecated(msg='read.exprSet is deprecated, use readExpressionSet instead')
    if(missing(exprs))
       stop("exprs can not be missing!")
    # Read exprs
