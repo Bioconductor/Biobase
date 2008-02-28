@@ -312,9 +312,11 @@ setMethod("selectSomeIndex",
         if (nrow(metadata)>length(meta))
             cat("    (", nrow(metadata), " total)\n", sep="")
         if (ncol(metadata)>1) {
-            mnms <- selectSome(colnames(metadata)[-1], maxToShow=4)
-            cat("  additional ", lbls$varMetadata, ": ", paste(mnms, collapse=", "),
-                "\n", sep="")
+            mcolnames <- colnames(metadata)
+            mnms <- selectSome(mcolnames[mcolnames!="labelDescription"],
+                               maxToShow=4)
+            cat("  additional ", lbls$varMetadata, ": ",
+                paste(mnms, collapse=", "), "\n", sep="")
         }
     } else cat(" none\n")
 }

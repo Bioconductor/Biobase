@@ -16,4 +16,5 @@ NEW FEATURES
 
 BUG FIXES
 
-
+    o AnnotatedDataFrame 'show' listed additional varMetadata column
+      names incorrectly when labelDescription was not thie first.
