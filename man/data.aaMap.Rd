@@ -1,7 +1,7 @@
 \name{data:aaMap}
 \alias{data:aaMap}
 \alias{aaMap}
-\non_function{}
+\docType{data}
 \title{Dataset: Names and Characteristics of Amino Acids }
 \usage{data(aaMap)}
 \description{

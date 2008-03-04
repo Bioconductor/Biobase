@@ -83,7 +83,6 @@
      \item{\code{annotation(MultiSet)}, \code{annotation(MultiSet,value)<-}}{See \code{\link{eSet-class}}}
      \item{\code{combine(MultiSet,MultiSet)}:}{See \code{\link{eSet-class}}}
      \item{\code{storageMode(eSet)}, \code{storageMode(eSet,character)<-}:}{See \code{\link{eSet-class}}}
-     \item{\code{reporterNames(MultiSet)}, \code{reporterNames(MultiSet,value)<-}:}{DEPRECATED}
   }
 
   Standard generic methods:

@@ -394,13 +394,10 @@ testSetAs <- function() {
   opts <- options()
   options(warn=-1)
   ## would like to be able to specify storage.mode, but how to specify?...
-  data(sample.exprSet)
-  suppressMessages(e <- as(sample.exprSet,"ExpressionSet"))
-  checkNewAndOld(e,sample.exprSet)
-
-  data(sample.exprSet.1)
-  e1 <- as(sample.exprSet.1,"ExpressionSet")
-  checkNewAndOld(e1,sample.exprSet.1)
+  test.exprSet <- data(file.path("VersionedClass_data", "devel", "exprSet.Rda"))
+  data(test.exprSet)
+  suppressMessages(e <- as(test.exprSet,"ExpressionSet"))
+  checkNewAndOld(e,test.exprSet)
 
   library(golubEsets)
   data(Golub_Merge)

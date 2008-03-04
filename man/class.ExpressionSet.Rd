@@ -2,14 +2,10 @@
 \docType{class}
 \alias{class:ExpressionSet}
 \alias{ExpressionSet}
-
 \alias{ExpressionSet-class}
 
 \alias{exprs,ExpressionSet-method}
 \alias{exprs<-,ExpressionSet,matrix-method}
-
-\alias{geneNames,ExpressionSet-method}
-\alias{geneNames<-,ExpressionSet,character-method}
 
 \alias{initialize,ExpressionSet-method}
 \alias{coerce,exprSet,ExpressionSet-method}
@@ -19,6 +15,7 @@
 \alias{updateObject,ExpressionSet-method}
 \alias{makeDataPackage,ExpressionSet-method}
 \alias{as.data.frame.ExpressionSet}
+\alias{write.exprs}
 \alias{write.exprs,ExpressionSet-method}
 
 \title{
@@ -118,10 +115,6 @@
      \item{\code{assayData(ExpressionSet)}:}{See \code{\link{eSet}}}
      \item{\code{sampleNames(ExpressionSet)} and \code{sampleNames(ExpressionSet)<-}:}{See \code{\link{eSet}}}
      \item{\code{featureNames(ExpressionSet)}, \code{featureNames(ExpressionSet, value)<-}:}{See \code{\link{eSet}}}
-           \item{\code{geneNames(ExpressionSet)} and
-           \code{geneNames(ExpressionSet, value)<-}:}{Deprecated.  Has
-           the same effect as \code{featureNames} which is the preferred
-           accessor of expression matrix row names.}
      \item{\code{dims(ExpressionSet)}:}{See \code{\link{eSet}}}
      \item{\code{phenoData(ExpressionSet)}, \code{phenoData(ExpressionSet,value)<-}:}{See \code{\link{eSet}}}
      \item{\code{varLabels(ExpressionSet)}, \code{varLabels(ExpressionSet, value)<-}:}{See \code{\link{eSet}}}
@@ -134,7 +127,6 @@
      \item{\code{annotation(ExpressionSet)}, \code{annotation(ExpressionSet,value)<-}}{See \code{\link{eSet}}}
      \item{\code{combine(ExpressionSet,ExpressionSet)}:}{See \code{\link{eSet}}}
      \item{\code{storageMode(ExpressionSet)}, \code{storageMode(ExpressionSet,character)<-}:}{See \code{\link{eSet}}}
-     \item{\code{reporterNames(ExpressionSet)}, \code{reporterNames(ExpressionSet,value)<-}:}{DEPRECATED}
   }
 
   Standard generic methods:
@@ -152,7 +144,7 @@
 	packageName, packageVersion, license, biocViews, filePath,
 	...)}}{Create a data package based on an ExpressionSet
       object. See \code{\link{makeDataPackage}}.}
-     \item{\code{as(exprSet,ExpressionSet)}:}{Coerce \code{exprSet} too \code{ExpressionSet}.}
+     \item{\code{as(exprSet,ExpressionSet)}:}{Coerce \code{exprSet} to \code{ExpressionSet}.}
      \item{\code{as(eSet,ExpressionSet)}:}{Coerce the \code{eSet} portion of an object to \code{ExpressionSet}.}
      \item{\code{show(ExpressionSet)}}{See \code{\link{eSet}}}
      \item{\code{dim(ExpressionSet)}, \code{ncol}}{See \code{\link{eSet}}}
@@ -179,20 +171,14 @@ new("ExpressionSet",
 data(sample.ExpressionSet)
 updateObject(sample.ExpressionSet)
 
-# update existing exprSet-like class to ExpressionSet
-data(sample.exprSet)
-expressionSet <- as(sample.exprSet,"ExpressionSet")
-expressionSet
-
 # information about assay and sample data
-featureNames(expressionSet)[1:10]
-sampleNames(expressionSet)[1:5]
-phenoData(expressionSet)
-experimentData(expressionSet)
+featureNames(sample.ExpressionSet)[1:10]
+sampleNames(sample.ExpressionSet)[1:5]
+phenoData(sample.ExpressionSet)
+experimentData(sample.ExpressionSet)
 
 # subset: first 10 genes, samples 2, 4, and 10
-expressionSet <- as(sample.exprSet,"ExpressionSet")
-expressionSet[1:10,c(2,4,10)]
+expressionSet <- sample.ExpressionSet[1:10,c(2,4,10)]
 
 # named features and their expression levels
 subset <- expressionSet[c("AFFX-BioC-3_at","AFFX-BioDn-5_at"),]

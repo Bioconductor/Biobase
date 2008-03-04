@@ -58,25 +58,21 @@
 \section{Methods}{
    Class-specific methods:
    \describe{
-      \item{\code{abstract(MIAME)}:}{An accessor function for \code{abstract}}
+      \item{\code{abstract(MIAME)}:}{An accessor function for \code{abstract}.}
       \item{\code{combine(MIAME,MIAME)}:}{Combine two objects of \code{MIAME-class}, issuing warnings when ambiguities encountered.}
-      \item{\code{expinfo(MIAME)}:}{An accessor function for \code{name}, \code{lab}, \code{contact}, \code{title}, and \code{url}}
-      \item{\code{hybridizations(MIAME)}:}{ An accessor function for \code{hybridizations} }
-      \item{\code{normControls(MIAME)}:}{ An accessor function for \code{normControls} }
-      \item{\code{notes(MIAME), notes(MIAME) <- value}:}{ Accessor
-	functions for \code{other}; duplicated here for compatibility
-	with the \code{exprSet} class. \code{notes(MIAME) <- character}
-	\emph{appends} character to notes; use \code{notes(MIAME) <-
-	  list} to replace the notes entirely.}
-      \item{\code{otherInfo(MIAME)}:}{ An accessor function for \code{other} }
-      \item{\code{preproc(MIAME)}:}{ An accessor function for \code{preprocessing} }
-      \item{\code{pubMedIds(MIAME), pubMedIds(MIAME) <- value}:}{ Accessor function for \code{pubMedIds}}
-      \item{\code{samples(MIAME)}:}{ An accessor function for
-	\code{samples} }
+      \item{\code{expinfo(MIAME)}:}{An accessor function for \code{name}, \code{lab}, \code{contact}, \code{title}, and \code{url}.}
+      \item{\code{hybridizations(MIAME)}:}{An accessor function for \code{hybridizations}.}
+      \item{\code{normControls(MIAME)}:}{An accessor function for \code{normControls}.}
+      \item{\code{notes(MIAME), notes(MIAME) <- value}:}{Accessor functions for \code{other}. \code{notes(MIAME) <- character}
+	\emph{appends} character to notes; use \code{notes(MIAME) <- list} to replace the notes entirely.}
+      \item{\code{otherInfo(MIAME)}:}{An accessor function for \code{other}.}
+      \item{\code{preproc(MIAME)}:}{An accessor function for \code{preprocessing}.}
+      \item{\code{pubMedIds(MIAME), pubMedIds(MIAME) <- value}:}{Accessor function for \code{pubMedIds}.}
+      \item{\code{samples(MIAME)}:}{An accessor function for \code{samples}.}
    }
    Standard generic methods:
    \describe{
-     \item{\code{updateObject(object, ..., verbose=FALSE)}}{Update instance to current version, if necessary. See \code{\link{updateObject}}}
+     \item{\code{updateObject(object, \dots, verbose=FALSE)}}{Update instance to current version, if necessary. See \code{\link{updateObject}}}
      \item{\code{isCurrent(object)}}{Determine whether version of object is current. See \code{\link{isCurrent}}}
      \item{\code{isVersioned(object)}}{Determine whether object contains a 'version' string describing its structure . See \code{\link{isVersioned}}}
       \item{\code{show(MIAME)}:}{Renders information about the MIAME information }

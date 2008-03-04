@@ -71,7 +71,7 @@ dumpPackTxt <- function (package) {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
  ##strictly internal, not for export
- ##take a phenoData object and create a valid - sort of - format
+ ##take an AnnotatedDataFrame object and create a valid format
  ## section for a man page
  pD2Rd <- function(pD) {
    if(!inherits(pD, "AnnotatedDataFrame") )

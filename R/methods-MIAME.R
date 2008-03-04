@@ -1,6 +1,5 @@
-updateOldMiame = function(x) {
-    .Deprecated("updateObject(x)", "Biobase")
-    updateObject(x)
+updateOldMiame <- function(x) {
+    .Defunct("updateObject", "Biobase")
 }
 
 setMethod("isCurrent", signature(object="MIAME", value="missing"),

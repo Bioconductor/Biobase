@@ -18,6 +18,6 @@ dims(object)
 }
 \author{Biocore}
 
-\seealso{\code{\link{exprSet}}, \code{\link{eSet-class}} }
+\seealso{\code{\link{eSet-class}}}
 
 \keyword{manip}

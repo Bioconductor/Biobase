@@ -6,24 +6,22 @@
 }
 
 \description{
-   \code{esApply} is a wrapper to \code{apply} for use with \code{ExpressionSet}s and
-   (deprecated) \code{exprSet}s. The application of a function to rows
-   of an expression array usually involves variables in
-   \code{pData}. \code{esApply} uses a special evaluation paradigm
+   \code{esApply} is a wrapper to \code{apply} for use with \code{ExpressionSet}s.
+   The application of a function to rows of an expression array usually involves
+   variables in \code{pData}. \code{esApply} uses a special evaluation paradigm
    to make this easy. The function \code{FUN} may reference any data in
    \code{pData} by name.
 }
 \usage{
-esApply(X, MARGIN, FUN, ...)
+esApply(X, MARGIN, FUN, \dots)
 }
 
 \arguments{
-   \item{X}{An instance of class \code{\link{ExpressionSet}} or
-     (deprecated) \code{exprSet}.}
+   \item{X}{An instance of class \code{\link{ExpressionSet}}.}
    \item{MARGIN}{The margin to apply to, either 1 for rows (samples) or
      2 for columns (features).}
    \item{FUN}{Any function }
-   \item{...}{Additional parameters for \code{FUN}.}
+   \item{\dots}{Additional parameters for \code{FUN}.}
 }
 
 \details{
@@ -57,54 +55,46 @@ f <- function(x) {
     t.test(xx[[1]], xx[[2]])$p.value
 }
 res <- esApply(sample.ExpressionSet, 1, f)
-    
+
 ## same, but using a variable passed in the function call
 
 f <- function(x, s) {
     xx <- split(x, s)
-    mean(xx[[1]])-mean(xx[[2]])
+    mean(xx[[1]]) - mean(xx[[2]])
 }
-sex=sample.ExpressionSet[["sex"]]
-res <- esApply(sample.ExpressionSet, 1, f, s=sex)
+sex <- sample.ExpressionSet[["sex"]]
+res <- esApply(sample.ExpressionSet, 1, f, s = sex)
 
-## Earlier examples, with (deprecated) sample.exprSet.1
-
-data(sample.exprSet.1)
-
-# we know that eset has covariates in the pData called "cov1" and "cov2"
-# here cov1 is an unbound value, it will be resolved by using the pData
-# here are two functions conforming to the esApply protocol
-
+# obtain the p-value of the t-test for sex difference
 mytt.demo <- function(y) {
- ys <- split( y, cov1 )
- t.test( ys[[1]], ys[[2]] )$p.value
- }
-
-# obtain the p value of the slope associated with cov2, adjusting for cov1
-# (if we were concerned with sign we could save the z statistic instead at coef[3,3]
-myreg.demo <- function( y ) {
-   summary(lm(y~cov1+cov2))$coef[3,4]
+ ys <- split(y, sex)
+ t.test(ys[[1]], ys[[2]])$p.value
 }
+sexPValue <- esApply(sample.ExpressionSet, 1, mytt.demo)
 
-newt <- esApply( sample.exprSet.1, 1, mytt.demo )
+# obtain the p-value of the slope associated with score, adjusting for sex
+# (if we were concerned with sign we could save the z statistic instead at coef[3,3]
+myreg.demo <- function(y) {
+   summary(lm(y ~ sex + score))$coef[3,4]
+}
+scorePValue <- esApply(sample.ExpressionSet, 1, myreg.demo)
 
 # a resampling method
-resamp <- function( ESET ) {
+resamp <- function(ESET) {
  ntiss <- ncol(exprs(ESET))
- newind <- sample(1:ntiss, size=ntiss, replace=TRUE)
+ newind <- sample(1:ntiss, size = ntiss, replace = TRUE)
  ESET[newind,]
- }
+}
 
 # a filter
-q3g100filt <- function( eset ) {
- apply( exprs(eset), 1, function(x)quantile(x,.75)>100 )
- }
+q3g100filt <- function(eset) {
+ apply(exprs(eset), 1, function(x) quantile(x,.75) > 100)
+}
 
 # filter after resampling and then apply
 set.seed(123)
-rest <- esApply( { bool <- q3g100filt(resamp(sample.exprSet.1)); sample.exprSet.1[bool,] }, 1,
-mytt.demo )
-
+rest <- esApply({bool <- q3g100filt(resamp(sample.ExpressionSet)); sample.ExpressionSet[bool,]},
+                1, mytt.demo)
 }
 \keyword{models}
 \keyword{methods}

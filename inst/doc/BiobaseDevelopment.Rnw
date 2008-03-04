@@ -311,22 +311,12 @@ very recently an \R{} object could not \Rfunction{contain} an
 \Rclass{environment}.
 
 The \Robject{assayData} slot of \ExpressionSet{} objects must contain
-a matrix named \Robject{exprs}. This is different from the structure
-of an \Robject{exprSet}, which was expected to contain a slot for
-\Robject{exprs} and \Robject{se.exprs} (containing an measure of
-uncertain associated with expression measure). The reason for removing
-\Robject{se.exprs} from \ExpressionSet is pragmatic: many
-\Robject{exprSet} objects did not contain an \Robject{se.exprs}
-object. The frequent absence of a data element means that effective
-methods cannot be written for the class -- a developer cannot easily
-write methods for \Robject{exprSet} that anticipate an
-\Robject{se.exprs}, because many objects the method is supposed to
-work on may not have the necessary data. Nonetheless, the
-\ExpressionSet{} validity method tries to be liberal -- it guarantees
-that the object has an \Robject{exprs} element, but allows for other
-elements too. The prudent developer wanting consistent additional data
-elements should derive a class from \ExpressionSet{} that enforces the
-presence of their desired elements.
+a matrix named \Robject{exprs}. Nonetheless, the \ExpressionSet{}
+validity method tries to be liberal -- it guarantees that the object
+has an \Robject{exprs} element, but allows for other elements too. The
+prudent developer wanting consistent additional data elements should
+derive a class from \ExpressionSet{} that enforces the presence of
+their desired elements.
 
 The \Rclass{AssayData} class allows for data elements to be stored in
 three different ways (see \Rfunction{?storageMode} and
@@ -596,12 +586,12 @@ more efficient routines.
 
 The information on \R{} and \Biobase{} versions is present in \eSet{}
 derived classes because \eSet{} contains \Rclass{VersionedBiobase}. On
-the other hand, \Rclass{phenoData} contains \Rclass{Versioned}, and
+the other hand, \Rclass{AnnotatedDataFrame} contains \Rclass{Versioned}, and
 has only information about its own class version.
-<<classVersion-phenoData>>=
-classVersion(new("phenoData"))
+<<classVersion-AnnotatedDataFrame>>=
+classVersion(new("AnnotatedDataFrame"))
 @ 
-The rationale for this is that \Rclass{phenoData} is and will likely
+The rationale for this is that \Rclass{AnnotatedDataFrame} is and will likely
 remain relatively simple, and details about \R{} and \Biobase{} are
 probably irrelevant to its use. On the other hand, some aspects of
 \eSet{} and the algorithms that operate on them are more cutting edge

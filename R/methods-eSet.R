@@ -36,10 +36,7 @@ setMethod("initialize",
                             paste(nms[dupNames], collapse="' '"),
                             "' also present in 'assayData'; argument(s) ignored")
               }
-              if (is(phenoData,"phenoData")) {
-                  warning("updating phenoData argument to 'AnnotatedDataFrame'", call.=FALSE)
-                  phenoData <- as(phenoData,"AnnotatedDataFrame")
-              } else if (!missing(phenoData)) {
+              if (!missing(phenoData)) {
                   checkClass(phenoData, "AnnotatedDataFrame", class(.Object))
               }
               dimLabels(phenoData) <- c("sampleNames", "sampleColumns")
@@ -64,23 +61,23 @@ setMethod("initialize",
           })
 
 updateOldESet <- function(from, toClass, ...) {  # to MultiExpressionSet
-  metadata <- varMetadata(from)
+  metadata <- phenoData(from)@varMetadata
   if (all(dim(metadata)==0)) {
     warning("replacing apparently empty varMetadata")
-    metadata <- data.frame(numeric(ncol(pData(from))))[,FALSE]
+    metadata <- data.frame(numeric(ncol(phenoData(from)@pData)))[,FALSE]
   }
   if (!is.null(metadata[["varName"]])) {
     row.names(metadata) <- metadata[["varName"]]
     metadata[["varName"]] <- NULL
-  } else if (!is.null(names(pData(from)))) {
-    row.names(metadata) <- names(pData(from))
+  } else if (!is.null(names(phenoData(from)@pData))) {
+    row.names(metadata) <- names(phenoData(from)@pData)
   }
   if (!is.null(metadata[["varLabels"]])) {
     names(metadata)[names(metadata)=="varLabels"] <- "labelDescription"
     metadata[["labelDescription"]] <- as.character(metadata[["labelDescription"]])
   }
   ## phenoData
-  pData <- pData(from)
+  pData <- phenoData(from)@pData
   phenoData <- new("AnnotatedDataFrame", data=pData, varMetadata=metadata)
   ## sampleNames
   if (any(sampleNames(assayData(from))!=sampleNames(phenoData))) {
@@ -588,35 +585,23 @@ setMethod("combine",
           })
 
 ##
-## Deprecated
+## Defunct methods
 ##
 
 setMethod("reporterNames", "eSet", function(object) {
-  .Deprecated("featureNames", "Biobase")
-  featureNames(object)
+  .Defunct("featureNames", "Biobase")
 })
-
 setReplaceMethod("reporterNames", c("eSet", "character"), function(object, value) {
-  .Deprecated("featureNames<-", "Biobase")
-  featureNames(object) <- value
+  .Defunct("featureNames<-", "Biobase")
 })
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("eList", "eSet", function(object) {
-  .Deprecated("assayData", "Biobase")
-  assayData(object)
+  .Defunct("assayData", "Biobase")
 })
 setReplaceMethod("eList", c("eSet", "AssayData"), function(object, value) {
-  .Deprecated("assayData<-", "Biobase")
-  assayData(object) <- value
+  .Defunct("assayData<-", "Biobase")
 })
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-## An extractor for named experimental data
-## FIXME: how much do we want to do to ensure that these are matrices?
-## this FIXME is still valid in the new design!  I am not sure we
-## want them to be required to be matrices.
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 setMethod("getExpData", c("eSet", "character"), function(object, name) {
-  .Deprecated("assayData", "Biobase")
-  assayData(object)[[name]]
+  .Defunct("assayData", "Biobase")
 })

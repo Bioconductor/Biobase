@@ -18,7 +18,6 @@
 \alias{assayDataElement<-}
 \alias{assayDataElementNames}
 \alias{assayDataElementReplace}
-\alias{coerce,exprSet,eSet-method}
 \alias{combine,eSet,ANY-method}
 \alias{combine,eSet,eSet-method}
 \alias{description,eSet-method}
@@ -40,7 +39,6 @@
 \alias{fvarMetadata,eSet-method}
 \alias{fvarMetadata<-,eSet,data.frame-method}
 \alias{initialize,eSet-method}
-\alias{getExpData,eSet,character-method}
 \alias{ncol,eSet-method}
 \alias{notes,eSet-method}
 \alias{notes<-,eSet,ANY-method}
@@ -52,7 +50,6 @@
 \alias{pubMedIds<-,eSet,character-method}
 \alias{preproc,eSet-method}
 \alias{preproc<-,eSet-method}
-\alias{reporterNames,eSet-method}
 \alias{sampleNames,eSet-method}
 \alias{sampleNames<-,eSet,ANY-method}
 \alias{show,eSet-method}
@@ -69,9 +66,6 @@
 
 \alias{listOrEnv}
 \alias{SW}
-\alias{SWPD}
-\alias{swrep}
-\alias{golubMergeSub}
 
 \concept{exprs}
 \concept{annotation}
@@ -85,9 +79,7 @@
 \title{
   Class to Contain High-Throughput Assays and Experimental Metadata
 }
-
 \description{
-
   Container for high-throughput assays and experimental
   metadata. Classes derived from \code{eSet} contain one or more
   identical-sized matricies as \code{assayData} elements. Derived
@@ -96,14 +88,8 @@
 
   \code{eSet} object cannot be instantiated directly; see the examples
   for useage.
-
 }
-
-% \section{Extends}{
-%    Directly extends class \code{\link{annotatedDataset}}.
-% }
 \section{Creating Objects}{
-
   \code{eSet} is a virtual class, so instances cannot be created.
 
   Objects created under previous definitions of \code{eSet-class} can be
@@ -182,7 +168,7 @@
        can most reliably be accessed with, e.g., \code{assayData(obj)[["se.exprs"]]}.}
      \item{\code{experimentData(object)},\code{experimentData(object) <- value}:}{Access
        and set details of experimental methods}
-     \item{\code{description(object)},\code{description(object) <- value}:}{Synonymous with experimentData; included for compatibility with \code{exprSet}.}
+     \item{\code{description(object)},\code{description(object) <- value}:}{Synonymous with experimentData.}
      \item{\code{notes(object)},\code{notes(object) <- value}:}{
        \code{signature(object="eSet", value="list")} Retrieve and set unstructured notes associated with \code{eSet}.
        \code{signature(object="eSet", value="character")} As with
@@ -207,8 +193,6 @@
        of \code{\link{assayData}}. Can be used to 'unlock' environments,
        or to change between \code{list} and \code{environment} modes of
        storing \code{assayData}.}
-     \item{\code{reporterNames(object)}, \code{reporterNames(object) <-
-	 value}:}{DEPRECATED, see \code{featureNames}}
   }
   Standard generic methods:
   \describe{

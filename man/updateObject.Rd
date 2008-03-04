@@ -12,7 +12,6 @@
 
 \title{Update an object to its current class definition}
 \description{
-
   These generic functions return an instance of \code{object} updated to
   its current class definition (or to the class definition of
   \code{template}, in the case of \code{updateObjectTo}).
@@ -27,7 +26,7 @@
   object is valid (see \code{\link[methods]{validObject}}). By default,
   \code{updateObject} has the following behaviors:
   \describe{
-    \item{\code{updateObject(ANY, ..., verbose=FALSE)}}{By default,
+    \item{\code{updateObject(ANY, \dots, verbose=FALSE)}}{By default,
       \code{updateObject} uses heuristic methods to determine whether
       the object should be the `new' S4 type (introduced in R 2.4.0),
       but is not. If the heuristics indicate an update is required, 
@@ -36,12 +35,12 @@
 	updated object, or issues an error if an update is required but
 	not possible. The optional
       named argument \code{verbose} causes a message to be printed describing
-      the action. Arguments \code{...} are passed to \code{link{updateObjectFromSlots}}.}
-    \item{\code{updateObject(list, ..., verbose=FALSE)}}{Visit each element in \code{list},
-      applying \code{updateObject(list[[elt]], ..., verbose=verbose)}.}
-    \item{\code{updateObject(environment, ..., verbose=FALSE)}}{Visit
+      the action. Arguments \code{\dots} are passed to \code{link{updateObjectFromSlots}}.}
+    \item{\code{updateObject(list, \dots, verbose=FALSE)}}{Visit each element in \code{list},
+      applying \code{updateObject(list[[elt]], \dots, verbose=verbose)}.}
+    \item{\code{updateObject(environment, \dots, verbose=FALSE)}}{Visit
       each element in \code{environment}, applying
-      \code{updateObject(environment[[elt]], ..., verbose=verbose)}}
+      \code{updateObject(environment[[elt]], \dots, verbose=verbose)}}
   }
 
   \code{updateObjectTo} requires that the class of the returned object
@@ -58,12 +57,12 @@
 
   Sample methods are illustrated below.
 
-  \code{updateObjectFromSlots(object, objclass = class(object), ..., verbose=FALSE)} is a
+  \code{updateObjectFromSlots(object, objclass = class(object), \dots, verbose=FALSE)} is a
   utility function that identifies the intersection of slots defined in
   the \code{object} instance and \code{objclass} definition. The
   corresponding elements in \code{object} are then updated (with
-  \code{updateObject(elt, ..., verbose=verbose)}) and used as arguments to
-  a call to \code{new(class, ...)}, with \code{...} replaced by slots
+  \code{updateObject(elt, \dots, verbose=verbose)}) and used as arguments to
+  a call to \code{new(class, \dots)}, with \code{\dots} replaced by slots
   from the original object. If this fails, \code{updateObjectFromSlots}
   then tries \code{new(class)} and assigns slots of \code{object} to
   the newly created instance.
@@ -74,9 +73,9 @@
   \code{object} cannot be determined by accessing known slots.
 }
 \usage{
-updateObject(object, ..., verbose=FALSE)
-updateObjectTo(object, template, ..., verbose=FALSE)
-updateObjectFromSlots(object, objclass=class(object), ..., verbose=FALSE)
+updateObject(object, \dots, verbose=FALSE)
+updateObjectTo(object, template, \dots, verbose=FALSE)
+updateObjectFromSlots(object, objclass=class(object), \dots, verbose=FALSE)
 getObjectSlots(object)
 }
 \arguments{
@@ -86,7 +85,7 @@ getObjectSlots(object)
   \item{objclass}{Optional character string naming the class of the object to be created.} 
   \item{verbose}{A logical, indicating whether information about the
     update should be reported. Use \code{message} to report this.}
-  \item{...}{Additional arguments, for use in specific update methods}
+  \item{\dots}{Additional arguments, for use in specific update methods.}
 }
 \value{
   \code{updateObject} returns a valid instance of \code{object}.
@@ -104,12 +103,6 @@ getObjectSlots(object)
 ## update object, same class
 data(sample.ExpressionSet)
 obj <- updateObject(sample.ExpressionSet)
-
-\dontrun{
-## generally, use 'as' to coerce objects between classes
-data(sample.exprSet)
-obj <- as(sample.exprSet, "ExpressionSet")
-}
 
 setClass("UpdtA", representation(x="numeric"), contains="data.frame")
 setMethod("updateObject", signature(object="UpdtA"),

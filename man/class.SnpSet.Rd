@@ -85,7 +85,6 @@
      \item{\code{annotation(SnpSet)}, \code{annotation(SnpSet,value)<-}}{See \code{\link{eSet}}}
      \item{\code{combine(SnpSet,SnpSet)}:}{See \code{\link{eSet}}}
      \item{\code{storageMode(eSet)}, \code{storageMode(eSet,character)<-}:}{See \code{\link{eSet}}}
-     \item{\code{reporterNames(SnpSet)}, \code{reporterNames(SnpSet,value)<-}:}{DEPRECATED}
   }
 
   Standard generic methods:

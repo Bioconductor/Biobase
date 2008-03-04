@@ -1,11 +1,9 @@
 setGeneric("abstract",        function(object) standardGeneric("abstract"))
-setGeneric("addVarMetadataEntry", function(object,vname,attname, attval) standardGeneric("addVarMetadataEntry"))
 setGeneric("aggenv",          function(object) standardGeneric("aggenv"))
 setGeneric("aggfun",          function(object) standardGeneric("aggfun"))
 setGeneric("annotation",      function(object) standardGeneric("annotation"))
 setGeneric("annotation<-",    function(object, value) standardGeneric("annotation<-"))
 setGeneric("annotatedDataFrameFrom", function(object, byrow, ...) standardGeneric("annotatedDataFrameFrom"))
-setGeneric("as.data.frame.exprSet", function(x, row.names=NULL, optional=FALSE, ...) standardGeneric("as.data.frame.exprSet"))
 setGeneric("assayData",       function(object)standardGeneric("assayData"))
 setGeneric("assayData<-",     function(object, value) standardGeneric("assayData<-"))
 setGeneric("channelNames",    function(object, ...) standardGeneric("channelNames"))
@@ -20,7 +18,6 @@ setGeneric("combine",
                }
            })
 setGeneric("content",         function(object) standardGeneric("content"))
-setGeneric("convertVarLabels",function(object) standardGeneric("convertVarLabels"))
 setGeneric("description",     function(object) standardGeneric("description"))
 setGeneric("description<-",   function(object, value) standardGeneric("description<-"))
 setGeneric("dims",            function(object) standardGeneric("dims"))
@@ -35,7 +32,6 @@ setGeneric("experimentData<-",function(object, value) standardGeneric("experimen
 setGeneric("expinfo",         function(object) standardGeneric("expinfo"))
 setGeneric("exprs",           function(object) standardGeneric("exprs"))
 setGeneric("exprs<-",         function(object, value) standardGeneric("exprs<-"))
-setGeneric("exprs2excel",     function(x,...) standardGeneric("exprs2excel"))
 setGeneric("featureNames",    function(object) standardGeneric("featureNames"))
 setGeneric("featureNames<-",  function(object, value) standardGeneric("featureNames<-"))
 setGeneric("featureData",     function(object) standardGeneric("featureData"))
@@ -49,16 +45,13 @@ setGeneric("fvarMetadata<-",  function(object, value) standardGeneric("fvarMetad
 setGeneric("geneNames",       function(object) standardGeneric("geneNames"))
 setGeneric("geneNames<-",     function(object, value) standardGeneric("geneNames<-"))
 setGeneric("getExpData",      function(object, name) standardGeneric("getExpData"))
-setGeneric("getUnits",        function(object, vname) standardGeneric("getUnits"))
-setGeneric("getVarMetadata",  function(object, vname, attname) standardGeneric("getVarMetadata"))
 setGeneric("hybridizations",  function(object) standardGeneric("hybridizations"))
 setGeneric("initfun",         function(object) standardGeneric("initfun"))
-setGeneric("iter",            function(object, covlab, f) standardGeneric("iter"))
 setGeneric("locked",          function(object) standardGeneric("locked"))
 setGeneric("makeDataPackage", function(object, author, email,
                                        packageName=deparse(substitute(object)),
                                        packageVersion=package_version("1.0.0"),
-                                       license="The Artistic License, Version 2.0",
+                                       license="Artistic-2.0",
                                        biocViews="ExperimentData",
                                        filePath=tempdir(), ...) standardGeneric("makeDataPackage"),
            signature="object")
@@ -74,8 +67,6 @@ setGeneric("preproc",         function(object) standardGeneric("preproc"))
 setGeneric("preproc<-",       function(object, value) standardGeneric("preproc<-"))
 setGeneric("pubMedIds",       function(object) standardGeneric("pubMedIds"))
 setGeneric("pubMedIds<-",     function(object, value) standardGeneric("pubMedIds<-"))
-setGeneric("reporterInfo",    function(object) standardGeneric("reporterInfo"))
-setGeneric("reporterInfo<-",  function(object, value) standardGeneric("reporterInfo<-"))
 setGeneric("reporterNames",   function(object) standardGeneric("reporterNames"))
 setGeneric("reporterNames<-", function(object, value) standardGeneric("reporterNames<-"))
 setGeneric("sampleNames",     function(object) standardGeneric("sampleNames"))
@@ -84,15 +75,13 @@ setGeneric("samples",         function(object) standardGeneric("samples"))
 setGeneric("se.exprs",        function(object) standardGeneric("se.exprs"))
 setGeneric("se.exprs<-",      function(object, value) standardGeneric("se.exprs<-"))
 setGeneric("selectChannels",  function(object, names, ...) standardGeneric("selectChannels"))
-setGeneric("split")
-setGeneric("selectSomeIndex",   function(object, ...) standardGeneric("selectSomeIndex"))
+setGeneric("selectSomeIndex", function(object, ...) standardGeneric("selectSomeIndex"))
 setGeneric("storageMode",     function(object) standardGeneric("storageMode"))
 setGeneric("storageMode<-",   function(object, value) standardGeneric("storageMode<-"))
 setGeneric("varLabels",       function(object) standardGeneric("varLabels"))
 setGeneric("varLabels<-",     function(object, value) standardGeneric("varLabels<-"))
 setGeneric("varMetadata",     function(object) standardGeneric("varMetadata"))
 setGeneric("varMetadata<-",   function(object, value) standardGeneric("varMetadata<-"))
-setGeneric("update2MIAME",    function(object) standardGeneric("update2MIAME"))
 setGeneric("write.exprs",     function(x,...) standardGeneric("write.exprs"))
 ## Version-related generics
 setGeneric("classVersion",    function(object) standardGeneric("classVersion"))
@@ -115,4 +104,3 @@ setGeneric("updateObjectTo",
                validObject(result)
                result
            })
-

@@ -1,12 +1,14 @@
 \name{reporter}
+\alias{data:reporter}
 \alias{reporter}
 \docType{data}
-\title{Example Data Frame Object for the ReporterInfo Slot}
+\title{Example data.frame representing reporter information}
 \description{
-  The \code{reporter} object is a 500 by 1 data frame.  The rows represent
-  the 500 probe ids in the \code{geneData} data.  The values in
+  The \code{reporter} object is a 500 by 1 data frame. The rows represent
+  the 500 probe ids in the \code{geneData} data. The values in
   \code{reporter} are the predefined probe types for the probes.
-  \code{reporter} is used to created the exprSet object \code{sample.exprSet}.  
+  \code{reporter} is used in conjunction with the \code{geneData} object
+  and its associates.  
 }
 \usage{data(reporter)}
 \format{
@@ -25,7 +27,6 @@
   \item{\code{_l_}}{LongProbeSet}
   \item{\code{_at}}{AntiSenseTarget}
   \item{\code{_st}}{SenseTarget}
-  
 }
 \source{
   Affymetrix GeneChip Expression Analysis Data Analysis Fundamentals (\url{http://www.affymetrix.com/Auth/support/downloads/manuals/data_analysis_fundamentals_manual.pdf})

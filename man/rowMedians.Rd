@@ -2,7 +2,6 @@
 \alias{rowMedians}
 \alias{rowMedians,matrix-method}
 \alias{rowMedians,ExpressionSet-method}
-\alias{rowMedians,exprSet-method}
 
 \title{Calculates the median for each row in a matrix}
 

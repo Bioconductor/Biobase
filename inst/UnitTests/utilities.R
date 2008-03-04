@@ -21,14 +21,11 @@ createCurrentInstances <- function(instanceDir = "VersionedClass_data") {
     } else cat("no instances need creating\n")
 }
 
-createComponentClasses <- function(exprSet, ExpressionSet, vers="devel", instanceDir = "VersionedClass_data") {
+createComponentClasses <- function(ExpressionSet, vers="devel", instanceDir = "VersionedClass_data") {
     MIAME <- experimentData(ExpressionSet)
     AnnotatedDataFrame <- phenoData(ExpressionSet)
-    phenoData <- phenoData(exprSet)
     cat("creating MIAME\n")
     save(MIAME, file=file.path(instanceDir, vers, "MIAME.Rda"))
     cat("creating AnnotatedDataFrame\n")
     save(AnnotatedDataFrame, file=file.path(instanceDir, vers, "AnnotatedDataFrame.Rda"))
-    cat("creating phenoData\n")
-    save(phenoData, file=file.path(instanceDir, vers, "phenoData.Rda"))
 }

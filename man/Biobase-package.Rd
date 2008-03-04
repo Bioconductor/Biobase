@@ -25,7 +25,7 @@
   \code{\link{package.version}}
 
   Data sets: \code{\link{aaMap}}, \code{\link{sample.ExpressionSet}},
-  \code{\link{sample.exprSet}}, \code{\link{geneData}}.
+  \code{\link{geneData}}.
 
   Introductory information is available from vignettes, type
   \code{openVignette()}.
@@ -33,10 +33,6 @@
   Full listing of documented articles is available in HTML view by
   typing \code{help.start()} and selecting \code{Biobase} package from the
   \code{Packages} menu or via \code{library(help="Biobase")}.
-
-  Signficant deprecated classes: \code{\link{exprSet}},
-  \code{\link{phenoData}}.
-
 }
 \author{
    O. Sklyar

@@ -166,7 +166,7 @@ testUpdateMiscPreviousInstances <- function() {
     on.exit(options(opts))
 
     rda <- list.files(system.file("UnitTests", "VersionedClass_data", package="Biobase"),
-                       full.names=TRUE, recursive=TRUE, pattern="^([^(ExpressionSet|exprSet)]).*\\.Rda")
+                       full.names=TRUE, recursive=TRUE, pattern="^([^(ExpressionSet)]).*\\.Rda")
     for (nm in rda) {
         env <- new.env(parent=emptyenv())
         load(nm, env)

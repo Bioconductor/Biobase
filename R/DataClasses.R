@@ -31,10 +31,7 @@ setClass("container",
    )
 )
 # ==========================================================================
-# phenoData: patient or experiment level data
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Consists of a 'data.frame' and some accompanying methods suited to handle
-# patient level data for microarrays
+# phenoData (DEFUNCT)
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setClass("phenoData",
    representation(
@@ -43,13 +40,7 @@ setClass("phenoData",
       varMetadata = "data.frame"
    ),
    contains="Versioned",
-   prototype = prototype(
-      new("Versioned", versions=c(phenoData="1.0.0")),
-      pData       = data.frame(matrix(nr=0,nc=0)),
-      varLabels   = list(),
-      varMetadata = data.frame(matrix(nr=0,nc=0))
-   ),
-   validity = function(object) validator.phenoData(object)
+   validity = function(object) "phenoData is defunct, use AnnotatedDataframe"
 )
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setOldClass("data.frame")
@@ -92,15 +83,11 @@ setClass("MIAME",
    )
 )
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# trick so that the old exprSet and Plobs works
+# trick so that Plobs works
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setClassUnion("characterORMIAME", c("MIAME", "character"))
 # ==========================================================================
-# annotatedDataset: virtual superset for 'exprSet', 'eSet' etc (Alan Katz)
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Currently defines 'phenoData' specific methods
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Uses: class phenoData
+# annotatedDataset (DEFUNCT)
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setClass("annotatedDataset",
    representation(
@@ -109,8 +96,7 @@ setClass("annotatedDataset",
       "VIRTUAL"
    ),
    contains=c("VersionedBiobase"),
-   prototype = prototype(
-       new("VersionedBiobase", versions=c(annotatedDataset="1.0.0")))
+   validity = function(object) "annotatedDataset is defunct"
 )
 # ==========================================================================
 # AnnotatedDataFrame: A data.frame, with annotations about columns named
@@ -163,7 +149,7 @@ setClass("eSet",
              dimLabels=c("featureNames", "featureColumns")),
            experimentData = new( "MIAME" ),
            annotation = character()))
-setClass("ExpressionSet",               # exprSet-like
+setClass("ExpressionSet",
          contains = "eSet",
          prototype = prototype(
            new("VersionedBiobase",
@@ -189,35 +175,18 @@ setClass("SnpSet",                      # call, callProbability
            new("VersionedBiobase",
                versions=c(classVersion("eSet"), SnpSet="1.0.0"))))
 # ==========================================================================
-# exprSet <== annotatedDataset: expression arrays and methods for processing them
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Based on: class 'annotatedDataset'
-# Uses: classes 'MIAME' and 'exprMatrix'
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Class union for the exprs and se.exprs slots of exprSet
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-if (!isClass("exprMatrix"))
-   setClassUnion("exprMatrix", c("matrix"))
+# exprSet (DEFUNCT)
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setClass("exprSet",
    representation(
-      exprs       = "exprMatrix",
-      se.exprs    = "exprMatrix",
+      exprs       = "matrix",
+      se.exprs    = "matrix",
       description = "characterORMIAME",
       annotation  = "character",
       notes       = "character"
    ),
    contains = c("annotatedDataset"), # contains VersionedBiobase implicitly
-   prototype = prototype(
-      new("VersionedBiobase",
-          versions=c(classVersion("annotatedDataset"), exprSet="1.0.0")),
-      exprs       = matrix(nr=0,nc=0),
-      se.exprs    = matrix(nr=0,nc=0),
-      description = new("MIAME"),
-      annotation  = "",
-      notes       = ""
-   ),
-   validity = function(object) validExprSet(object)
+   validity = function(object) "exprSet is defunct, use ExpressionSet"
 )
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 

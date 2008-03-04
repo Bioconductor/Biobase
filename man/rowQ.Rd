@@ -2,14 +2,13 @@
 \alias{rowQ}
 \alias{rowQ,matrix,numeric-method}
 \alias{rowQ,ExpressionSet,numeric-method}
-\alias{rowQ,exprSet,numeric-method}
 \alias{rowMin}
 \alias{rowMax}
 
 \title{A function to compute empirical row quantiles.}
 \description{
  This function computes the requested quantile for each row of a matrix,
- or of an \code{exprSet}.
+ or of an \code{ExpressionSet}.
 }
 \usage{
 rowQ(imat, which)
@@ -17,7 +16,7 @@ rowMax(imat)
 rowMin(imat)
 }
 \arguments{
-  \item{imat}{Either a matrix or an \code{ExpressionSet}. }
+  \item{imat}{Either a matrix or an \code{ExpressionSet}.}
   \item{which}{An integer indicating which order statistic should be returned.}
 }
 \details{
@@ -32,7 +31,7 @@ with the appropriate argument set.
  A vector of length equal to the number of rows of the input matrix containing
 the requested quantiles.
 }
-\author{ R. Gentleman }
+\author{R. Gentleman}
 
 \seealso{
  \code{\link{rowMedians}}.

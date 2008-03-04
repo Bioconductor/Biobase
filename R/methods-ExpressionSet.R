@@ -60,29 +60,31 @@ setMethod("initialize", "ExpressionSet",
 }
 
 setAs("exprSet", "ExpressionSet", function(from) {
-  desc <- description(from)
+  desc <- from@description
   desc <- 
     if (class(desc)!="MIAME") {
         warning("missing or mis-formed MIAME 'description' in original object; creating new, empty description")
         new("MIAME")
     } else updateObject(desc)
-  exprs <- assayData(from)
+  exprs <- from@exprs
+  phenoData <- as(from@phenoData, "AnnotatedDataFrame")
+  annotation <- from@annotation
   dims <- dim(exprs)
   if (all(dim(from@se.exprs) == dims)) {
     se.exprs <- from@se.exprs
     colnames(se.exprs) <- colnames(exprs)
     new("ExpressionSet",
-        phenoData=as(phenoData(from), "AnnotatedDataFrame"),
+        phenoData=phenoData,
         experimentData=desc,
-        annotation=annotation(from),
+        annotation=annotation,
         exprs=exprs,
         se.exprs=se.exprs)
   } else {
     warning("missing or mis-shaped 'se.exprs' in original object; creating ExpressionSet without se.exprs")
     new("ExpressionSet",
-        phenoData=as(phenoData(from), "AnnotatedDataFrame"),
+        phenoData=phenoData,
         experimentData=desc,
-        annotation=annotation(from),
+        annotation=annotation,
         exprs=exprs)
   }
 })
@@ -108,19 +110,14 @@ setReplaceMethod("exprs", signature(object="ExpressionSet",value="matrix"),
 
 setMethod("geneNames", signature(object="ExpressionSet"),
           function(object) {
-              .Deprecated("featureNames")
-              featureNames(object)
+              .Defunct("featureNames", "Biobase")
           })
-
-
 setReplaceMethod("geneNames", signature(object="ExpressionSet",
                                         value="character"),
           function(object, value) {
-              .Deprecated("featureNames")
-              ## FIXME: check length and uniqueness?
-              ##        call validObject?
-              featureNames(object) <- value
+              .Defunct("featureNames<-", "Biobase")
           })
+
 
 .esApply <- function(X, MARGIN, FUN, ...) {
     parent <- environment(FUN)
@@ -230,4 +227,3 @@ readExpressionSet <- function(exprsFile,
     validObject(obj)
     obj
 }
-

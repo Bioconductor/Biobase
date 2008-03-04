@@ -1,7 +1,7 @@
 \name{data:sample.ExpressionSet}
 \alias{data:sample.ExpressionSet}
 \alias{sample.ExpressionSet}
-\non_function{}
+\docType{data}
 \title{Dataset of class 'ExpressionSet'}
 \usage{data(sample.ExpressionSet)}
 \format{

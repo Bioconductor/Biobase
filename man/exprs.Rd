@@ -7,8 +7,7 @@
 \title{Retrieve expression data from eSets.}
 \description{
   These generic functions access the expression and error measurements
-  of assay data stored in an object derived from the \code{\link{eSet-class}}
-  or \code{\link{exprSet-class}}.
+  of assay data stored in an object derived from the \code{\link{eSet-class}}.
 }
 \usage{
 exprs(object)
@@ -17,7 +16,7 @@ se.exprs(object)
 se.exprs(object) <- value
 }
 \arguments{
-  \item{object}{Object derived from class \code{eSet}, or \code{exprSet}}
+  \item{object}{Object derived from class \code{eSet}.}
   \item{value}{Matrix with rows representing features and columns samples.}
 }
 \value{
@@ -27,6 +26,6 @@ se.exprs(object) <- value
 }
 \author{Biocore}
 
-\seealso{\code{\link{exprSet-class}}, \code{\link{eSet-class}}, \code{\link{ExpressionSet-class}}, \code{\link{SnpSet-class}}}
+\seealso{\code{\link{eSet-class}}, \code{\link{ExpressionSet-class}}, \code{\link{SnpSet-class}}}
 
 \keyword{manip}
