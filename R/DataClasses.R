@@ -40,7 +40,7 @@ setClass("phenoData",
       varMetadata = "data.frame"
    ),
    contains="Versioned",
-   validity = function(object) "phenoData is defunct, use AnnotatedDataframe"
+   validity = function(object) "class phenoData is defunct, convert using as(<<object>>, \"AnnotatedDataFrame\")"
 )
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setOldClass("data.frame")
@@ -95,9 +95,7 @@ setClass("annotatedDataset",
       phenoData    = "phenoData",
       "VIRTUAL"
    ),
-   contains=c("VersionedBiobase"),
-   validity = function(object) "annotatedDataset is defunct"
-)
+   contains=c("VersionedBiobase"))
 # ==========================================================================
 # AnnotatedDataFrame: A data.frame, with annotations about columns named
 # in the data slot contained in the metadata slot. The data slot has
@@ -186,7 +184,7 @@ setClass("exprSet",
       notes       = "character"
    ),
    contains = c("annotatedDataset"), # contains VersionedBiobase implicitly
-   validity = function(object) "exprSet is defunct, use ExpressionSet"
+   validity = function(object) "class exprSet is defunct, convert using as(<<object>>, \"ExpressionSet\")"
 )
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
