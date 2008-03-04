@@ -33,7 +33,7 @@ fvarMetadata(object) <- value
 \value{
   \code{featureData} returns an object containing information on both
   variable values and variable meta-data.  \code{fvarLabels} returns a
-  character vector of measured variable names. \code{fvarData} returns a data
+  character vector of measured variable names. \code{fData} returns a data
   frame with features as rows, variables as columns. \code{fvarMetadata}
   returns a data frame with variable names as rows, description tags
   (e.g., unit of measurement) as columns.
