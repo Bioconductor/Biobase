@@ -277,10 +277,11 @@ validMsg <- function(msg, result) {
 }
 
 checkClass <- function(object, expected, prefix="", call.=FALSE, ...) {
-    if (identical(possibleExtends(class(object), expected), FALSE))
-      stop(prefix, " '", deparse(substitute(object)),
-           "' is class '", class(object), "' but should be or extend '", expected, "'",
-           call.=call., ...)
+    if (!is(object, expected))
+      stop(prefix, " '", deparse(substitute(object)), "' is class '",
+           paste(class(object), collapse="', '"),
+           "' but should be or extend '",
+           paste(expected, collapse="', '"), "'", call.=call., ...)
 }
 
 ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
