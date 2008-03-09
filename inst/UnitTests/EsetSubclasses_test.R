@@ -371,10 +371,21 @@ testSetAs <- function() {
     }, where=.GlobalEnv)
 
   checkNewAndOld <- function(new, old) {
-    checkTrue(identical(pData(new),pData(old)))
-    checkTrue(all.equal(exprs(new),exprs(old),check.attributes=FALSE))
-    checkTrue(identical(sampleNames(new),sampleNames(old)))
-    checkTrue(identical(featureNames(new),geneNames(old)))
+    if (class(old)=="exprSet") {
+        pDataOld <- slot(slot(old, "phenoData"), "pData")
+        exprsOld <- slot(old, "exprs")
+        sampleNamesOld <- as.character(pDataOld$Samples)
+        geneNamesOld <- rownames(exprsOld)
+    } else {
+        pDataOld <- pData(old)
+        exprsOld <- exprs(old)
+        sampleNamesOld <- sampleNames(old)
+        geneNamesOld <- geneNames(old)
+    }
+    checkTrue(identical(pData(new), pDataOld))
+    checkTrue(all.equal(exprs(new),exprsOld,check.attributes=FALSE))
+    checkTrue(identical(sampleNames(new),sampleNamesOld))
+    checkTrue(identical(featureNames(new),geneNamesOld))
   }
   checkNewGolubMerge <- function(new,old) {
     checkTrue(identical(pData(new),pData(old)))
@@ -383,21 +394,31 @@ testSetAs <- function() {
     checkTrue(identical(featureNames(new),featureNames(old)))
   }
   checkNewSampleEset <- function(new, old)   {
-      checkTrue(identical(pData(new),pData(old)))
-      checkTrue(all(names(assayData(old)) == names(assayData(new))))
+      if (class(old)=="eSet") {
+          pDataOld <- slot(slot(old, "phenoData"), "pData")
+          assayDataOld <- slot(old, "assayData")
+          exprsOld <- assayDataOld[["exprs"]]
+      } else {
+          pDataOld <- pData(old)
+          exprsOld <- exprs(old)
+          sampleNamesOld <- sampleNames(old)
+          geneNamesOld <- geneNames(old)
+      }
+      checkTrue(identical(pData(new),pDataOld))
+      checkTrue(all(names(assayDataOld) == names(assayData(new))))
       dups <- duplicated(old@reporterNames)
       mapply(function(x,y) checkTrue(all.equal(x[!dups,],y,check.attributes=FALSE)),
-             assayData(old), assayData(new))
+             assayDataOld, assayData(new))
       checkTrue(identical(sampleNames(new),old@sampleNames))
       checkTrue(identical(featureNames(new),old@reporterNames[!dups]))
   }
   opts <- options()
   options(warn=-1)
   ## would like to be able to specify storage.mode, but how to specify?...
-  test.exprSet <- data(file.path("VersionedClass_data", "devel", "exprSet.Rda"))
-  data(test.exprSet)
-  suppressMessages(e <- as(test.exprSet,"ExpressionSet"))
-  checkNewAndOld(e,test.exprSet)
+  fp <- file.path("VersionedClass_data", "devel", "exprSet.Rda")
+  load(fp)
+  suppressMessages(e <- as(exprSet,"ExpressionSet"))
+  checkNewAndOld(e,exprSet)
 
   library(golubEsets)
   data(Golub_Merge)
@@ -406,11 +427,12 @@ testSetAs <- function() {
   pubMedIds(gm) = "10521349"
   checkNewGolubMerge(gm,Golub_Merge)
 
-  data(sample.eSet)
+  fp <- file.path("VersionedClass_data", "devel", "sample.eSet.rda")
+  load(fp)
   suppressMessages(es <- updateOldESet(sample.eSet, "SwirlSet"))
   checkNewSampleEset(es, sample.eSet)
   options(opts)
-    removeClass("SwirlSet", where=.GlobalEnv)
+  removeClass("SwirlSet", where=.GlobalEnv)
 }
 
 testFeatureNamesReplace <- function() {

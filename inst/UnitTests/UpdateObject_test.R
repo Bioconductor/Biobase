@@ -139,19 +139,22 @@ testUpdateExpressionSet <- function() {
 testUpdateESetMisc <- function() {
     opts <- options()
     options(warn=-1)
-    data(sample.exprSet)
+    fp <- file.path("VersionedClass_data", "devel", "sample.exprSet.rda")
+    load(fp)
     suppressMessages(obj <- as(sample.exprSet, "ExpressionSet"))
     checkTrue(validObject(obj, complete=TRUE))
     checkTrue(all(sapply(c("phenoData", "experimentData", "featureData"),
                          function(nm) isS4(eval(parse(text=paste(nm,"(obj)", sep="")))))))
 
-    data(sample.eSet)
+    fp <- file.path("VersionedClass_data", "devel", "sample.eSet.rda")
+    load(fp)
     obj <- as(sample.eSet, "MultiSet")
     checkTrue(validObject(obj, complete=TRUE))
     checkTrue(all(sapply(c("phenoData", "experimentData", "featureData"),
                          function(nm) isS4(eval(parse(text=paste(nm,"(obj)", sep="")))))))
 
-    data(eset)
+    fp <- file.path("VersionedClass_data", "devel", "eset.rda")
+    load(fp)
     obj <- as(eset, "ExpressionSet")
     checkTrue(validObject(obj, complete=TRUE))
     checkTrue(all(sapply(c("phenoData", "experimentData", "featureData"),
@@ -177,37 +180,6 @@ testUpdateMiscPreviousInstances <- function() {
                    checkTrue(validObject(obj, complete=TRUE))
                })
                
-    }
-}
-
-testUpdatePreviousExprSet <- function() {
-    opts <- options("warn")
-    options(warn=-1)
-    on.exit(options(opts))
-
-    rda <- list.files(system.file("UnitTests", "VersionedClass_data", package="Biobase"),
-                      full.names=TRUE, recursive=TRUE, pattern="^exprSet.*\\.Rda")
-
-    for (nm in rda) {
-        env <- new.env(parent=emptyenv())
-        load(nm, env)
-        eapply(env,
-               function(elt) {
-                   suppressMessages(obj <- updateObject(elt))
-                   checkTrue(validObject(obj, complete=TRUE))
-                   ## S4
-                   checkTrue(all(sapply(c("phenoData", "description"),
-                                        function(nm) isS4(eval(parse(text=paste(nm,"(obj)", sep="")))))))
-                   ## content
-                   checkTrue(identical(exprs(obj), exprs(elt)))
-                   checkTrue(identical(pData(phenoData(obj)), pData(phenoData(elt))))
-                   checkTrue(identical(varMetadata(phenoData(obj)), varMetadata(phenoData(elt))))
-                   nms <- names(getSlots("MIAME"))
-                   nms <- nms[!nms %in% ".__classVersion__"]
-                   checkTrue(all(sapply(nms, function(nm)
-                                        identical(slot(description(obj), nm),
-                                                  slot(description(elt), nm)))))
-               })
     }
 }
 
