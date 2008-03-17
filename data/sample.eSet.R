@@ -1,1 +1,4 @@
-message("Biobase's sample.eSet dataset is defunct. Use sample.MultiSet instead.")
+if(interactive())
+{
+  message("Biobase 'sample.eSet' dataset is defunct. Use 'sample.MultiSet' instead.")
+}
