@@ -43,3 +43,14 @@ testAssayDataCombine <- function() {
     checkAssayDataCombine(1,0)
     checkAssayDataCombine(0,1)
 }
+
+testAssayDataCombineRows <- function() {
+    m <- matrix(1:20, nrow=5,
+                dimnames=list(LETTERS[1:5], letters[1:4]))
+    obj <- assayDataNew(exprs=m)
+    obj1 <- assayDataNew(exprs=m[1:3,])
+    obj2 <- assayDataNew(exprs=m[4:5,])
+    checkEquals(obj, combine(obj1, obj2))
+    obj3 <- assayDataNew(exprs=m[3:5,])
+    checkEquals(obj, combine(obj1, obj3)) # overlapping
+}

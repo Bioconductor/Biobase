@@ -1,4 +1,5 @@
-assayDataNew <- function(storage.mode = c("lockedEnvironment", "environment", "list"), ...) {
+assayDataNew <- function(storage.mode = c("lockedEnvironment", "environment",
+                           "list"), ...) {
   storage.mode <- match.arg(storage.mode) # defaults to "lockedEnvironment"
   assayData <- switch(storage.mode,
                       lockedEnvironment =,
@@ -203,35 +204,9 @@ setReplaceMethod("featureNames", signature(object="AssayData", value="ANY"),
 })
 
 setMethod("combine", c("AssayData", "AssayData"), function(x, y, ...) {
-    combineElement <- function(x, y) {
-        d <- dim(x)
-        if (length(d) != length(dim(y)))
-          stop("assayData elements have different dimension lengths: ",
-               d, ", ", dim(y))
-        if (!all({d==dim(y)}[-2]))
-          stop("assayData elements have incompatible dimensions: ",
-               d, ", ", dim(y))
-        if (length(d)==2) {
-            sharedCols <- intersect(colnames(x), colnames(y))
-            if (length(sharedCols)>0) {
-                if (!identical(x[,sharedCols, drop=FALSE], y[,sharedCols, drop=FALSE])) {
-                    diff <- !sapply(sharedCols,
-                                    function(nm) identical(x[, nm, drop=FALSE],
-                                                           y[, nm, drop=FALSE]))
-                    stop("assayData elements must have identical data",
-                         "\n\tnon-conforming sample(s): ", 
-                         paste(sharedCols[diff], collapse=", "), sep="")
-                }
-                cbind(x, y[,colnames(y) %in% setdiff(colnames(y), sharedCols), drop=FALSE])
-            } else cbind(x,y)
-        } else stop("Cannot combine AssayData with dim length ", length(dim(x)))
-    }
     storage.mode <- assayDataStorageMode(x)
     nmfunc <- if ("environment"==class(x)) ls else names
 
-    if (assayDataDim(x)[[1]] != assayDataDim(y)[[1]])
-      stop("objects have different numbers of features: ",
-           assayDataDim(x)[[1]], ", ", assayDataDim(y)[[1]])
     if (assayDataStorageMode(y) != storage.mode)
       stop(paste("assayData must have same storage, but are ",
                  storage.mode, ", ", assayDataStorageMode(y), sep=""))
@@ -244,11 +219,11 @@ setMethod("combine", c("AssayData", "AssayData"), function(x, y, ...) {
                  paste(nmfunc(x), collapse=" "),
                  paste(nmfunc(y), collapse=" "), sep="\n\t"))
     if ("list" == storage.mode) {
-        aData <- lapply(names(x), function(nm) combineElement(x[[nm]],y[[nm]]))
+        aData <- lapply(names(x), function(nm) combine(x[[nm]],y[[nm]]))
         names(aData) <- names(x)
     } else {
         aData <- new.env(parent=emptyenv())
-        for (nm in ls(x)) aData[[nm]] <- combineElement(x[[nm]], y[[nm]])
+        for (nm in ls(x)) aData[[nm]] <- combine(x[[nm]], y[[nm]])
         if ("lockedEnvironment" == storage.mode) assayDataEnvLock(aData)
     }
     aData

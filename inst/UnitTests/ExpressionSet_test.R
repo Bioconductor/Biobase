@@ -27,6 +27,17 @@ testCombineFeatureData <- function() {
     checkException(suppressWarnings(combine(obj1, obj2)), silent=TRUE)
 }
 
+testCombineRows <- function() {
+    data(sample.ExpressionSet)
+    obj <- sample.ExpressionSet
+
+    checkEquals(obj, combine(obj[1:250,], obj[251:500,]))
+    checkEquals(obj, combine(obj[,1:13], obj[,14:26]))
+    ## overlapping
+    checkEquals(obj, combine(obj[1:300,], obj[250:500,]))
+    checkEquals(obj, combine(obj[,1:20], obj[,15:26]))
+}
+
 testAddTextNotes <- function() {
     eset <- new("ExpressionSet")
     notes(eset) <- "a note"

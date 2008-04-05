@@ -2,6 +2,7 @@
 \alias{combine}
 \alias{combine,ANY,missing-method}
 \alias{combine,data.frame,data.frame-method}
+\alias{combine,matrix,matrix-method}
 \concept{combine phenoData}
 
 \title{Methods for Function combine in Package `Biobase'}
@@ -48,6 +49,14 @@ combine(x, y, ...)
       error. \code{combine} issues a warning when a column is a
       \code{\link{factor}} and the levels of the factor in the two
       data.frames are different.}
+    \item{\code{combine(matrix, matrix)}}{Combined two \code{matrix}
+      objects so that the resulting \code{matrix} contains all rows and
+      columns of the original objects. Both matricies must have
+      \code{dimnames}. Rows and columns in the returned
+      value are unique, that is, a row or column represented in both
+      arguments is reprensted only once in the result. To perform this
+      operation, \code{combine} makes sure that data in shared rows and
+      columns are all equal in the two matricies.}
   }
   Additional \code{combine} methods are defined for
   \code{\link{AnnotatedDataFrame}},
@@ -91,6 +100,10 @@ combine(x, y, ...)
   df1 <- data.frame(x=1:5,y=I(letters[1:5]), row.names=letters[1:5])
   df2 <- data.frame(z=3:7,y=I(letters[3:7]), row.names=letters[3:7])
   combine(df1, df2)
+
+  m <- matrix(1:20, nrow=5, dimnames=list(LETTERS[1:5], letters[1:4]))
+  combine(m[1:3,], m[4:5,])
+  combine(m[1:3, 1:3], m[3:5, 3:4]) # overlap
 }
 
 \keyword{manip}
