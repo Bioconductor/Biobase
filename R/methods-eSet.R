@@ -42,7 +42,7 @@ setMethod("initialize",
               dimLabels(phenoData) <- c("sampleNames", "sampleColumns")
               if (!missing(featureData))
                 checkClass(featureData, "AnnotatedDataFrame", class(.Object))
-              dimLabels(featureData) <- c("featureNames", "featureColumsn")
+              dimLabels(featureData) <- c("featureNames", "featureColumns")
               ## coordinate sample names
               adSampleNames <- sampleNames(assayData)
               if (all(sapply(adSampleNames,is.null)))
