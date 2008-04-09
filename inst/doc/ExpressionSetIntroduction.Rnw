@@ -125,8 +125,8 @@ is printed.
 Many users have access to .CEL or other files produced by microarray
 chip manufacturer hardware. Usually the strategy is to use a
 Bioconductor package such as \Rpackage{affyPLM}, \Rpackage{affy},
-\Rpackage{oligo}, \Rpackage{limma}, or \Rpackage{arrayMagic} to read
-these files.  These Bioconductor packages have functions (e.g.,
+\Rpackage{oligo}, or \Rpackage{limma}, to read these files.
+These Bioconductor packages have functions (e.g.,
 \Rfunction{ReadAffy}, \Rfunction{expresso}, or \Rfunction{justRMA} in
 \Rpackage{affy}) to read CEL files and perform preliminary
 preprocessing, and to represent the resulting data as an
