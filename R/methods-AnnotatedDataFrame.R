@@ -328,8 +328,12 @@ setMethod("show",
 setMethod("combine",
           signature(x="AnnotatedDataFrame", y="AnnotatedDataFrame"),
           function(x, y) {
-              if (!identical(dimLabels(x),dimLabels(y)))
-                stop("AnnotatedDataFrame dimLabels differ")
+              if (!identical(dimLabels(x),dimLabels(y))) {
+                  msg <- sprintf("AnnotatedDataFrame dimLabels differ:\n    %s\n    %s\n  try 'updateObject'?",
+                                 paste(dimLabels(x), collapse=", "),
+                                 paste(dimLabels(y), collapse=", "))
+                  stop(msg)
+              }
 
               pDataX <- pData(x)
               pDataY <- pData(y)
