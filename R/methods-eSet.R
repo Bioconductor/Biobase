@@ -512,7 +512,7 @@ setReplaceMethod("experimentData",
                  })
 
 setMethod("description", signature(object="eSet"),
-          function(object) {
+          function(object, ...) {
               experimentData(object)
           })
 

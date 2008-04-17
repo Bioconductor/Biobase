@@ -18,7 +18,8 @@ setGeneric("combine",
                }
            })
 setGeneric("content",         function(object) standardGeneric("content"))
-setGeneric("description",     function(object) standardGeneric("description"))
+setGeneric("description",     function(object, ...)
+           standardGeneric("description"))
 setGeneric("description<-",   function(object, value) standardGeneric("description<-"))
 setGeneric("dims",            function(object) standardGeneric("dims"))
 setGeneric("dimLabels",       function(object) standardGeneric("dimLabels"))
