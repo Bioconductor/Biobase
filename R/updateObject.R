@@ -23,8 +23,12 @@ setMethod("updateObject", signature(object="environment"),
           function(object, ..., verbose=FALSE) {
               if (verbose) message("updateObject(object = 'environment')")
               envLocked <- environmentIsLocked(object)
-              if (envLocked) warning("updateObject duplicating locked environment")
-              else warning("updateObject modifying environment")
+              if (verbose) {
+                  if (envLocked)
+                    warning("updateObject duplicating locked environment")
+                  else
+                    warning("updateObject modifying environment")
+              }
               env <- 
                 if (envLocked) new.env()
                 else object

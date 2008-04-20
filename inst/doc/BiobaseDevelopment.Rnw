@@ -40,31 +40,32 @@
 \date{7 August, 2006}
 \maketitle
 
-Revised 4 September, 2006 -- \Robject{featureData} slot
+Revised 4 September, 2006 -- \Robject{featureData} slot.  
+Revised 20 April 2007 -- minor wording changes; \Rfunarg{verbose} and
+other arguments passed through \Rmethod{updateObject} example;
+introduce a second variant of \Rmethod{initialize} illustrating its
+use as a copy constructor.
 
 \section{Introduction}
 
 These notes help \emph{developers} who are interested in using and
-extending the \eSet{} class hierarchy, and using features recently
-added to \Biobase. The information here is not useful to regular users
-of \Biobase.
+extending the \eSet{} class hierarchy, and using features in
+\Biobase. The information here is not useful to regular users of
+\Biobase.
 
-Recent changes (see the date in the title of this document!) to
-\Biobase{} introduce new structure and approaches to \eSet{}. The
-changes make it easy for developers to creatively use and extend the
-\eSet{} class hierarchy. This document outlines recent changes, and
-illustrates how developers can exploit the new structure to
-efficiently use and extend \eSet{}.
+This document illustrates the \Biobase{} structures and approaches
+that make it it easy for developers to creatively use and extend the
+\eSet{} class hierarchy.
 
 The document starts with a brief description of the motivation for
-change, and a comparison of the old and new \eSet{}s and related
-functionality (e.g.,the \Rclass{Versioned} class and
-\Rfunction{updateObject} methods). We then illustrate how \eSet{} can
-be extended to handle additional types of data, and how new methods
-can exploit the \eSet{} class hierarchy. We conclude with a brief
-summary of lessons learned, useful developer-related side-effects of
-efforts to revise \eSet{}, and possible directions for future
-development.
+change, and a comparison of the old (before August, 2006) and new
+\eSet{}s and related functionality (e.g.,the \Rclass{Versioned} class
+and \Rfunction{updateObject} methods). We then illustrate how \eSet{}
+can be extended to handle additional types of data, and how new
+methods can exploit the \eSet{} class hierarchy. We conclude with a
+brief summary of lessons learned, useful developer-related
+side-effects of efforts to revise \eSet{}, and possible directions for
+future development.
 
 \section{Comparing old and new}
 
@@ -73,7 +74,7 @@ What is an \eSet{}?
 \item Coordinate high through-put (e.g., gene expression) and phenotype data.
 \item Provide common data container for diverse Bioconductor packages.
 \end{itemize}
-Motivation for change.
+Motivation for change (August, 2006).
 \begin{itemize}
 \item What was broken?  Complex data structure. Inconsistent object
   validity. No straight-forward way to extend \eSet{} to new data
@@ -307,7 +308,7 @@ that has a slot that contains a list or environment. The
 \Rfunction{is} relationship is desirable to avoid unnecessary
 function calls to access slots, and requires that a class
 \Rfunction{contain} the base type (e.g., \Rclass{environment}. Until
-very recently an \R{} object could not \Rfunction{contain} an
+recently an \R{} object could not \Rfunction{contain} an
 \Rclass{environment}.
 
 The \Robject{assayData} slot of \ExpressionSet{} objects must contain
@@ -405,10 +406,33 @@ setMethod("initialize", "SwirlSet",
                    G = new("matrix"),
                    Rb = new("matrix"),
                    Gb = new("matrix"),
-                   ... ) {
+                   ...) {
             callNextMethod(.Object,
                            R=R, G=G, Rb=Rb, Gb=Gb,
                            ...)
+        })
+@ 
+% 
+A slightly different \Rmethod{initialize} method allows the user to
+specify either the \Robject{assayData} or the \Robject{assayData}
+content. In advanced use, this has the advantage that
+\Rmethod{initialize} can be used as a `copy constructor' to update
+several slots simultaneously.
+<<SwirlSet-initialize-2>>=
+setMethod("initialize", "SwirlSet",
+          function(.Object,
+                   assayData=assayDataNew(
+                     R=R, G=G, Rb=Rb, Gb=Gb),
+                   R = new("matrix"),
+                   G = new("matrix"),
+                   Rb = new("matrix"),
+                   Gb = new("matrix"),
+                   ...) {
+            if (!missing(assayData) && 
+                any(!missing(R), !missing(G), !missing(Rb), !missing(Gb))) {
+                warning("using 'assayData'; ignoring 'R', 'G', 'Rb', 'Gb'")
+            }
+            callNextMethod(.Object, assayData=assayData, ...)
         })
 @ 
 
@@ -554,10 +578,14 @@ setMethod("updateObject", signature(object="MySet"),
               if (!isVersioned(object))
                   ## Radical surgery -- create a new, up-to-date instance
                   new("MySet",
-                      assayData = updateObject(assayData(object)),
-                      phenoData = updateObject(phenoData(object)),
-                      experimentData = updateObject(experimentData(object)),
-                      annotation = updateObject(annotation(object)))
+                      assayData = updateObject(assayData(object),
+                        ...., verbose=verbose),
+                      phenoData = updateObject(phenoData(object),
+                        ..., verbose=verbose),
+                      experimentData = updateObject(experimentData(object),
+                        ..., verbose=verbose),
+                      annotation = updateObject(annotation(object),
+                        ..., verbose=verbose))
               else {
                   ## Make minor changes, and update version by consulting class definition
                   classVersion(object)["MySet"] <-
@@ -629,13 +657,13 @@ There is additional documentation about these classes and methods in
 
 \section{Summary}
 
-This document summarizes recent changes to \Biobase, outlining
-strategies that developers using \Biobase{} may find useful. The main
-points are to introduce the \eSet{} class hierarchy, to illustrate how
-developers can effectively extend this class, and to introduce class
-versions as a way of tracking and easily updating objects. It is
-anticipated that \eSet{}-derived classes will play an increasingly
-important role in \Biobase{} development.
+This document summarizes \Biobase, outlining strategies that
+developers using \Biobase{} may find useful. The main points are to
+introduce the \eSet{} class hierarchy, to illustrate how developers
+can effectively extend this class, and to introduce class versions as
+a way of tracking and easily updating objects. It is anticipated that
+\eSet{}-derived classes will play an increasingly important role in
+\Biobase{} development.
 
 \section{Session Information}
 

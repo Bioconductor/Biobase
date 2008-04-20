@@ -9,6 +9,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o 'combine' on data.frame columns with mismatched levels causes a
     warning, rather than error.
 
+    o updateObject does not warn about duplicating locked environment,
+    unlesss verbose=TRUE
+
 NEW FEATURES
 
     o 'combine' now works to combine rows of ExpressionSet
