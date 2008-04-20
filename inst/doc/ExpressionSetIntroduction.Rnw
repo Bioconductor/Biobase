@@ -7,7 +7,7 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \documentclass[12pt]{article}
-\usepackage{amsmath,pstricks,fullpage}
+\usepackage{amsmath,fullpage}
 \usepackage[authoryear,round]{natbib}
 \usepackage{hyperref}
 \usepackage{theorem}
