@@ -44,7 +44,7 @@ setMethod("updateObject", signature(object="AnnotatedDataFrame"),
                 callNextMethod()
               else {
                   ## version 1.0.0. -> 1.1.0 needs a new slot "dimLabels"
-                  to <- new("AnnotatedDataFrame")
+                  to <- new(class(object))
                   varMetadata(to) <- updateObject(varMetadata(object))
                   pData(to) <- updateObject(pData(object))
                   to
@@ -128,8 +128,7 @@ setReplaceMethod("pData",
                      varMetadata <-
                          varMetadata(object)[names(value),,drop=FALSE]
                      row.names(varMetadata) <- names(value)
-                     new("AnnotatedDataFrame",
-                         data=value, varMetadata=varMetadata)
+                     initialize(object, data=value, varMetadata=varMetadata)
                  })
 
 setMethod("sampleNames", "AnnotatedDataFrame", function(object) row.names(object@data))
@@ -195,8 +194,7 @@ setMethod("[",
                   else
                     pD <- x@data[i,j,drop = drop]
               }
-              new("AnnotatedDataFrame",
-                  data=pD, varMetadata=mD, dimLabels=dimLabels(x))
+              initialize(x, data=pD, varMetadata=mD)
           })
 
 ##setMethod("$", "AnnotatedDataFrame", function(x, name) `$`(pData(x), name))
@@ -328,6 +326,12 @@ setMethod("show",
 setMethod("combine",
           signature(x="AnnotatedDataFrame", y="AnnotatedDataFrame"),
           function(x, y) {
+              if (class(x) != class(y)) {
+                  msg <- sprintf("'%s' objects have diffrenent classes '%s', '%s'",
+                                 "combine,AnnotatedDataFrame,AnnotatedDataFrame-method",
+                                 class(x), class(y))
+                  stop(msg)
+              }
               if (!identical(dimLabels(x),dimLabels(y))) {
                   msg <- sprintf("AnnotatedDataFrame dimLabels differ:\n    %s\n    %s\n  try 'updateObject'?",
                                  paste(dimLabels(x), collapse=", "),
@@ -353,8 +357,7 @@ setMethod("combine",
                 }
               vM <- combine(varMetadataX, varMetadataY)
 
-              new("AnnotatedDataFrame",
-                  data=pData, varMetadata=vM, dimLabels=dimLabels(x))
+              initialize(x, data=pData, varMetadata=vM)
           })
 
 
