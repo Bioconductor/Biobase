@@ -1,5 +1,17 @@
         **************************************************
         *                                                *
+        *              2.8 SERIES NEWS                   *
+        *                                                *
+        **************************************************
+
+BUG FIXES
+
+    o combine,matrix,matrix-method would record 'NA' for entries in
+    the second matrix with niether rows nor columns present in the
+    first.
+
+        **************************************************
+        *                                                *
         *              2.7 SERIES NEWS                   *
         *                                                *
         **************************************************

@@ -19,14 +19,11 @@ setMethod("combine", c("matrix", "matrix"), function(x, y, ...) {
              ok)
     unionRows <- union(xdim[[1]], ydim[[1]])
     unionCols <- union(xdim[[2]], ydim[[2]])
-    diffRows <- setdiff(ydim[[1]], xdim[[1]])
-    diffCols <- setdiff(ydim[[2]], xdim[[2]])
 
     m <- matrix(new(class(as.vector(x))),
                 nrow=length(unionRows), ncol=length(unionCols),
                 dimnames=list(unionRows, unionCols))
     m[rownames(x), colnames(x)] <- x
-    m[sharedRows, diffCols] <- y[sharedRows, diffCols]
-    m[diffRows, sharedCols] <- y[diffRows, sharedCols]
+    m[rownames(y), colnames(y)] <- y
     m
 })

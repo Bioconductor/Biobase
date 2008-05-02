@@ -348,7 +348,7 @@ exprs(sample.ExpressionSet) <- log(exprs(sample.ExpressionSet))
 @ 
 The \Rfunction{setReplaceMethod} for \Robject{exprs} (and
 \Robject{assayData}) succeeds by performing a deep copy of the entire
-environment. Becaue this is very inefficient, the recommended paradigm
+environment. Because this is very inefficient, the recommended paradigm
 to update an element in a \Robject{lockedEnvironment} is to extract
 it, make many changes, and then reassign it. Developers can study
 \Robject{assayData} methods to learn more about how to lock and unlock

@@ -7,7 +7,7 @@ testCombineMatrix <- function() {
     ## overlap
     checkEquals(m, combine(m[1:3,], m[3:5,]))
     checkEquals(m, combine(m[,1:3], m[,3:4]))
-    checkEquals(matrix(c(1:3, NA, NA, 6:8, NA, NA, 11:15, NA, NA, 18, NA, NA),
+    checkEquals(matrix(c(1:3, NA, NA, 6:8, NA, NA, 11:15, NA, NA, 18:20),
                        nrow=5,
                        dimnames=list(LETTERS[1:5], letters[1:4])),
                 combine(m[1:3,1:3], m[3:5, 3:4]))
