@@ -252,7 +252,7 @@ selectSome <- function(obj, maxToShow=5) {
       bot <- ceiling(maxToShow/2)
       top <- len-(maxToShow-bot-1)
       nms <- obj[c(1:bot, top:len)]
-      c(nms[1:bot], "...", nms[-c(1:bot)])
+      c(as.character(nms[1:bot]), "...", as.character(nms[-c(1:bot)]))
   }
   else obj
 }
