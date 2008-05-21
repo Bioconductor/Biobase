@@ -4,6 +4,11 @@
         *                                                *
         **************************************************
 
+NEW FEATURES
+
+    o 'makeDataPacakge' method for ExpressionSet now accepts a
+    'description' argument for the generated manual page.
+
 BUG FIXES
 
     o combine,matrix,matrix-method would record 'NA' for entries in
