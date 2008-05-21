@@ -140,10 +140,9 @@
       that \code{exprs} is a member of
       \code{assayData}. \code{checkValidity(ExpressionSet)} imposes this
       validity check, and the validity checks of \code{eSet}.}
-    \item{\code{makeDataPackage(object, author, email,
-	packageName, packageVersion, license, biocViews, filePath,
-	...)}}{Create a data package based on an ExpressionSet
-      object. See \code{\link{makeDataPackage}}.}
+    \item{\code{makeDataPackage(object, author, email, packageName, packageVersion, license, biocViews, filePath, description=paste(abstract(object), collapse="\n\n"), ...)}}{
+      Create a data package based on an ExpressionSet object. See
+      \code{\link{makeDataPackage}}.}
      \item{\code{as(exprSet,ExpressionSet)}:}{Coerce \code{exprSet} to \code{ExpressionSet}.}
      \item{\code{as(eSet,ExpressionSet)}:}{Coerce the \code{eSet} portion of an object to \code{ExpressionSet}.}
      \item{\code{show(ExpressionSet)}}{See \code{\link{eSet}}}

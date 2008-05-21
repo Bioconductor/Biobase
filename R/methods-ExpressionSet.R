@@ -136,7 +136,8 @@ setMethod("esApply",
 setMethod("makeDataPackage",
           signature(object="ExpressionSet"),
           function(object, author, email,
-                   packageName, packageVersion, license, biocViews, filePath, ...) {
+                   packageName, packageVersion, license, biocViews, filePath,
+                   description=paste(abstract(object), collapse="\n\n"), ...) {
               if( missing(email) || !(is.character(email) && (length(email) == 1)
                                       && grep("@", email) == 1 ) )
                 stop("invalid email address")
@@ -148,7 +149,7 @@ setMethod("makeDataPackage",
                 TITLE = paste("Experimental Data Package:",packageName),
                 MAINTAINER = paste(author, ", <", email, ">", sep = ""),
                 BVIEWS = biocViews,
-                DESCRIPTION = "place holder 1",
+                DESCRIPTION = description,
                 FORMAT = pD2Rd(phenoData(object)))
 
               res = createPackage(packageName, destinationDir=filePath,
