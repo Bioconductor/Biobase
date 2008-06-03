@@ -44,12 +44,13 @@ openPDF <- function(file, bg=TRUE) {
       if (OST == "unix") {
          bioCOpt <- getOption("BioC")
          pdf <- getOption("pdfviewer")
-         if (is.null(pdf)) {
-            warning(paste("pdfViewer is set to:",pdf,
-                          "which does not seem to exist.  Please",
-                          "run the command setOptionPdfViewer()"))
-            return(FALSE)
-         }
+         msg <- NULL
+         if (is.null(pdf))
+             msg <- "getOption('pdfviewer') is NULL"
+         else if (length(pdf)==1 && nchar(pdf[[1]])==0)
+             msg <- "getOption('pdfviewer') is ''"
+         if (!is.null(msg))
+             stop(msg, "; please use 'options(pdfviewer=...)'")
          cmd <- paste(pdf,file)
          if( bg )
             cmd <- paste(cmd, "&")
