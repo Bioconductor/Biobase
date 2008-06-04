@@ -70,33 +70,38 @@ openVignette = function(package=NULL) {
   }
 }
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# add vignettes or other elements to the menu bar of a window (2002 J. Zhang)
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-addVigs2WinMenu <- function(pkgName) {
-    if ((.Platform$OS.type == "windows") && (.Platform$GUI == "Rgui")
-        && interactive()) {
-        vigFile <- system.file("Meta", "vignette.rds", package=pkgName)
-        if (!file.exists(vigFile)) {
-            warning(sprintf("%s contains no vignette, nothing is added to the menu bar", pkgName))
-        } else {
-            vigMtrx <- .readRDS(vigFile)
-            vigs <- file.path(.find.package(pkgName), "doc", vigMtrx[,"PDF"])
-            names(vigs) <- vigMtrx[,"Title"]
-
-            if (!"Vignettes" %in% winMenuNames())
-              winMenuAdd("Vignettes")
-            pkgMenu <- paste("Vignettes", pkgName, sep="/")
-            winMenuAdd(pkgMenu)
-            for (i in vigs) {
-                item <- sub(".pdf", "", basename(i))
-                winMenuAddItem(pkgMenu, item, paste("shell.exec(\"", as.character(i), "\")", sep = ""))
-            }
-        } ## else
-        ans <- TRUE
+#-----------------------------------------------------------
+# add package vignettes to the menu bar of the Windows Rgui
+##----------------------------------------------------------
+addVigs2WinMenu = function(pkgName) {
+  if ((.Platform$OS.type == "windows") &&
+      (.Platform$GUI == "Rgui") &&
+      interactive()) {
+      
+    vigFile = system.file("Meta", "vignette.rds", package=pkgName)
+    if (!file.exists(vigFile)) {
+      warning(sprintf("%s contains no vignette, nothing is added to the menu bar", pkgName))
     } else {
-        ans <- FALSE
-    }
-    ans
+      vigMtrx = .readRDS(vigFile)
+      vigs = file.path(.find.package(pkgName), "doc", vigMtrx[, "PDF"])
+      names(vigs) = vigMtrx[,"Title"]
+
+      if (!"Vignettes" %in% winMenuNames())
+        winMenuAdd("Vignettes")
+      
+      pkgMenu = paste("Vignettes", pkgName, sep="/")
+      winMenuAdd(pkgMenu)
+
+      for (i in seq(along=vigs))
+        winMenuAddItem(pkgMenu, names(vigs)[i],
+                       paste("shell.exec(\"", vigs[i], "\")", sep=""))
+
+    } ## else
+    ans = TRUE
+
+  } else {
+    ans = FALSE
+  } ## else
+  ans
 }
 
