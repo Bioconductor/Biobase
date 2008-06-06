@@ -198,16 +198,18 @@ readExpressionSet <- function(exprsFile,
     ex = as.matrix(do.call("read.table", exprsArgs))
 
     ## phenoData
-    if (!missing(phenoDataFile))
+    if (!missing(phenoDataFile)) {
         phenoDataArgs$file=phenoDataFile
-    pd = do.call("read.AnnotatedDataFrame", phenoDataArgs)
-    
-    if (!identical(sampleNames(pd), colnames(ex)))
-      stop("Column names of expression matrix must be identical to\n",
-           "the sample names of the phenodata table.\n",
-           "You could use 'options(error=recover)' to compare the",
-           "values of 'sampleNames(pd)' and 'colnames(ex)'.\n")
-                       
+        pd = do.call("read.AnnotatedDataFrame", phenoDataArgs)
+        if (!identical(sampleNames(pd), colnames(ex)))
+            stop("Column names of expression matrix must be identical to\n",
+                 "the sample names of the phenodata table.\n",
+                 "You could use 'options(error=recover)' to compare the",
+                 "values of 'sampleNames(pd)' and 'colnames(ex)'.\n")
+    } else {
+        pd = annotatedDataFrameFrom(ex, byrow=FALSE)
+    }
+
     obj = new("ExpressionSet", exprs=ex, phenoData=pd)
 
 

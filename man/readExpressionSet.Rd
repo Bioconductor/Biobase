@@ -6,7 +6,7 @@
 
 \description{
   Create an instance of class ExpressionSet by reading data from files.
-  Unfortunately, 'widget' functionality is not yet implemented for readExpressionSet.
+  \sQuote{widget} functionality is not implemented for readExpressionSet.
 }
 
 \usage{
@@ -32,8 +32,9 @@ readExpressionSet(exprsFile,
     columns as samples. \code{\link{read.table}} is called with this
     as its \code{file} argument and further arguments given by \code{exprsArgs}.}
   \item{phenoDataFile}{(character) File or connection from which to read
-    phenotypic data. \code{\link{read.AnnotatedDataFrame}} is called with this
-    as its \code{file} argument and further arguments given by \code{phenoDataArgs}.}
+    phenotypic data. \code{\link{read.AnnotatedDataFrame}} is called
+    with this as its \code{file} argument and further arguments given by
+    \code{phenoDataArgs}.}
   \item{experimentDataFile}{(character) File or connection from which to read
     experiment data. \code{\link{read.MIAME}} is called with this
     as its \code{file} argument and further arguments given by
@@ -64,7 +65,7 @@ readExpressionSet(exprsFile,
   \code{\link{read.AnnotatedDataFrame}} function. Experiment data are
   read using the \code{\link{read.MIAME}} function. Notes are read using
   the \code{\link{readLines}} function. The return value must be a valid
-  \code{ExpressionSet}.
+  \code{ExpressionSet}. Only the \code{exprsFile} argument is required.
 }
   
 
