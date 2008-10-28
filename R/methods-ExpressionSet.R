@@ -60,6 +60,7 @@ setMethod("initialize", "ExpressionSet",
 }
 
 setAs("exprSet", "ExpressionSet", function(from) {
+  from <- asS4(from)
   desc <- from@description
   desc <- 
     if (class(desc)!="MIAME") {

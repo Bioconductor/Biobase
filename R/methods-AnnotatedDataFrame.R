@@ -40,6 +40,7 @@ setValidity("AnnotatedDataFrame", validAnnotatedDataFrame)
 setMethod("updateObject", signature(object="AnnotatedDataFrame"),
           function(object, ..., verbose=FALSE) {
               if (verbose) message("updateObject(object = 'AnnotatedDataFrame')")
+              object <- asS4(object)
               if (isVersioned(object) && isCurrent(object)["AnnotatedDataFrame"])
                 callNextMethod()
               else {
@@ -219,6 +220,7 @@ setReplaceMethod("[[",
                  })
 
 setAs("phenoData", "AnnotatedDataFrame", function(from) {
+  from <- asS4(from)
   ## data
   data <- from@pData
   ## varMetadata

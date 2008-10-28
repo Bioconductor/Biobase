@@ -12,6 +12,7 @@ setMethod("isCurrent", signature(object="MIAME", value="missing"),
 setMethod("updateObject", signature(object="MIAME"),
           function(object, ..., verbose=FALSE) {
               if (verbose) message("updateObject(object = 'MIAME')")
+              object <- asS4(object)
               if (isVersioned(object) && isCurrent(object)["MIAME"])
                 callNextMethod()
               else

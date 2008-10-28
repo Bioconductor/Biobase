@@ -61,23 +61,25 @@ setMethod("initialize",
           })
 
 updateOldESet <- function(from, toClass, ...) {  # to MultiExpressionSet
-  metadata <- phenoData(from)@varMetadata
+  from <- asS4(from)
+  ophenoData <- asS4(phenoData(from))
+  metadata <- ophenoData@varMetadata
   if (all(dim(metadata)==0)) {
     warning("replacing apparently empty varMetadata")
-    metadata <- data.frame(numeric(ncol(phenoData(from)@pData)))[,FALSE]
+    metadata <- data.frame(numeric(ncol(ophenoData@pData)))[,FALSE]
   }
   if (!is.null(metadata[["varName"]])) {
     row.names(metadata) <- metadata[["varName"]]
     metadata[["varName"]] <- NULL
-  } else if (!is.null(names(phenoData(from)@pData))) {
-    row.names(metadata) <- names(phenoData(from)@pData)
+  } else if (!is.null(names(ophenoData@pData))) {
+    row.names(metadata) <- names(ophenoData@pData)
   }
   if (!is.null(metadata[["varLabels"]])) {
     names(metadata)[names(metadata)=="varLabels"] <- "labelDescription"
     metadata[["labelDescription"]] <- as.character(metadata[["labelDescription"]])
   }
   ## phenoData
-  pData <- phenoData(from)@pData
+  pData <- ophenoData@pData
   phenoData <- new("AnnotatedDataFrame", data=pData, varMetadata=metadata)
   ## sampleNames
   if (any(sampleNames(assayData(from))!=sampleNames(phenoData))) {
@@ -147,6 +149,7 @@ updateESetTo <- function(object, template, ..., verbose=FALSE) {
 setMethod("updateObject", signature(object="eSet"),
           function(object, ..., verbose=FALSE) {
               if (verbose) message("updateObject(object = 'eSet')")
+              object <- asS4(object)
               if (isVersioned(object) && isCurrent(object)["eSet"])
                 return(callNextMethod())
               ## storage.mode likely to be useful to update versioned classes, too

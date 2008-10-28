@@ -139,21 +139,24 @@ testUpdateExpressionSet <- function() {
 testUpdateESetMisc <- function() {
     opts <- options()
     options(warn=-1)
-    fp <- file.path("VersionedClass_data", "devel", "sample.exprSet.rda")
+    fp <- system.file("UnitTests", "VersionedClass_data", "devel", "sample.exprSet.rda",
+                      package="Biobase")
     load(fp)
     suppressMessages(obj <- as(sample.exprSet, "ExpressionSet"))
     checkTrue(validObject(obj, complete=TRUE))
     checkTrue(all(sapply(c("phenoData", "experimentData", "featureData"),
                          function(nm) isS4(eval(parse(text=paste(nm,"(obj)", sep="")))))))
 
-    fp <- file.path("VersionedClass_data", "devel", "sample.eSet.rda")
+    fp <- system.file("UnitTests", "VersionedClass_data", "devel", "sample.eSet.rda",
+                      package="Biobase")
     load(fp)
     obj <- as(sample.eSet, "MultiSet")
     checkTrue(validObject(obj, complete=TRUE))
     checkTrue(all(sapply(c("phenoData", "experimentData", "featureData"),
                          function(nm) isS4(eval(parse(text=paste(nm,"(obj)", sep="")))))))
 
-    fp <- file.path("VersionedClass_data", "devel", "eset.rda")
+    fp <- system.file("UnitTests", "VersionedClass_data", "devel", "eset.rda",
+                      package="Biobase")
     load(fp)
     obj <- as(eset, "ExpressionSet")
     checkTrue(validObject(obj, complete=TRUE))
@@ -202,14 +205,16 @@ testUpdatePreviousExpressionSet <- function() {
                    checkTrue(all(sapply(c("phenoData", "experimentData", "featureData"),
                                         function(nm) isS4(eval(parse(text=paste(nm,"(obj)", sep="")))))))
                    ## content
-                   checkTrue(identical(exprs(obj), exprs(elt)))
-                   checkTrue(identical(pData(phenoData(obj)), pData(phenoData(elt))))
-                   checkTrue(identical(varMetadata(phenoData(obj)), varMetadata(phenoData(elt))))
+                   checkTrue(identical(exprs(obj), slot(elt, "assayData")[["exprs"]]))
+                   checkTrue(identical(pData(phenoData(obj)),
+                                       slot(slot(elt, "phenoData"), "data")))
+                   checkTrue(identical(varMetadata(phenoData(obj)),
+                                       slot(slot(elt, "phenoData"), "varMetadata")))
                    nms <- names(getSlots("MIAME"))
                    nms <- nms[!nms %in% ".__classVersion__"]
                    lapply(nms, function(nm)
                           checkTrue(identical(slot(experimentData(obj), nm),
-                                              slot(experimentData(elt), nm))))
+                                              slot(slot(elt, "experimentData"), nm))))
                })
     }
 }
