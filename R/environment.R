@@ -24,25 +24,26 @@
 }
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 .buildBiobaseOpts <- function() {
-    if (is.null(getOption("BioC"))) {
+    BioC <- getOption("BioC")
+    if (is.null(BioC)) {
         BioC <- list()
         class(BioC) <- "BioCOptions"
-        options("BioC"=BioC)
     }
-
-    Base <- list()
-    class(Base) <- "BioCPkg"
-    Base$urls <- list( bioc = "http://www.bioconductor.org")
+    Base <- BioC$Base
+    if (is.null(Base)) {
+        Base <- list()
+        class(Base) <- "BioCPkg"
+    }
+    if (is.null(Base$urls))
+        Base$urls <- list( bioc = "http://bioconductor.org")
     ##RI: I added this to make my life easier. Should it be TRUE?
     ##AJR: NO.  I've run across a few cases when it would completely
     ##     break functionality, i.e. when tcltk isn't part of the R
     ##     package (on weird, and development-based machines
-    Base$use.widgets=FALSE
-
-    BioC <- getOption("BioC")
+    if (is.null(Base$use.widgets))
+        Base$use.widgets <- FALSE
     BioC$Base <- Base
     options("BioC"=BioC)
-
 }
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 biocReposList <- function() {
