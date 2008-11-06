@@ -48,8 +48,11 @@
 biocReposList <- function() {
     ## Locations of Bioconductor release repositories
     VERSION <- "2.4"
-    root <- paste("http://bioconductor.org/packages", VERSION, sep="/")
-    mkurl <- function(...) paste(root, ..., sep="/")
+    bioc_topurl <- getOption("BioC")$Base$urls$bioc
+    if (is.null(bioc_topurl))
+        bioc_topurl <- "http://bioconductor.org"
+    pkg_topurl <- paste(bioc_topurl, "packages", VERSION, sep="/")
+    mkurl <- function(...) paste(pkg_topurl, ..., sep="/")
     reposList <- c(bioc=mkurl("bioc"),
                    aData=mkurl("data/annotation"),
                    eData=mkurl("data/experiment"),
