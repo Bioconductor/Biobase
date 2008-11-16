@@ -196,11 +196,14 @@ setClass("ScalarObject", contains="VIRTUAL",
                TRUE
          })
 
+setClass("ScalarLogical", contains=c("ScalarObject", "logical"),
+         prototype=NA)
+
 setClass("ScalarCharacter", contains=c("ScalarObject", "character"),
          prototype="")
 
 setClass("ScalarInteger", contains=c("ScalarObject", "integer"),
-         prototype=as.integer(NA))
+         prototype=NA_integer_)
 
 setClass("ScalarNumeric", contains=c("ScalarObject", "numeric"),
-         prototype=as.double(NA))
+         prototype=NA_real_)
