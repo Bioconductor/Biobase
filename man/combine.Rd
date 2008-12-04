@@ -54,7 +54,7 @@ combine(x, y, ...)
       columns of the original objects. Both matricies must have
       \code{dimnames}. Rows and columns in the returned
       value are unique, that is, a row or column represented in both
-      arguments is reprensted only once in the result. To perform this
+      arguments is represented only once in the result. To perform this
       operation, \code{combine} makes sure that data in shared rows and
       columns are all equal in the two matricies.}
   }
