@@ -1,3 +1,14 @@
+testCombineMatrixDifferentModes <- function() {
+    m <- matrix(1:20, nrow=5, dimnames=list(LETTERS[1:5], letters[1:4]))
+    n <- matrix(as.numeric(1:20),
+                nrow=5, dimnames=list(LETTERS[1:5], letters[1:4]))
+    res <- combine(m, n)                # modes coerced to same
+    checkEquals("numeric", mode(res))
+    n <- matrix(as.character(1:20),
+                nrow=5, dimnames=list(LETTERS[1:5], letters[1:4]))
+    checkException(combine(m, n))       # modes differ
+}
+
 testCombineMatrix <- function() {
     ## dimnames
     m <- matrix(1:20, nrow=5, dimnames=list(LETTERS[1:5], letters[1:4]))

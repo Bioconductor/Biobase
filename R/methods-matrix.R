@@ -3,8 +3,8 @@ setMethod("combine", c("matrix", "matrix"), function(x, y, ...) {
         return(x)
     else if (length(x)==0)
         return(y)
-    if (typeof(x) != typeof(y))
-        stop("matrix types ", typeof(x), ", ", typeof(y), " differ")
+    if (mode(x) != mode(y))
+        stop("matrix modes ", mode(x), ", ", mode(y), " differ")
     xdim <- dimnames(x)
     ydim <- dimnames(y)
     if (is.null(xdim) || is.null(ydim) ||
