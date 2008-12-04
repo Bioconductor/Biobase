@@ -5,6 +5,9 @@ setMethod("combine", c("matrix", "matrix"), function(x, y, ...) {
         return(y)
     if (mode(x) != mode(y))
         stop("matrix modes ", mode(x), ", ", mode(y), " differ")
+    if (typeof(x) != typeof(y))
+        warning("matrix typeof ", typeof(x), ", ", typeof(y),
+                " differ")
     xdim <- dimnames(x)
     ydim <- dimnames(y)
     if (is.null(xdim) || is.null(ydim) ||
