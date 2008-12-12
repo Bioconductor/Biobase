@@ -37,6 +37,10 @@ validAnnotatedDataFrame <- function( object ) {
 
 setValidity("AnnotatedDataFrame", validAnnotatedDataFrame)
 
+setAs("AnnotatedDataFrame", "data.frame", function(from) {
+    pData(from)
+})
+
 setMethod("updateObject", signature(object="AnnotatedDataFrame"),
           function(object, ..., verbose=FALSE) {
               if (verbose) message("updateObject(object = 'AnnotatedDataFrame')")

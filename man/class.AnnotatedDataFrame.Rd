@@ -12,6 +12,7 @@
 \alias{[[,AnnotatedDataFrame-method}
 \alias{$<-,AnnotatedDataFrame-method}
 \alias{$,AnnotatedDataFrame-method}
+\alias{coerce,AnnotatedDataFrame,data.frame-method}
 \alias{combine,AnnotatedDataFrame,AnnotatedDataFrame-method}
 \alias{initialize,AnnotatedDataFrame-method}
 \alias{coerce,data.frame,AnnotatedDataFrame-method}
@@ -88,6 +89,9 @@
 
   Class-specific methods.
   \describe{
+
+    \item{\code{as(annotatedDataFrame, "data.frame")}}{Coerce objects of
+      \code{AnnotatedDataFrame} to \code{data.frame}.}
     \item{\code{combine(<AnnotatedDataFrame>,
 	<AnnotatedDataFrame>}:}{Bind data from one
       \code{AnnotatedDataFrame} to a second
