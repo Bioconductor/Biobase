@@ -11,7 +11,7 @@ setGeneric("channel",         function(object, name, ...) standardGeneric("chann
 setGeneric("combine",
            function(x, y, ...) {
                if (length(list(...)) > 0) {
-                   callGeneric(x, do.call("callGeneric",
+                   callGeneric(x, do.call(callGeneric,
                                           list(y, ...)))
                } else {
                    standardGeneric("combine")

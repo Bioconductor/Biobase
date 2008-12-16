@@ -196,12 +196,12 @@ readExpressionSet <- function(exprsFile,
     if (missing(exprsFile))
         stop("exprs can not be missing!")
     exprsArgs$file=exprsFile
-    ex = as.matrix(do.call("read.table", exprsArgs))
+    ex = as.matrix(do.call(read.table, exprsArgs))
 
     ## phenoData
     if (!missing(phenoDataFile)) {
         phenoDataArgs$file=phenoDataFile
-        pd = do.call("read.AnnotatedDataFrame", phenoDataArgs)
+        pd = do.call(read.AnnotatedDataFrame, phenoDataArgs)
         if (!identical(sampleNames(pd), colnames(ex)))
             stop("Column names of expression matrix must be identical to\n",
                  "the sample names of the phenodata table.\n",
@@ -220,7 +220,7 @@ readExpressionSet <- function(exprsFile,
     if (!missing(experimentDataFile))
         experimentDataArgs$file=experimentDataFile
     if (!is.null(experimentDataArgs$file))
-        experimentData(obj) <- do.call("read.MIAME", experimentDataArgs)
+        experimentData(obj) <- do.call(read.MIAME, experimentDataArgs)
     ## annotation
     if (!missing(annotation))
         annotation(obj) <- annotation

@@ -34,7 +34,7 @@ setMethod("initialize", signature(.Object="Versions"),
 setMethod("updateObject", signature(object="Versions"),
           function(object, ..., verbose=FALSE) {
               if (verbose) message("updateObject(object = 'Versions')")
-              if (!isS4(object)) do.call("new", c("Versions", object))
+              if (!isS4(object)) do.call(new, c("Versions", object))
               else object
       })
 

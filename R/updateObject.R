@@ -90,14 +90,14 @@ updateObjectFromSlots <- function(object, objclass = class(object), ..., verbose
         if (verbose) message("heuristic updateObjectFromSlots, method 1")
         res <- 
           tryCatch({
-              do.call("new", c(objclass, objectSlots[joint]))
+              do.call(new, c(objclass, objectSlots[joint]))
           }, error=errf("'new(\"", objclass, "\", ...)' from slots failed"))
     }
     if (is.null(res)) {
         if (verbose) message("heuristic updateObjectFromSlots, method 2")
         res <- 
           tryCatch({
-              obj <- do.call("new", list(objclass))
+              obj <- do.call(new, list(objclass))
               for (slt in joint) slot(obj, slt) <- updateObject(objectSlots[[slt]], ..., verbose=verbose)
               obj
           }, error=errf("failed to add slots to 'new(\"", objclass, "\", ...)'"))

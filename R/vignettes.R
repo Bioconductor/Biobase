@@ -34,7 +34,7 @@ getPkgVigs = function(package=NULL) {
       pkgVigs[[j]] = rv
     }
   } ## for j
-  do.call("rbind", args=pkgVigs)
+  do.call(rbind, args=pkgVigs)
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

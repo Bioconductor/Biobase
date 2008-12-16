@@ -50,12 +50,12 @@ helperNew <- function(obj, ...) {
   }
   dots <- if (length(list(...))>0) list(...) else NULL
   switch(obj,
-         SnpSetDetail = do.call("new", c(obj,argsSnpDetail(allClasses[[obj]]), dots)),
-         SnpSet2 = do.call("new", c(obj,argsSnpN(2),dots)),
-         SnpSet4 = do.call("new", c(obj,argsSnpN(8),dots)),           
+         SnpSetDetail = do.call(new, c(obj,argsSnpDetail(allClasses[[obj]]), dots)),
+         SnpSet2 = do.call(new, c(obj,argsSnpN(2),dots)),
+         SnpSet4 = do.call(new, c(obj,argsSnpN(8),dots)),           
          eSet = new("eSet", ...),
          ## default
-         do.call("new", c(obj, args(allClasses[[obj]]), dots)))
+         do.call(new, c(obj, args(allClasses[[obj]]), dots)))
 }
 
 helperFillWithNoise <- function( obj ) {
