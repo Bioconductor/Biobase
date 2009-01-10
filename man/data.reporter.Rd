@@ -17,16 +17,18 @@
 \details{
   There are 10 predefined probe types:
 
-  \item{\code{AFFX-}}{Quality Control (QC)}
-  \item{\code{_f_}}{SequenceFamily}
-  \item{\code{_g_}}{CommonGroups}
-  \item{\code{_s_}}{SimilarityConstraint}
-  \item{\code{_r_}}{RulesDropped}
-  \item{\code{_i_}}{Incomplete}
-  \item{\code{_b_}}{AmbiguousProbeSet}
-  \item{\code{_l_}}{LongProbeSet}
-  \item{\code{_at}}{AntiSenseTarget}
-  \item{\code{_st}}{SenseTarget}
+  \itemize{
+    \item{\code{AFFX-}}{Quality Control (QC)}
+    \item{\code{_f_}}{SequenceFamily}
+    \item{\code{_g_}}{CommonGroups}
+    \item{\code{_s_}}{SimilarityConstraint}
+    \item{\code{_r_}}{RulesDropped}
+    \item{\code{_i_}}{Incomplete}
+    \item{\code{_b_}}{AmbiguousProbeSet}
+    \item{\code{_l_}}{LongProbeSet}
+    \item{\code{_at}}{AntiSenseTarget}
+    \item{\code{_st}}{SenseTarget}
+  }
 }
 \source{
   Affymetrix GeneChip Expression Analysis Data Analysis Fundamentals (\url{http://www.affymetrix.com/Auth/support/downloads/manuals/data_analysis_fundamentals_manual.pdf})

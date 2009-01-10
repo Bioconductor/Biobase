@@ -147,7 +147,7 @@
   \code{sampleNames<-}, \code{storageMode}, \code{varMetadata},
   \code{isCurrent}, \code{isVersioned}, \code{updateObject}.
 
-  Additional methods: \code{coerce} (\sQuote(as), to convert between
+  Additional methods: \code{coerce} (\sQuote{as}, to convert between
   objects, if possible), \code{initialize} (used internally for
   creating objects), \code{show} (invoked automatically when the
   object is displayed to the screen)
