@@ -9,7 +9,7 @@
 }
 
 \usage{
-copySubstitute(src, dest, symbolValues, symbolDelimiter="@", allowUnresolvedSymbols=FALSE, recursive = FALSE, removeExtension = "\\.in$")
+copySubstitute(src, dest, symbolValues, symbolDelimiter="@", allowUnresolvedSymbols=FALSE, recursive = FALSE, removeExtension = "\\\\.in$")
 }
 
 \arguments{
