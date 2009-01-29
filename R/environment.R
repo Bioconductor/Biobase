@@ -58,6 +58,7 @@ biocReposList <- function() {
                    aData=mkurl("data/annotation"),
                    eData=mkurl("data/experiment"),
                    extra=mkurl("extra"),
+                   brainarray="http://brainarray.mbni.med.umich.edu/bioc",
                    cran="http://cran.fhcrc.org")
     reposList
 }
