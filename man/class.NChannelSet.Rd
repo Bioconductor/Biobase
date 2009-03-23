@@ -38,7 +38,7 @@
   \describe{
     \item{\code{assayData}:}{
       Object of class \code{\link{AssayData}}, usually
-      an environment containing matricies of identical size. Each matrix
+      an environment containing matrices of identical size. Each matrix
       represents a single channel. Columns in each matrix correspond to
       samples, rows to features. Once created, \code{NChannelSet} manages
       coordination of samples and channels.
