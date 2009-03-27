@@ -23,7 +23,7 @@ setMethod("rowQ", signature(imat="matrix", which="numeric"),
               if (any(is.na(imat)))
                 stop("cannot handle missing values.")
               if (length(which) != 1 || !is.finite(which))
-                stop("which must be length one and finite numeric")
+                stop("'which' must be length one and finite numeric")
               .Call("rowQ", imat, which, PACKAGE="Biobase")
           })
 
