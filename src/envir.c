@@ -97,11 +97,11 @@ SEXP rowQ(SEXP inmat, SEXP which)
 
   /* we can do integers later */
   if( !isMatrix(inmat) || !isReal(inmat) )
-    error("argument must be a numeric matrix");
+    error("'imat' must be a numeric matrix");
 
   /* FIXME: should check for FINITE/NA */
   if( !isNumeric(which) || length(which) != 1 )
-    error("which must be numeric");
+    error("'which' must be numeric");
 
   /* subtract one here, since rPsort does zero based addressing*/
   medval = asInteger(which) - 1;
@@ -112,7 +112,7 @@ SEXP rowQ(SEXP inmat, SEXP which)
 
   /* sanity check */
   if( medval < 0 || medval >= ncol )
-    error("which  is larger than the number of rows");
+    error("'which' is larger than the number of columns");
 
   PROTECT(ans = allocVector(REALSXP, nrow));
   
