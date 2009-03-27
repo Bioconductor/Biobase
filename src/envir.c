@@ -101,7 +101,7 @@ SEXP rowQ(SEXP inmat, SEXP which)
 
   /* FIXME: should check for FINITE/NA */
   if( !isNumeric(which) || length(which) != 1 )
-    error("'which' must be numeric");
+    error("'which' order statistic must be numeric");
 
   /* subtract one here, since rPsort does zero based addressing*/
   medval = asInteger(which) - 1;
@@ -112,7 +112,8 @@ SEXP rowQ(SEXP inmat, SEXP which)
 
   /* sanity check */
   if( medval < 0 || medval >= ncol )
-    error("'which' is larger than the number of columns");
+      error("cannot calculate order statistic on object with %d columns",
+            ncol);
 
   PROTECT(ans = allocVector(REALSXP, nrow));
   
