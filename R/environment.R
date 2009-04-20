@@ -48,7 +48,7 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 biocReposList <- function() {
     ## Locations of Bioconductor release repositories
-    VERSION <- "2.4"
+    VERSION <- "2.5"
     bioc_topurl <- getOption("BioC")$Base$urls$bioc
     if (is.null(bioc_topurl))
         bioc_topurl <- "http://bioconductor.org"
