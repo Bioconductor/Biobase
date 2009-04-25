@@ -132,7 +132,11 @@ setMethod("sampleNames",
               appl <- 
                 if (storageMode(object)=="list") lapply
                 else eapply
-              appl(assayData(object), colnames)
+              res <- appl(assayData(object), colnames)
+              ident <- sapply(res[-1], function(elt, ref) all(elt==ref),
+                              res[[1]])
+              if (all(ident)) res[[1]]
+              else res
           })
 
 setReplaceMethod("sampleNames",

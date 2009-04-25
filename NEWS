@@ -1,5 +1,16 @@
         **************************************************
         *                                                *
+        *              2.10 SERIES NEWS                   *
+        *                                                *
+        **************************************************
+
+USER VISIBLE CHANGES
+
+    o 'sampleNames,NChannelSet-method' returns a vector when the
+    sample names of each channel are the same.
+
+        **************************************************
+        *                                                *
         *              2.8 SERIES NEWS                   *
         *                                                *
         **************************************************

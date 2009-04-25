@@ -131,6 +131,17 @@ testSampleNamesUpdate <- function() {
     checkTrue(validObject(obj))
     checkTrue(all(sampleNames(obj)[["R"]] == LETTERS[5:1]) &&
               all(sampleNames(obj)[["G"]] == letters[5:1]))
+
+    ## drop to character when smaple names identic
+    sampleNames(obj) <- LETTERS[1:5]
+    checkIdentical(LETTERS[1:5], sampleNames(obj))
+    checkIdentical(list(G=LETTERS[1:5], R=LETTERS[1:5]),
+                   eapply(assayData(obj), colnames))
+
+    checkException(sampleNames(obj) <- list(LETTERS[1:5]),
+                   silent=TRUE)         # unnamed repleacement
+    checkException(sampleNames(obj) <- list(X=LETTERS[1:5]) ,
+                   silent=TRUE)         # misnamed repleacement
 }
 
 testSelectChannels <- function() {

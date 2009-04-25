@@ -151,26 +151,38 @@ setReplaceMethod("sampleNames", c("AssayData", "ANY"), function(object, value) {
     object
 })
 
+
 setReplaceMethod("sampleNames",
                  signature=signature(
                    object="AssayData",
                    value="list"),
-                 function(object, value) {
-                     switch(assayDataStorageMode(object),
-                            lockedEnvironment = {
-                                object <- copyEnv(object)
-                                for (nm in names(value))
-                                  colnames(object[[nm]]) <- value[[nm]]
-                                assayDataEnvLock(object)
-                            }, environment = {
-                                for (nm in names(value))
-                                  colnames(object[[nm]]) <- value[[nm]]
-                            }, list= {
-                                for (nm in names(value))
-                                  colnames(object[[nm]]) <- value[[nm]]
-                            })
-                     object
-                 })
+                 function(object, value) 
+{
+    .names_found_unique <- function(names, table)
+    {
+        ok <- !is.null(names) && all(names %in% table) && 
+              !any(duplicated(names))
+        if (!ok)
+            stop("'sampleNames' replacement list must have unique named elements corresponding to assayData element names")
+    }
+    switch(assayDataStorageMode(object),
+           lockedEnvironment = {
+               .names_found_unique(names(value), ls(object))
+               object <- copyEnv(object)
+               for (nm in names(value))
+                   colnames(object[[nm]]) <- value[[nm]]
+               assayDataEnvLock(object)
+           }, environment = {
+               .names_found_unique(names(value), ls(object))
+               for (nm in names(value))
+                   colnames(object[[nm]]) <- value[[nm]]
+           }, list= {
+               .names_found_unique(names(value), namess(object))
+               for (nm in names(value))
+                   colnames(object[[nm]]) <- value[[nm]]
+           })
+    object
+})
 
 setMethod("featureNames", signature(object="AssayData"),
           function(object) {
