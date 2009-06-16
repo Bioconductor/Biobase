@@ -177,7 +177,7 @@ setReplaceMethod("sampleNames",
                for (nm in names(value))
                    colnames(object[[nm]]) <- value[[nm]]
            }, list= {
-               .names_found_unique(names(value), namess(object))
+               .names_found_unique(names(value), names(object))
                for (nm in names(value))
                    colnames(object[[nm]]) <- value[[nm]]
            })
