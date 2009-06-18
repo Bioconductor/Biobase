@@ -6,6 +6,10 @@
 
 USER VISIBLE CHANGES
 
+    o 'scanDates' slot added to eSet class to store a character
+    vector of length #samples; can be accessed by scanDates and
+    set by scanDates<-.
+
     o 'sampleNames,NChannelSet-method' returns a vector when the
     sample names of each channel are the same.
 
