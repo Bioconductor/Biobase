@@ -1,23 +1,24 @@
 setMethod("initialize", "SnpSet",
           function(.Object,
-                   assayData = assayDataNew(
-                     call = call,
-                     callProbability = callProbability, ...),
+                   assayData = assayDataNew(call = call,
+                                            callProbability = callProbability, ...),
                    phenoData = annotatedDataFrameFrom(assayData, byrow=FALSE),
                    featureData = annotatedDataFrameFrom(assayData, byrow=TRUE),
                    experimentData = new("MIAME"),
                    annotation = character(),
+                   scanDates = character(),
                    call = new("matrix"),
-                   callProbability = matrix(
-                     numeric(), nrow=nrow(call), ncol=ncol(call),
-                     dimnames=dimnames(call)),
-                   ... ) {
+                   callProbability = matrix(numeric(),
+                                            nrow=nrow(call), ncol=ncol(call),
+                                            dimnames=dimnames(call)),
+                   ...) {
             callNextMethod(.Object,
                            assayData = assayData,
                            phenoData = phenoData,
                            featureData = featureData,
                            experimentData = experimentData,
-                           annotation = annotation)
+                           annotation = annotation,
+                           scanDates = scanDates)
           })
 
 setValidity("SnpSet", function(object) {

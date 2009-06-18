@@ -85,6 +85,11 @@
       experiment. The annotation string is used to retrieve information 
       about features, e.g., using the \code{annotation} package.}
 
+    \item{\code{scanDates}:}{
+      Object of class \code{"character"}. A character vector
+      identifying the dates the samples were scanned during the
+      experiment.}
+
     \item{\code{.__classVersion__}:}{
       Object of class \code{\link{Versions}}, containing
       automatically created information about the class definition
@@ -140,12 +145,15 @@
   }
 
   Methods with functionality derived from \code{\link{eSet}}:
-  \code{annotation}, \code{assayData}, \code{assayData<-},
-  \code{classVersion}, \code{classVersion<-}, \code{dim}, \code{dims},
-  \code{experimentData}, \code{featureData}, \code{phenoData},
-  \code{phenoData<-}, \code{pubMedIds}, \code{sampleNames},
-  \code{sampleNames<-}, \code{storageMode}, \code{varMetadata},
-  \code{isCurrent}, \code{isVersioned}, \code{updateObject}.
+  \code{annotation}, \code{annotation<-}, \code{assayData},
+  \code{assayData<-}, \code{classVersion}, \code{classVersion<-},
+  \code{dim}, \code{dims}, \code{experimentData}, \code{experimentData<-},
+  \code{featureData}, \code{featureData<-}, \code{phenoData},
+  \code{phenoData<-}, \code{pubMedIds}, \code{pubMedIds<-},
+  \code{sampleNames}, \code{sampleNames<-}, \code{scanDates},
+  \code{scanDates<-}, \code{storageMode}, \code{storageMode<-},
+  \code{varMetadata}, \code{varMetadata<-}, \code{isCurrent},
+  \code{isVersioned}, \code{updateObject}.
 
   Additional methods: \code{coerce} (\sQuote{as}, to convert between
   objects, if possible), \code{initialize} (used internally for

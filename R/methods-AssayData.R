@@ -123,9 +123,11 @@ setMethod("sampleNames", signature(object="AssayData"),
           function(object) {
               if (!length(object))
                 return(character(0))
+              safe.colnames <-
+                function(x) if (nrow(x) == 0) character(0) else colnames(x)
               switch(assayDataStorageMode(object),
-                     list=colnames(object[[1]]),
-                     colnames(object[[ls(object)[1]]]))
+                     list=safe.colnames(object[[1]]),
+                     safe.colnames(object[[ls(object)[1]]]))
           })
 
 setReplaceMethod("sampleNames", c("AssayData", "ANY"), function(object, value) {
@@ -188,9 +190,11 @@ setMethod("featureNames", signature(object="AssayData"),
           function(object) {
               if (!length(object))
                 return(character(0))
+              safe.rownames <-
+                function(x) if (nrow(x) == 0) character(0) else rownames(x)
               switch(assayDataStorageMode(object),
-                     list=rownames(object[[1]]),
-                     rownames(object[[ls(object)[1]]]))
+                     list=safe.rownames(object[[1]]),
+                     safe.rownames(object[[ls(object)[1]]]))
           })
 
 
@@ -254,10 +258,12 @@ assayDataDim <- function(object) {
 
 ##FIXME: RG says I don't know if you should ignore non-matrix objects or
 ## not -  for now I have put in an informative error message
-assayDataDims <- function( object ) {
+assayDataDims <- function(object) {
   nms <- if (assayDataStorageMode(object) == "list") names(object) else ls(object)
-  if ( length( nms ) == 0 ) return( NA )
-  d = sapply(nms, function(i) dim(object[[i]]))
+  if (length(nms) == 0)
+    return(matrix(integer(0), nrow = 2, ncol = 0, 
+                  dimnames = list(c("Features", "Samples"), character(0))))
+  d <- sapply(nms, function(i) dim(object[[i]]))
   rownames(d) <- c("Features", "Samples", rep("...", nrow(d)-2))
   colnames(d) <- nms
   d[,order(colnames(d)), drop=FALSE]

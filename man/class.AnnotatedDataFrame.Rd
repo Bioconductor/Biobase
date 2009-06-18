@@ -79,10 +79,15 @@
    \describe{
       \item{\code{data}:}{A \code{data.frame} containing samples (rows)
 	and measured variables (columns).}
+	  \item{\code{dimLabels}:}{A \code{character} vector of length 2 that
+	provides labels for the rows and columns in the \code{show} method.}
       \item{\code{varMetadata}:}{A \code{data.frame} with number of rows
 	equal number of columns in \code{data}, and at least one column,
 	named \code{labelDescription}, containing a textual description
 	of each variable.}
+      \item{\code{.__classVersion__}:}{A \code{Versions} object describing
+    the R and Biobase version numbers used to created the instance.
+    Intended for developer use.}
   }
 }
 \section{Methods}{

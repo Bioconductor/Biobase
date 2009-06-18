@@ -3,12 +3,13 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("initialize",
           signature(.Object="eSet"),
-          function( .Object,
+          function(.Object,
                    assayData,
                    phenoData = annotatedDataFrameFrom(assayData, byrow=FALSE),
                    featureData = annotatedDataFrameFrom(assayData, byrow=TRUE),
-                   experimentData = new( "MIAME" ),
+                   experimentData = new("MIAME"),
                    annotation = character(0),
+                   scanDates,
                    ...) {
               ## NB: Arguments provided in '...' are used to initialize
               ## slots if possible (when called from some subclass).
@@ -36,28 +37,40 @@ setMethod("initialize",
                             paste(nms[dupNames], collapse="' '"),
                             "' also present in 'assayData'; argument(s) ignored")
               }
-              if (!missing(phenoData)) {
-                  checkClass(phenoData, "AnnotatedDataFrame", class(.Object))
-              }
+              if (!missing(phenoData))
+                checkClass(phenoData, "AnnotatedDataFrame", class(.Object))
               dimLabels(phenoData) <- c("sampleNames", "sampleColumns")
               if (!missing(featureData))
                 checkClass(featureData, "AnnotatedDataFrame", class(.Object))
               dimLabels(featureData) <- c("featureNames", "featureColumns")
+              ## create the scanDates, if necessary
+              if (missing(scanDates) || length(scanDates) == 0) {
+                dims <- assayDataDims(assayData)
+                if (ncol(dims) == 0)
+                  scanDates <- character(0)
+                else
+                  scanDates <- rep(NA_character_, dims[2,1])
+              }
               ## coordinate sample names
               adSampleNames <- sampleNames(assayData)
-              if (all(sapply(adSampleNames,is.null)))
+              if (all(sapply(adSampleNames, is.null)))
                 sampleNames(assayData) <- sampleNames(phenoData)
+              if (is.null(names(scanDates)))
+                names(scanDates) <- sampleNames(phenoData)
               ## where do feature names come from? assayData or featureData
               adFeatureNames <- featureNames(assayData)
               if (all(sapply(adFeatureNames, is.null)))
                 featureNames(assayData) <- featureNames(featureData)
               ## create new instance from 'extra' dotArgs, and from instance
               for (s in names(dotArgs)[isSlot])
-                   slot(.Object, s) <- dotArgs[[s]]
+                slot(.Object, s) <- dotArgs[[s]]
               callNextMethod(.Object,
                              assayData=assayData,
-                             phenoData=phenoData, featureData=featureData,
-                             experimentData=experimentData, annotation=annotation)
+                             phenoData=phenoData,
+                             featureData=featureData,
+                             experimentData=experimentData,
+                             annotation=annotation,
+                             scanDates=scanDates)
           })
 
 updateOldESet <- function(from, toClass, ...) {  # to MultiExpressionSet
@@ -157,53 +170,75 @@ setMethod("updateObject", signature(object="eSet"),
               storage.mode <-
                 if (storage.mode.final == "lockedEnvironment") "environment"
                 else storage.mode.final
+              additionalSlots <- setdiff(slotNames(class(object)), slotNames("eSet"))
+              names(additionalSlots) <- additionalSlots
               if (!isVersioned(object)) {
-                  object <- updateESetTo(object, new(class(object), storage.mode=storage.mode), ..., verbose=verbose)
-                  storageMode(object) <- storage.mode.final
+                object <- updateESetTo(object, new(class(object), storage.mode=storage.mode), ..., verbose=verbose)
+                storageMode(object) <- storage.mode.final
               } else if (classVersion(object)["eSet"]=="1.0.0") {
-                  ## added featureData slot; need to update phenoData
-                  object <-
-                    new(class(object),
-                        assayData=updateObject(assayData(object), ..., verbose=verbose),
-                        phenoData=new("AnnotatedDataFrame",
-                          data=pData(object), varMetadata=varMetadata(object)),
-                        featureData(object) <- annotatedDataFrameFrom(assayData(object), byrow=TRUE),
-                        experimentData = updateObject(experimentData(object), ..., verbose=verbose),
-                        annotation = annotation(object))
+                ## added featureData slot; need to update phenoData
+                object <-
+                  do.call(new,
+                          c(list(class(object),
+                                 assayData = updateObject(assayData(object), ..., verbose=verbose),
+                                 phenoData = new("AnnotatedDataFrame", data=pData(object),
+                                                 varMetadata=varMetadata(object)),
+                                 featureData = annotatedDataFrameFrom(assayData(object), byrow=TRUE),
+                                 experimentData = updateObject(experimentData(object), ..., verbose=verbose),
+                                 annotation = annotation(object)),
+                            lapply(additionalSlots, function(x) slot(object, x))))
+              } else if (classVersion(object)["eSet"]=="1.1.0") {
+                ## added scanDates slot
+                object <-
+                  do.call(new,
+                          c(list(class(object),
+                                 assayData = assayData(object),
+                                 phenoData = phenoData(object),
+                                 featureData = featureData(object),
+                                 experimentData = experimentData(object),
+                                 annotation = annotation(object)),
+                            lapply(additionalSlots, function(x) slot(object, x))))
               }
-              else stop("cannot update object of class '", class(object),
-                        "', claiming to be eSet version '", as(classVersion(object)["eSet"], "character"), "'")
+              else {
+                stop("cannot update object of class '", class(object),
+                     "', claiming to be eSet version '",
+                     as(classVersion(object)["eSet"], "character"), "'")
+              }
               object
           })
 
 setMethod("updateObjectTo", signature(object="eSet", template="eSet"), updateESetTo)
 
-setValidity("eSet", function( object ) {
+setValidity("eSet", function(object) {
     msg <- validMsg(NULL, isValidVersion(object, "eSet"))
     dims <- dims(object)
-    if (!is.na(dims[[1]])) {
+    if (ncol(dims) > 0) {
         ## assayData
-        if (any( dims[1,] != dims[1,1]))
+        if (any(dims[1,] != dims[1,1]))
           msg <- validMsg(msg, "row numbers differ for assayData members")
         if (any(dims[2,] != dims[2,1]))
           msg <- validMsg(msg, "sample numbers differ for assayData members")
         msg <- validMsg(msg, assayDataValidMembers(assayData(object)))
         ## featureData
-        if ( dims[1,1] != dim( featureData(object))[[1]] )
+        if (dims[1,1] != dim( featureData(object))[[1]])
           msg <- validMsg(msg, "feature numbers differ between assayData and featureData")
-        if (!all(featureNames(assayData(object))==featureNames(featureData(object))))
+        if (!identical(featureNames(assayData(object)), featureNames(featureData(object))))
           msg <- validMsg(msg, "featureNames differ between assayData and featureData")
         ## phenoData
-        if ( dims[2,1] != dim( phenoData( object ))[[1]] )
+        if (dims[2,1] != dim(phenoData(object))[[1]])
           msg <- validMsg(msg, "sample numbers differ between assayData and phenoData")
-        if (!all(sampleNames(assayData(object))==sampleNames(phenoData(object))))
+        if (!identical(sampleNames(assayData(object)), sampleNames(phenoData(object))))
           msg <- validMsg(msg, "sampleNames differ between assayData and phenoData")
+        ## scanDates
+        if (dims[2,1] != length(scanDates(object)))
+          msg <- validMsg(msg, "number of scanDates does not match the sample number")
+        if (!identical(names(scanDates(object)), sampleNames(assayData(object))))
+          msg <- validMsg(msg, "sampleNames differ between scanDates and assayData")
     }
     if (is.null(msg)) TRUE else msg
 })
 
-setMethod("preproc", "eSet", function(object)
-       preproc(experimentData(object)))
+setMethod("preproc", "eSet", function(object) preproc(experimentData(object)))
 
 setReplaceMethod("preproc",
                  signature=signature(object="eSet"),
@@ -266,6 +301,11 @@ setReplaceMethod("sampleNames",
                      ad <- assayData(object)
                      sampleNames(ad) <- value
                      object@phenoData <- pd
+                     sd <- scanDates(object)
+                     if (length(sd) == 0)
+                       sd <- rep(NA_character_, length(value))
+                     names(sd) <- value
+                     scanDates(object) <- sd
                      unsafeSetSlot(object, "assayData", ad)
                  })
 
@@ -289,7 +329,8 @@ setMethod("dim", "eSet", function(x) assayDataDim(assayData(x)))
 setMethod("dims", "eSet", function(object) assayDataDims(assayData(object)))
 
 setMethod("[", "eSet", function(x, i, j, ..., drop = FALSE) {
-  if (missing(drop)) drop <- FALSE
+  if (missing(drop))
+    drop <- FALSE
   if (missing(i) && missing(j)) {
       if (length(list(...))!=0)
         stop("specify genes or samples to subset; use '",
@@ -297,8 +338,12 @@ setMethod("[", "eSet", function(x, i, j, ..., drop = FALSE) {
              "' to access phenoData variables")
       return(x)
   }
-  if (!missing(j))
+  if (!isVersioned(x) || !isCurrent(x)["eSet"])
+    x <- updateObject(x)
+  if (!missing(j)) {
     phenoData(x) <- phenoData(x)[j,, ..., drop = drop]
+    scanDates(x) <- scanDates(x)[j]
+  }
   if (!missing(i))
     featureData(x) <- featureData(x)[i,,..., drop=drop]
   ## assayData; implemented here to avoid function call
@@ -569,6 +614,32 @@ setReplaceMethod("annotation",
                      object
                  })
 
+setMethod("scanDates", "eSet",
+          function(object) {
+              tryCatch(object@scanDates, error = function(x) {
+                         snames <- sampleNames(phenoData(object))
+                         structure(rep(NA_character_, length(snames)),
+                                   names = snames)
+                       })
+          })
+
+setReplaceMethod("scanDates",
+                 signature=signature(
+                   object="eSet",
+                   value="character"),
+                 function(object, value) {
+                     if (class(try(object@scanDates, silent = TRUE)) == "try-error")
+                       object <- updateObject(object)
+                     snames <- sampleNames(phenoData(object))
+                     if (!is.character(value))
+                       value <- as.character(value)
+                     if (length(snames) != length(value))
+                       stop("'scanDates' replacement must be a character vector of length ", length(snames))
+                     names(value) <- snames
+                     object@scanDates <- value
+                     object
+                 })
+
 setMethod("combine",
           signature=signature(
             x="eSet", y="eSet"),
@@ -583,6 +654,7 @@ setMethod("combine",
               phenoData(x) <- combine(phenoData(x), phenoData(y))
               featureData(x) <- combine(featureData(x), featureData(y))
               experimentData(x) <- combine(experimentData(x),experimentData(y))
+              scanDates(x) <- c(scanDates(x), scanDates(y))
               ## annotation -- constant
               x
           })

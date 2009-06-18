@@ -136,17 +136,19 @@ setClass("eSet",
                         featureData = "AnnotatedDataFrame",
                         experimentData = "MIAME",
                         annotation = "character",
+                        scanDates="character",
                         "VIRTUAL"),
          contains="VersionedBiobase",
          prototype = prototype(
-           new("VersionedBiobase", versions=c(eSet="1.1.0")),
+           new("VersionedBiobase", versions=c(eSet="1.2.0")),
            assayData = list(), # use initialize to set as env, so different instances have different envs
            phenoData = new("AnnotatedDataFrame",
              dimLabels=c("sampleNames", "sampleColumns")),
            featureData = new("AnnotatedDataFrame",
              dimLabels=c("featureNames", "featureColumns")),
-           experimentData = new( "MIAME" ),
-           annotation = character()))
+           experimentData = new("MIAME"),
+           annotation = character(),
+           scanDates = character()))
 setClass("ExpressionSet",
          contains = "eSet",
          prototype = prototype(

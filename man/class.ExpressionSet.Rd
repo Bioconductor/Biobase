@@ -40,6 +40,7 @@
     featureData = new("AnnotatedDataFrame"),
     experimentData = new("MIAME"),
     annotation = character(0),
+    scanDates = character(0),
     exprs = new("matrix"))
   }
 
@@ -54,7 +55,8 @@
     phenoData = new("AnnotatedDataFrame"),
     featureData = new("AnnotatedDataFrame"),
     experimentData = new("MIAME"),
-    annotation = character(0))
+    annotation = character(0),
+    scanDates = character(0))
   }
 
   This creates an \code{ExpressionSet} with \code{assayData} provided
@@ -66,10 +68,12 @@
   \code{ExpressionSet} instances are usually created through
   \code{new("ExpressionSet", ...)}. Usually the arguments to \code{new}
   include \code{exprs} (a matrix of expression data, with features
-  corresponding to rows and samples to columns), \code{phenoData}, \code{featureData},
-  \code{experimentData}, and \code{annotation}. 
-  \code{phenoData}, \code{featureData}, \code{experimentData}, and \code{annotation} can be
-  missing, in which case they are assigned default values.
+  corresponding to rows and samples to columns), \code{phenoData},
+  \code{featureData}, \code{experimentData}, \code{annotation}, and
+  \code{scanDates}. 
+  \code{phenoData}, \code{featureData}, \code{experimentData},
+  \code{annotation}, and \code{scanDates} can be missing, in which case
+  they are assigned default values.
 }
 \section{Slots}{
   Inherited from \code{eSet}:
@@ -85,6 +89,7 @@
       \item{\code{featureData}:}{See \code{\link{eSet}}}
       \item{\code{experimentData}:}{See \code{\link{eSet}}}
       \item{\code{annotation}:}{See \code{\link{eSet}}}
+      \item{\code{scanDates}:}{See \code{\link{eSet}}}
   }
 }
 \section{Methods}{
@@ -125,6 +130,7 @@
      \item{\code{pubMedIds(ExpressionSet)}, \code{pubMedIds(ExpressionSet,value)}}{See \code{\link{eSet}}}
      \item{\code{abstract(ExpressionSet)}:}{See \code{\link{eSet}}}
      \item{\code{annotation(ExpressionSet)}, \code{annotation(ExpressionSet,value)<-}}{See \code{\link{eSet}}}
+     \item{\code{scanDates(ExpressionSet)}, \code{scanDates(ExpressionSet,value)<-}}{See \code{\link{eSet}}}
      \item{\code{combine(ExpressionSet,ExpressionSet)}:}{See \code{\link{eSet}}}
      \item{\code{storageMode(ExpressionSet)}, \code{storageMode(ExpressionSet,character)<-}:}{See \code{\link{eSet}}}
   }

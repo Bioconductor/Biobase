@@ -89,6 +89,7 @@ setMethod("channel",
                   featureData = featureData(obj),
                   experimentData = experimentData(obj),
                   annotation=annotation(obj),
+                  scanDates=scanDates(obj),
                   exprs = assayData(obj)[[name]],
                   ...)
           })
@@ -123,6 +124,7 @@ setMethod("selectChannels",
                          featureData = featureData(object),
                          experimentData=experimentData(object),
                          annotation=annotation(object),
+                         scanDates=scanDates(object),
                          ...)
           })
 

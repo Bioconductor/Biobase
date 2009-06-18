@@ -1,10 +1,8 @@
 setMethod("initialize", "ExpressionSet",
           function(.Object,
                    assayData,
-                   phenoData = annotatedDataFrameFrom(assayData, byrow=FALSE),
-                   featureData = annotatedDataFrameFrom(assayData, byrow=TRUE),
-                   experimentData = new("MIAME"),
-                   annotation = character(),
+                   phenoData,
+                   featureData,
                    exprs = new("matrix"),
                    ... ) {
               if (missing(assayData)) {
@@ -13,19 +11,19 @@ setMethod("initialize", "ExpressionSet",
                   if (missing(featureData))
                     featureData <- annotatedDataFrameFrom(exprs, byrow=TRUE)
                   .Object <- callNextMethod(.Object,
-                                            phenoData=phenoData,
-                                            featureData=featureData,
-                                            experimentData=experimentData,
-                                            annotation=annotation,
-                                            exprs=exprs,
+                                            phenoData = phenoData,
+                                            featureData = featureData,
+                                            exprs = exprs,
                                             ...)
               } else if (missing(exprs)) {
+                  if (missing(phenoData))
+                    phenoData <- annotatedDataFrameFrom(assayData, byrow=FALSE)
+                  if (missing(featureData))
+                    featureData <- annotatedDataFrameFrom(assayData, byrow=TRUE)
                   .Object <- callNextMethod(.Object,
                                             assayData = assayData,
                                             phenoData = phenoData,
                                             featureData = featureData,
-                                            experimentData = experimentData,
-                                            annotation = annotation,
                                             ...)
               } else stop("provide at most one of 'assayData' or 'exprs' to initialize ExpressionSet",
                           call.=FALSE)
@@ -181,6 +179,7 @@ readExpressionSet <- function(exprsFile,
                               notesFile,
                               path,
                               annotation,
+                              scanDates,
                               ## arguments to read.* methods 
                               exprsArgs=list(sep=sep, header=header, row.names=row.names, quote=quote, ...),
                               phenoDataArgs=list(sep=sep, header=header, row.names=row.names, quote=quote, stringsAsFactors=stringsAsFactors, ...),
@@ -224,6 +223,9 @@ readExpressionSet <- function(exprsFile,
     ## annotation
     if (!missing(annotation))
         annotation(obj) <- annotation
+    ## scanDates
+    if (!missing(scanDates))
+        scanDates(obj) <- scanDates
     ## notes
     if (!missing(notesFile))
         notes(obj) <- readLines(notesFile)

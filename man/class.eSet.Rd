@@ -52,6 +52,8 @@
 \alias{preproc<-,eSet-method}
 \alias{sampleNames,eSet-method}
 \alias{sampleNames<-,eSet,ANY-method}
+\alias{scanDates,eSet-method}
+\alias{scanDates<-,eSet,character-method}
 \alias{show,eSet-method}
 \alias{storageMode,eSet-method}
 \alias{storageMode<-,eSet,character-method}
@@ -113,9 +115,11 @@
 	methods. Class: \code{\link{MIAME-class}}}
       \item{\code{annotation}:}{Label associated with the annotation
 	package used in the experiment. Class: \code{character}}
-      \item{\code{.classVersion}:}{Character vector describing the R and
-	Biobase version number used to created the instance. Intended
-	for developer use. Class: \code{\link{Versions-class}}} 
+      \item{\code{scanDates}:}{Dates samples were scanned/digitized.
+    Class: \code{character}}
+      \item{\code{.__classVersion__}:}{A \code{Versions} object describing
+    the R and Biobase version numbers used to created the instance.
+    Intended for developer use.}
   }
 }
 \section{Methods}{
@@ -181,6 +185,9 @@
      \item{\code{annotation(object)},
        \code{annotation(object) <- value}}{Access and set annotation label
        indicating package used in the experiment.}
+     \item{\code{scanDates(object)},
+       \code{scanDates(object) <- value}}{Access and set the scan/digitization
+       dates for the samples.}
      \item{\code{preproc(object)},
        \code{preproc(object) <- value}:}{\code{signature(object="eSet",
 	 value="list")} Access and set \code{preprocessing} information

@@ -73,6 +73,8 @@ setGeneric("reporterNames<-", function(object, value) standardGeneric("reporterN
 setGeneric("sampleNames",     function(object) standardGeneric("sampleNames"))
 setGeneric("sampleNames<-",   function(object, value) standardGeneric("sampleNames<-"))
 setGeneric("samples",         function(object) standardGeneric("samples"))
+setGeneric("scanDates",       function(object) standardGeneric("scanDates"))
+setGeneric("scanDates<-",     function(object, value) standardGeneric("scanDates<-"))
 setGeneric("se.exprs",        function(object) standardGeneric("se.exprs"))
 setGeneric("se.exprs<-",      function(object, value) standardGeneric("se.exprs<-"))
 setGeneric("selectChannels",  function(object, names, ...) standardGeneric("selectChannels"))
