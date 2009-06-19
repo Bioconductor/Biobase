@@ -124,7 +124,7 @@ setMethod("sampleNames", signature(object="AssayData"),
               if (!length(object))
                 return(character(0))
               safe.colnames <-
-                function(x) if (nrow(x) == 0) character(0) else colnames(x)
+                function(x) if (ncol(x) == 0) character(0) else colnames(x)
               switch(assayDataStorageMode(object),
                      list=safe.colnames(object[[1]]),
                      safe.colnames(object[[ls(object)[1]]]))
