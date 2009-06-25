@@ -650,6 +650,8 @@ setMethod("combine",
               if (any(annotation(x) != annotation(y)))
                 stop("objects have different annotations: ",
                      annotation(x), ", ", annotation(y))
+              if (!isCurrent(x)[["eSet"]])
+                  x <- updateObject(x)
               assayData(x) <- combine(assayData(x), assayData(y))
               phenoData(x) <- combine(phenoData(x), phenoData(y))
               featureData(x) <- combine(featureData(x), featureData(y))
