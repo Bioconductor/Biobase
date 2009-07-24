@@ -85,7 +85,7 @@
       experiment. The annotation string is used to retrieve information 
       about features, e.g., using the \code{annotation} package.}
 
-    \item{\code{scanDates}:}{
+    \item{\code{protocolData}:}{
       Object of class \code{"character"}. A character vector
       identifying the dates the samples were scanned during the
       experiment.}
@@ -149,9 +149,9 @@
   \code{assayData<-}, \code{classVersion}, \code{classVersion<-},
   \code{dim}, \code{dims}, \code{experimentData}, \code{experimentData<-},
   \code{featureData}, \code{featureData<-}, \code{phenoData},
-  \code{phenoData<-}, \code{pubMedIds}, \code{pubMedIds<-},
-  \code{sampleNames}, \code{sampleNames<-}, \code{scanDates},
-  \code{scanDates<-}, \code{storageMode}, \code{storageMode<-},
+  \code{phenoData<-}, \code{protocolData}, \code{protocolData<-},
+  \code{pubMedIds}, \code{pubMedIds<-}, \code{sampleNames},
+  \code{sampleNames<-}, \code{storageMode}, \code{storageMode<-},
   \code{varMetadata}, \code{varMetadata<-}, \code{isCurrent},
   \code{isVersioned}, \code{updateObject}.
 

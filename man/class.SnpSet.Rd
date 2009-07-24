@@ -26,7 +26,7 @@
     phenoData = [AnnotatedDataFrame],
     experimentData = [MIAME],
     annotation = [character],
-    scanDates = [character],
+    protocolData = [AnnotatedDataFrame],
     call = [matrix],
     callProbability = [matrix],
     ...)
@@ -36,9 +36,9 @@
   \code{new("SnpSet", ...)}. Usually the arguments to \code{new}
   include \code{call} (a matrix of gentoypic calls, with features (SNPs)
   corresponding to rows and samples to columns), \code{phenoData},
-  \code{experimentData}, \code{annotation}, and \code{scanDates}. 
+  \code{experimentData}, \code{annotation}, and \code{protocolData}. 
   \code{phenoData}, \code{experimentData}, \code{annotation} and
-  \code{scanDates} can be missing, in which case they are assigned
+  \code{protocolData} can be missing, in which case they are assigned
   default values.
 }
 \section{Slots}{
@@ -57,7 +57,7 @@
       \item{\code{phenoData}:}{See \code{\link{eSet}}}
       \item{\code{experimentData}:}{See \code{\link{eSet}}}
       \item{\code{annotation}:}{See \code{\link{eSet}}}
-      \item{\code{scanDates}:}{See \code{\link{eSet}}}
+      \item{\code{protocolData}:}{See \code{\link{eSet}}}
   }
 }
 \section{Methods}{
@@ -86,7 +86,7 @@
      \item{\code{pubMedIds(SnpSet)}, \code{pubMedIds(SnpSet,value)}}{See \code{\link{eSet}}}
      \item{\code{abstract(SnpSet)}:}{See \code{\link{eSet}}}
      \item{\code{annotation(SnpSet)}, \code{annotation(SnpSet,value)<-}}{See \code{\link{eSet}}}
-     \item{\code{scanDates(SnpSet)}, \code{scanDates(SnpSet,value)<-}}{See \code{\link{eSet}}}
+     \item{\code{protocolData(SnpSet)}, \code{protocolData(SnpSet,value)<-}}{See \code{\link{eSet}}}
      \item{\code{combine(SnpSet,SnpSet)}:}{See \code{\link{eSet}}}
      \item{\code{storageMode(eSet)}, \code{storageMode(eSet,character)<-}:}{See \code{\link{eSet}}}
   }

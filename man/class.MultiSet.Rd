@@ -28,7 +28,7 @@
     phenoData = [AnnotatedDataFrame],
     experimentData = [MIAME],
     annotation = [character],
-    scanDates = [character],
+    protocolData = [AnnotatedDataFrame],
     ...)
   }
 
@@ -38,9 +38,9 @@
   \code{new("MultiSet", ...)}. The \code{...} arguments to \code{new}
   are matrices of expression data (with features
   corresponding to rows and samples to columns), \code{phenoData},
-  \code{experimentData}, \code{annotation}, and \code{scanDates}. 
+  \code{experimentData}, \code{annotation}, and \code{protocolData}. 
   \code{phenoData}, \code{experimentData}, \code{annotation}, and
-  \code{scanDates} can be missing, in which case they are assigned
+  \code{protocolData} can be missing, in which case they are assigned
   default values.
 
   \code{\link{updateOldESet}} will take a serialized instance (e.g., saved to a disk
@@ -60,7 +60,7 @@
       \item{\code{phenoData}:}{See \code{\link{eSet-class}}}
       \item{\code{experimentData}:}{See \code{\link{eSet-class}}}
       \item{\code{annotation}:}{See \code{\link{eSet-class}}}
-      \item{\code{scanDates}:}{See \code{\link{eSet-class}}}
+      \item{\code{protocolData}:}{See \code{\link{eSet-class}}}
   }
 }
 \section{Methods}{
@@ -84,7 +84,7 @@
      \item{\code{pubMedIds(MultiSet)}, \code{pubMedIds(MultiSet,value)}}{See \code{\link{eSet-class}}}
      \item{\code{abstract(MultiSet)}:}{See \code{\link{eSet-class}}}
      \item{\code{annotation(MultiSet)}, \code{annotation(MultiSet,value)<-}}{See \code{\link{eSet-class}}}
-     \item{\code{scanDates(MultiSet)}, \code{scanDates(MultiSet,value)<-}}{See \code{\link{eSet-class}}}
+     \item{\code{protocolData(MultiSet)}, \code{protocolData(MultiSet,value)<-}}{See \code{\link{eSet-class}}}
      \item{\code{combine(MultiSet,MultiSet)}:}{See \code{\link{eSet-class}}}
      \item{\code{storageMode(eSet)}, \code{storageMode(eSet,character)<-}:}{See \code{\link{eSet-class}}}
   }

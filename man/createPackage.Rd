@@ -38,7 +38,7 @@ createPackage(pkgname, destinationDir, originDir, symbolValues, unlink=FALSE, qu
   use R CMD check.
 
   The symbols \code{@PKGNAME@} and \code{@DATE@} are automatically
-  defined with the values of \code{pkgname} and \code{\date()}, respectively.
+  defined with the values of \code{pkgname} and \code{date()}, respectively.
 }
 
 \value{

@@ -16,7 +16,6 @@ readExpressionSet(exprsFile,
       notesFile,
       path,
       annotation,
-      scanDates,
       ## arguments to read.* methods 
       exprsArgs=list(sep=sep, header=header, row.names=row.names, quote=quote, ...),
       phenoDataArgs=list(sep=sep, header=header, row.names=row.names, quote=quote, stringsAsFactors=stringsAsFactors, ...),
@@ -45,8 +44,6 @@ readExpressionSet(exprsFile,
   \item{path}{(optional) directory in which to find all the above files.}
   \item{annotation}{(character) A single character string indicating the
     annotation associated with this ExpressionSet.}
-  \item{scanDates}{(character) A character vector indicating the
-    scan dates for the samples stored in this ExpressionSet.}
   \item{exprsArgs}{A list of arguments to be used with
     \code{\link{read.table}} when reading in the expression matrix.}
   \item{phenoDataArgs}{A list of arguments to be used (with

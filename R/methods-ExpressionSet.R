@@ -179,7 +179,6 @@ readExpressionSet <- function(exprsFile,
                               notesFile,
                               path,
                               annotation,
-                              scanDates,
                               ## arguments to read.* methods 
                               exprsArgs=list(sep=sep, header=header, row.names=row.names, quote=quote, ...),
                               phenoDataArgs=list(sep=sep, header=header, row.names=row.names, quote=quote, stringsAsFactors=stringsAsFactors, ...),
@@ -223,9 +222,6 @@ readExpressionSet <- function(exprsFile,
     ## annotation
     if (!missing(annotation))
         annotation(obj) <- annotation
-    ## scanDates
-    if (!missing(scanDates))
-        scanDates(obj) <- scanDates
     ## notes
     if (!missing(notesFile))
         notes(obj) <- readLines(notesFile)

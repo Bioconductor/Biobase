@@ -50,10 +50,10 @@
 \alias{pubMedIds<-,eSet,character-method}
 \alias{preproc,eSet-method}
 \alias{preproc<-,eSet-method}
+\alias{protocolData,eSet-method}
+\alias{protocolData<-,eSet,character-method}
 \alias{sampleNames,eSet-method}
 \alias{sampleNames<-,eSet,ANY-method}
-\alias{scanDates,eSet-method}
-\alias{scanDates<-,eSet,character-method}
 \alias{show,eSet-method}
 \alias{storageMode,eSet-method}
 \alias{storageMode<-,eSet,character-method}
@@ -103,9 +103,9 @@
       \item{\code{assayData}:}{Contains matrices with equal
 	dimensions, and with column number equal to
 	\code{nrow(phenoData)}. Class:\code{\link{AssayData-class}}}
-      \item{\code{phenoData}:}{Contains variables describing sample
-	(i.e., columns in \code{assayData})
-	phenotypes. Class: \code{\link{AnnotatedDataFrame-class}}}
+      \item{\code{phenoData}:}{Contains experimenter-supplied variables
+      describing sample (i.e., columns in \code{assayData}) phenotypes.
+	Class: \code{\link{AnnotatedDataFrame-class}}}
       \item{\code{featureData}:}{Contains variables describing features
 	(i.e., rows in \code{assayData}) unique to this experiment. Use
 	the \code{annotation} slot to efficiently reference feature data
@@ -115,8 +115,9 @@
 	methods. Class: \code{\link{MIAME-class}}}
       \item{\code{annotation}:}{Label associated with the annotation
 	package used in the experiment. Class: \code{character}}
-      \item{\code{scanDates}:}{Dates samples were scanned/digitized.
-    Class: \code{character}}
+      \item{\code{protocolData}:}{Contains microarray equipment-generated
+      variables describing sample (i.e., columns in \code{assayData}) phenotypes.
+    Class: \code{\link{AnnotatedDataFrame-class}}}
       \item{\code{.__classVersion__}:}{A \code{Versions} object describing
     the R and Biobase version numbers used to created the instance.
     Intended for developer use.}
@@ -185,9 +186,8 @@
      \item{\code{annotation(object)},
        \code{annotation(object) <- value}}{Access and set annotation label
        indicating package used in the experiment.}
-     \item{\code{scanDates(object)},
-       \code{scanDates(object) <- value}}{Access and set the scan/digitization
-       dates for the samples.}
+     \item{\code{protocolData(object)},
+       \code{protocolData(object) <- value}}{Access and set the protocol data.}
      \item{\code{preproc(object)},
        \code{preproc(object) <- value}:}{\code{signature(object="eSet",
 	 value="list")} Access and set \code{preprocessing} information

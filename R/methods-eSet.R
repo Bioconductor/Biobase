@@ -9,7 +9,7 @@ setMethod("initialize",
                    featureData = annotatedDataFrameFrom(assayData, byrow=TRUE),
                    experimentData = new("MIAME"),
                    annotation = character(0),
-                   scanDates,
+                   protocolData = phenoData[,integer(0)],
                    ...) {
               ## NB: Arguments provided in '...' are used to initialize
               ## slots if possible (when called from some subclass).
@@ -43,20 +43,18 @@ setMethod("initialize",
               if (!missing(featureData))
                 checkClass(featureData, "AnnotatedDataFrame", class(.Object))
               dimLabels(featureData) <- c("featureNames", "featureColumns")
-              ## create the scanDates, if necessary
-              if (missing(scanDates) || length(scanDates) == 0) {
-                dims <- assayDataDims(assayData)
-                if (ncol(dims) == 0)
-                  scanDates <- character(0)
-                else
-                  scanDates <- rep(NA_character_, dims[2,1])
+              ## create the protocolData, if necessary
+              if (!missing(protocolData)) {
+                checkClass(protocolData, "AnnotatedDataFrame", class(.Object))
+                dimLabels(protocolData) <- c("sampleNames", "sampleColumns")
               }
               ## coordinate sample names
               adSampleNames <- sampleNames(assayData)
               if (all(sapply(adSampleNames, is.null)))
                 sampleNames(assayData) <- sampleNames(phenoData)
-              if (is.null(names(scanDates)))
-                names(scanDates) <- sampleNames(phenoData)
+              pdSampleNames <- sampleNames(protocolData)
+              if (all(sapply(pdSampleNames, is.null)))
+                sampleNames(protocolData) <- sampleNames(phenoData)
               ## where do feature names come from? assayData or featureData
               adFeatureNames <- featureNames(assayData)
               if (all(sapply(adFeatureNames, is.null)))
@@ -70,7 +68,7 @@ setMethod("initialize",
                              featureData=featureData,
                              experimentData=experimentData,
                              annotation=annotation,
-                             scanDates=scanDates)
+                             protocolData=protocolData)
           })
 
 updateOldESet <- function(from, toClass, ...) {  # to MultiExpressionSet
@@ -198,6 +196,23 @@ setMethod("updateObject", signature(object="eSet"),
                                  experimentData = experimentData(object),
                                  annotation = annotation(object)),
                             lapply(additionalSlots, function(x) slot(object, x))))
+              } else if (classVersion(object)["eSet"]=="1.2.0") {
+                ## added protocolData slot, removed scanDates slot
+                scanDates <- object@scanDates
+                protocolData <- phenoData(object)[,integer(0)]
+                if (length(scanDates) > 0) {
+                  protocolData[["ScanDate"]] <- scanDates
+                }    
+                object <-
+                  do.call(new,
+                          c(list(class(object),
+                                 assayData = assayData(object),
+                                 phenoData = phenoData(object),
+                                 featureData = featureData(object),
+                                 experimentData = experimentData(object),
+                                 annotation = annotation(object),
+                                 protocolData = protocolData),
+                            lapply(additionalSlots, function(x) slot(object, x))))
               }
               else {
                 stop("cannot update object of class '", class(object),
@@ -229,11 +244,11 @@ setValidity("eSet", function(object) {
           msg <- validMsg(msg, "sample numbers differ between assayData and phenoData")
         if (!identical(sampleNames(assayData(object)), sampleNames(phenoData(object))))
           msg <- validMsg(msg, "sampleNames differ between assayData and phenoData")
-        ## scanDates
-        if (dims[2,1] != length(scanDates(object)))
-          msg <- validMsg(msg, "number of scanDates does not match the sample number")
-        if (!identical(names(scanDates(object)), sampleNames(assayData(object))))
-          msg <- validMsg(msg, "sampleNames differ between scanDates and assayData")
+        ## protocolData
+        if (dim(phenoData(object))[[1]] != dim(protocolData(object))[[1]])
+          msg <- validMsg(msg, "sample numbers differ between phenoData and protocolData")
+        if (!identical(sampleNames(phenoData(object)), sampleNames(protocolData(object))))
+          msg <- validMsg(msg, "sampleNames differ between phenoData and protocolData")
     }
     if (is.null(msg)) TRUE else msg
 })
@@ -300,12 +315,14 @@ setReplaceMethod("sampleNames",
                      sampleNames(pd) <- value
                      ad <- assayData(object)
                      sampleNames(ad) <- value
+                     prd <- protocolData(object)
+                     if (nrow(prd) == 0) {
+                         prd <- pd[,integer(0)]
+                     } else {
+                         sampleNames(prd) <- value
+                     }
                      object@phenoData <- pd
-                     sd <- scanDates(object)
-                     if (length(sd) == 0)
-                       sd <- rep(NA_character_, length(value))
-                     names(sd) <- value
-                     scanDates(object) <- sd
+                     object@protocolData <- prd
                      unsafeSetSlot(object, "assayData", ad)
                  })
 
@@ -342,7 +359,7 @@ setMethod("[", "eSet", function(x, i, j, ..., drop = FALSE) {
     x <- updateObject(x)
   if (!missing(j)) {
     phenoData(x) <- phenoData(x)[j,, ..., drop = drop]
-    scanDates(x) <- scanDates(x)[j]
+    protocolData(x) <- protocolData(x)[j,, ..., drop = drop]
   }
   if (!missing(i))
     featureData(x) <- featureData(x)[i,,..., drop=drop]
@@ -444,6 +461,9 @@ setReplaceMethod("phenoData",
                    value="AnnotatedDataFrame"),
                  function(object, value) {
                      object@phenoData <- value
+                     if (nrow(protocolData(object)) == 0) {
+                         protocolData(object) <- value[,integer(0)]
+                     }
                      object
                  })
 
@@ -456,7 +476,7 @@ setReplaceMethod("pData",
                  function(object, value) {
                      pd <- phenoData(object)
                      pData(pd) <- value
-                     object@phenoData <- pd
+                     phenoData(object) <- pd
                      object
                  })
 
@@ -614,29 +634,22 @@ setReplaceMethod("annotation",
                      object
                  })
 
-setMethod("scanDates", "eSet",
+setMethod("protocolData", "eSet",
           function(object) {
-              tryCatch(object@scanDates, error = function(x) {
-                         snames <- sampleNames(phenoData(object))
-                         structure(rep(NA_character_, length(snames)),
-                                   names = snames)
+              tryCatch(object@protocolData,
+                       error = function(x) {
+                         phenoData(object)[,integer(0)]
                        })
           })
 
-setReplaceMethod("scanDates",
+setReplaceMethod("protocolData",
                  signature=signature(
                    object="eSet",
-                   value="character"),
+                   value="AnnotatedDataFrame"),
                  function(object, value) {
-                     if (class(try(object@scanDates, silent = TRUE)) == "try-error")
+                     if (class(try(object@protocolData, silent = TRUE)) == "try-error")
                        object <- updateObject(object)
-                     snames <- sampleNames(phenoData(object))
-                     if (!is.character(value))
-                       value <- as.character(value)
-                     if (length(snames) != length(value))
-                       stop("'scanDates' replacement must be a character vector of length ", length(snames))
-                     names(value) <- snames
-                     object@scanDates <- value
+                     object@protocolData <- value
                      object
                  })
 
@@ -656,7 +669,7 @@ setMethod("combine",
               phenoData(x) <- combine(phenoData(x), phenoData(y))
               featureData(x) <- combine(featureData(x), featureData(y))
               experimentData(x) <- combine(experimentData(x),experimentData(y))
-              scanDates(x) <- c(scanDates(x), scanDates(y))
+              protocolData(x) <- combine(protocolData(x), protocolData(y))
               ## annotation -- constant
               x
           })

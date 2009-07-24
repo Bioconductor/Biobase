@@ -6,7 +6,7 @@ setMethod("initialize", "SnpSet",
                    featureData = annotatedDataFrameFrom(assayData, byrow=TRUE),
                    experimentData = new("MIAME"),
                    annotation = character(),
-                   scanDates = character(),
+                   protocolData = phenoData[,integer(0)],
                    call = new("matrix"),
                    callProbability = matrix(numeric(),
                                             nrow=nrow(call), ncol=ncol(call),
@@ -18,7 +18,7 @@ setMethod("initialize", "SnpSet",
                            featureData = featureData,
                            experimentData = experimentData,
                            annotation = annotation,
-                           scanDates = scanDates)
+                           protocolData = protocolData)
           })
 
 setValidity("SnpSet", function(object) {
