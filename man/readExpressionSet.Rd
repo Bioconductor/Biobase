@@ -17,10 +17,15 @@ readExpressionSet(exprsFile,
       path,
       annotation,
       ## arguments to read.* methods 
-      exprsArgs=list(sep=sep, header=header, row.names=row.names, quote=quote, ...),
-      phenoDataArgs=list(sep=sep, header=header, row.names=row.names, quote=quote, stringsAsFactors=stringsAsFactors, ...),
-      experimentDataArgs=list(sep=sep, header=header, row.names=row.names, quote=quote, stringsAsFactors=stringsAsFactors, ...),
-      sep = "\t", header = TRUE, quote = "", stringsAsFactors = FALSE, row.names = 1L,
+      exprsArgs=list(sep=sep, header=header, row.names=row.names,
+        quote=quote, ...),
+      phenoDataArgs=list(sep=sep, header=header, row.names=row.names,
+        quote=quote, stringsAsFactors=stringsAsFactors, ...),
+      experimentDataArgs=list(sep=sep, header=header,
+        row.names=row.names, quote=quote,
+        stringsAsFactors=stringsAsFactors, ...),
+      sep = "\t", header = TRUE, quote = "", stringsAsFactors = FALSE,
+      row.names = 1L,
       ## widget
       widget = getOption("BioC")$Base$use.widgets,
       ...)
@@ -70,7 +75,7 @@ readExpressionSet(exprsFile,
   
 
 \value{
-  An instance of the \code{\link[ExpressionSet-class]{ExpressionSet}} class.
+  An instance of the \code{\linkS4class{ExpressionSet}} class.
 }
 
 \author{Martin Morgan <mtmorgan@fhcrc.org>}

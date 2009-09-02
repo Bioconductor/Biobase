@@ -44,14 +44,14 @@ for (kk in 1:20) {
   # When all values of 'y2' are NA, 'y2' is logical
   if (is.logical(y2)) y2 <- as.double(y2)
   stopifnot(all.equal(y1,y2))
-  cat(sprintf("rowMedians()/apply(): \%.3g\n", (t1/t2)[3]))
+  cat(sprintf("rowMedians()/apply(): %.3g\n", (t1/t2)[3]))
 
   if (!nas) {
     t3 <- system.time({
       y3 <- rowMedians2(x)
     })
     stopifnot(all.equal(y1,y3))
-    cat(sprintf("rowMedians()/rowMedians2(): \%.3g\n", (t1/t3)[3]))
+    cat(sprintf("rowMedians()/rowMedians2(): %.3g\n", (t1/t3)[3]))
   }
 }
 

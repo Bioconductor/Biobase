@@ -31,8 +31,7 @@ createPackage(pkgname, destinationDir, originDir, symbolValues, unlink=FALSE, qu
 
 \details{The intended use of this function is for the automated mass
   production of data packages, such as the microarray annotation,
-  CDF, and probe sequence packages. An example is in the function
-  \code{\link[matchprobes:makeProbePackage]{makeProbePackage}}.
+  CDF, and probe sequence packages.
 
   No syntactic or other checking of the package is performed. For this,
   use R CMD check.
@@ -47,7 +46,6 @@ createPackage(pkgname, destinationDir, originDir, symbolValues, unlink=FALSE, qu
 }
 
 \seealso{\code{\link[Biobase:copySubstitute]{copySubstitute}},
-  \code{\link[matchprobes:makeProbePackage]{makeProbePackage}},
   the reference manual \emph{Writing R extensions}.}
 
 \author{Wolfgang Huber \url{http://www.dkfz.de/mga/whuber}}

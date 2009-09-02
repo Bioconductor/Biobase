@@ -172,7 +172,7 @@ SEXP lc_prefix(SEXP x, SEXP ignoreCase)
 
     /* init to first char in first elem. of x */
     first = CHAR(STRING_ELT(x, 0));
-    prefix = (char *)Calloc(min_nc, char);
+    prefix = (char *)Calloc(min_nc + 1, char);
     done = 0;
     i = 0;
     while (1) {
