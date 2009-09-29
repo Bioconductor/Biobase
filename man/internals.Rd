@@ -1,4 +1,4 @@
-\name{abstract}
+\name{Internals}
 \alias{aggenv}
 \alias{aggfun}
 \alias{content}
