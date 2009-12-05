@@ -125,8 +125,9 @@ testHarmonizeAssayDataDimnames <- function() {
 
         ## names on both dimnames
         nexprs <- exprs
-        dimnames(nexprs) <- lapply(dimnames(nexprs), function(x) {
-            names(x) <- letters[seq(1, length(x))]
+        dimnames(nexprs) <-
+            lapply(dimnames(nexprs), function(x) {
+            names(x) <- as.vector(letters[seq(1, length(x))])
             x
         })        
         checkHarmonizeOne(nexprs)

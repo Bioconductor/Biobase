@@ -1,9 +1,11 @@
 nonvirtualClasses <- NULL
-instanceDir <- "VersionedClass_data"
+instanceDir <-
+    system.file("UnitTests", "VersionedClass_data", package="Biobase")
 
 .setUp <- function() {
     nms <- ls(getNamespace("Biobase"),all=TRUE)
     classes <- gsub(".__C__", "", nms[grep(".__C__", nms)])
+    classes <- classes[!classes %in% "phenoData"]
     isVirtual <- sapply(classes, function(nm) getClass(nm)@virtual)
     nonvirtualClasses <<- classes[!isVirtual]
 }
@@ -121,6 +123,7 @@ testDevelInstanceIsCurrent <- function() {
     instances <-
       sub(".Rda", "",
           list.files(path=file.path(instanceDir, "devel"), pattern=".*.Rda"))
+    instances <- instances[!instances %in% "Versioned"]
     current <- sapply(instances, function(obj) {
         vers <- isCurrent(get(obj, env=instanceEnv))[c("S4", obj)]
         all(vers[!is.na(vers)])

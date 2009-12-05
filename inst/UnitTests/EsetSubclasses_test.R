@@ -147,19 +147,25 @@ testInitializeWithNames <- function() {
     checkTrue(identical(sampleNames(obj), c("1", "2")))
 
     exprs <- matrix(1:10, ncol=2)
-    phenoData <- new("AnnotatedDataFrame", data=data.frame(x=1:2, row.names=c("A", "B")))
+    phenoData <- new("AnnotatedDataFrame",
+                     data=data.frame(x=1:2, row.names=c("A", "B")))
     obj <- new("ExpressionSet", phenoData=phenoData, exprs=exprs)
     checkTrue(identical(sampleNames(obj), c("A", "B")))
 }
 
 testValidation <- function() {
-  for (mode in modes)
-    lapply(names(allSubclasses), function(s) {
-      obj <- helperNew(s, storage.mode=mode)
-      checkTrue(validObject( obj ))
-      phenoData(obj) <- new("AnnotatedDataFrame")
-      checkEquals( validObject( obj, test = TRUE ), "sample numbers differ between assayData and phenoData")
-    })
+    errMsg <-
+        c("sample numbers differ between assayData and phenoData",
+          "sampleNames differ between assayData and phenoData",
+          "sample numbers differ between phenoData and protocolData",
+          "sampleNames differ between phenoData and protocolData" )
+    for (mode in modes)
+        lapply(names(allSubclasses), function(s) {
+            obj <- helperNew(s, storage.mode=mode)
+            checkTrue(validObject( obj ))
+            phenoData(obj) <- new("AnnotatedDataFrame")
+            checkEquals( validObject( obj, test = TRUE ), errMsg)
+        })
 }
 
 testNColSubclasses <- function() {
