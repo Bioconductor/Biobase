@@ -149,5 +149,7 @@ setReplaceMethod("sampleNames",
                      sampleNames(assayData(object)) <- value
                      sampleNames(phenoData(object)) <-
                          sampleNames(assayData(object))
+                     sampleNames(protocolData(object)) <-
+                         sampleNames(assayData(object))
                      object
                  })

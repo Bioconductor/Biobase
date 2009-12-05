@@ -190,10 +190,10 @@ setMethod("updateObject", signature(object="eSet"),
                 object <-
                   do.call(new,
                           c(list(class(object),
-                                 assayData = assayData(object),
-                                 phenoData = phenoData(object),
-                                 featureData = featureData(object),
-                                 experimentData = experimentData(object),
+                                 assayData = updateObject(assayData(object)),
+                                 phenoData = updateObject(phenoData(object)),
+                                 featureData = updateObject(featureData(object)),
+                                 experimentData = updateObject(experimentData(object)),
                                  annotation = annotation(object)),
                             lapply(additionalSlots, function(x) slot(object, x))))
               } else if (classVersion(object)["eSet"]=="1.2.0") {
@@ -206,13 +206,14 @@ setMethod("updateObject", signature(object="eSet"),
                 object <-
                   do.call(new,
                           c(list(class(object),
-                                 assayData = assayData(object),
-                                 phenoData = phenoData(object),
-                                 featureData = featureData(object),
-                                 experimentData = experimentData(object),
+                                 assayData = updateObject(assayData(object)),
+                                 phenoData = updateObject(phenoData(object)),
+                                 featureData = updateObject(featureData(object)),
+                                 experimentData = updateObject(experimentData(object)),
                                  annotation = annotation(object),
                                  protocolData = protocolData),
-                            lapply(additionalSlots, function(x) slot(object, x))))
+                            lapply(additionalSlots,
+                                   function(x) updateObject(slot(object, x)))))
               }
               else {
                 stop("cannot update object of class '", class(object),
