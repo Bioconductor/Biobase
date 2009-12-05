@@ -30,3 +30,23 @@ setMethod("exprs", c("SnpSet"), function(object) assayDataElement(object, "call"
 setReplaceMethod("exprs", c("SnpSet", "matrix"), function(object, value) {
   assayDataElementReplace(object, "call", value)
 })
+
+setMethod(snpCall, "SnpSet", function(object, ...) {
+    assayDataElement(object, "call")
+})
+
+setMethod(snpCallProbability, "SnpSet", function(object, ...) {
+    assayDataElement(object, "callProbability")
+})
+
+setReplaceMethod("snpCall", c("SnpSet", "matrix"),
+                 function(object, ..., value)
+{
+    assayDataElementReplace(object, "call", value)
+})
+
+setReplaceMethod("snpCallProbability", c("SnpSet", "matrix"),
+                 function(object, ..., value)
+{
+    assayDataElementReplace(object, "callProbability", value)
+})

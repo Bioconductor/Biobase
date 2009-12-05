@@ -6,6 +6,10 @@
 \alias{SnpSet-class}
 \alias{exprs<-,SnpSet,matrix-method}
 \alias{exprs,SnpSet-method}
+\alias{snpCall,SnpSet-method}
+\alias{snpCall<-,SnpSet,matrix-method}
+\alias{snpCallProbability,SnpSet-method}
+\alias{snpCallProbability<-,SnpSet,matrix-method}
 
 \alias{initialize,SnpSet-method}
 
@@ -34,7 +38,7 @@
 
   \code{SnpSet} instances are usually created through
   \code{new("SnpSet", ...)}. Usually the arguments to \code{new}
-  include \code{call} (a matrix of gentoypic calls, with features (SNPs)
+  include \code{call} (a matrix of genotypic calls, with features (SNPs)
   corresponding to rows and samples to columns), \code{phenoData},
   \code{experimentData}, \code{annotation}, and \code{protocolData}. 
   \code{phenoData}, \code{experimentData}, \code{annotation} and
@@ -47,7 +51,7 @@
       \item{\code{assayData}:}{Contains matrices with equal
 	dimensions, and with column number equal to
 	\code{nrow(phenoData)}. \code{assayData} must contain a matrix
-	\code{call} with rows represening features (e.g., SNPs)
+	\code{call} with rows representing features (e.g., SNPs)
 	and columns representing samples, and a matrix
 	\code{callProbability} describing the certainty of the
 	call. The content of \code{call} and \code{callProbability} are
@@ -64,10 +68,17 @@
 
   Class-specific methods:
   \describe{
-     \item{\code{exprs(SnpSet)}, \code{exprs(SnpSet,matrix)<-}}{Access and
+     \item{\code{snpCall(SnpSet)}, \code{snpCall(SnpSet,matrix)<-}}{Access and
        set elements named \code{call} in the \code{AssayData}
        slot.}
-  }
+
+     \item{\code{exprs(SnpSet)}, \code{exprs(SnpSet,matrix)<-}}{Synonym
+	   for \code{snpCall}.}
+
+     \item{\code{snpCallProbability(SnpSet)},
+	   \code{snpCallProbability<-(SnpSet,matrix)<-}}{ Access and set
+	   elements named \code{callProbability} in the \code{AssayData}
+	   slot.}  }
   
    Derived from \code{\link{eSet}}:
    \describe{
@@ -101,8 +112,8 @@
      \item{\code{SnpSet$}, \code{SnpSet$<-}}{See \code{\link{eSet}}}
   }
 }
-% NB -- this authorship claim seems to need adjustment!  Martin? -- VC
-\author{V.J. Carey, after initial design by R. Gentleman }
+
+\author{Martin Morgan, V.J. Carey, after initial design by R. Gentleman }
 
 \seealso{
   \code{\link{eSet}}, \code{\link{ExpressionSet}}
