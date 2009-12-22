@@ -74,8 +74,8 @@
     remove(myComplicatedObject)
     cache(myComplicatedObject <- bigCalc())
     stopifnot(all.equal(myComplicatedObject, aCopy))
-    allCacheFiles <- list.files(".", pattern="^tmp_R_cache_.*\\.RData$",
-                                full.name=TRUE)
+    allCacheFiles <-
+       list.files(".", pattern="^tmp_R_cache_.*\\\\.RData$", full.name=TRUE)
     file.remove(allCacheFiles)
 }
 

@@ -278,6 +278,8 @@ setMethod("show",
                       "\n")
               cat("  element names:",
                   paste(assayDataElementNames(object), collapse=", "), "\n")
+              .showAnnotatedDataFrame(protocolData(object),
+                                      labels=list(object="protocolData"))
               .showAnnotatedDataFrame(phenoData(object),
                                       labels=list(object="phenoData"))
               .showAnnotatedDataFrame(featureData(object),

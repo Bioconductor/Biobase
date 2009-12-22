@@ -286,10 +286,15 @@ setMethod("selectSomeIndex",
                  varMetadata="varMetadata",
                  varLabels="varLabels")
     lbls[names(labels)] <- labels
+    if (ncol(object) == 0) {            # early exit for empty objects
+        cat(lbls[["object"]], ": none\n", sep="")
+        return()
+    }
     ## create a simplified object for extracting names
     idx <- selectSomeIndex(pData(object), maxToShow=4)
     idy <- selectSomeIndex(pData(object), byrow=FALSE, maxToShow=4)
-    pData <- pData(object)[c(idx[[1]], idx[[3]]), c(idy[[1]], idy[[3]]), drop=FALSE]
+    pData <- pData(object)[c(idx[[1]], idx[[3]]), c(idy[[1]], idy[[3]]),
+                           drop=FALSE]
     rnms <- rownames(pData)
     nms <- c(rnms[idx[[1]]], idx[[2]],
              if (!is.null(idx[[1]])) rnms[-idx[[1]]] else NULL)
@@ -301,13 +306,15 @@ setMethod("selectSomeIndex",
         outs = c(outs, paste(" (",nrow(object)," total)", sep=""))
     cat(strbreak(outs))
     
-    cat("\n  ", lbls$varLabels, " and ", lbls$varMetadata, " description:", sep="")
+    cat("\n  ", lbls$varLabels, " and ", lbls$varMetadata, " description:",
+        sep="")
     cnms <- colnames(pData)
     if (length(cnms)>0) {
         cat("\n")
         metadata <- varMetadata(object)
         vars <- c(cnms[idy[[1]]], idy[[2]], cnms[-idy[[1]]])
-        meta <- selectSome(as.character(metadata[["labelDescription"]]), maxToShow=4)
+        meta <- selectSome(as.character(metadata[["labelDescription"]]),
+                           maxToShow=4)
         mapply(function(nm, meta) {
             outs = paste("    ",nm,": ", meta, "\n", sep="")
             cat(strbreak(outs))

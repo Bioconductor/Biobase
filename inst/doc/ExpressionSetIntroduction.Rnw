@@ -71,12 +71,14 @@ expression data from microarray experiments (\code{assayData};
 different data components, as we will see below), `meta-data'
 describing samples in the experiment (\code{phenoData}), annotations
 and meta-data about the features on the chip or technology used for
-the experiment (\code{featureData}, \code{annotation}), and a flexible
-structure to describe the experiment (\code{experimentData}). The
-\Rclass{ExpressionSet} class coordinates all of this data, so that you
-do not usually have to worry about the details. However, an
-\Rclass{ExpressionSet} needs to be created in the first place, and
-creation can be complicated.
+the experiment (\code{featureData}, \code{annotation}), information
+related to the protocol used for processing each sample (and usually
+extracted from manufacturer files, \code{protocolData}), and a
+flexible structure to describe the experiment
+(\code{experimentData}). The \Rclass{ExpressionSet} class coordinates
+all of this data, so that you do not usually have to worry about the
+details. However, an \Rclass{ExpressionSet} needs to be created in the
+first place, and creation can be complicated.
 
 In this introduction we learn how to create and manipulate
 \Rclass{ExpressionSet} objects, and practice some basic \R{} skills.
@@ -337,8 +339,9 @@ or instrument.  Many of these packages are available from the
 Bioconductor web site.  These packages contain information such as the
 gene name, symbol and chromosomal location. There are other meta-data
 packages that contain the information that is provided by other
-initiatives such as GO and KEGG.  The \textit{annotate} package
-provides basic data manipulation tools for the meta-data packages.
+initiatives such as GO and KEGG.  The \Rpackage{annotate} and
+\Rpackage{AnnotationDbi} packages provides basic data manipulation
+tools for the meta-data packages.
 
 The appropriate way to create annotation data for features is very
 straight-forward: we provide a character string identifying the type of

@@ -6,6 +6,8 @@
 
 USER VISIBLE CHANGES
 
+    o 'show,eSet-method' summarizes protocolData, if available.
+
     o 'snpCall' 'snpCallProbability' accessors added for SnpSet.
 
         **************************************************
