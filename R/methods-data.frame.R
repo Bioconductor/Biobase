@@ -20,7 +20,7 @@ setMethod("combine",
               }
               sharedRows <- intersect(row.names(x), row.names(y))
               ok <- sapply(sharedCols, function(nm) {
-                  if (class(x[[nm]]) != class(y[[nm]])) return(FALSE)
+                  if (!all(class(x[[nm]]) == class(y[[nm]]))) return(FALSE)
                   switch(class(x[[nm]])[[1]],
                          factor= {
                              if (!alleq(levels(x[[nm]]), levels(y[[nm]]))) {
@@ -78,7 +78,7 @@ setMethod("combine",
                   nmx <- paste(nm, extX, sep="")
                   nmy <- paste(nm, extY, sep="")
                   z[[nm]] <-
-                    switch(class(z[[nmx]]),
+                    switch(class(z[[nmx]])[[1]],
                            AsIs= I(ifelse(is.na(z[[nmx]]), z[[nmy]], z[[nmx]])),
                            factor= {
                                col <- ifelse(is.na(z[[nmx]]),
@@ -87,7 +87,11 @@ setMethod("combine",
                                  factor(col)
                                else factor(col, levels=levels(z[[nmx]]))
                            },
-                           ifelse(is.na(z[[nmx]]), z[[nmy]], z[[nmx]]))
+                           {
+                               col <- ifelse(is.na(z[[nmx]]), z[[nmy]], z[[nmx]])
+                               class(col) <- class(z[[nmx]])
+                               col
+                           })
               }
 
               ## tidy

@@ -38,6 +38,21 @@ testCombineThreeDF <- function() {
     checkIdentical(e, res)
 }
 
+testCombineDF_POSIXct <- function()
+{
+    ## class(x) can have length > 1 as in Sys.time()
+    t0 <- Sys.time()
+    df1 <- data.frame(i = 1:3, t = rep(t0, 3), row.names=letters[1:3])
+    df2 <- data.frame(i = 1:3, t = c(t0, t0 + 500, t0 + 1000),
+                      row.names=c("a", "d", "e"))
+    e <- data.frame(i = c(1L, 2L, 3L, 2L, 3L),
+                    t = c(t0, t0, t0, t0 + 500, t0 + 1000),
+                    row.names=c("a", "b", "c", "d", "e"))
+    res <- combine(df1, df2)
+    checkIdentical(e, res)
+}
+
+
 testCombineWithNamedArgs <- function() {
     x <- data.frame(x=1:5,
                     y=factor(letters[1:5], levels=letters[1:8]),
