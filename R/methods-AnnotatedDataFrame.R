@@ -260,6 +260,8 @@ selectSome <- function(obj, maxToShow=5) {
       nms <- obj[c(1:bot, top:len)]
       c(as.character(nms[1:bot]), "...", as.character(nms[-c(1:bot)]))
   }
+  else if (is.factor(obj))
+      as.character(obj)
   else obj
 }
 

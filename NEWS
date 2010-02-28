@@ -1,8 +1,5 @@
-        **************************************************
-        *                                                *
-        *              2.11 SERIES NEWS                   *
-        *                                                *
-        **************************************************
+CHANGES IN VERSION 2.7
+----------------------
 
 USER VISIBLE CHANGES
 
@@ -10,11 +7,13 @@ USER VISIBLE CHANGES
 
     o 'snpCall' 'snpCallProbability' accessors added for SnpSet.
 
-        **************************************************
-        *                                                *
-        *              2.10 SERIES NEWS                   *
-        *                                                *
-        **************************************************
+BUG FIXES
+
+    o 'selectSome' returns short factors as character()
+
+
+CHANGES IN VERSION 2.5
+----------------------
 
 USER VISIBLE CHANGES
 
@@ -25,11 +24,9 @@ USER VISIBLE CHANGES
     o 'sampleNames,NChannelSet-method' returns a vector when the
     sample names of each channel are the same.
 
-        **************************************************
-        *                                                *
-        *              2.8 SERIES NEWS                   *
-        *                                                *
-        **************************************************
+
+CHANGES IN VERSION 2.1
+----------------------
 
 NEW FEATURES
 
@@ -44,11 +41,9 @@ BUG FIXES
 
     o openPDF now checks for NULL or zero-length pdfviewer option
 
-        **************************************************
-        *                                                *
-        *              2.7 SERIES NEWS                   *
-        *                                                *
-        **************************************************
+
+CHANGES IN VERSION 2.0
+----------------------
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -70,10 +65,14 @@ BUG FIXES
 NEWLY DEFUNCT CLASSES, METHODS, FUNCTIONS, DATA SETS
 
     o Defunct S4 Classes
-       1) annotatedDataset - class definition still exits to support phenoData conversion
+
+       1) annotatedDataset - class definition still exits to support
+       phenoData conversion
        2) exprMatrix - removed class definition
-       3) exprSet - class definition still exists to allow conversion to ExpressionSet
-       4) phenoData - class definition still exists to allow conversion to AnnotatedDataFrame
+       3) exprSet - class definition still exists to allow conversion
+       to ExpressionSet
+       4) phenoData - class definition still exists to allow
+       conversion to AnnotatedDataFrame
 
     o Defunct Generics/Methods
        1) addVarMetadataEntry - S4 generic definition removed
