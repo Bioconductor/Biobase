@@ -18,7 +18,7 @@ createPackage(pkgname, destinationDir, originDir, symbolValues, unlink=FALSE, qu
     the template package. Usually, this will contain a file named
     \code{DESCRIPTION}, and subdirectories \code{R}, \code{man},
     \code{data}. In all files and filenames, symbols will be replaced
-    by their respectives values, see the parameter \code{symbolValues}.}
+    by their respective values, see the parameter \code{symbolValues}.}
   \item{symbolValues}{Named list of character strings. The symbol-to-value
     mapping. See
     \code{\link[Biobase:copySubstitute]{copySubstitute}} for details.}

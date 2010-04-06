@@ -3,7 +3,7 @@
 \title{Extract elements of a vector for concise rendering}
 \description{
 Extract the first and last several elements of a vector for concise
-rendering; insert elipses to indiciated elided elements. This function
+rendering; insert ellipses to indicate elided elements. This function
 is primarily meant for developer rather than end-user use.
 }
 \usage{

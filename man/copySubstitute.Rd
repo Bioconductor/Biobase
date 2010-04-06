@@ -16,7 +16,7 @@ copySubstitute(src, dest, symbolValues, symbolDelimiter="@", allowUnresolvedSymb
   \item{src}{Source, either a character vector with filenames and/or
     directory names, or a connection object.}
   \item{dest}{Destination, either a character vector of length 1
-    with the name of an existing, writeable directory, or a connection
+    with the name of an existing, writable directory, or a connection
     object. The class of the \code{dest} argument must match that of the
     \code{src} argument.}
   \item{symbolValues}{A named list of character strings.}
@@ -34,7 +34,7 @@ copySubstitute(src, dest, symbolValues, symbolDelimiter="@", allowUnresolvedSymb
 \details{
   Symbol substitution: this is best explained with an example. If the list
   \code{symbolValues} contains an element with name \code{FOO} and value
-  \code{bar}, and symbolDelimiter is \code{@}, then any occurence of
+  \code{bar}, and symbolDelimiter is \code{@}, then any occurrence of
   \code{@FOO@} is replaced by \code{bar}. This applies both the text
   contents of the files in \code{src} as well as to the filenames. See examples.
 

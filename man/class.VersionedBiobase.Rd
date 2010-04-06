@@ -7,7 +7,7 @@
 
 \description{
 
-  Use this class as a `superclass' for classes requiring infomration
+  Use this class as a `superclass' for classes requiring information
   about versions. By default, the class contains versions for R and
   Biobase. See \code{\link{Versioned-class}} for additional details.
 

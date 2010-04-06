@@ -7,7 +7,7 @@
 \format{
   The data for 4 cases, labeled a to d and 500 genes.
   Each case has five covariates: SlideNumber: number; FileName: name;
-  Cy3: genotype labelled Cy3; Cy5: genotype labelled Cy5; Date: date.
+  Cy3: genotype labeled Cy3; Cy5: genotype labeled Cy5; Date: date.
 }
 \description{
  The expression data are real but anonymized. The data are from an

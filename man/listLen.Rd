@@ -21,7 +21,7 @@ listLen(x)
   the list \code{x} containing the lengths of each element.
 
   The current implementation is intended for lists containing vectors
-  and the C-level length function is used to determine lenght.  This
+  and the C-level length function is used to determine length.  This
   means no dispatch is done for the elements of the list.  If your
   list contains S4 objects, you should use \code{sapply(x, length)}
   instead.

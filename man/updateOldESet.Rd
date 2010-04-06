@@ -9,7 +9,7 @@
   of Biobase to the current class structure. Warnings indicate when
   coercions change how data in the \code{from} object are
   altered. If the \code{from} object was not a valid object of the
-  original eSet classs, then \code{updateOldESet} may fail.
+  original eSet class, then \code{updateOldESet} may fail.
 }
 \usage{
 updateOldESet(from, toClass, ...)

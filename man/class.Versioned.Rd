@@ -15,7 +15,7 @@
 
 \description{
 
-  Use this class as a `superclass' for classes requiring infomration
+  Use this class as a `superclass' for classes requiring information
   about versions.
 
 }
@@ -28,9 +28,9 @@
       perhaps with additional named version elements (the contents of
       \code{versions}) added. Named elements of \code{versions} are
       character strings that can be coerced using \code{\link{package_version}}, or \code{package_version} instances.}
-    \item{\code{classVersion(object)}}{Obtain version inforomation about instance \code{object}. See \code{\link{classVersion}}.}
-    \item{\code{classVersion(object) <- value}}{Set version inforomation on instance \code{object} to \code{value}; useful when \code{object} is an instance of a class that contains \code{VersionClass}. See \code{\link{classVersion}}.}
-    \item{\code{classVersion(object)["id"] <- value}}{Create or update version inforomation \code{"id"} on instance \code{object} to \code{value}; useful when \code{object} is an instance of a class that contains \code{VersionClass}. See \code{\link{classVersion}}.}
+    \item{\code{classVersion(object)}}{Obtain version information about instance \code{object}. See \code{\link{classVersion}}.}
+    \item{\code{classVersion(object) <- value}}{Set version information on instance \code{object} to \code{value}; useful when \code{object} is an instance of a class that contains \code{VersionClass}. See \code{\link{classVersion}}.}
+    \item{\code{classVersion(object)["id"] <- value}}{Create or update version information \code{"id"} on instance \code{object} to \code{value}; useful when \code{object} is an instance of a class that contains \code{VersionClass}. See \code{\link{classVersion}}.}
     \item{\code{show(object)}}{Default method returns \code{invisible},
       to avoid printing confusing information when your own class does
       not have a \code{show} method defined. Use

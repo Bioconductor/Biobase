@@ -5,7 +5,7 @@
 \title{Example data.frame representing reporter information}
 \description{
   The \code{reporter} object is a 500 by 1 data frame. The rows represent
-  the 500 probe ids in the \code{geneData} data. The values in
+  the 500 probe IDs in the \code{geneData} data. The values in
   \code{reporter} are the predefined probe types for the probes.
   \code{reporter} is used in conjunction with the \code{geneData} object
   and its associates.  

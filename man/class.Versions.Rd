@@ -20,7 +20,7 @@
 \description{
 
   A class to record version number information. This class is used to
-  report versions; to add version informaton to your own class, use
+  report versions; to add version information to your own class, use
   \code{\link{Versioned-class}}.
 
 }
@@ -48,7 +48,7 @@
       update another class that uses \code{Versions-class} to track the
       class version.}
     \item{\code{as(object, "character")}}{Convert \code{object} to character representation, e.g., \code{1.0.0}}
-    \item{\code{object1 < object2}}{Compare \code{object1} and \code{object2} using version class information. Symbols in addition to \code{<} are admissable; see \code{?Ops}}
+    \item{\code{object1 < object2}}{Compare \code{object1} and \code{object2} using version class information. Symbols in addition to \code{<} are admissible; see \code{?Ops}}
   }
 }
 

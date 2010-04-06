@@ -37,7 +37,7 @@ l2e(vals, envir)
   will create a new environment with an efficient initial size.  If the
   names of \code{vals} are not unique, a warning will be raised.  The
   returned environment will contain the value associated with the last
-  occurance of any given duplicated name.
+  occurrence of any given duplicated name.
   
   \code{copyEnv}: This function will make a copy of the contents from
   \code{oldEnv} and place them into \code{newEnv}.

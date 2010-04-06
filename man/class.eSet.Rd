@@ -136,7 +136,7 @@
        \code{featureNames(object) <- value}:}{Coordinate accessing and setting of
        feature names (e.g, genes, probes) in \code{assayData}.}
      \item{\code{dims(object)}:}{Access the common dimensions (\code{dim}) or
-       column numbers (\code{ncol}), or dimensions of all memebers
+       column numbers (\code{ncol}), or dimensions of all members
        (\code{dims}) of \code{assayData}.}
 
      \item{\code{phenoData(object)},

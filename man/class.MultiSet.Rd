@@ -55,7 +55,7 @@
       \item{\code{assayData}:}{Contains zero or more matrices with equal
 	dimensions, and with column number equal to
 	\code{nrow(phenoData)}. Each matrix in \code{assayData} has rows
-	represening features (e.g., reporters) and columns representing
+	representing features (e.g., reporters) and columns representing
 	samples. Class:\code{\link{AssayData-class}}}
       \item{\code{phenoData}:}{See \code{\link{eSet-class}}}
       \item{\code{experimentData}:}{See \code{\link{eSet-class}}}

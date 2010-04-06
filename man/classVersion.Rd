@@ -15,7 +15,7 @@
 
   By default, \code{classVersion} has the following behaviors:
   \describe{
-    \item{\code{classVersion(Versioned-instance)}}{Returns a \code{Versions-class} object obtaine from the object.}
+    \item{\code{classVersion(Versioned-instance)}}{Returns a \code{Versions-class} object obtained from the object.}
     \item{\code{classVersion{"class"}}}{Consults the definition of \code{class} and return the current version information, if available.}
     \item{\code{classVersion(ANY)}}{Return a \code{\link{VersionsNull-class}} object to indicate no version information available.}
   }

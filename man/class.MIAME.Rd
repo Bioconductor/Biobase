@@ -46,7 +46,7 @@
       \item{\code{title}:}{Object of class \code{character} containing a single-sentence experiment title }
       \item{\code{abstract}:}{Object of class \code{character} containing an abstract describing the experiment}
       \item{\code{url}:}{Object of class \code{character} containing a URL for the experiment}
-      \item{\code{samples}:}{Object of class \code{list} containg information about the samples}
+      \item{\code{samples}:}{Object of class \code{list} containing information about the samples}
       \item{\code{hybridizations}:}{Object of class \code{list} containing information about the hybridizations}
       \item{\code{normControls}:}{Object of class \code{list} containing information about the controls such as house keeping genes}
       \item{\code{preprocessing}:}{Object of class \code{list} containing information about the pre-processing steps used on the raw data from this experiment}

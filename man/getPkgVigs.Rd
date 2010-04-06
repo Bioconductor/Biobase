@@ -14,7 +14,7 @@ getPkgVigs(package = NULL)
     \code{NULL}. The latter is for all attached packages (in \code{\link{search}()}).}
 }
 \value{
-A dataframe with columns \code{package}, \code{filename}, \code{title}.
+A data.frame with columns \code{package}, \code{filename}, \code{title}.
 }
 \author{Jeff Gentry, modifications by Wolfgang Huber.}
 \seealso{\code{\link{openVignette}}}

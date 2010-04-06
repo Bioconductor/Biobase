@@ -30,7 +30,7 @@ experimentData(object) <- value
   \code{abstract} returns a character vector containing the abstract
   (as in a published paper) associated with \code{object}.
 
-  \code{pubMedIds} returns a character vector of PUBMED Ids associated
+  \code{pubMedIds} returns a character vector of PUBMED IDs associated
   with the experiment.
 
   \code{experimentData} returns an object representing the description

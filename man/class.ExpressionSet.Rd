@@ -139,8 +139,8 @@
   \describe{
     \item{\code{initialize(ExpressionSet)}:}{Object instantiation, used
       by \code{new}; not to be called directly by the user.}
-    \item{\code{updateObject(ExpressionSet)}:}{Update outaded versions
-      of \code{ExpressionSet} to their current definiton. See
+    \item{\code{updateObject(ExpressionSet)}:}{Update outdated versions
+      of \code{ExpressionSet} to their current definition. See
       \code{\link{updateObject}}, \code{\link{Versions-class}}.}
     \item{\code{validObject(ExpressionSet)}:}{Validity-checking method, ensuring
       that \code{exprs} is a member of
