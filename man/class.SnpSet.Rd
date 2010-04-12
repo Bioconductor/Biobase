@@ -20,10 +20,13 @@
 \description{
   Container for high-throughput assays and experimental
   metadata. \code{SnpSet} class is derived from
-  \code{\link{eSet}}, and requires matricies \code{call},
-  \code{callProbability} as assay data members.  } \section{Extends}{
+  \code{\link{eSet}}, and requires matrices \code{call},
+  \code{callProbability} as assay data members.}
+
+\section{Extends}{
    Directly extends class \code{\link{eSet}}.
 }
+
 \section{Creating Objects}{
 
   \code{new('SnpSet',

@@ -84,18 +84,19 @@
 \description{
   Container for high-throughput assays and experimental
   metadata. Classes derived from \code{eSet} contain one or more
-  identical-sized matricies as \code{assayData} elements. Derived
+  identical-sized matrices as \code{assayData} elements. Derived
   classes (e.g., \code{\link{ExpressionSet-class}}, \code{\link{SnpSet-class}})
   specify which elements must be present in the \code{assayData} slot.
 
   \code{eSet} object cannot be instantiated directly; see the examples
-  for useage.
+  for usage.
 }
 \section{Creating Objects}{
   \code{eSet} is a virtual class, so instances cannot be created.
 
   Objects created under previous definitions of \code{eSet-class} can be
-  coerced to classes derived  based on \code{eSet} using \code{updateOldESet}.
+  coerced to the current classes derived from \code{eSet} using
+  \code{updateOldESet}.
 }
 \section{Slots}{
    Introduced in \code{eSet}:
