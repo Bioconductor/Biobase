@@ -1,6 +1,6 @@
 \name{cache}
 \alias{cache}
-\docType{function}
+\docType{methods}
 
 \title{Evaluate an expression if its value is not already cached.}
 \description{

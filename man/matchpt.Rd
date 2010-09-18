@@ -1,8 +1,6 @@
 \name{matchpt}
-
 \alias{matchpt}
-
-\docType{function}
+\docType{methods}
 
 \title{Nearest neighbor search.}
 \description{
