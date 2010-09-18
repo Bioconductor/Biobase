@@ -281,7 +281,22 @@ setMethod("selectSomeIndex",
               else list(NULL, NULL, NULL)
           })
 
-.showAnnotatedDataFrame <- function(object, labels=list(0)) {
+
+.wrapcat <-
+    function(lbl, nms, total, ..., indent=2, exdent=4)
+{
+    lbl <- sprintf("%s:", lbl)
+    txt <- paste(c(lbl,  nms), collapse=" ")
+    ext <-
+        if (length(nms) < total) sprintf("(%d total)", total)
+        else character()
+    txt <- paste(c(lbl,  nms, ext), collapse=" ")
+    cat(strwrap(txt, ..., indent=indent, exdent=exdent), sep="\n")
+}
+
+.showAnnotatedDataFrame <-
+    function(object, labels=list(0)) 
+{
     lbls <- list(object=paste("An object of class \"",
                    class(object), "\"", sep=""),
                  sampleNames=dimLabels(object)[[1]],
@@ -302,36 +317,16 @@ setMethod("selectSomeIndex",
              if (!is.null(idx[[1]])) rnms[-idx[[1]]] else NULL)
 
     cat(lbls$object, "\n", sep="")
-    outs = paste("  ", lbls$sampleNames, ": ",
-      paste(nms, collapse=", "), sep="")
-    if (nrow(object)>length(nms))
-        outs = c(outs, paste(" (",nrow(object)," total)", sep=""))
-    cat(strbreak(outs))
-    
-    cat("\n  ", lbls$varLabels, " and ", lbls$varMetadata, " description:",
-        sep="")
+    .wrapcat(lbls$sampleNames, nms, nrow(object))
+
     cnms <- colnames(pData)
-    if (length(cnms)>0) {
-        cat("\n")
-        metadata <- varMetadata(object)
+    if (length(cnms) > 0) {
         vars <- c(cnms[idy[[1]]], idy[[2]], cnms[-idy[[1]]])
-        meta <- selectSome(as.character(metadata[["labelDescription"]]),
-                           maxToShow=4)
-        mapply(function(nm, meta) {
-            outs = paste("    ",nm,": ", meta, "\n", sep="")
-            cat(strbreak(outs))
-        }, vars, meta)
-        
-        if (nrow(metadata)>length(meta))
-            cat("    (", nrow(metadata), " total)\n", sep="")
-        if (ncol(metadata)>1) {
-            mcolnames <- colnames(metadata)
-            mnms <- selectSome(mcolnames[mcolnames!="labelDescription"],
-                               maxToShow=4)
-            cat("  additional ", lbls$varMetadata, ": ",
-                paste(mnms, collapse=", "), "\n", sep="")
-        }
-    } else cat(" none\n")
+        .wrapcat(lbls$varLabels, vars, ncol(object))
+
+        mnms <- selectSome(colnames(varMetadata(object)), maxToShow=4)
+        .wrapcat(lbls$varMetadata, mnms, length(mnms))
+    } else cat("\n  ", lbls$varLabels, ": none", sep="")
 }
 
 setMethod("show",
@@ -376,47 +371,52 @@ setMethod("combine",
           })
 
 
-read.AnnotatedDataFrame = function(filename, path,
-                                   sep = "\t", header = TRUE, quote = "", stringsAsFactors = FALSE, 
-                                   row.names = 1L,
-                                   varMetadata.char="#",
-                                   widget = getOption("BioC")$Base$use.widgets,
-                                   sampleNames = character(0),
-                                   ...) {
-  
-  if(!(is.character(varMetadata.char)&&(identical(nchar(varMetadata.char), 1L))))
-    stop("Invalid  'varMetadata.char'")
+read.AnnotatedDataFrame <-
+    function(filename, path, sep = "\t", header = TRUE, quote = "",
+             stringsAsFactors = FALSE, row.names = 1L,
+             varMetadata.char="#", widget =
+             getOption("BioC")$Base$use.widgets, sampleNames =
+             character(0), ...)
+{
+    
+    if(!(is.character(varMetadata.char) &&
+         (identical(nchar(varMetadata.char), 1L))))
+        stop("Invalid  'varMetadata.char'")
 
-  ## For backward (or forward?) compatibility:
-  if(widget)
-    stop("Sorry: tkWidgets support is not available for read.AnnotatedDataFrame")
+    ## For backward (or forward?) compatibility:
+    if(widget)
+        stop("Sorry: tkWidgets is not available for read.AnnotatedDataFrame")
 
-  if(length(sampleNames)>0)
-    stop("'sampleNames' argument is not supported, please provide the sample",
-         "names in the input file and use the option 'row.names'.")
+    if(length(sampleNames)>0)
+        stop("'sampleNames' argument is not supported, provide the sample",
+             "names in the input file and use the option 'row.names'.")
 
-  if(!missing(path))
-    filename = file.path(path, filename)
-  pData = read.table(filename, sep=sep, header=header, quote=quote, stringsAsFactors=stringsAsFactors, 
-    row.names=row.names, comment.char=varMetadata.char, ...)
-  
-  ## read varMetadata section (the lines with leading "#")
-  vmd = grep(paste("^",  varMetadata.char, sep=""), readLines(filename), value=TRUE)
-  svmd = strsplit(vmd, ":")
-  varNames = sub("^# *", "", sapply(svmd, "[", 1L))
-  varMetad = sapply(svmd, "[", 2L)
+    if(!missing(path))
+        filename = file.path(path, filename)
+    pData = read.table(filename, sep=sep, header=header, quote=quote,
+      stringsAsFactors=stringsAsFactors, 
+      row.names=row.names, comment.char=varMetadata.char, ...)
+    
+    ## read varMetadata section (the lines with leading "#")
+    vmd = grep(paste("^",  varMetadata.char, sep=""),
+      readLines(filename), value=TRUE)
+    svmd = strsplit(vmd, ":")
+    varNames = sub("^# *", "", sapply(svmd, "[", 1L))
+    varMetad = sapply(svmd, "[", 2L)
 
-  ## link varMetadata names with pData colnames
-  mt = match(colnames(pData), varNames)
-  varMetad = ifelse(!is.na(mt), varMetad[mt], "")
+    ## link varMetadata names with pData colnames
+    mt = match(colnames(pData), varNames)
+    varMetad = ifelse(!is.na(mt), varMetad[mt], "")
 
-  vmd = data.frame(labelDescription=varMetad, row.names=colnames(pData))
+    vmd = data.frame(labelDescription=varMetad, row.names=colnames(pData))
 
-  ## add provenance information. Alapping it on as an attribute is a bit tacky, if Martin likes the idea
-  ## at all, maybe this can be made a proper slot...
-  provenance = sprintf("Read from file %s on %s at %s.", filename, Sys.info()["nodename"], date())
-  attr(vmd, "provenance") = provenance
-  
-  new("AnnotatedDataFrame", data=pData, varMetadata=vmd)
-  
+    ## add provenance information. Alapping it on as an attribute is a
+    ## bit tacky, if Martin likes the idea at all, maybe this can be
+    ## made a proper slot...
+    provenance = sprintf("Read from file %s on %s at %s.",
+      filename, Sys.info()["nodename"], date())
+    attr(vmd, "provenance") = provenance
+    
+    new("AnnotatedDataFrame", data=pData, varMetadata=vmd)
+    
 }
