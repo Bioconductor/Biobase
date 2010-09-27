@@ -1,6 +1,6 @@
 # id: case identifier
 # gender: sex of the patient at time of study begin
-# type: whether the patient was considered a case or a control in this study
+# type: is the patient a case or a control in this study?
 # score: Huffmann-Berelizka score of psychocognitive transcendance.
 id	gender	type	score
 A	Female	Control	0.75

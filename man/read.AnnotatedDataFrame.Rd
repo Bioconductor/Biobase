@@ -62,7 +62,7 @@ exampleFile = system.file("extdata", "pData.txt", package="Biobase")
 adf <- read.AnnotatedDataFrame(exampleFile)
 adf
 head(pData(adf))
-head(readLines(exampleFile))
+head(noquote(readLines(exampleFile)), 11)
 
 }
 \keyword{file}
