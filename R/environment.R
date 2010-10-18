@@ -48,7 +48,7 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 biocReposList <- function() {
     ## Locations of Bioconductor release repositories
-    VERSION <- "2.7"
+    VERSION <- "2.8"
     bioc_topurl <- getOption("BioC")$Base$urls$bioc
     if (is.null(bioc_topurl))
         bioc_topurl <- "http://bioconductor.org"
@@ -58,7 +58,6 @@ biocReposList <- function() {
                    aData=mkurl("data/annotation"),
                    eData=mkurl("data/experiment"),
                    extra=mkurl("extra"),
-                   brainarray="http://brainarray.mbni.med.umich.edu/bioc",
                    cran="http://cran.fhcrc.org")
     reposList
 }
