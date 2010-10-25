@@ -230,11 +230,11 @@ setValidity("eSet", function(object) {
     dims <- dims(object)
     if (ncol(dims) > 0) {
         ## assayData
+        msg <- validMsg(msg, assayDataValidMembers(assayData(object)))
         if (any(dims[1,] != dims[1,1]))
           msg <- validMsg(msg, "row numbers differ for assayData members")
         if (any(dims[2,] != dims[2,1]))
           msg <- validMsg(msg, "sample numbers differ for assayData members")
-        msg <- validMsg(msg, assayDataValidMembers(assayData(object)))
         ## featureData
         if (dims[1,1] != dim( featureData(object))[[1]])
           msg <- validMsg(msg, "feature numbers differ between assayData and featureData")
