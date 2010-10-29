@@ -57,6 +57,9 @@
 
 \alias{updateOldMiame}
 
+\alias{l2e}
+
+
 \description{
    The function, class, or data object you have asked for has been deprecated or made defunct. 
 }

@@ -2,7 +2,7 @@
 # Functions to operate with the environment:
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # .initContents; .buildBiobaseOpts;
-# multiassign; l2e; copyEnv
+# multiassign; copyEnv
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 .initContents <- function() {
    makeG = TRUE
@@ -110,17 +110,16 @@ listLen <- function(x)
     max(29L, as.integer(n * 1.20))
 }
 
-l2e <- function(vals, envir) {
-   if(missing(envir))
-     envir <- new.env(hash=TRUE, parent=emptyenv(),
-                      size=.new_env_size(length(vals)))
-   .Call("listToEnv", vals, envir, PACKAGE="Biobase")
-}
-
 copyEnv <- function(oldEnv, newEnv, all.names=FALSE) {
     if (missing(newEnv))
       newEnv <- new.env(hash=TRUE,
                         parent=parent.env(oldEnv),
                         size=.new_env_size(length(oldEnv)))
     .Call(copyEnv_sym, oldEnv, newEnv, all.names)
+}
+
+
+## Deprecated in v 2.11.2
+l2e <- function(vals, envir) {
+       .Deprecated(msg="'l2e' is deprecated, use 'list2env' instead ")
 }
