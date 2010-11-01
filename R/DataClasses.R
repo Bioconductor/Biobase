@@ -45,11 +45,20 @@ setClass("phenoData",
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setOldClass("data.frame")
 setClassUnion("data.frameOrNULL", c("data.frame", "NULL"))
+
+
 # ==========================================================================
+# MIAxE: a VIRTUAL class for experiment meta-data 
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+setClass("MIAxE",
+    representation("VIRTUAL"),
+    contains="Versioned",
+    prototype = prototype(new("Versioned", versions=c(MIAxE="1.0.0")))
+    )
+ 
+
 # MIAME: a class for microarray data - MIAME information (Rafael A. Irizarry)
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # More info: http://www.mged.org/Workgroups/MIAME/miame_1.1.html
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setClass("MIAME",
    representation(
       name           = "character",
@@ -65,9 +74,9 @@ setClass("MIAME",
       preprocessing  = "list",
       other          = "list"
    ),
-   contains=c("Versioned"),
+   contains=c("MIAxE"),
    prototype = prototype(
-      new("Versioned", versions=c(MIAME="1.0.0")),
+      new("Versioned", versions=c(classVersion("MIAxE"), MIAME="1.1.0")),
       name           = "",
       lab            = "",
       contact        = "",
@@ -134,19 +143,18 @@ setClass("eSet",
          representation(assayData = "AssayData",
                         phenoData = "AnnotatedDataFrame",
                         featureData = "AnnotatedDataFrame",
-                        experimentData = "MIAME",
+                        experimentData = "MIAxE",
                         annotation = "character",
                         protocolData="AnnotatedDataFrame",
                         "VIRTUAL"),
          contains="VersionedBiobase",
          prototype = prototype(
-           new("VersionedBiobase", versions=c(eSet="1.3.0")),
+           new("VersionedBiobase", versions=c(eSet="1.4.0")),
                assayData = list(), # use initialize to set as env, so different instances have different envs
                phenoData = new("AnnotatedDataFrame",
                  dimLabels=c("sampleNames", "sampleColumns")),
                featureData = new("AnnotatedDataFrame",
                  dimLabels=c("featureNames", "featureColumns")),
-               experimentData = new("MIAME"),
                annotation = character(),
                protocolData = new("AnnotatedDataFrame",
                  dimLabels=c("sampleNames", "sampleColumns"))))
@@ -154,7 +162,7 @@ setClass("ExpressionSet",
          contains = "eSet",
          prototype = prototype(
            new("VersionedBiobase",
-               versions=c(classVersion("eSet"), ExpressionSet="1.0.0"))))
+               versions=c(classVersion("eSet"), ExpressionSet="1.1.0"))))
 setClass("NChannelSet",
          contains = "eSet",
          prototype = prototype(

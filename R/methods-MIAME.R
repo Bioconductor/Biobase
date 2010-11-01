@@ -4,8 +4,12 @@ updateOldMiame <- function(x) {
 
 setMethod("isCurrent", signature(object="MIAME", value="missing"),
           function(object, value) {
-              res <- callNextMethod() && "pubMedIds" %in% names(getObjectSlots(object))
-              names(res) <- "MIAME"
+              cver <- callNextMethod()
+              MIAMEres <- all(c(cver, "pubMedIds" %in% names(getObjectSlots(object))))
+              if("MIAxE" %in% names(cver)) {
+                  res <- c(cver["MIAxE"], MIAMEres) 
+                  names(res) <- c("MIAxE", "MIAME")
+              } else {res <- MIAMEres; names(res) <- "MIAME"}
               res
       })
          
@@ -17,6 +21,8 @@ setMethod("updateObject", signature(object="MIAME"),
                 callNextMethod()
               else
                 updateObjectFromSlots(object, ..., verbose=verbose)
+                classVersion(object) <- classVersion(class(object))
+                object
           })
 
 # ==========================================================================

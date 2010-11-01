@@ -214,8 +214,21 @@ setMethod("updateObject", signature(object="eSet"),
                                  protocolData = protocolData),
                             lapply(additionalSlots,
                                    function(x) updateObject(slot(object, x)))))
-              }
-              else {
+              } else if (classVersion(object)["eSet"]=="1.3.0") {
+                ## added MIAxE class, MIAME now a subclass of MIAxE 
+                ## MIAME has both MIAME and MIAxE version information
+                object <-
+                  do.call(new,
+                          c(list(class(object),
+                                 assayData = updateObject(assayData(object)),
+                                 phenoData = updateObject(phenoData(object)),
+                                 featureData = updateObject(featureData(object)),
+                                 experimentData = updateObject(experimentData(object)),
+                                 annotation = annotation(object),
+                                 protocolData = updateObject(protocolData(object))),
+                            lapply(additionalSlots,
+                                   function(x) updateObject(slot(object, x)))))
+              } else {
                 stop("cannot update object of class '", class(object),
                      "', claiming to be eSet version '",
                      as(classVersion(object)["eSet"], "character"), "'")

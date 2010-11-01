@@ -13,7 +13,7 @@
   associated functions is available from within class help
   pages.
 
-  Additional data classes: \code{\link{eSet}},
+  Additional data classes: \code{\link{eSet}}, \code{\link{MIAxE}},
   \code{\link{MultiSet}}. Additional manipulation and data structuring
   classes: \code{\link{Versioned}}, \code{\link{VersionedBiobase}},
   \code{\link{aggregator}}, \code{\link{container}}.

@@ -90,8 +90,16 @@ setMethod("isCurrent", signature(object="Versioned", value="missing"),
 
 setMethod("isCurrent", signature(object="Versioned", value="character"),
           function(object, value) {
-              if (extends(class(object),value) && isVersioned(object)) {
-                  vers <- classVersion(value)
+             # vers <- classVersion(value)
+             # if(!all(names(vers) %in% names(classVersion(object)))) {
+             #     res <- FALSE
+             #     names(res) <- value 
+             #     return(res)
+             # }
+              vers <- classVersion(value)
+              if (extends(class(object),value) && 
+                          isVersioned(object) &&
+                          all(names(vers) %in% names(classVersion(object)))) {
                   res <- classVersion(object)[names(vers)] == vers
                   names(res) <- names(vers)
               } else {
