@@ -56,6 +56,17 @@
 }
 
 \section{Methods}{
+   Constructor methods:
+   \describe{
+      \item{\code{MIAME()}:}{
+      \code{MIAME(name = "", lab = "", contact = "",
+                  title = "", abstract = "", url = "",
+                  pubMedIds = "" , samples = "",
+                  hybridizations = list(), normControls = list(),
+                  preprocessing = list(), other = list())}:
+      Creates a new \code{MIAME} object with slots as defined above.}
+    }
+
    Class-specific methods:
    \describe{
       \item{\code{abstract(MIAME)}:}{An accessor function for \code{abstract}.}
@@ -64,7 +75,7 @@
       \item{\code{hybridizations(MIAME)}:}{An accessor function for \code{hybridizations}.}
       \item{\code{normControls(MIAME)}:}{An accessor function for \code{normControls}.}
       \item{\code{notes(MIAME), notes(MIAME) <- value}:}{Accessor functions for \code{other}. \code{notes(MIAME) <- character}
-	\emph{appends} character to notes; use \code{notes(MIAME) <- list} to replace the notes entirely.}
+           \emph{appends} character to notes; use \code{notes(MIAME) <- list} to replace the notes entirely.}
       \item{\code{otherInfo(MIAME)}:}{An accessor function for \code{other}.}
       \item{\code{preproc(MIAME)}:}{An accessor function for \code{preprocessing}.}
       \item{\code{pubMedIds(MIAME), pubMedIds(MIAME) <- value}:}{Accessor function for \code{pubMedIds}.}

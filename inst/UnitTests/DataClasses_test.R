@@ -7,3 +7,9 @@ testNew <- function() {
     res <- lapply(classes[!isVirtual & !isDefunct],
                   function(x) suppressWarnings(new(x)))
 }
+
+test_MIAME_construction <- function() {
+    checkTrue(validObject(new("MIAME")))
+    checkTrue(validObject(MIAME()))
+    checkIdentical(new("MIAME", name="mytest"), MIAME(name="mytest"))
+}

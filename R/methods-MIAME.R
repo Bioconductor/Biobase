@@ -12,7 +12,7 @@ setMethod("isCurrent", signature(object="MIAME", value="missing"),
               } else {res <- MIAMEres; names(res) <- "MIAME"}
               res
       })
-         
+
 setMethod("updateObject", signature(object="MIAME"),
           function(object, ..., verbose=FALSE) {
               if (verbose) message("updateObject(object = 'MIAME')")
@@ -112,6 +112,28 @@ setReplaceMethod("notes", signature(object="MIAME", value="character"),
                      object
                  })
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+MIAME <- 
+    function(name = "", lab = "", contact = "",
+             title = "", abstract = "", url = "",
+             pubMedIds = "", samples = list(),
+             hybridizations = list(), normControls = list(),
+             preprocessing = list(), other = list()) {
+        new("MIAME", name=name, 
+                        lab=lab,
+                        contact=contact,
+                        title=title,
+                        abstract=abstract,
+                        url=url,
+                        pubMedIds=pubMedIds,
+                        samples=samples,
+                        hybridizations=hybridizations,
+                        normControls=normControls,
+                        preprocessing=preprocessing,
+                        other=other)
+    }
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 read.MIAME <- function(filename=NULL,widget=getOption("BioC")$Base$use.widgets,...) {
    if(!is.null(filename)) {
       miame <- scan(filename,what="c",quiet=TRUE,sep="\n",...)
@@ -167,7 +189,7 @@ setMethod("combine", c("MIAME", "MIAME"), function(x, y, ...) {
                  warning("\n  unknown or conflicting information in MIAME field '", sl,"'; using information from object 'x'")
                  slot(x,sl)
              })
-             
+
   }
   x
 })
