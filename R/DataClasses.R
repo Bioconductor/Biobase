@@ -162,7 +162,8 @@ setClass("ExpressionSet",
          contains = "eSet",
          prototype = prototype(
            new("VersionedBiobase",
-               versions=c(classVersion("eSet"), ExpressionSet="1.1.0"))))
+               versions=c(classVersion("eSet"), ExpressionSet="1.1.0")),
+               experimentData=new("MIAME")))
 setClass("NChannelSet",
          contains = "eSet",
          prototype = prototype(

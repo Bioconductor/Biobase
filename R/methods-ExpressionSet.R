@@ -190,7 +190,7 @@ readExpressionSet <- function(exprsFile,
                               ...) {
     if (!missing(widget) && widget != FALSE)
         stop("sorry, widgets not yet available")
-    
+
     ## exprs
     if (missing(exprsFile))
         stop("exprs can not be missing!")
