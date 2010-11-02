@@ -91,7 +91,9 @@ setAs("exprSet", "ExpressionSet", function(from) {
 setValidity("ExpressionSet", function(object) {
     msg <- validMsg(NULL, isValidVersion(object, "ExpressionSet"))
     msg <- validMsg(msg, assayDataValidMembers(assayData(object), c("exprs")))
-    msg <- validMsg(msg, class(experimentData(object)) == "MIAME")
+    if(class(experimentData(object)) != "MIAME")
+        msg <- validMsg(msg, 
+               "experimentData slot in ExpressionSet must be 'MIAME' object")
     if (is.null(msg)) TRUE else msg
 })
 

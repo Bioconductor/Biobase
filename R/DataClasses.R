@@ -149,7 +149,7 @@ setClass("eSet",
                         "VIRTUAL"),
          contains="VersionedBiobase",
          prototype = prototype(
-           new("VersionedBiobase", versions=c(eSet="1.4.0")),
+           new("VersionedBiobase", versions=c(eSet="1.3.0")),
                assayData = list(), # use initialize to set as env, so different instances have different envs
                phenoData = new("AnnotatedDataFrame",
                  dimLabels=c("sampleNames", "sampleColumns")),
@@ -159,10 +159,11 @@ setClass("eSet",
                protocolData = new("AnnotatedDataFrame",
                  dimLabels=c("sampleNames", "sampleColumns"))))
 setClass("ExpressionSet",
+         representation(experimentData="MIAME"),
          contains = "eSet",
          prototype = prototype(
            new("VersionedBiobase",
-               versions=c(classVersion("eSet"), ExpressionSet="1.1.0")),
+               versions=c(classVersion("eSet"), ExpressionSet="1.0.0")),
                experimentData=new("MIAME")))
 setClass("NChannelSet",
          contains = "eSet",

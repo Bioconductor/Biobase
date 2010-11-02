@@ -119,17 +119,17 @@ MIAME <-
              hybridizations = list(), normControls = list(),
              preprocessing = list(), other = list()) {
         new("MIAME", name=name, 
-                        lab=lab,
-                        contact=contact,
-                        title=title,
-                        abstract=abstract,
-                        url=url,
-                        pubMedIds=pubMedIds,
-                        samples=samples,
-                        hybridizations=hybridizations,
-                        normControls=normControls,
-                        preprocessing=preprocessing,
-                        other=other)
+                     lab=lab,
+                     contact=contact,
+                     title=title,
+                     abstract=abstract,
+                     url=url,
+                     pubMedIds=pubMedIds,
+                     samples=samples,
+                     hybridizations=hybridizations,
+                     normControls=normControls,
+                     preprocessing=preprocessing,
+                     other=other)
     }
 
 
