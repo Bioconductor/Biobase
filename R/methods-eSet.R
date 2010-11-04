@@ -202,7 +202,7 @@ setMethod("updateObject", signature(object="eSet"),
                 protocolData <- phenoData(object)[,integer(0)]
                 if (length(scanDates) > 0) {
                   protocolData[["ScanDate"]] <- scanDates
-                }    
+                }
                 object <-
                   do.call(new,
                           c(list(class(object),

@@ -36,7 +36,10 @@
 }
 
 \description{
-   Class \code{MIAME} covers MIAME entries that are not covered by other classes in Bioconductor. Namely, experimental design, samples, hybridizations, normalization controls, and pre-processing information.}
+   Class \code{MIAME} covers MIAME entries that are not covered by other classes
+in Bioconductor. Namely, experimental design, samples, hybridizations,
+normalization controls, and pre-processing information. The \code{MIAME} class 
+is derived from \code{\link{MIAxE}}.}
 
 \section{Slots}{
    \describe{

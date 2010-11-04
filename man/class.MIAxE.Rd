@@ -1,9 +1,9 @@
 \name{MIAxE}
 \docType{class}
-\alias{class:MIAxE}
 \alias{MIAxE}
-
+\alias{class:MIAxE}
 \alias{MIAxE-class}
+\alias{show,MIAxE-method}
 
 \title{MIAxE objects}
 
@@ -18,9 +18,22 @@
   derive directly from the \code{MIAxE} class: MIAME. 
 }
 
+\section{Slots}{
+   Introduced in \code{MIAxE}:
+   \describe{
+      \item{\code{.__classVersion__}:}{A \code{Versions} object describing
+    the \code{MIAxE} version number. Intended for developer use.}
+  }
+}
+
+
 \section{Methods}{
-  Currently no methods exist for the \code{MIAxE} objects. 
- }
+   Standard generic methods:
+   \describe{
+      \item{\code{show(object)}}{Informatively display object contents.}
+   }
+}
+
 
 \author{Biocore team}
 

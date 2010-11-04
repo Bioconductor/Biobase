@@ -40,11 +40,13 @@
 \date{7 August, 2006}
 \maketitle
 
-Revised 4 September, 2006 -- \Robject{featureData} slot.  
+Revised 4 September, 2006 -- \Robject{featureData} slot.
 Revised 20 April 2007 -- minor wording changes; \Rfunarg{verbose} and
 other arguments passed through \Rmethod{updateObject} example;
 introduce a second variant of \Rmethod{initialize} illustrating its
 use as a copy constructor.
+Revised 4 November, 2010 -- \Robject{experimentData} slot as \Rclass{MIAxE} 
+class. \Rclass{MIAME} class is now subclass of \Rclass{MIAxE}.
 
 \section{Introduction}
 
@@ -180,7 +182,13 @@ Purpose.
 \begin{itemize}
 \item Summarize where and how the experiment was performed.
 \end{itemize}
-Structure: \Rclass{MIAME}
+Structure: \Rclass{MIAxE} virtual class
+\begin{itemize}
+\item[] {In Biobase version 2.11 the \Rclass{MIAxE} virtual class was introduced 
+as a general container for experiment meta-data. The \Rclass{MIAME} class
+is now a subclass of \Rclass{MIAxE}. See \verb|?"MIAxE-class"|. 
+The \Rclass{MIAME} class structure is as follows} 
+\end{itemize}
 \begin{itemize}
 \item \Robject{title}: experiment title.
 \item \Robject{name}: experimenter name(s).
@@ -266,7 +274,7 @@ Important methods.
 \begin{itemize}
 \item Initialization (additional details below):
 <<ExpressionSet-initialize,eval=FALSE>>=
-obj <- new("eSet", phenoData = new("AnnotatedDataFrame"), experimentData = new("MIAME"), annotation = character(), exprs = new("matrix")) 
+obj <- new("ExpressionSet", phenoData = new("AnnotatedDataFrame"), experimentData = new("MIAME"), annotation = character(), exprs = new("matrix")) 
 @ 
 \item \Rfunction{exprs(obj), exprs(obj) <- value}: get or set \Robject{exprs}; methods defined for \Rclass{ExpressionSet}, \Rclass{AssayData}.
 \end{itemize}
@@ -307,7 +315,7 @@ class that \Rfunction{is} a list or environment, rather than a class
 that has a slot that contains a list or environment. The
 \Rfunction{is} relationship is desirable to avoid unnecessary
 function calls to access slots, and requires that a class
-\Rfunction{contain} the base type (e.g., \Rclass{environment}. Until
+\Rfunction{contain} the base type (e.g., \Rclass{environment}). Until
 recently an \R{} object could not \Rfunction{contain} an
 \Rclass{environment}.
 
@@ -328,7 +336,7 @@ probably familiar with \Robject{list} objects; a drawback is that
 \R{} may trigger creation of many copies of the the \Robject{exprs}
 element. This can be expensive in both space and time. Environments
 are nearly unique in \R{}, in that they are passed by reference rather
-than value. This eliminates some copying, but has the unfortunately
+than value. This eliminates some copying, but has the unfortunate
 consequence that side-effects occur -- modifications to an environment
 inside a function influence the value of elements outside the
 function. For these reasons, environments can be useful as `read only'
