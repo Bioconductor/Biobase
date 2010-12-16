@@ -172,17 +172,33 @@ setReplaceMethod("varLabels", c("AnnotatedDataFrame", "ANY"), function(object, v
   object
 })
 
-setMethod("varMetadata", "AnnotatedDataFrame", function(object) object@varMetadata )
+setMethod("varMetadata", "AnnotatedDataFrame",
+          function(object) object@varMetadata )
 
-setReplaceMethod("varMetadata", c("AnnotatedDataFrame", "data.frame"), function(object, value) {
-  if (!("labelDescription" %in% colnames(value)))
-    warning("varMetadata must have column named 'labelDescription'")
-  if (ncol(pData(object))>0)
-    row.names(value) <- names(pData(object))
-  object@varMetadata <- value
-  object
+setReplaceMethod("varMetadata", c("AnnotatedDataFrame", "data.frame"),
+                 function(object, value)
+{
+    if (!("labelDescription" %in% colnames(value)))
+        warning("'varMetadata' must have column 'labelDescription'")
+    rinfo <- .row_names_info(value)
+    if (0L <= rinfo) {
+        ## not 'automatic'
+        bad <- setdiff(row.names(value), varLabels(object))
+        if (length(bad)) {
+            fmt <- "'%s' not in 'varLabels(<AnnotatedDataFrame>)'"
+            stop(sprintf(fmt, paste(selectSome(bad), collapse="', '")))
+        }
+    }
+    if (ncol(object) != abs(rinfo)) {
+        fmt <- "varMetadata has %d row(s); 'value' has %d"
+        stop(sprintf(fmt, ncol(object), nrow(value)))
+    }
+    if (0 < ncol(pData(object)))
+        row.names(value) <- names(pData(object))
+    object@varMetadata <- value
+    object
 })
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 setMethod("[",
           signature(x="AnnotatedDataFrame"),
           function(x, i, j, ..., drop) {
