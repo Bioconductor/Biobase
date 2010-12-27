@@ -88,7 +88,7 @@ In this introduction we learn how to create and manipulate
 \subsection{Installing Packages}
 
 If you are reading this document and have not yet installed any
-software on your computer, visit \url{http://biocondcutor.org} and
+software on your computer, visit \url{http://bioconductor.org} and
 follow the instructions for installing \R{} and Bioconductor.  Once
 you have installed \R{} and Bioconductor, you are ready to go with
 this document. In the future, you might find that you need to install
