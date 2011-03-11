@@ -9,11 +9,13 @@ This generic function handles methods for adding and retrieving
 }
 \usage{
 annotation(object)
-annotation(object) <- "hgu95av2"
+annotation(object) <- value
 
 }
 \arguments{
   \item{object}{Object derived from class eSet}
+  \item{value}{character(1) describing the chip from which the eSet data
+    is obtained}
 }
 \value{
   \code{annotation(object)} returns a character vector indicating the
