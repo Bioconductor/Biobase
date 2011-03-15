@@ -13,7 +13,7 @@
         paste("\nWelcome to Bioconductor\n",
                 "Vignettes contain introductory material. To view, type",
                 "'browseVignettes()'. To cite Bioconductor, see",
-                "'citation(\"Biobase\")' and for packages 'citation(pkgname)'.\n", sep="\n  "))
+                "'citation(\"Biobase\")' and for packages 'citation(\"pkgname\")'.\n", sep="\n  "))
    addVigs2WinMenu("Biobase") 
 }
 
