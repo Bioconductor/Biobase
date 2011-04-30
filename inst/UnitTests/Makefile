@@ -7,11 +7,11 @@ all: install test
 
 install:
 	cd ${TOP}; \
-	R CMD INSTALL --clean ${PKG_PATH} && \
+	"$(R_HOME)/bin/R" CMD INSTALL --clean ${PKG_PATH} && \
 	cd ${RUNIT_DIR}
 
 test:
-	R --slave < runalltests.R
+	"$(R_HOME)/bin/R" --slave < runalltests.R
 
 %.R: FORCE
 	./runfile.sh $@
