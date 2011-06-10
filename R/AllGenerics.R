@@ -111,3 +111,17 @@ setGeneric("updateObjectTo",
                validObject(result)
                result
            })
+
+
+
+
+# Currently, these are for DESeq and DEXSeq. Could be extended to a more general
+#  infrastructure for count datasets.
+setGeneric("counts",        function(cds, normalized=FALSE) standardGeneric("counts"))
+setGeneric("dispTable",     function(cds)                   standardGeneric("dispTable"))
+setGeneric("dispTable<-",   function(cds, value)            standardGeneric("dispTable<-"))
+setGeneric("sizeFactors",   function(cds)                   standardGeneric("sizeFactors"))
+setGeneric("sizeFactors<-", function(cds, value)            standardGeneric("sizeFactors<-"))
+setGeneric("conditions",    function(cds)                   standardGeneric("conditions"))
+setGeneric("conditions<-",  function(cds, value)            standardGeneric("conditions<-"))
+

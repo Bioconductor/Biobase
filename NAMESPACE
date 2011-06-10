@@ -32,7 +32,11 @@ exportMethods("[", "[[", "$", abstract, aggenv, aggfun,
               pubMedIds, "pubMedIds<-",
               isVersioned, isCurrent, classVersion, "classVersion<-",
               updateObject, updateObjectTo,
-              initialize, show, Compare)
+              initialize, show, Compare,
+              "counts",
+              "dispTable", "dispTable<-",
+              "sizeFactors", "sizeFactors<-",
+              "conditions", "conditions<-")
 
 export("Aggregate",
        "addVigs2WinMenu",
