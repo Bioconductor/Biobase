@@ -1,6 +1,8 @@
-\name{conditions}
+\name{dge}
 \alias{conditions}
 \alias{conditions<-}
+\alias{design}
+\alias{design<-}
 \alias{counts}
 \alias{counts<-}
 \alias{dispTable}
@@ -9,6 +11,7 @@
 \alias{sizeFactors<-}
 
 \title{Accessors and generic functions for count datasets}
+
 \description{These generic functions provide basic interfaces to operations on
 and data access to count datasets.}
 
@@ -19,8 +22,10 @@ dispTable(cds)
 dispTable(cds)  <- value
 sizeFactors(cds) 
 sizeFactors(cds) <- value
-conditions(cds) 
+conditions(cds, ...) 
 conditions(cds) <- value
+design(cds, ...) 
+design(cds) <- value
 }
 
 \arguments{
@@ -31,7 +36,7 @@ conditions(cds) <- value
     For \code{sizeFactors<-}, a numeric vectors whose lengths matches.
     the number of samples in \code{cds},
     For \code{conditions<-}, a matrix or a data frame ...}
-    
+  \item{...}{Further arguments.}  
 }
 
 \details{See DESeq and DEXSeq package vignettes.}

@@ -123,6 +123,9 @@ setGeneric("dispTable",     function(cds)                   standardGeneric("dis
 setGeneric("dispTable<-",   function(cds, value)            standardGeneric("dispTable<-"))
 setGeneric("sizeFactors",   function(cds)                   standardGeneric("sizeFactors"))
 setGeneric("sizeFactors<-", function(cds, value)            standardGeneric("sizeFactors<-"))
-setGeneric("conditions",    function(cds)                   standardGeneric("conditions"))
+
+setGeneric("conditions",    function(cds, ...)              standardGeneric("conditions"))
 setGeneric("conditions<-",  function(cds, value)            standardGeneric("conditions<-"))
+setGeneric("design",        function(cds, ...)              standardGeneric("design"))
+setGeneric("design<-",      function(cds, value)            standardGeneric("design<-"))
 
