@@ -129,3 +129,6 @@ setGeneric("conditions<-",  function(cds, value)            standardGeneric("con
 setGeneric("design",        function(cds, ...)              standardGeneric("design"))
 setGeneric("design<-",      function(cds, value)            standardGeneric("design<-"))
 
+setGeneric("estimateSizeFactors", function(cds, ...) standardGeneric("estimateSizeFactors"))
+setGeneric("estimateDispersions", function(cds, ...) standardGeneric("estimateDispersions"))
+

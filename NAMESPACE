@@ -38,7 +38,9 @@ exportMethods("[", "[[", "$", abstract, aggenv, aggfun,
               "design", "design<-",
               "dispTable", "dispTable<-",
               "sizeFactors", "sizeFactors<-",
-              "conditions", "conditions<-")
+              "conditions", "conditions<-",
+              "estimateSizeFactors", 
+              "estimateDispersions")
 
 export("Aggregate",
        "addVigs2WinMenu",
