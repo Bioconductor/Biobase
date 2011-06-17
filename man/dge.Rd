@@ -2,6 +2,7 @@
 \alias{conditions}
 \alias{conditions<-}
 \alias{counts}
+\alias{counts<-}
 \alias{dispTable}
 \alias{dispTable<-}
 \alias{sizeFactors}
@@ -13,6 +14,7 @@ and data access to count datasets.}
 
 \usage{
 counts(cds, normalized=FALSE)
+counts(cds) <- value
 dispTable(cds)         
 dispTable(cds)  <- value
 sizeFactors(cds) 

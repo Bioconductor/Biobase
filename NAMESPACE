@@ -33,7 +33,7 @@ exportMethods("[", "[[", "$", abstract, aggenv, aggfun,
               isVersioned, isCurrent, classVersion, "classVersion<-",
               updateObject, updateObjectTo,
               initialize, show, Compare,
-              "counts",
+              "counts", "counts<-",
               "dispTable", "dispTable<-",
               "sizeFactors", "sizeFactors<-",
               "conditions", "conditions<-")
