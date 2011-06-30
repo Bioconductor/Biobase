@@ -3,6 +3,8 @@
 
 \title{Return a list of Bioconductor package repositories}
 \description{
+  WARNING: The \code{biocReposList} function is deprecated!
+
   This function returns a named character vector of Bioconductor package
   repositories.
 
@@ -17,19 +19,23 @@ biocReposList()
   The repository URLs are hardcoded for each release.
 }
 \value{
-  \item{bioc }{URL of main Bioc package repository}
-  \item{aData }{URL for Bioc annotation data package repository}
-  \item{eData }{URL for Bioc experiment data package repository}
-  \item{oh }{URL for Bioc Omegahat package repository.  This repository
-    contains the versions of Omegahat packages that were tested with the
-    current Bioc release.}
-  \item{li }{URL for Bioc Lindsey package repository.}
-  \item{cran }{URL for Bioc CRAN package repository.  This is just a
-    normal CRAN repository.}
+  \item{bioc}{URL for Bioc software package repository}
+  \item{aData}{URL for Bioc annotation data package repository}
+  \item{eData}{URL for Bioc experiment data package repository}
+  \item{extra}{URL for Bioc extra repository}
+  \item{cran}{URL for CRAN package repository.}
 }
 \author{S. Falcon}
 \examples{
-brl <- biocReposList()
+## This function is deprecated. Please use biocLite() to install packages:
+if (interactive()) {
+  source("http://bioconductor.org/biocLite.R")
+  biocLite("hgu95av2.db")
+}
+## If you really need to get the list of Bioconductor package repositories
+## (like biocReposList() does), then do:
+source("http://bioconductor.org/biocLite.R")
+biocinstallRepos()  # PLEASE USE THIS, NOT biocReposList()
 }
 \keyword{utilities}
 

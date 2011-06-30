@@ -47,6 +47,15 @@
 }
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 biocReposList <- function() {
+    msg <- c("  The biocReposList() function is deprecated.  ",
+             "Please use biocLite() to install\n  packages:\n",
+             "      source(\"http://bioconductor.org/biocLite.R\")\n",
+             "      biocLite(\"<pkgname>\")\n",
+             "  If you really need to get the list of Bioconductor package ",
+             "repositories (like\n  biocReposList() does), then do:\n",
+             "      source(\"http://bioconductor.org/biocLite.R\")\n",
+             "      biocinstallRepos()\n")
+    .Deprecated(msg=msg)
     ## Locations of Bioconductor release repositories
     VERSION <- "2.9"
     bioc_topurl <- getOption("BioC")$Base$urls$bioc
