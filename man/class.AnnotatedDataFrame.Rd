@@ -3,6 +3,9 @@
 \alias{class:AnnotatedDataFrame}
 \alias{AnnotatedDataFrame}
 \alias{AnnotatedDataFrame-class}
+\alias{AnnotatedDataFrame,missing,missing-method}
+\alias{AnnotatedDataFrame,data.frame,missing-method}
+\alias{AnnotatedDataFrame,data.frame,data.frame-method}
 
 \alias{dimLabels}
 \alias{dimLabels<-}
@@ -50,14 +53,10 @@
 }
 \section{Creating Objects}{
 
-  \code{new("AnnotatedDataFrame")}
+  \code{AnnotatedDataFrame(data, varMetadata, dimLabels=c("rowNames", "columnNames"), ...)}
 
-  \code{new("AnnotatedDataFrame", data=data.frame(),
-    varMetadata=data.frame(), dimLabels=c("rowNames", "columnNames"))}
-
-  \code{AnnotatedDataFrame} instances are created using \code{new}.  The
-  initialize method takes up to three arguments, \code{data},
-  \code{varMetadata}, and \code{dimLabels}.  \code{data} is a
+  \code{AnnotatedDataFrame} instances are created using
+  \code{AnnotatedDataFrame}. The function can take three arguments, \code{data} is a
   \code{data.frame} of the samples (rows) and measured variables
   (columns).  \code{varMetadata} is a \code{data.frame} with the number
   of rows equal to the number of columns of the \code{data} argument.
@@ -66,11 +65,11 @@
   and columns in the \code{show} method. \code{varMetadata} and
   \code{dimLabels} can be missing.
 
-  \code{as(data.frame, "AnnotatedDataFrame")} coerces a \code{data.frame} to an
-  \code{AnnotatedDataFrame}.
+\code{as(data.frame, "AnnotatedDataFrame")} coerces a \code{data.frame} to an
+\code{AnnotatedDataFrame}.
 
-  \code{\link{annotatedDataFrameFrom}} may be a convenient way to create
-  an \code{AnnotatedDataFrame} from \code{\link{AssayData-class}}.
+\code{\link{annotatedDataFrameFrom}} may be a convenient way to create
+an \code{AnnotatedDataFrame} from \code{\link{AssayData-class}}.
 
 }
 
@@ -182,15 +181,13 @@ metaData <-
                "Numbers",
                "Factor levels",
                "Characters"))
-                       
-new("AnnotatedDataFrame")
-new("AnnotatedDataFrame", data=df)
-new("AnnotatedDataFrame",
-    data=df, varMetadata=metaData)
 
+AnnotatedDataFrame()
+AnnotatedDataFrame(data=df)
+AnnotatedDataFrame(data=df, varMetaData=metaData)
 as(df, "AnnotatedDataFrame")
 
-obj <- new("AnnotatedDataFrame")
+obj <- AnnotatedDataFrame()
 pData(obj) <- df
 varMetadata(obj) <- metaData
 validObject(obj)

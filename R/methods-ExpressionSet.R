@@ -232,3 +232,53 @@ readExpressionSet <- function(exprsFile,
     validObject(obj)
     obj
 }
+
+
+setMethod(ExpressionSet,
+          signature=signature(assayData="missing"),
+    function(assayData,
+             phenoData=AnnotatedDataFrame(),
+             featureData=AnnotatedDataFrame(),
+             experimentData=new("MIAME"), annotation=character(),
+             protocolData=AnnotatedDataFrame(),
+             ...)
+{
+    new("ExpressionSet",
+        assayData=assayDataNew(exprs=matrix(0, 0, 0)),
+        phenoData=phenoData,
+        featureData=featureData, experimentData=experimentData,
+        annotation=annotation, protocolData=protocolData, ...)
+})
+
+setMethod(ExpressionSet,
+          signature=signature(assayData="environment"),
+    function(assayData,
+             phenoData=annotatedDataFrameFrom(assayData, byrow=FALSE),
+             featureData=annotatedDataFrameFrom(assayData, byrow=TRUE),
+             experimentData=new("MIAME"), annotation=character(),
+             protocolData=annotatedDataFrameFrom(assayData, byrow=FALSE),
+             ...)
+{
+    new("ExpressionSet", assayData=assayData, phenoData=phenoData,
+        featureData=featureData, experimentData=experimentData,
+        annotation=annotation, protocolData=protocolData, ...)
+})
+
+
+setMethod(ExpressionSet,
+          signature=signature(assayData="matrix"),
+    function(assayData,
+             phenoData=annotatedDataFrameFrom(assayData, byrow=FALSE),
+             featureData=annotatedDataFrameFrom(assayData, byrow=TRUE),
+             experimentData=new("MIAME"), annotation=character(),
+             protocolData=annotatedDataFrameFrom(assayData, byrow=FALSE),
+             ...)
+{
+    assayData <- assayDataNew(exprs=assayData)
+    new("ExpressionSet", assayData=assayData,
+        phenoData=phenoData,
+        featureData=featureData, experimentData=experimentData,
+        annotation=annotation, protocolData=protocolData, ...)
+})
+
+

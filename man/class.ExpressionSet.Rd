@@ -3,6 +3,9 @@
 \alias{class:ExpressionSet}
 \alias{ExpressionSet}
 \alias{ExpressionSet-class}
+\alias{ExpressionSet,missing-method}
+\alias{ExpressionSet,environment-method}
+\alias{ExpressionSet,matrix-method}
 
 \alias{exprs,ExpressionSet-method}
 \alias{exprs<-,ExpressionSet,matrix-method}
@@ -33,44 +36,23 @@
 }
 \section{Creating Objects}{
 
-  \code{new("ExpressionSet")}
+  \code{ExpressionSet} instances are usually created through
 
-  \code{new("ExpressionSet",
-    phenoData = new("AnnotatedDataFrame"),
-    featureData = new("AnnotatedDataFrame"),
-    experimentData = new("MIAME"),
-    annotation = character(0),
-    protocolData = phenoData[,integer(0)],
-    exprs = new("matrix"))
+  \code{ExpressionSet()}
+
+  \code{ExpressionSet(assayData,
+        phenoData=annotatedDataFrameFrom(assayData, byrow=FALSE),
+        featureData=annotatedDataFrameFrom(assayData, byrow=TRUE),
+        experimentData=new("MIAME"), annotation=character(),
+        protocolData=annotatedDataFrameFrom(assayData, byrow=FALSE),
+        ...)
   }
-
-  This creates an \code{ExpressionSet} with \code{assayData} implicitly
-  created to contain \code{exprs}. Additional named matrix arguments
-  with the same dimensions as \code{exprs} are added to
-  \code{assayData}; the row and column names of these additional
-  matricies should match those of \code{exprs}. 
-
-  \code{new("ExpressionSet",
-    assayData = assayDataNew(exprs=new("matrix")),
-    phenoData = new("AnnotatedDataFrame"),
-    featureData = new("AnnotatedDataFrame"),
-    experimentData = new("MIAME"),
-    annotation = character(0),
-    protocolData = phenoData[,integer(0)])
-  }
-
   This creates an \code{ExpressionSet} with \code{assayData} provided
   explicitly. In this form, the only required named argument is
-  \code{assayData}.
+  \code{assayData}.  \code{assayData} can be \code{matrix} (a matrix of
+  expression data, with features  corresponding to rows and samples
+  to columns) or an \code{environment} that contains \code{exprs}.
 
-  \code{as([exprSet],"ExpressionSet")}
-
-  \code{ExpressionSet} instances are usually created through
-  \code{new("ExpressionSet", ...)}. Usually the arguments to \code{new}
-  include \code{exprs} (a matrix of expression data, with features
-  corresponding to rows and samples to columns), \code{phenoData},
-  \code{featureData}, \code{experimentData}, \code{annotation}, and
-  \code{protocolData}. 
   \code{phenoData}, \code{featureData}, \code{experimentData},
   \code{annotation}, and \code{protocolData} can be missing, in which case
   they are assigned default values.
@@ -167,10 +149,9 @@
 
 \examples{
 # create an instance of ExpressionSet
-new("ExpressionSet")
+ExpressionSet()
 
-new("ExpressionSet",
-    exprs=matrix(runif(1000), nrow=100, ncol=10))
+ExpressionSet(assayData=matrix(runif(1000), nrow=100, ncol=10))
 
 # update an existing ExpressionSet
 data(sample.ExpressionSet)

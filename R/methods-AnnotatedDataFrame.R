@@ -436,3 +436,41 @@ read.AnnotatedDataFrame <-
     new("AnnotatedDataFrame", data=pData, varMetadata=vmd)
     
 }
+
+setMethod("AnnotatedDataFrame",
+          signature(data="missing", varMetadata="missing"),
+
+      function(data, varMetadata, dimLabels=c("rowNames", "columnNames"), ...)
+{
+    AnnotatedDataFrame(data=data.frame(), varMetadata=data.frame(),
+                   dimLabels=dimLabels)
+})
+
+setMethod("AnnotatedDataFrame",
+          signature(data="data.frame", varMetadata="missing"),
+    function(data, varMetadata,
+             dimLabels=c("rowNames", "columnNames"), ...)
+{
+    varMetadata <- data.frame(labelDescription = rep(NA, ncol(data)))
+    row.names(varMetadata) <- names(data)
+    AnnotatedDataFrame(data=data, varMetadata=varMetadata,
+                       dimLabels=dimLabels,...)
+})
+
+setMethod("AnnotatedDataFrame",
+           signature(data="data.frame", varMetadata="data.frame"),
+    function(data, varMetadata,
+             dimLabels=c("rowNames", "columnNames"), ...)
+{
+    if (!"labelDescription" %in% colnames(varMetadata))
+        varMetadata[["labelDescription"]] <- rep(NA, nrow(varMetadata))
+    row.names(varMetadata) <- names(data)
+    varMetadata[["labelDescription"]] <-
+        as.character(varMetadata[["labelDescription"]])
+    new("AnnotatedDataFrame", data=data, varMetadata=varMetadata,
+        dimLabels=dimLabels)
+})
+
+
+
+

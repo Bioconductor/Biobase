@@ -132,3 +132,19 @@ setGeneric("design<-",      function(cds, value)            standardGeneric("des
 setGeneric("estimateSizeFactors", function(cds, ...) standardGeneric("estimateSizeFactors"))
 setGeneric("estimateDispersions", function(cds, ...) standardGeneric("estimateDispersions"))
 
+## Generics for Constructors: AnnotatedDataFrame and ExpresssionSet
+
+setGeneric("AnnotatedDataFrame", function(data, varMetadata, ...)
+           standardGeneric("AnnotatedDataFrame"))
+
+
+setGeneric("ExpressionSet",
+           function(assayData,
+                    phenoData=annotatedDataFrameFrom(assayData, byrow=FALSE),
+                    featureData=annotatedDataFrameFrom(assayData, byrow=TRUE),
+                    experimentData=new("MIAME"),
+                    annotation=character(),
+                    protocolData=annotatedDataFrameFrom(assayData, byrow=FALSE),
+                    ...)
+           standardGeneric("ExpressionSet"),
+           signature="assayData")

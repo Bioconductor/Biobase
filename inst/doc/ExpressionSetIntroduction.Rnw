@@ -204,9 +204,10 @@ head(exprs[,1:5])
 @ 
 %% 
 
-At this point, we can create a minimal \Rclass{ExpressionSet} object:
+At this point, we can create a minimal \Rclass{ExpressionSet} object using the
+\code{ExpressionSet} constructor:
 <<ExpressionSet-basic>>=
-minimalSet <- new("ExpressionSet", exprs=exprs)
+minimalSet <- ExpressionSet(assayData=exprs)
 @ 
 % 
 We'll get more benefit from expression sets by creating a richer
@@ -385,11 +386,9 @@ available slots.
 \subsection{Assembling an \Rclass{ExpressionSet}}
 
 An \Rclass{ExpressionSet} object is created by assembling its component
-parts, and after all this work the final assembly is disappointingly
-easy:
+parts and callng the \code{ExpressionSet} constructor:
 <<ExpressionSetFinally>>=
-exampleSet <- new("ExpressionSet", 
-                  exprs=exprs, 
+exampleSet <- ExpressionSet(assayData=exprs, 
                   phenoData=phenoData, 
                   experimentData=experimentData,
                   annotation="hgu95av2")
@@ -404,7 +403,7 @@ information. Less rich objects can be created by providing less
 information. As mentioned earlier, a minimal expression set can be
 created with
 <<ExpressionSet-minimal>>=
-minimalSet <- new("ExpressionSet", exprs=exprs)
+minimalSet <- ExpressionSet(assayData=exprs)
 @ 
 %% 
 Of course this object has no information about phenotypic or feature

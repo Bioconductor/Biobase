@@ -40,7 +40,9 @@ exportMethods("[", "[[", "$", abstract, aggenv, aggfun,
               "sizeFactors", "sizeFactors<-",
               "conditions", "conditions<-",
               "estimateSizeFactors", 
-              "estimateDispersions")
+              "estimateDispersions",
+              "AnnotatedDataFrame",
+              "ExpressionSet")
 
 export("Aggregate",
        "addVigs2WinMenu",
