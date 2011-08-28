@@ -2,7 +2,6 @@
 # Biobase package initialization
 # ==========================================================================
 .onLoad <- function(libname, pkgname) {
-    require("methods")
     ## need contents to load at library attach - not at build time
     .initContents() ## in environment.R
     .buildBiobaseOpts() ## in environment.R

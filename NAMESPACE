@@ -1,5 +1,7 @@
 useDynLib(Biobase, copyEnv_sym=copyEnv, sublist_extract)
 
+import(methods)
+
 exportClasses(aggregator, container, eSet, phenoData,
               MIAxE, MIAME, characterORMIAME,
               annotatedDataset, AssayData, data.frameOrNULL,

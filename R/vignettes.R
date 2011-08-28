@@ -20,7 +20,7 @@ getPkgVigs = function(package=NULL) {
   pkgVigs = vector(mode="list", length=length(vigrds))
   for(j in seq(along=vigrds)) {
     if (file.exists(vigrds[j])) {
-      v = .readRDS(vigrds[j])
+      v = readRDS(vigrds[j])
       f = v[, "PDF"]
       f = ifelse(f=="",
         as.character(NA),
@@ -82,7 +82,7 @@ addVigs2WinMenu = function(pkgName) {
     if (!file.exists(vigFile)) {
       warning(sprintf("%s contains no vignette, nothing is added to the menu bar", pkgName))
     } else {
-      vigMtrx = .readRDS(vigFile)
+      vigMtrx = readRDS(vigFile)
       vigs = file.path(.find.package(pkgName), "doc", vigMtrx[, "PDF"])
       names(vigs) = vigMtrx[,"Title"]
 
