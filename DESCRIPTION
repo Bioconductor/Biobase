@@ -1,6 +1,6 @@
 Package: Biobase
 Title: Biobase: Base functions for Bioconductor
-Version: 2.13.9
+Version: 2.13.10
 Author: R. Gentleman, V. Carey, M. Morgan, S. Falcon
 Description: Functions that are needed by many other packages or which replace R functions.
 Suggests: tools, tkWidgets, ALL
@@ -10,7 +10,7 @@ Maintainer: Biocore Team c/o BioC user list <bioconductor@stat.math.ethz.ch>
 License: Artistic-2.0
 Collate: tools.R strings.R environment.R vignettes.R packages.R
          AllGenerics.R
-         VersionsClass.R 
+         VersionsClass.R
          VersionedClasses.R methods-VersionsNull.R methods-VersionedClass.R
          DataClasses.R methods-aggregator.R methods-ANY.R
          methods-container.R methods-data.frame.R methods-matrix.R
