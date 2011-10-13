@@ -33,7 +33,7 @@ estimateDispersions(cds, ...)
 }
 
 \arguments{
-  \item{cds}{Object of class \code{CountDataSet} or {ExonCountSet}.}
+  \item{cds}{Object of class \code{CountDataSet} or \code{ExonCountSet}.}
   \item{normalized}{Logical indicating whether the returned count values
   should be divided by the \code{sizeFactors}.}
   \item{value}{For \code{dispTable<-}, an object of class ...,
