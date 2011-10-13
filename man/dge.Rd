@@ -18,29 +18,26 @@
 and data access to count datasets.}
 
 \usage{
-counts(cds, normalized=FALSE)
-counts(cds) <- value
-dispTable(cds)
-dispTable(cds)  <- value
-sizeFactors(cds)
-sizeFactors(cds) <- value
-conditions(cds, ...)
-conditions(cds) <- value
-design(cds, ...)
-design(cds) <- value
-estimateSizeFactors(cds, ...)
-estimateDispersions(cds, ...)
+counts(object, ...)
+counts(object, ...) <- value
+dispTable(object, ...)
+dispTable(object, ...)  <- value
+sizeFactors(object, ...)
+sizeFactors(object, ...) <- value
+conditions(object, ...)
+conditions(object, ...) <- value
+design(object, ...)
+design(object, ...) <- value
+estimateSizeFactors(object, ...)
+estimateDispersions(object, ...)
 }
 
 \arguments{
-  \item{cds}{Object of class \code{CountDataSet} or \code{ExonCountSet}.}
-  \item{normalized}{Logical indicating whether the returned count values
-  should be divided by the \code{sizeFactors}.}
-  \item{value}{For \code{dispTable<-}, an object of class ...,
-    For \code{sizeFactors<-}, a numeric vectors whose lengths matches.
-    the number of samples in \code{cds},
-    For \code{conditions<-}, a matrix or a data frame ...}
-  \item{...}{Further arguments.}
+  \item{object}{Object of class for which methods are defined, e.g.,
+    \code{CountDataSet} or \code{ExonCountSet}.}
+  \item{value}{Value to be assigned to corresponding components of
+    \code{object}; supported types depend on method implementation.}
+  \item{...}{Further arguments, perhaps used by metohds}
 }
 
 \details{For the details, please consult the manual pages of the

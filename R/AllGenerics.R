@@ -117,20 +117,20 @@ setGeneric("updateObjectTo",
 
 # Currently, these are for DESeq and DEXSeq. Could be extended to a more general
 #  infrastructure for count datasets.
-setGeneric("counts",        function(cds, normalized=FALSE) standardGeneric("counts"))
-setGeneric("counts<-",      function(cds, value)            standardGeneric("counts<-"))
-setGeneric("dispTable",     function(cds)                   standardGeneric("dispTable"))
-setGeneric("dispTable<-",   function(cds, value)            standardGeneric("dispTable<-"))
-setGeneric("sizeFactors",   function(cds)                   standardGeneric("sizeFactors"))
-setGeneric("sizeFactors<-", function(cds, value)            standardGeneric("sizeFactors<-"))
+setGeneric("counts",        function(object, ...)        standardGeneric("counts"))
+setGeneric("counts<-",      function(object, ..., value) standardGeneric("counts<-"))
+setGeneric("dispTable",     function(object, ...)        standardGeneric("dispTable"))
+setGeneric("dispTable<-",   function(object, ..., value) standardGeneric("dispTable<-"))
+setGeneric("sizeFactors",   function(object, ...)        standardGeneric("sizeFactors"))
+setGeneric("sizeFactors<-", function(object, ..., value) standardGeneric("sizeFactors<-"))
 
-setGeneric("conditions",    function(cds, ...)              standardGeneric("conditions"))
-setGeneric("conditions<-",  function(cds, value)            standardGeneric("conditions<-"))
-setGeneric("design",        function(cds, ...)              standardGeneric("design"))
-setGeneric("design<-",      function(cds, value)            standardGeneric("design<-"))
+setGeneric("conditions",    function(object, ...)        standardGeneric("conditions"))
+setGeneric("conditions<-",  function(object, ..., value) standardGeneric("conditions<-"))
+setGeneric("design",        function(object, ...)        standardGeneric("design"))
+setGeneric("design<-",      function(object, ..., value) standardGeneric("design<-"))
 
-setGeneric("estimateSizeFactors", function(cds, ...) standardGeneric("estimateSizeFactors"))
-setGeneric("estimateDispersions", function(cds, ...) standardGeneric("estimateDispersions"))
+setGeneric("estimateSizeFactors", function(object, ...) standardGeneric("estimateSizeFactors"))
+setGeneric("estimateDispersions", function(object, ...) standardGeneric("estimateDispersions"))
 
 ## Generics for Constructors: AnnotatedDataFrame and ExpresssionSet
 
