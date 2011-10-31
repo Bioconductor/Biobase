@@ -47,7 +47,7 @@
 }
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 biocReposList <- function() {
-    msg <- c("  The biocReposList() function is deprecated.  ",
+    msg <- c("\n  The biocReposList() function is defunct.  ",
              "Please use biocLite() to install\n  packages:\n",
              "      source(\"http://bioconductor.org/biocLite.R\")\n",
              "      biocLite(\"<pkgname>\")\n",
@@ -55,20 +55,7 @@ biocReposList <- function() {
              "repositories (like\n  biocReposList() does), then do:\n",
              "      source(\"http://bioconductor.org/biocLite.R\")\n",
              "      biocinstallRepos()\n")
-    .Deprecated(msg=msg)
-    ## Locations of Bioconductor release repositories
-    VERSION <- "2.9"
-    bioc_topurl <- getOption("BioC")$Base$urls$bioc
-    if (is.null(bioc_topurl))
-        bioc_topurl <- "http://bioconductor.org"
-    pkg_topurl <- paste(bioc_topurl, "packages", VERSION, sep="/")
-    mkurl <- function(...) paste(pkg_topurl, ..., sep="/")
-    reposList <- c(bioc=mkurl("bioc"),
-                   aData=mkurl("data/annotation"),
-                   eData=mkurl("data/experiment"),
-                   extra=mkurl("extra"),
-                   cran="http://cran.fhcrc.org")
-    reposList
+    .Defunct(msg=msg)
 }
 # ==========================================================================
 # RG:
