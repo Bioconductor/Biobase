@@ -257,23 +257,6 @@ cache <- function(expr, dir=".", prefix="tmp_R_cache_", name) {
     invisible(get(name, envir=parent.frame()))
 }
 ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-getObjectSlots <- function(object) { # object, rather than class defn, slots
-    if(!is.object(object) || isVirtualClass(class(object)))
-      return(NULL)
-    value <- attributes(object)
-    value$class <- NULL
-    if(is(object, "vector")) {
-        .Data <- as.vector(object)
-        attr(.Data, "class") <- NULL
-        attrNames <- c('comment', 'dim', 'dimnames', 'names', 'row.names', 'tsp')
-        for (nm in names(value)[names(value) %in% attrNames])
-          attr(.Data, nm) <- value[[nm]]
-        value <- value[!names(value) %in% attrNames]
-        value$.Data <- .Data
-    }
-    value
-}
-
 validMsg <- function(msg, result) {
     if (is.character(result)) {
         append(msg, result)

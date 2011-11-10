@@ -2,6 +2,8 @@ useDynLib(Biobase, copyEnv_sym=copyEnv, sublist_extract)
 
 import(methods)
 
+importFrom(BiocGenerics, updateObject, updateObjectFromSlots, getObjectSlots)
+
 exportClasses(aggregator, container, eSet, phenoData,
               MIAxE, MIAME, characterORMIAME,
               annotatedDataset, AssayData, data.frameOrNULL,
@@ -53,7 +55,7 @@ export("Aggregate",
        "assayDataNew", "assayDataValidMembers",
        assayDataElementNames,
        assayDataElement, assayDataElementReplace, "assayDataElement<-",
-       "biocReposList", "cache", "copyEnv", "copySubstitute", "getObjectSlots",
+       "biocReposList", "cache", "copyEnv", "copySubstitute",
        "createPackage", "df2pD", "dumpPackTxt", "esApply",
        "getPkgVigs", "isUnique", "l2e", "listLen", "matchpt", "mkScalar",
        "multiassign", "note", "openPDF","openVignette", "package.version",
@@ -62,4 +64,4 @@ export("Aggregate",
        readExpressionSet, read.AnnotatedDataFrame, read.MIAME, MIAME,
        "selectSome", "strbreak", "subListExtract", "testBioCConnection",
        "lcSuffix", "lcPrefix", "lcPrefixC",
-       "updateOldESet", "updateObjectFromSlots", "userQuery", "validMsg")
+       "updateOldESet", "userQuery", "validMsg")

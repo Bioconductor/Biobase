@@ -95,13 +95,7 @@ setGeneric("classVersion",    function(object) standardGeneric("classVersion"))
 setGeneric("classVersion<-",  function(object, value) standardGeneric("classVersion<-"))
 setGeneric("isCurrent",       function(object, value) standardGeneric("isCurrent"))
 setGeneric("isVersioned",     function(object) standardGeneric("isVersioned"))
-## updateObject
-setGeneric("updateObject",
-           function(object, ..., verbose=FALSE) {
-               result <- standardGeneric("updateObject")
-               validObject(result)
-               result
-           })
+## updateObjectTo
 setGeneric("updateObjectTo",
            function(object, template, ..., verbose=FALSE) {
                result <- standardGeneric("updateObjectTo")
