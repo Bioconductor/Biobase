@@ -534,8 +534,9 @@ mechanism for updating old objects to their new representation.
 \Biobase{} introduces the \Rclass{Versioned} and
 \Rclass{VersionedBiobase} classes to facilitate this. These classes
 are incorporated into key \Biobase class definitions.\Biobase also
-defines the \Rfunction{updateObject} generic and methods for
-conveniently updating old objects to their new representation.
+defines \Rmethod{updateObject} methods (the \Rfunction{updateObject}
+generic function is defined in the \Rpackage{BiocGenerics} package)
+for conveniently updating old objects to their new representation.
 <<updateObject-eg>>=
 data(sample.ExpressionSet)
 classVersion(sample.ExpressionSet)
