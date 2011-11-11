@@ -1,3 +1,39 @@
+testUpdateObjectToDefaults <- function() {
+    x <- 1:10
+    checkTrue(identical(1:10, updateObjectTo(x, 10:1)))
+    x <- as.numeric(1:10)
+    checkTrue(identical(as.integer(1:10), updateObjectTo(x, integer())))
+    checkTrue(!identical(as.numeric(1:10), updateObjectTo(x, integer())))
+}
+
+testUpdateObjectToSetClass <- function() {
+    setClass("A",
+             representation(x="numeric"),
+             prototype=prototype(x=1:10),
+             where=.GlobalEnv)
+    a <- new("A")
+    a1 <- new("A",x=10:1)
+    checkTrue(identical(a, updateObjectTo(a, a1)))
+
+    setClass("B",
+             representation(x="numeric"),
+             where=.GlobalEnv)
+    b <- new("B")
+    checkException(updateObjectTo(a, b), silent=TRUE)
+
+    setAs("A", "B", function(from) {
+        b <- new("B")
+        b@x <- from@x
+        b
+    }, where=.GlobalEnv)
+    obj <- updateObjectTo(a,b)
+    checkTrue(class(obj)=="B")
+    checkIdentical(obj@x, a@x)
+    removeMethod("coerce", c("A","B"), where=.GlobalEnv)
+    removeClass("B", where=.GlobalEnv)
+    removeClass("A", where=.GlobalEnv)
+}
+
 testUpdateExpressionSet <- function() {
     opts <- options()
     options(warn=-1)
