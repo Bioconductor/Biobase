@@ -2,7 +2,10 @@ useDynLib(Biobase, copyEnv_sym=copyEnv, sublist_extract)
 
 import(methods)
 
-importFrom(BiocGenerics, updateObject, updateObjectFromSlots, getObjectSlots)
+importFrom(BiocGenerics,
+    combine,
+    updateObject, updateObjectFromSlots, getObjectSlots
+)
 
 exportClasses(aggregator, container, eSet, phenoData,
               MIAxE, MIAME, characterORMIAME,
