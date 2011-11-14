@@ -31,31 +31,79 @@
   \code{\link{eSet}}, and requires a matrix named \code{exprs} as
   assayData member.
 }
+
+\usage{
+## Instance creation
+ExpressionSet(assayData,
+    phenoData=annotatedDataFrameFrom(assayData, byrow=FALSE),
+    featureData=annotatedDataFrameFrom(assayData, byrow=TRUE),
+    experimentData=new("MIAME"), annotation=character(),
+    protocolData=annotatedDataFrameFrom(assayData, byrow=FALSE),
+    ...)
+
+## Additional methods documented below
+}
+
+\arguments{
+
+  \item{assayData}{A \code{matrix} of expression values, or an
+    \code{environment}.
+
+    When \code{assayData} is a \code{matrix}, the rows represent probe
+    sets (\sQuote{features} in \code{ExpressionSet} parlance).  Columns
+    represent samples. When present, row names identify features and
+    column names identify samples. Row and column names must be unique,
+    and consistent with row names of \code{featureData} and
+    \code{phenoData}, respectively. The assay data can be retrieved with
+    \code{exprs()}.
+
+    When \code{assayData} is an environment, it contains identically
+    dimensioned matrices like that described in the previous
+    paragraph. One of the elements of the environment must be named
+    \sQuote{exprs}; this element is returned with \code{exprs()}.
+
+  }
+
+  \item{phenoData}{An optional \code{data.frame} or
+    \code{AnnotatedDataFrame} containing information about each
+    sample. The number of rows in \code{phenoData} must match the number
+    of columns in \code{assayData}. Row names of \code{phenoData} must
+    match column names of the matrix / matricies in \code{assayData}.}
+
+  \item{featureData}{An optional \code{data.frame} or
+    \code{AnnotatedDataFrame} containing information about each
+    feature. The number of rows in \code{featureData} must match the
+    number of rows in \code{assayData}. Row names of \code{featureData}
+    must match row names of the matrix / matricies in \code{assayData}.}
+
+  \item{experimentData}{An optional \code{MIAME} instance with meta-data
+    (e.g., the lab and resulting publications from the analysis) about
+    the experiment.}
+
+  \item{annotation}{A \code{character} describing the platform on which
+    the samples were assayed. This is often the name of a Bioconductor
+    chip annotation package, which facilitated down-stream analysis.}
+
+  \item{protocolData}{An optional \code{AnnotatedDataFrame} containing
+    equipment-generated information about protocols. The number of rows
+    and row names of \code{protocolData} must agree with the dimension
+    and column names of \code{assayData}.}
+
+  \item{\dots}{Additional arguments, passed to
+    \code{new("ExpressionSet", ...)} and available for classes that extend
+    \code{ExpressionSet}.
+  }
+
+}
+
 \section{Extends}{
    Directly extends class \code{\link{eSet}}.
 }
 \section{Creating Objects}{
 
   \code{ExpressionSet} instances are usually created through
+  \code{ExpressionSet()}.
 
-  \code{ExpressionSet()}
-
-  \code{ExpressionSet(assayData,
-        phenoData=annotatedDataFrameFrom(assayData, byrow=FALSE),
-        featureData=annotatedDataFrameFrom(assayData, byrow=TRUE),
-        experimentData=new("MIAME"), annotation=character(),
-        protocolData=annotatedDataFrameFrom(assayData, byrow=FALSE),
-        ...)
-  }
-  This creates an \code{ExpressionSet} with \code{assayData} provided
-  explicitly. In this form, the only required named argument is
-  \code{assayData}.  \code{assayData} can be \code{matrix} (a matrix of
-  expression data, with features  corresponding to rows and samples
-  to columns) or an \code{environment} that contains \code{exprs}.
-
-  \code{phenoData}, \code{featureData}, \code{experimentData},
-  \code{annotation}, and \code{protocolData} can be missing, in which case
-  they are assigned default values.
 }
 \section{Slots}{
   Inherited from \code{eSet}:
@@ -63,7 +111,7 @@
       \item{\code{assayData}:}{Contains matrices with equal
 	dimensions, and with column number equal to
 	\code{nrow(phenoData)}. \code{assayData} must contain a matrix
-	\code{exprs} with rows represening features (e.g., reporters)
+	\code{exprs} with rows representing features (e.g., probe sets)
 	and columns representing samples. Additional matrices of
 	identical size (e.g., representing measurement errors) may
 	also be included in \code{assayData}. Class:\code{\link{AssayData-class}}}
