@@ -8,12 +8,15 @@
 }
 
 .onAttach <- function(libname, pkgname) {
-    packageStartupMessage(
-        paste("\nWelcome to Bioconductor\n",
-                "Vignettes contain introductory material. To view, type",
-                "'browseVignettes()'. To cite Bioconductor, see",
-                "'citation(\"Biobase\")' and for packages 'citation(\"pkgname\")'.\n", sep="\n  "))
-   addVigs2WinMenu("Biobase") 
+    msg0 <- "Vignettes contain introductory material; view with
+             'browseVignettes()'. To cite Bioconductor, see
+             'citation(\"Biobase\")', and for packages
+             'citation(\"pkgname\")'."
+    msg <- strwrap(c("", "Welcome to Bioconductor", "",
+                     paste(msg0, collapse=""), ""),
+                   exdent=4, indent=4)
+    packageStartupMessage(paste(msg, collapse="\n"))
+    addVigs2WinMenu("Biobase") 
 }
 
 .onUnload <- function( libpath ) {
