@@ -12,10 +12,9 @@
              'browseVignettes()'. To cite Bioconductor, see
              'citation(\"Biobase\")', and for packages
              'citation(\"pkgname\")'."
-    msg <- strwrap(c("", "Welcome to Bioconductor", "",
-                     paste(msg0, collapse=""), ""),
-                   exdent=4, indent=4)
-    packageStartupMessage(paste(msg, collapse="\n"))
+    msg <- strwrap(paste(msg0, collapse=""), exdent=4, indent=4)
+    packageStartupMessage(paste(c("Welcome to Bioconductor\n", msg),
+                                collapse="\n"), "\n")
     addVigs2WinMenu("Biobase") 
 }
 
