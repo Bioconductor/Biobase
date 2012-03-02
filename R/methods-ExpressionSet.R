@@ -280,5 +280,3 @@ setMethod(ExpressionSet,
         featureData=featureData, experimentData=experimentData,
         annotation=annotation, protocolData=protocolData, ...)
 })
-
-

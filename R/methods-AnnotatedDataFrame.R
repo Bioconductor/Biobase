@@ -443,7 +443,7 @@ setMethod("AnnotatedDataFrame",
       function(data, varMetadata, dimLabels=c("rowNames", "columnNames"), ...)
 {
     AnnotatedDataFrame(data=data.frame(), varMetadata=data.frame(),
-                   dimLabels=dimLabels)
+                   dimLabels=dimLabels, ...)
 })
 
 setMethod("AnnotatedDataFrame",
@@ -468,7 +468,7 @@ setMethod("AnnotatedDataFrame",
     varMetadata[["labelDescription"]] <-
         as.character(varMetadata[["labelDescription"]])
     new("AnnotatedDataFrame", data=data, varMetadata=varMetadata,
-        dimLabels=dimLabels)
+        dimLabels=dimLabels, ...)
 })
 
 
