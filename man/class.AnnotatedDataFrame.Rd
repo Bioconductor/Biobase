@@ -184,7 +184,7 @@ metaData <-
 
 AnnotatedDataFrame()
 AnnotatedDataFrame(data=df)
-AnnotatedDataFrame(data=df, varMetaData=metaData)
+AnnotatedDataFrame(data=df, varMetadata=metaData)
 as(df, "AnnotatedDataFrame")
 
 obj <- AnnotatedDataFrame()
