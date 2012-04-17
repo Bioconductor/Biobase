@@ -208,7 +208,6 @@ updateObject(sample.ExpressionSet)
 # information about assay and sample data
 featureNames(sample.ExpressionSet)[1:10]
 sampleNames(sample.ExpressionSet)[1:5]
-phenoData(sample.ExpressionSet)
 experimentData(sample.ExpressionSet)
 
 # subset: first 10 genes, samples 2, 4, and 10

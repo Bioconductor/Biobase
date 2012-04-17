@@ -676,24 +676,3 @@ setMethod("combine",
               x
           })
 
-##
-## Defunct methods
-##
-
-setMethod("reporterNames", "eSet", function(object) {
-  .Defunct("featureNames", "Biobase")
-})
-setReplaceMethod("reporterNames", c("eSet", "character"), function(object, value) {
-  .Defunct("featureNames<-", "Biobase")
-})
-
-setMethod("eList", "eSet", function(object) {
-  .Defunct("assayData", "Biobase")
-})
-setReplaceMethod("eList", c("eSet", "AssayData"), function(object, value) {
-  .Defunct("assayData<-", "Biobase")
-})
-
-setMethod("getExpData", c("eSet", "character"), function(object, name) {
-  .Defunct("assayData", "Biobase")
-})
