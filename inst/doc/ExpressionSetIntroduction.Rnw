@@ -452,11 +452,14 @@ sampleNames(exampleSet)[1:5]
 varLabels(exampleSet)
 @ 
 %% 
-Extract the expression matrix of
-sample information using \Rfunction{exprs}:
+Extract the expression matrix and the \Rclass{AnnotatedDataFrame} of
+sample information using \Rfunction{exprs} and \Rfunction{phenoData},
+respectively:
 <<exprs>>=
 mat <- exprs(exampleSet)
 dim(mat)
+adf <- phenoData(exampleSet)
+adf
 @ 
 
 \subsubsection{Subsetting}

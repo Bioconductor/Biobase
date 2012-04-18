@@ -18,11 +18,11 @@ Aggregate <- function(x, agg) {
    if(is.character(x)) {
       for( i in 1:length(x) ) {
          nm <- x[i]
-         if( !exists(nm, envir=aggenv(agg), inherits=FALSE) )
-            assign(nm, envir=aggenv(agg), initfun(agg)(nm, x))
+         if( !exists(nm, env=aggenv(agg), inherits=FALSE) )
+            assign(nm, env=aggenv(agg), initfun(agg)(nm, x))
          else {
-            v1 <- get(nm, envir=aggenv(agg))
-            assign(nm, aggfun(agg)(nm, v1), envir=aggenv(agg))
+            v1 <- get(nm, env=aggenv(agg))
+            assign(nm, aggfun(agg)(nm, v1), env=aggenv(agg))
          }
       }
    }
@@ -31,11 +31,11 @@ Aggregate <- function(x, agg) {
          nms <- names(x)
          for( i in 1:length(x) ) {
             nm <- nms[i]
-            if( !exists(nm, envir=aggenv(agg), inherits=FALSE) )
-               assign(nm, envir=aggenv(agg), initfun(agg)(nm, x[[i]]))
+            if( !exists(nm, env=aggenv(agg), inherits=FALSE) )
+               assign(nm, env=aggenv(agg), initfun(agg)(nm, x[[i]]))
             else {
-               v1 <- get(nm, envir=aggenv(agg))
-               assign(nm, envir=aggenv(agg), aggfun(agg)(nm, v1, x[[i]]))
+               v1 <- get(nm, env=aggenv(agg))
+               assign(nm, env=aggenv(agg), aggfun(agg)(nm, v1, x[[i]]))
             }
          }
       }

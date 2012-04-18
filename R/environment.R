@@ -45,6 +45,18 @@
     BioC$Base <- Base
     options("BioC"=BioC)
 }
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+biocReposList <- function() {
+    msg <- c("\n  The biocReposList() function is defunct.  ",
+             "Please use biocLite() to install\n  packages:\n",
+             "      source(\"http://bioconductor.org/biocLite.R\")\n",
+             "      biocLite(\"<pkgname>\")\n",
+             "  If you really need to get the list of Bioconductor package ",
+             "repositories (like\n  biocReposList() does), then do:\n",
+             "      source(\"http://bioconductor.org/biocLite.R\")\n",
+             "      biocinstallRepos()\n")
+    .Defunct(msg=msg)
+}
 # ==========================================================================
 # RG:
 # multiput and multiget

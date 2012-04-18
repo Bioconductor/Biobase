@@ -1,3 +1,7 @@
+updateOldMiame <- function(x) {
+    .Defunct("updateObject", "Biobase")
+}
+
 setMethod("isCurrent", signature(object="MIAME", value="missing"),
           function(object, value) {
               cver <- callNextMethod()
