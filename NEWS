@@ -1,3 +1,13 @@
+CHANGES IN VERSION 2.17.1
+----------------------
+
+USER VISIBLE CHANGES
+
+    o All objects made defunct in previous release cycles have been removed.
+      This includes geneNames, getExpData, eList, reporterNames, getBiocRepos,
+      read.exprSet, updateOldMiame, df2pD, read.pD, read.phenoData, exprData,
+      exprList, and phenoData.
+
 CHANGES IN VERSION 2.11
 ----------------------
 

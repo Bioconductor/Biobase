@@ -1,4 +1,4 @@
-\name{Deprecated}
+\name{Deprecated and Defunct}
 \title{Biobase Deprecated and Defunct}
 
 \alias{class:annotatedDataset}
@@ -59,6 +59,7 @@
 
 \alias{l2e}
 
+\alias{biocReposList}
 
 \description{
    The function, class, or data object you have asked for has been deprecated or made defunct. 

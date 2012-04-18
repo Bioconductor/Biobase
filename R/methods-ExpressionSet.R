@@ -110,23 +110,12 @@ setReplaceMethod("exprs", signature(object="ExpressionSet",value="matrix"),
                  function(object, value) assayDataElementReplace(object, "exprs", value))
 
 
-setMethod("geneNames", signature(object="ExpressionSet"),
-          function(object) {
-              .Defunct("featureNames", "Biobase")
-          })
-setReplaceMethod("geneNames", signature(object="ExpressionSet",
-                                        value="character"),
-          function(object, value) {
-              .Defunct("featureNames<-", "Biobase")
-          })
-
-
 .esApply <- function(X, MARGIN, FUN, ...) {
     parent <- environment(FUN)
     if (is.null(parent))
         parent <- emptyenv()
     e1 <- new.env(parent=parent)
-    multiassign(names(pData(X)), pData(X), env=e1)
+    multiassign(names(pData(X)), pData(X), envir=e1)
     environment(FUN) <- e1
     apply(exprs(X), MARGIN, FUN, ...)
 }
