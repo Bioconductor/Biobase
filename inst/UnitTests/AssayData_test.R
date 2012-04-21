@@ -37,6 +37,15 @@ checkAssayDataCombine <- function(nr, nc) {
     }
 }
 
+testAssayDataNew_named_dims <- function()
+{
+    nms0 <- list(letters[1:5], LETTERS[1:2])
+    nms <- Map(setNames, nms0, nms0)
+    exprs <- matrix(0, nrow=5, ncol=2, dimnames=nms)
+    checkIdentical(nms0[[1]], featureNames(assayDataNew(exprs=exprs)))
+    checkIdentical(nms0[[2]], sampleNames(assayDataNew(exprs=exprs)))
+}
+
 testAssayDataCombine <- function() {
     checkAssayDataCombine(5,3)
     checkAssayDataCombine(0,0)

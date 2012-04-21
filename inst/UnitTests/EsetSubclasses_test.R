@@ -421,7 +421,8 @@ testSetAs <- function() {
   opts <- options()
   options(warn=-1)
   ## would like to be able to specify storage.mode, but how to specify?...
-  fp <- file.path("VersionedClass_data", "devel", "exprSet.Rda")
+  fp <- system.file(package="Biobase", "UnitTests",
+                    "VersionedClass_data", "devel", "exprSet.Rda")
   load(fp)
   suppressMessages(e <- as(exprSet,"ExpressionSet"))
   checkNewAndOld(e,exprSet)
@@ -433,7 +434,8 @@ testSetAs <- function() {
   pubMedIds(gm) = "10521349"
   checkNewGolubMerge(gm,Golub_Merge)
 
-  fp <- file.path("VersionedClass_data", "devel", "sample.eSet.rda")
+  fp <- system.file(package="Biobase", "UnitTests",
+                    "VersionedClass_data", "devel", "sample.eSet.rda")
   load(fp)
   suppressMessages(es <- updateOldESet(sample.eSet, "SwirlSet"))
   checkNewSampleEset(es, sample.eSet)

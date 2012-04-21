@@ -1,19 +1,28 @@
-assayDataNew <- function(storage.mode = c("lockedEnvironment", "environment", "list"), ...) {
-  storage.mode <- match.arg(storage.mode) ## defaults to "lockedEnvironment"
-  assayData <- switch(storage.mode,
-                      lockedEnvironment =,
-                      environment = new.env(parent=emptyenv()),
-                      list = list())
-  
-  arglist <- list(...)
-  if( (length(arglist)>0L) && ((is.null(names(arglist))) || any(names(arglist)=="")))
-    stop("One or more arguments of this function are not named - please provide named arguments!")
-  
-  for (nm in names(arglist)) assayData[[nm]] <- arglist[[nm]]
-  if (storage.mode == "lockedEnvironment") assayDataEnvLock(assayData)
-  msg <- assayDataValidMembers(assayData)
-  if (!is.logical(msg)) stop(msg)
-  assayData
+assayDataNew <-
+    function(storage.mode = c("lockedEnvironment", "environment", "list"),
+             ...)
+{
+    storage.mode <- match.arg(storage.mode) ## defaults to "lockedEnvironment"
+    assayData <- switch(storage.mode,
+                        lockedEnvironment =,
+                        environment = new.env(parent=emptyenv()),
+                        list = list())
+    
+    arglist <- list(...)
+    if( (length(arglist)>0L) &&
+       ((is.null(names(arglist))) || any(names(arglist)=="")))
+        stop("all arguments must be named")
+
+    for (nm in names(arglist)) {
+        elt <- arglist[[nm]]
+        dimnames(elt) <- lapply(dimnames(elt), unname)
+        assayData[[nm]] <- elt
+    }
+    if (storage.mode == "lockedEnvironment")
+        assayDataEnvLock(assayData)
+    msg <- assayDataValidMembers(assayData)
+    if (!is.logical(msg)) stop(msg)
+    assayData
 }
 
 assayDataValidMembers <- function(assayData, required) {

@@ -1,24 +1,28 @@
 setMethod("initialize", signature(.Object="AnnotatedDataFrame"),
-          function(.Object, data = data.frame(), varMetadata = data.frame(),...) {
-              tryCatch({
-                  if (missing(varMetadata)) {
-                      if (!missing(data)) checkClass(data, "data.frame", class(.Object))
-                      varMetadata <- data.frame(labelDescription = rep(NA, ncol(data)))
-                      row.names(varMetadata) <- as.character(colnames(data))
-                  } else {
-                      checkClass(varMetadata, "data.frame", class(.Object))
-                      if (!"labelDescription" %in% colnames(varMetadata))
-                          varMetadata[["labelDescription"]] <- rep(NA, nrow(varMetadata))
-                      row.names(varMetadata) <- names(data)
-                  }
-                  varMetadata[["labelDescription"]] <- as.character(varMetadata[["labelDescription"]])
-              }, error=function(err) {
-                  stop(conditionMessage(err),
-                       "\n  AnnotatedDataFrame 'initialize' could not update varMetadata:",
-                       "\n  perhaps pData and varMetadata are inconsistent?")
-              })
-              callNextMethod(.Object, data=data, varMetadata=varMetadata, ...)
-          })
+          function(.Object, data = data.frame(), varMetadata = data.frame(),
+                   ...)
+{
+    tryCatch({
+        if (missing(varMetadata)) {
+            if (!missing(data)) checkClass(data, "data.frame", class(.Object))
+            varMetadata <- data.frame(labelDescription = rep(NA, ncol(data)))
+            row.names(varMetadata) <- as.character(colnames(data))
+        } else {
+            checkClass(varMetadata, "data.frame", class(.Object))
+            if (!"labelDescription" %in% colnames(varMetadata))
+                varMetadata[["labelDescription"]] <-
+                    rep(NA, nrow(varMetadata))
+            row.names(varMetadata) <- names(data)
+        }
+        varMetadata[["labelDescription"]] <-
+            as.character(varMetadata[["labelDescription"]])
+    }, error=function(err) {
+        stop(conditionMessage(err),
+             "\n  AnnotatedDataFrame 'initialize' could not update varMetadata:",
+             "\n  perhaps pData and varMetadata are inconsistent?")
+    })
+    callNextMethod(.Object, data=data, varMetadata=varMetadata, ...)
+})
 
 validAnnotatedDataFrame <- function( object ) {
     msg <- NULL
@@ -31,7 +35,8 @@ validAnnotatedDataFrame <- function( object ) {
     if ( !("labelDescription" %in% colnames(varMetadata(object))))
       msg <- paste(msg, "AnnotatedDataFrame varMetadata missing labelDescription column", sep="\n  ")
     if (length(dimLabels(object))!=2)
-      msg <- paste(msg, "dimLabels must be a character vector of length 2", sep="\n  ")
+      msg <- paste(msg, "dimLabels must be a character vector of length 2",
+                   sep="\n  ")
     if (is.null(msg)) TRUE else msg
 }
 
@@ -181,20 +186,23 @@ setReplaceMethod("varMetadata", c("AnnotatedDataFrame", "data.frame"),
     if (!("labelDescription" %in% colnames(value)))
         warning("'varMetadata' must have column 'labelDescription'")
     rinfo <- .row_names_info(value)
-    if (0L <= rinfo) {
-        ## not 'automatic'
-        bad <- setdiff(row.names(value), varLabels(object))
-        if (length(bad)) {
-            fmt <- "'%s' not in 'varLabels(<AnnotatedDataFrame>)'"
-            stop(sprintf(fmt, paste(selectSome(bad), collapse="', '")))
+    if (0L != length(varLabels(object))) {
+        if (0L <= rinfo) {
+            ## not 'automatic'
+            bad <- setdiff(row.names(value), varLabels(object))
+            if (0L != length(bad)) {
+                fmt <- "'%s' not in 'varLabels(<AnnotatedDataFrame>)'"
+                nms <- paste(selectSome(bad), collapse="', '")
+                stop(sprintf(fmt, nms))
+            }
         }
+        if (ncol(object) != abs(rinfo)) {
+            fmt <- "varMetadata has %d row(s), 'value' has %d"
+            stop(sprintf(fmt, ncol(object), nrow(value)))
+        }
+        if (0 < ncol(pData(object)))
+            row.names(value) <- names(pData(object))
     }
-    if (ncol(object) != abs(rinfo)) {
-        fmt <- "varMetadata has %d row(s); 'value' has %d"
-        stop(sprintf(fmt, ncol(object), nrow(value)))
-    }
-    if (0 < ncol(pData(object)))
-        row.names(value) <- names(pData(object))
     object@varMetadata <- value
     object
 })

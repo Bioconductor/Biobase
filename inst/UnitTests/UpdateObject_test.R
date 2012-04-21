@@ -66,29 +66,28 @@ testUpdateExpressionSet <- function() {
 testUpdateESetMisc <- function() {
     opts <- options()
     options(warn=-1)
-    fp <- system.file("UnitTests", "VersionedClass_data", "devel", "sample.exprSet.rda",
-                      package="Biobase")
-    load(fp)
+
+    idx <- c("phenoData", "experimentData", "featureData")
+    fun <- function(nm)
+        isS4(eval(parse(text=paste(nm,"(obj)", sep=""))))
+
+    load(system.file("UnitTests", "VersionedClass_data", "devel",
+                     "sample.exprSet.rda", package="Biobase"))
     suppressMessages(obj <- as(sample.exprSet, "ExpressionSet"))
     checkTrue(validObject(obj, complete=TRUE))
-    checkTrue(all(sapply(c("phenoData", "experimentData", "featureData"),
-                         function(nm) isS4(eval(parse(text=paste(nm,"(obj)", sep="")))))))
+    checkTrue(all(sapply(idx, fun)))
 
-    fp <- system.file("UnitTests", "VersionedClass_data", "devel", "sample.eSet.rda",
-                      package="Biobase")
-    load(fp)
+    load(system.file("UnitTests", "VersionedClass_data", "devel",
+                     "sample.eSet.rda", package="Biobase"))
     obj <- as(sample.eSet, "MultiSet")
     checkTrue(validObject(obj, complete=TRUE))
-    checkTrue(all(sapply(c("phenoData", "experimentData", "featureData"),
-                         function(nm) isS4(eval(parse(text=paste(nm,"(obj)", sep="")))))))
+    checkTrue(all(sapply(idx, fun)))
 
-    fp <- system.file("UnitTests", "VersionedClass_data", "devel", "eset.rda",
-                      package="Biobase")
-    load(fp)
+    load(system.file("UnitTests", "VersionedClass_data", "devel", "eset.rda",
+                     package="Biobase"))
     obj <- as(eset, "ExpressionSet")
     checkTrue(validObject(obj, complete=TRUE))
-    checkTrue(all(sapply(c("phenoData", "experimentData", "featureData"),
-                         function(nm) isS4(eval(parse(text=paste(nm,"(obj)", sep="")))))))
+    checkTrue(all(sapply(idx, fun)))
 
     options(opts)
 }
@@ -98,20 +97,24 @@ testUpdateMiscPreviousInstances <- function() {
     options(warn=-1)
     on.exit(options(opts))
 
-    rda <- list.files(system.file("UnitTests", "VersionedClass_data", package="Biobase"),
-                       full.names=TRUE, recursive=TRUE, pattern="^([^(ExpressionSet)]).*\\.Rda")
-    for (nm in rda) {
-        cat(basename(nm), "\n")
+    rda <- dir(system.file("UnitTests", "VersionedClass_data",
+                           package="Biobase"), full.names=TRUE,
+               recursive=TRUE, pattern="^([^(ExpressionSet)]).*\\.Rda")
+
+    ok <- sapply(rda, function(nm) {
         env <- new.env(parent=emptyenv())
         load(nm, env)
-        eapply(env,
-               function(elt) {
-                   suppressMessages(obj <- updateObject(elt))
-                   checkTrue(isS4(obj))
-                   checkTrue(validObject(obj, complete=TRUE))
-               })
-               
-    }
+        tryCatch({
+            eapply(env, function(elt) {
+                suppressMessages(obj <- updateObject(elt))
+                checkTrue(isS4(obj))
+                checkTrue(validObject(obj, complete=TRUE))
+            })
+            TRUE
+        }, error=function(...) FALSE)
+    })
+    checkTrue(all(ok),
+              msg=sprintf("failed: '%s'", paste(rda[!ok], collapse="' '")))
 }
 
 testUpdatePreviousExpressionSet <- function() {
@@ -119,30 +122,42 @@ testUpdatePreviousExpressionSet <- function() {
     options(warn=-1)
     on.exit(options(opts))
 
-    rda <- list.files(system.file("UnitTests", "VersionedClass_data", package="Biobase"),
-                      full.names=TRUE, recursive=TRUE, pattern="^ExpressionSet.*\\.Rda")
+    rda <- dir(system.file("UnitTests", "VersionedClass_data",
+                           package="Biobase"), full.names=TRUE,
+               recursive=TRUE, pattern="^ExpressionSet.*\\.Rda")
 
-    for (nm in rda) {
+    ok <- sapply(rda, function(nm) {
         env <- new.env(parent=emptyenv())
         load(nm, env)
-        eapply(env,
-               function(elt) {
-                   suppressMessages(obj <- updateObject(elt))
-                   checkTrue(validObject(obj, complete=TRUE))
-                   ## S4
-                   checkTrue(all(sapply(c("phenoData", "experimentData", "featureData"),
-                                        function(nm) isS4(eval(parse(text=paste(nm,"(obj)", sep="")))))))
-                   ## content
-                   checkTrue(identical(exprs(obj), slot(elt, "assayData")[["exprs"]]))
-                   checkTrue(identical(pData(phenoData(obj)),
-                                       slot(slot(elt, "phenoData"), "data")))
-                   checkTrue(identical(varMetadata(phenoData(obj)),
-                                       slot(slot(elt, "phenoData"), "varMetadata")))
-                   nms <- names(getSlots("MIAME"))
-                   nms <- nms[!nms %in% ".__classVersion__"]
-                   lapply(nms, function(nm)
-                          checkTrue(identical(slot(experimentData(obj), nm),
-                                              slot(slot(elt, "experimentData"), nm))))
-               })
-    }
+        tryCatch({
+            eapply(env, function(elt) {
+                suppressMessages(obj <- updateObject(elt))
+                checkTrue(validObject(obj, complete=TRUE))
+                ## S4
+                idx <- c("phenoData", "experimentData", "featureData")
+                ok <- sapply(idx, function(nm) {
+                    isS4(eval(parse(text=paste(nm,"(obj)", sep=""))))
+                })
+
+                checkTrue(all(ok))
+                ## content
+                checkIdentical(exprs(obj),
+                               slot(elt, "assayData")[["exprs"]])
+                checkIdentical(pData(phenoData(obj)),
+                               slot(slot(elt, "phenoData"), "data"))
+                checkIdentical(varMetadata(phenoData(obj)),
+                               slot(slot(elt, "phenoData"), "varMetadata"))
+                nms <- names(getSlots("MIAME"))
+                nms <- nms[!nms %in% ".__classVersion__"]
+                lapply(nms, function(nm)
+                       checkIdentical(slot(experimentData(obj), nm),
+                                      slot(slot(elt, "experimentData"),
+                                           nm)))
+            })
+            TRUE
+        }, error=function(...) FALSE)
+    })
+
+    checkTrue(all(ok),
+              msg=sprintf("failed: '%s'", paste(rda[!ok], collapse="' '")))
 }

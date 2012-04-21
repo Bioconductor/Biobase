@@ -38,10 +38,12 @@ check <- function(obj1, obj2, obj) {
     checkVarMetadata(varMetadata(obj1), varMetadata(obj2), varMetadata(obj))
 }
 checkUnchangedPData <- function(p1, p2, p) {
-    checkTrue(all(sapply(colnames(p1),
-                         function(nm) identical(p[1:dim(p1)[[1]],nm], p1[,nm]))))
-    checkTrue(all(sapply(colnames(p2),
-                         function(nm) identical(p[dim(p1)[[1]] + 1:dim(p1)[[1]],nm], p2[,nm]))))
+    checkTrue(all(sapply(colnames(p1), function(nm) {
+        identical(p[1:dim(p1)[[1]],nm], p1[,nm])
+    })))
+    checkTrue(all(sapply(colnames(p2), function(nm) {
+        identical(p[dim(p1)[[1]] + 1:dim(p1)[[1]],nm], p2[,nm])
+    })))
 }
 
 testEmptyCombine <- function() {
@@ -108,6 +110,11 @@ testVarMetadataAssign <- function() {
     obj2 <- obj1
     varMetadata(obj2) <- varMetadata(obj1)
     checkTrue(identical(obj1, obj2))
+
+    to <- AnnotatedDataFrame(data.frame(Sample=1:5))
+    df <- data.frame(labelDescription="foo", row.names="Sample")
+    varMetadata(to) <- df
+    checkTrue(validObject(to))
 }
 
 testMetadataFactors <- function() {
@@ -237,11 +244,6 @@ testNewWithVarMetadata <- function() {
                data=df, varMetadata=metaData)
     checkTrue(validObject(obj))
     checkTrue(all(row.names(varMetadata(obj))==names(pData(obj))))
-    ## build up piece-wise
-    obj <- new("AnnotatedDataFrame")
-    pData(obj) <- df
-    varMetadata(obj) <- metaData
-    checkTrue(validObject(obj))
 }
 
 testAnnotatedDataFrameFrom <- function() {

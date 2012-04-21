@@ -16,7 +16,7 @@ setMethod("updateObject", signature(object="MIAME"),
               if (isVersioned(object) && isCurrent(object)["MIAME"])
                 callNextMethod()
               else
-                updateObjectFromSlots(object, ..., verbose=verbose)
+                object <- updateObjectFromSlots(object, ..., verbose=verbose)
                 classVersion(object) <- classVersion(class(object))
                 object
           })
