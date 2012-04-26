@@ -105,9 +105,5 @@ copyEnv <- function(oldEnv, newEnv, all.names=FALSE) {
 
 ## Deprecated in v 2.11.2
 l2e <- function(vals, envir) {
-    .Deprecated(msg="'l2e' is deprecated, use 'list2env' instead ")
-    if (missing(envir))
-        list2env(vals, hash=TRUE)
-    else
-        list2env(vals, envir, hash=TRUE)
+    .Defunct("list2env", package="base")
 }

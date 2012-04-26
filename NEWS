@@ -1,3 +1,10 @@
+CHANGES IN VERSION 2.17.5
+-----------------------
+
+USER VISIBLE CHANGES
+
+    o l2e(), previously deprecated, has been made defunct.
+
 CHANGES IN VERSION 2.17.1
 ----------------------
 
