@@ -9,13 +9,14 @@ assayDataNew <-
                         list = list())
     
     arglist <- list(...)
-    if( (length(arglist)>0L) &&
+    if((length(arglist)>0L) &&
        ((is.null(names(arglist))) || any(names(arglist)=="")))
         stop("all arguments must be named")
 
     for (nm in names(arglist)) {
         elt <- arglist[[nm]]
-        dimnames(elt) <- lapply(dimnames(elt), unname)
+        if (!is.null(dimnames(elt)))
+            dimnames(elt) <- lapply(dimnames(elt), unname)
         assayData[[nm]] <- elt
     }
     if (storage.mode == "lockedEnvironment")
