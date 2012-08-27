@@ -138,7 +138,7 @@ setMethod("makeDataPackage",
                 VERSION=as.character(package_version(packageVersion)),
                 LICENSE=license,
                 TITLE = paste("Experimental Data Package:",packageName),
-                MAINTAINER = paste(author, ", <", email, ">", sep = ""),
+                MAINTAINER = paste0(author, ", <", email, ">"),
                 BVIEWS = biocViews,
                 DESCRIPTION = description,
                 FORMAT = pD2Rd(phenoData(object)))
@@ -150,7 +150,7 @@ setMethod("makeDataPackage",
               ##save the data file
               datadir = file.path(res$pkgdir, "data")
               dir.create(datadir, showWarnings=FALSE)
-              outfile = file.path(datadir, paste(packageName, ".rda", sep=""))
+              outfile = file.path(datadir, paste0(packageName, ".rda"))
               assign(packageName, object)
               save(list=packageName, file = outfile)
 

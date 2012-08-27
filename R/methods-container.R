@@ -22,8 +22,8 @@ setReplaceMethod("[[", "container",
       cv <- class(value)
       cont <- content(x)
       if( !extends(cv, cont) )
-         stop(paste("the container is class", cont,
-                    "the object is class", cv, "cannot assign", sep=" "))
+         stop("the container is class '", cont,
+              "' the object is class '", cv, "' cannot assign")
       x@x[[i]] <- value
       x
    }

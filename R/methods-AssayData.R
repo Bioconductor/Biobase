@@ -34,17 +34,16 @@ assayDataValidMembers <- function(assayData, required) {
     if (!missing(required)) {
         absent <- required[!required %in% eltNames]
         if (length(absent) != 0)
-          msg <- paste(msg, 
-                       paste("'AssayData' missing '", absent ,"'" , sep = "", collapse = "\n\t"),
-                       sep="\n")
+          msg <- c(msg, paste0("'AssayData' missing '", absent ,"'" ,
+                               collapse = "\n\t"))
     }
     dimsOk <-
       sapply(eltNames, function(elt)
              tryCatch(length(dim(assayData[[elt]]))>1,
                       error=function(err) FALSE))
     if (!all(dimsOk)) 
-      msg <- c(msg, paste("'AssayData' elements with invalid dimensions: '",
-                          paste(eltNames[!dimsOk], collapse="' '"), "'", sep=""))
+      msg <- c(msg, paste0("'AssayData' elements with invalid dimensions: '",
+                           paste(eltNames[!dimsOk], collapse="' '"), "'"))
     if (length(assayData)>1) {
         eltRowNames <- rownames(assayData[[eltNames[[1]]]])
         rowNamesOk <- 
@@ -100,7 +99,7 @@ assayDataSubsetElements <-
         else ls(object)
     if (!all(elts %in% names))
       stop("'AssayData' missing elements: '",
-           paste(elts[!elts %in% names], collapse="', '", sep=""), "'")
+           paste0(elts[!elts %in% names], collapse="', '"), "'")
     switch(storageMode,
            lockedEnvironment = {
                assayData <- new.env(parent = emptyenv())
@@ -140,30 +139,6 @@ setMethod("sampleNames", signature(object="AssayData"),
                      safe.colnames(object[[ls(object)[1]]]))
           })
 
-setReplaceMethod("sampleNames", c("AssayData", "ANY"), function(object, value) {
-    dims <- 
-      switch(assayDataStorageMode(object),
-             lockedEnvironment=,
-             environment = eapply(object, ncol),
-             list = lapply(object, ncol))
-    if (length(dims)==0 && length(value) !=0)
-      return(object)                    # early exit; no samples to name
-    if (!all(dims==length(value)))
-      stop("'value' length (", length(value),
-           ") must equal sample number in AssayData (",dims[[1]], ")")
-    switch(assayDataStorageMode(object),
-           lockedEnvironment = {
-               object <- copyEnv(object)
-               for (nm in ls(object)) colnames(object[[nm]]) <- value
-               assayDataEnvLock(object)
-           },
-           environment = for (nm in ls(object)) colnames(object[[nm]]) <- value,
-           list = for (nm in names(object)) colnames(object[[nm]]) <- value
-           )
-    object
-})
-
-
 setReplaceMethod("sampleNames",
                  signature=signature(
                    object="AssayData",
@@ -195,6 +170,41 @@ setReplaceMethod("sampleNames",
            })
     object
 })
+
+setReplaceMethod("sampleNames",
+    signature(object="AssayData", value="ANY"),
+    function(object, value)
+{
+    dims <- 
+      switch(assayDataStorageMode(object),
+             lockedEnvironment=,
+             environment = eapply(object, ncol),
+             list = lapply(object, ncol))
+    if (length(dims)==0 && length(value) !=0)
+      return(object)                    # early exit; no samples to name
+    if (!all(dims==length(value)))
+      stop("'value' length (", length(value),
+           ") must equal sample number in AssayData (",dims[[1]], ")")
+    switch(assayDataStorageMode(object),
+           lockedEnvironment = {
+               object <- copyEnv(object)
+               for (nm in ls(object))
+                   colnames(object[[nm]]) <- value
+               assayDataEnvLock(object)
+           },
+           environment = {
+               for (nm in ls(object))
+                   colnames(object[[nm]]) <- value
+           },
+           list = {
+               for (nm in names(object))
+                   colnames(object[[nm]]) <- value
+           })
+    object
+})
+
+
+
 
 setMethod("featureNames", signature(object="AssayData"),
           function(object) {
@@ -237,8 +247,8 @@ setMethod("combine", c("AssayData", "AssayData"), function(x, y, ...) {
     nmfunc <- if ("environment"==class(x)) ls else names
 
     if (assayDataStorageMode(y) != storage.mode)
-      stop(paste("assayData must have same storage, but are ",
-                 storage.mode, ", ", assayDataStorageMode(y), sep=""))
+      stop("assayData must have same storage, but are '",
+           storage.mode, "', '", assayDataStorageMode(y))
     if (length(nmfunc(x)) != length(nmfunc(y)))
       stop("assayData have different numbers of elements:\n\t",
            paste(nmfunc(x), collapse=" "), "\n\t",

@@ -267,7 +267,8 @@ setReplaceMethod("preproc",
 setMethod("show",
           signature=signature(object="eSet"),
           function(object) {
-              cat(class( object ), " (storageMode: ", storageMode(object), ")\n", sep="")
+              cat(class(object), " (storageMode: ",
+                  storageMode(object), ")\n", sep="")
               adim <- dim(object)
               if (length(adim)>1)
                   cat("assayData:",
@@ -660,8 +661,8 @@ setMethod("combine",
             x="eSet", y="eSet"),
           function(x, y, ...) {
               if (class(x) != class(y))
-                stop(paste("objects must be the same class, but are ",
-                           class(x), ", ", class(y), sep=""))
+                stop("objects must be the same class, but are '",
+                     class(x), "', '", class(y), "'")
               if (any(annotation(x) != annotation(y)))
                 stop("objects have different annotations: ",
                      annotation(x), ", ", annotation(y))

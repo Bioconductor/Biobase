@@ -29,7 +29,7 @@ isValidVersion <- function(object, nm) {# utility
         vers[is.na(vers)] <- FALSE
         names(vers) <- nm
         bad <- names(vers[vers==FALSE])
-        msg <- validMsg(msg, paste("out-of-date class version '", bad, "'", sep=""))
+        msg <- validMsg(msg, paste0("out-of-date class version '", bad, "'"))
     }
     msg
 }

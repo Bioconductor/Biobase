@@ -25,7 +25,7 @@ testBioCConnection <- function() {
    if (is.null(bioCoption))
       bioCoption <- "http://www.bioconductor.org"
    ## Now check to see if we can connect to the BioC website
-   biocURL <- url(paste(bioCoption,"/main.html",sep=""))
+   biocURL <- url(paste0(bioCoption,"/main.html"))
    options(show.error.messages=FALSE)
    test <- try(readLines(biocURL)[1])
    options(show.error.messages=TRUE)
@@ -99,13 +99,14 @@ copySubstitute = function(src, dest, symbolValues,
       }
       ## check for unresolved symbols
       if(!allowUnresolvedSymbols) {
-         re = regexpr(paste(symbolDelimiter, ".+", symbolDelimiter, sep=""), txt)
+         re = regexpr(paste0(symbolDelimiter, ".+", symbolDelimiter), txt)
          wh = which(re>0)
          if(length(wh)>0) {
             ml   = attr(re, "match.length")
             mess = "UNRESOLVED SYMBOLS:\n"
-            mess = paste(mess, paste(sapply(wh, function(i)
-            paste("Line", i, ":", substr(txt[i], re[i], re[i] + ml[i]))), collapse="\n"), sep="")
+            mess <- paste0(mess, paste(sapply(wh, function(i) {
+                paste("Line", i, ":", substr(txt[i], re[i], re[i] + ml[i]))
+            }), collapse="\n"))
             stop(mess)
          }
       }
@@ -150,7 +151,7 @@ copySubstitute = function(src, dest, symbolValues,
             ## if 'dest' does not exist, create
             if (file.access(dest) != 0) {
                if (!dir.create(dest))
-                  stop(paste("'dest' does not exist, and it cannot be created:", dest))
+                  stop("'dest' does not exist, and cannot be created: ", dest)
             }
             ## process src
             isdir = file.info(src)$isdir
@@ -162,7 +163,7 @@ copySubstitute = function(src, dest, symbolValues,
                destname = file.path(dest, tmp)
                if (isdir[k]) {
                   if(!dir.create(destname))
-                     stop(paste("directory cannot be created:", destname))
+                     stop("directory cannot be created: ", destname)
                   cpSubs(dir(src[k], full.names=TRUE), destname)
                }
                else
@@ -174,7 +175,7 @@ copySubstitute = function(src, dest, symbolValues,
       stop(usage)
    } ## cpSubs
    ## DO IT!
-   nm  = paste(symbolDelimiter, names(symbolValues), symbolDelimiter, sep="")
+   nm  = paste0(symbolDelimiter, names(symbolValues), symbolDelimiter)
    cpSubs(src, dest)
 }
 # ==========================================================================
@@ -245,7 +246,7 @@ cache <- function(expr, dir=".", prefix="tmp_R_cache_", name) {
     }
     name <- as.character(pexpr[[2]])
     RHS <- pexpr[[3]]
-    cachefile <- file.path(dir, paste(prefix, name, ".RData", sep=""))
+    cachefile <- file.path(dir, paste0(prefix, name, ".RData"))
     if(file.exists(cachefile)) {
         load(cachefile)
         assign(name, get(name), envir=parent.frame())
@@ -279,9 +280,8 @@ userQuery <- function(msg, allowed=c("y","n"), default = "n",
     ## repeats until it gets allowable input
   if(interactive()){
     repeat {
-      allowMsg <- paste("[",paste(allowed,collapse="/"),
-                        "] ", sep="")
-      outMsg <- paste(msg,allowMsg)
+      allowMsg <- paste0("[", paste(allowed,collapse="/"), "] ")
+      outMsg <- paste(msg, allowMsg)
       cat(outMsg)
       if(case.sensitive)
         ans <- readLines(n=1)
@@ -290,7 +290,7 @@ userQuery <- function(msg, allowed=c("y","n"), default = "n",
       if (ans %in% allowed)
         break
       else
-        cat(paste(ans,"is not a valid response, try again.\n"))
+        cat(ans, "is not a valid response, try again.\n")
     }
     return(ans)
   }else{

@@ -24,19 +24,25 @@ setMethod("initialize", signature(.Object="AnnotatedDataFrame"),
     callNextMethod(.Object, data=data, varMetadata=varMetadata, ...)
 })
 
-validAnnotatedDataFrame <- function( object ) {
+validAnnotatedDataFrame <- function( object ) 
+{
     msg <- NULL
     if (!is(object, "AnnotatedDataFrame"))
-      msg <- paste(msg, paste("Cannot validate", class(object), "as AnnotatedDataFrame" ), sep = "\n  ")
-    if (length(row.names(varMetadata(object))) != length(colnames(pData(object))))
-      msg <- paste(msg, "All AnnotatedDataFrame pData column names must be present as rows in varMetadata, and vice versa", sep="\n")
+        msg <- c(msg, paste("cannot validate", class(object),
+                            "as AnnotatedDataFrame" ))
+    if (length(row.names(varMetadata(object))) !=
+        length(colnames(pData(object))))
+        msg <- c(msg, paste("all AnnotatedDataFrame pData column names",
+                            "must be present as rows in varMetadata",
+                            "and vice versa"))
     else if (any(row.names(varMetadata(object)) != colnames(pData(object))))
-      msg <- paste(msg, "AnnotatedDataFrame colnames of data differ from row.names of varMetadata", sep="\n  ")
+      msg <- c(msg, paste("AnnotatedDataFrame colnames of data differ",
+                          "from row.names of varMetadata"))
     if ( !("labelDescription" %in% colnames(varMetadata(object))))
-      msg <- paste(msg, "AnnotatedDataFrame varMetadata missing labelDescription column", sep="\n  ")
+      msg <- c(msg, paste("AnnotatedDataFrame varMetadata",
+                          "missing labelDescription column"))
     if (length(dimLabels(object))!=2)
-      msg <- paste(msg, "dimLabels must be a character vector of length 2",
-                   sep="\n  ")
+      msg <- c(msg, "dimLabels must be a character vector of length 2")
     if (is.null(msg)) TRUE else msg
 }
 
@@ -141,16 +147,19 @@ setReplaceMethod("pData",
                      initialize(object, data=value, varMetadata=varMetadata)
                  })
 
-setMethod("sampleNames", "AnnotatedDataFrame", function(object) row.names(object@data))
+setMethod("sampleNames", "AnnotatedDataFrame",
+    function(object) row.names(object@data))
 
-setReplaceMethod("sampleNames", c("AnnotatedDataFrame", "ANY"), function(object, value) {
-  if (length(value) != dim(object@data)[[1]])
-    stop(paste("number of new names (",
-               length(value),
-               ") should equal number of rows in AnnotatedDataFrame (",
-               dim( object )[[1]], ")",sep=""))
-  row.names(object@data) <- value
-  object
+setReplaceMethod("sampleNames",
+    signature(object="AnnotatedDataFrame", value="ANY"),
+    function(object, value) 
+{
+    if (length(value) != dim(object@data)[[1]])
+        stop("number of new names (", length(value), ") ",
+             "should equal number of rows in AnnotatedDataFrame (",
+             dim( object )[[1]], ")")
+    row.names(object@data) <- value
+    object
 })
 
 setMethod("featureNames",
@@ -166,15 +175,17 @@ setReplaceMethod("featureNames",
 
 setMethod("varLabels", "AnnotatedDataFrame", function(object) colnames(object@data))
 
-setReplaceMethod("varLabels", c("AnnotatedDataFrame", "ANY"), function(object, value) {
-  if (length(value) != dim(object@data)[[2]])
-    stop(paste("number of new varLabels (",
-               length(value),
-               ") should equal number of columns in AnnotatedDataFrame (",
-               dim(object)[[2]], ")", sep=""))
-  colnames(object@data) <- value
-  row.names(object@varMetadata) <- value
-  object
+setReplaceMethod("varLabels",
+    signature("AnnotatedDataFrame", "ANY"),
+    function(object, value) 
+{
+    if (length(value) != dim(object@data)[[2]])
+        stop("number of new varLabels (", length(value), ") ",
+             "should equal number of columns in AnnotatedDataFrame (",
+             dim(object)[[2]], ")")
+    colnames(object@data) <- value
+    row.names(object@varMetadata) <- value
+    object
 })
 
 setMethod("varMetadata", "AnnotatedDataFrame",
@@ -321,8 +332,7 @@ setMethod("selectSomeIndex",
 .showAnnotatedDataFrame <-
     function(object, labels=list(0)) 
 {
-    lbls <- list(object=paste("An object of class \"",
-                   class(object), "\"", sep=""),
+    lbls <- list(object=paste0("An object of class '", class(object), "'"),
                  sampleNames=dimLabels(object)[[1]],
                  varMetadata="varMetadata",
                  varLabels="varLabels")
@@ -361,16 +371,16 @@ setMethod("combine",
           signature(x="AnnotatedDataFrame", y="AnnotatedDataFrame"),
           function(x, y) {
               if (class(x) != class(y)) {
-                  msg <- sprintf("'%s' objects have diffrenent classes '%s', '%s'",
-                                 "combine,AnnotatedDataFrame,AnnotatedDataFrame-method",
-                                 class(x), class(y))
-                  stop(msg)
+                  fmt <- "'%s' objects have diffrenent classes '%s', '%s'"
+                  txt0 <- "combine,AnnotatedDataFrame,AnnotatedDataFrame-method"
+                  stop(sprintf(fmt, txt0, class(x), class(y)))
               }
               if (!identical(dimLabels(x),dimLabels(y))) {
-                  msg <- sprintf("AnnotatedDataFrame dimLabels differ:\n    %s\n    %s\n  try 'updateObject'?",
-                                 paste(dimLabels(x), collapse=", "),
-                                 paste(dimLabels(y), collapse=", "))
-                  stop(msg)
+                  fmt <- paste("AnnotatedDataFrame dimLabels differ:\n",
+                               "    %s\n",
+                               "    %s\n  try 'updateObject'?")
+                  stop(sprintf(fmt, paste(dimLabels(x), collapse=", "),
+                               paste(dimLabels(y), collapse=", ")))
               }
 
               pDataX <- pData(x)
@@ -379,7 +389,8 @@ setMethod("combine",
 
               varMetadataX <- varMetadata(x)
               varMetadataY <- varMetadata(y)
-              ## labelDescription is required, likely a factor with conflicting levels
+              ## labelDescription is required, likely a factor with
+              ## conflicting levels
               if (is.factor(varMetadataX$labelDescription) &&
                   is.factor(varMetadataY$labelDescription)) {
                   f <- factor(c(as.character(varMetadataX$labelDescription),
@@ -422,7 +433,7 @@ read.AnnotatedDataFrame <-
       row.names=row.names, comment.char=varMetadata.char, ...)
     
     ## read varMetadata section (the lines with leading "#")
-    vmd = grep(paste("^",  varMetadata.char, sep=""),
+    vmd = grep(paste0("^",  varMetadata.char),
       readLines(filename), value=TRUE)
     svmd = strsplit(vmd, ":")
     varNames = sub("^# *", "", sapply(svmd, "[", 1L))

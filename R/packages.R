@@ -10,11 +10,11 @@ createPackage <- function(pkgname, destinationDir, originDir, symbolValues,
    ## check arguments
    for (a in c("pkgname", "destinationDir", "originDir"))
       if (!is.character(get(a)) || length(get(a))!=1)
-         stop(paste("'", a, "' must be a character vector of length 1.", sep=""))
+         stop("'", a, "' must be character(1)")
    ## check whether destinationDir, originDir exist and are directories
    for (a in c("destinationDir", "originDir"))
       if(!file.exists(get(a)) || !file.info(get(a))$isdir)
-         stop(paste("'", a, "' must be a directory (", get(a), ")\n.", sep=""))
+         stop("'", a, "' must be a directory (", get(a), ")")
    ## locate / remove / create destination directory
    pkgdir = file.path(destinationDir, pkgname)
    if (!quiet)
@@ -23,17 +23,17 @@ createPackage <- function(pkgname, destinationDir, originDir, symbolValues,
       if (unlink) {
          unlink(pkgdir, recursive=TRUE)
          if (file.exists(pkgdir)) {
-            stop(paste("Directory", pkgdir, "exists and could not be removed.",
-                       "Please remove it manually or choose another destination directory."))
+            stop("directory '", pkgdir, "' exists and could not be removed; ",
+                 "remove it manually or choose another destination directory")
          }
          else {
             if(!quiet)
-               cat(paste("Existing", pkgdir, "was removed.\n"))
+               cat("existing", pkgdir, "was removed.\n")
          }
       }
       else
-         stop(paste("Directory", pkgdir, "exists. Please use unlink=TRUE to remove it",
-                    "or choose another destination directory."))
+         stop("directory '", pkgdir, "' exists; use unlink=TRUE ",
+              "to remove it, or choose another destination directory")
    } ## if (file.exists)
    ## predefined symbols
    symbolValues = append(symbolValues, list(TODAY=date(), PKGNAME=pkgname))
@@ -48,7 +48,7 @@ package.version <- function(pkg, lib.loc = NULL) {
    options(warn=-1)
    desc <- packageDescription(pkg, lib.loc, "Version")
    if (is.na(desc))
-      stop(paste("Package",pkg,"does not exist"))
+      stop("package '", pkg, "' does not exist")
    desc
 }
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -82,8 +82,8 @@ dumpPackTxt <- function (package) {
    vMD = varMetadata(pD)
    vL = varLabels(pD)
    for(i in 1:length(vL) ) {
-     item = paste("\\item \\code{", vL[i], "}: ", vMD[i,1], sep="")
+     item = paste0("\\item \\code{", vL[i], "}: ", vMD[i,1])
      covs = paste(covs, item, sep="\n")
    }
-   paste(fmt, covs, "\n}\n}\n", sep="")
+   paste0(fmt, covs, "\n}\n}\n")
  }

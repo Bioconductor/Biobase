@@ -37,37 +37,40 @@ setMethod("initialize",
           })
 
 setValidity("NChannelSet",
-            function(object) {
-                msg <- validMsg(NULL, isValidVersion(object, "NChannelSet"))
-                if (!"channel" %in% names(varMetadata(object))) {
-                    msg <- validMsg(msg,
-                                    "\n  'NChannelSet' varMetadata must have a 'channel' column")
-                } else {
-                    channel <-
-                      varMetadata(object)[["channel"]]
-                    if (!is(channel, "factor"))
-                      msg <- validMsg(msg,
-                                      "\n  'NChannelSet' varMetadata column 'channel' must be class 'factor'")
-                    else if (0 < length(channel)) {
-                        phenoChannels <- unique(channel)
-                        phenoChannels <- phenoChannels[!is.na(phenoChannels)]
-                        okChannels <-
-                            phenoChannels %in% c("_ALL_", channelNames(object))
-                        if (!all(okChannels)) {
-                            txt <- paste("\n  'NChannelSet' varMetadata 'channel' entries not in assayData: '",
-                                         paste(phenoChannels[!okChannels],
-                                               collapse="', '", sep=""),
-                                         "'", sep="")
-                            msg <- validMsg(msg, txt)
-                        }
-                        
-                    }
-                    if (!("_ALL_" %in% levels(channel)))
-                        msg <- validMsg(msg,
-                                        "\n  'NChannelSet' varMetadata 'channel' requires '_ALL_' as a level")
-                }
-                if (is.null(msg)) TRUE else msg
-            })
+    function(object) 
+{
+    msg <- validMsg(NULL, isValidVersion(object, "NChannelSet"))
+    if (!"channel" %in% names(varMetadata(object))) {
+        txt <- "\n  'NChannelSet' varMetadata must have a 'channel' column"
+        msg <- validMsg(msg, txt)
+    } else {
+        channel <-
+            varMetadata(object)[["channel"]]
+        if (!is(channel, "factor")) {
+            txt <- paste("\n  'NChannelSet' varMetadata column 'channel'",
+                         "must be class 'factor'")
+            msg <- validMsg(msg, txt)
+        } else if (0 < length(channel)) {
+            phenoChannels <- unique(channel)
+            phenoChannels <- phenoChannels[!is.na(phenoChannels)]
+            okChannels <-
+                phenoChannels %in% c("_ALL_", channelNames(object))
+            if (!all(okChannels)) {
+                txt0 <- paste0(phenoChannels[!okChannels], collapse="', '")
+                txt <- paste0("\n  'NChannelSet' varMetadata ",
+                              "'channel' entries not in assayData: '",
+                              txt0, "'")
+                msg <- validMsg(msg, txt)
+            }
+        }
+        if (!("_ALL_" %in% levels(channel))) {
+            txt <- paste("\n  'NChannelSet' varMetadata 'channel'",
+                         "requires '_ALL_' as a level")
+            msg <- validMsg(msg, txt)
+        }
+    }
+    if (is.null(msg)) TRUE else msg
+})
 
 setMethod("channelNames",
           signature = signature(
@@ -81,7 +84,7 @@ setMethod("channel",
           function(object, name, ...) {
               if (length(name) != 1)
                   stop("\n  'NChannelSet' channel 'name' must be one element",
-                       "\n    was: '", paste(name, sep="", collapse="', '"), "'")
+                       "\n    was: '", paste0(name, collapse="', '"), "'")
               obj <- selectChannels(object, name) # subset phenoData appropriately
               sampleNames(phenoData(obj)) <- sampleNames(assayData(obj))
               new("ExpressionSet",

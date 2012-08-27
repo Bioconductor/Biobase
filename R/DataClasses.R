@@ -40,7 +40,10 @@ setClass("phenoData",
       varMetadata = "data.frame"
    ),
    contains="Versioned",
-   validity = function(object) "class phenoData is defunct, convert using as(<<object>>, \"AnnotatedDataFrame\")"
+   validity = function(object) {
+       paste("class phenoData is defunct,",
+             "convert using as(<<object>>, \"AnnotatedDataFrame\")")
+   }
 )
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setOldClass("data.frame")
@@ -197,7 +200,9 @@ setClass("exprSet",
       notes       = "character"
    ),
    contains = c("annotatedDataset"), # contains VersionedBiobase implicitly
-   validity = function(object) "class exprSet is defunct, convert using as(<<object>>, \"ExpressionSet\")"
+   validity = function(object)
+         paste("class exprSet is defunct,",
+               "convert using as(<<object>>, \"ExpressionSet\")")
 )
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 

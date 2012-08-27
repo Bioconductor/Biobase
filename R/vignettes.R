@@ -9,9 +9,12 @@ getPkgVigs = function(package=NULL) {
       stop("`package' must be a character vector of package names")
     rows <- match(package, pkgs)
     if( all(is.na(rows)) )
-      stop("packages: ", paste(package,collapse=", "), " are not loaded")
+        stop("packages '", paste(package, collapse="', '"),
+             "' are not loaded")
     if( any(is.na(rows)) )
-      warning("packages ", paste(package[is.na(rows)], collapse=", "), " are not loaded")
+        warning("packages '",
+                paste(package[is.na(rows)], collapse="', '"),
+                "' are not loaded")
     pkgs <- pkgs[rows[!is.na(rows)]]
   }
   vigrds = file.path(.find.package(pkgs), "Meta", "vignette.rds")
@@ -40,10 +43,14 @@ getPkgVigs = function(package=NULL) {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 openVignette = function(package=NULL) {
   vig = getPkgVigs(package)
-  if(is.null(vig)) {
-    warning(paste(sep="", "No vignettes found",
-       ifelse(is.null(package), ".\n", sprintf(" for package%s %s.\n",
-              ifelse(length(package)==1, "", "s"), paste(package, collapse=", ")))))
+  if (is.null(vig)) {
+      txt <- ""
+      if (!is.null(package)) {
+          ss <- if (length(package)==1) "" else "s"
+          pkgs <- paste(package, collapse=", ")
+          txt <- sprintf(" for package%s %s", ss, pkgs)
+      }
+      warning("no vignettes found", txt)
   } else {
     hasnofile = is.na(vig$filename)
     vig$title[hasnofile] = paste(vig$title[hasnofile], "[-]")
@@ -61,7 +68,7 @@ openVignette = function(package=NULL) {
       if(!is.na(vif)) {
         openPDF(vif)
         cat("Opening", vif, "\n")
-        ## browseURL(paste("file://", vig[index],sep=""))
+        ## browseURL(paste0("file://", vig[index]))
       } else {
         stop("Sorry, no PDF file could be found for this vignette.\n",
              "Please reinstall the package with built vignettes.")
@@ -94,7 +101,7 @@ addVigs2WinMenu = function(pkgName) {
 
       for (i in seq(along=vigs))
         winMenuAddItem(pkgMenu, names(vigs)[i],
-                       paste("shell.exec(\"", vigs[i], "\")", sep=""))
+                       paste0("shell.exec(\"", vigs[i], "\")"))
 
     } ## else
     ans = TRUE
