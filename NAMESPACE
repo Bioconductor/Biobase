@@ -4,7 +4,8 @@ import(methods)
 
 importFrom(BiocGenerics,
     combine,
-    updateObject, updateObjectFromSlots, getObjectSlots
+    updateObject, updateObjectFromSlots, getObjectSlots,
+    annotation, "annotation<-"
 )
 
 exportClasses(aggregator, container, eSet,

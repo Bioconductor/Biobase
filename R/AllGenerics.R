@@ -1,8 +1,6 @@
 setGeneric("abstract",        function(object) standardGeneric("abstract"))
 setGeneric("aggenv",          function(object) standardGeneric("aggenv"))
 setGeneric("aggfun",          function(object) standardGeneric("aggfun"))
-setGeneric("annotation",      function(object) standardGeneric("annotation"))
-setGeneric("annotation<-",    function(object, value) standardGeneric("annotation<-"))
 setGeneric("annotatedDataFrameFrom", function(object, byrow, ...) standardGeneric("annotatedDataFrameFrom"))
 setGeneric("assayData",       function(object)standardGeneric("assayData"))
 setGeneric("assayData<-",     function(object, value) standardGeneric("assayData<-"))
