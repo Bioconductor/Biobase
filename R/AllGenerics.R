@@ -11,6 +11,8 @@ setGeneric("description",     function(object, ...)
            standardGeneric("description"))
 setGeneric("description<-",   function(object, value) standardGeneric("description<-"))
 setGeneric("dims",            function(object) standardGeneric("dims"))
+setGeneric("dimnames")
+setGeneric("dimnames<-")
 setGeneric("dimLabels",       function(object) standardGeneric("dimLabels"))
 setGeneric("dimLabels<-",     function(object, value) standardGeneric("dimLabels<-"))
 setGeneric("esApply",          function(X, MARGIN, FUN, ...) standardGeneric("esApply"),

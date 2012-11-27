@@ -1,3 +1,11 @@
+CHANGES IN VERSION 2.19
+-----------------------
+
+USER VISIBLE CHANGES
+
+    o dimnames(), rownames(), colnames() and setters work on
+    eSet-derived objects
+
 CHANGES IN VERSION 2.17
 -----------------------
 

@@ -211,11 +211,11 @@ testChannel <- function() {
                      c("R", "G", "_ALL_")))))
     robj <- channel(obj, "R")
     checkTrue(validObject(robj))
-    checkTrue(all(colnames(robj) %in% c("r", "both")))
+    checkTrue(all(varLabels(robj) %in% c("r", "both")))
     checkIdentical(assayDataElementNames(robj), "exprs")
     gobj <- channel(obj, "G")
     checkTrue(validObject(gobj))
-    checkTrue(all(colnames(gobj) %in% c("g", "both")))
+    checkTrue(all(varLabels(gobj) %in% c("g", "both")))
     checkIdentical(assayDataElementNames(gobj), "exprs")
 }
 

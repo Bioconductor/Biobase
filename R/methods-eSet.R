@@ -344,6 +344,16 @@ setReplaceMethod("featureNames",
                      unsafeSetSlot(object, "assayData", ad)
                  })
 
+setMethod("dimnames", "eSet", function(x) {
+    list(featureNames(x), sampleNames(x))
+})
+
+setReplaceMethod("dimnames", "eSet", function(x, value) {
+    featureNames(x) <- value[[1]]
+    sampleNames(x) <- value[[2]]
+    x
+})
+
 setMethod("dim", "eSet", function(x) assayDataDim(assayData(x)))
 
 setMethod("dims", "eSet", function(object) assayDataDims(assayData(object)))

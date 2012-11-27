@@ -22,6 +22,10 @@
 \alias{combine,eSet,eSet-method}
 \alias{description,eSet-method}
 \alias{description<-,eSet,MIAME-method}
+\alias{dimnames}
+\alias{dimnames<-}
+\alias{dimnames,eSet-method}
+\alias{dimnames<-,eSet-method}
 \alias{dim,eSet-method}
 \alias{dims,eSet-method}
 \alias{experimentData,eSet-method}
@@ -136,6 +140,9 @@
      \item{\code{featureNames(object)},
        \code{featureNames(object) <- value}:}{Coordinate accessing and setting of
        feature names (e.g, genes, probes) in \code{assayData}.}
+     \item{\code{dimnames(object)}, \code{dimnames(object) <-
+	 value}:}{Also \code{rownames} and \code{colnames}; access and set
+	 feature and sample names.}
      \item{\code{dims(object)}:}{Access the common dimensions (\code{dim}) or
        column numbers (\code{ncol}), or dimensions of all members
        (\code{dims}) of \code{assayData}.}
