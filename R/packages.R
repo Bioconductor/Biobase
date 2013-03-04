@@ -54,7 +54,7 @@ package.version <- function(pkg, lib.loc = NULL) {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 dumpPackTxt <- function (package) {
    # stolen from "library" to get descriptive info out on stdout
-   pkgpath <- .find.package(package)
+   pkgpath <- find.package(package)
 #   outFile <- tempfile("Rlibrary")
 #   outConn <- file(outFile, open = "w")
    docFiles <- file.path(pkgpath, c("TITLE", "DESCRIPTION", "INDEX"))

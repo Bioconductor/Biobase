@@ -17,7 +17,7 @@ getPkgVigs = function(package=NULL) {
                 "' are not loaded")
     pkgs <- pkgs[rows[!is.na(rows)]]
   }
-  vigrds = file.path(.find.package(pkgs), "Meta", "vignette.rds")
+  vigrds = file.path(find.package(pkgs), "Meta", "vignette.rds")
   
   ## construct data frame with: package, path, title
   pkgVigs = vector(mode="list", length=length(vigrds))
@@ -90,7 +90,7 @@ addVigs2WinMenu = function(pkgName) {
       warning(sprintf("%s contains no vignette, nothing is added to the menu bar", pkgName))
     } else {
       vigMtrx = readRDS(vigFile)
-      vigs = file.path(.find.package(pkgName), "doc", vigMtrx[, "PDF"])
+      vigs = file.path(find.package(pkgName), "doc", vigMtrx[, "PDF"])
       names(vigs) = vigMtrx[,"Title"]
 
       if (!"Vignettes" %in% winMenuNames())
