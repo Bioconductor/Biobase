@@ -3,7 +3,7 @@
 ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ## methods and class defined together so available for prototypes elsewhere
 
-setClass("Versions", contains="list")
+.Versions <- setClass("Versions", contains="list")
 
 setMethod("initialize", signature(.Object="Versions"),
           function(.Object, ...) callNextMethod(.Object, .asValidVersions(list(...))))

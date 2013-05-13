@@ -21,9 +21,7 @@ selectChannels(object, names, ...)
 \author{Biocore}
 
 \examples{
-obj <- new("NChannelSet",
-           R=matrix(runif(100), 20, 5),
-           G=matrix(runif(100), 20, 5))
+obj <- NChannelSet(R=matrix(runif(100), 20, 5), G=matrix(runif(100), 20, 5))
 
 ## G channel as NChannelSet
 selectChannels(obj, "G")

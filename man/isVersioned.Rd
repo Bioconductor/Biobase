@@ -41,9 +41,9 @@ isVersioned(obj)
 
 isVersioned(1:10) # FALSE
 
-setClass("A", contains="VersionedBiobase",
+A <- setClass("A", contains="VersionedBiobase",
          prototype=prototype(new("VersionedBiobase", versions=c(A="1.0.0"))))
-a <- new("A")
+a <- A()
 isVersioned(a)
 
 removeClass("A")

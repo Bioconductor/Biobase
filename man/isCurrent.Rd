@@ -53,10 +53,10 @@ isCurrent(obj)
 
 isCurrent(1:10) # NA
 
-setClass("A", contains="VersionedBiobase",
+A <- setClass("A", contains="VersionedBiobase",
          prototype=prototype(new("VersionedBiobase", versions=c(A="1.0.0"))))
 
-a <- new("A")
+a <- A()
 classVersion(a)
 
 isCurrent(a, "VersionedBiobase") # is the 'VersionedBiobase' portion current?

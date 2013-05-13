@@ -4,7 +4,7 @@
 # Data are aggregated in the environment env if they are not there then the
 # get assigned with initfun, if they are there they get aggregated with agfun
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setClass("aggregator",
+.aggregator <- setClass("aggregator",
    representation(
       aggenv  = "environment",
       initfun = "function",
@@ -18,7 +18,7 @@ setClass("aggregator",
 # ==========================================================================
 # container: lists containing objects of specified class (R. Gentleman, 2001)
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setClass("container",
+.container <- setClass("container",
    representation(
       x       = "list",
       content = "character",
@@ -53,16 +53,16 @@ setClassUnion("data.frameOrNULL", c("data.frame", "NULL"))
 # ==========================================================================
 # MIAxE: a VIRTUAL class for experiment meta-data 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setClass("MIAxE",
+.MIAxe <- setClass("MIAxE",
     representation("VIRTUAL"),
     contains="Versioned",
-    prototype = prototype(new("Versioned", versions=c(MIAxE="1.0.0")))
+    prototype = prototype(.Versioned(versions=c(MIAxE="1.0.0")))
     )
  
 
 # MIAME: a class for microarray data - MIAME information (Rafael A. Irizarry)
 # More info: http://www.mged.org/Workgroups/MIAME/miame_1.1.html
-setClass("MIAME",
+.MIAME <- setClass("MIAME",
    representation(
       name           = "character",
       lab            = "character",
@@ -79,7 +79,7 @@ setClass("MIAME",
    ),
    contains=c("MIAxE"),
    prototype = prototype(
-      new("Versioned", versions=c(classVersion("MIAxE"), MIAME="1.1.0")),
+      .Versioned(versions=c(classVersion("MIAxE"), MIAME="1.1.0")),
       name           = "",
       lab            = "",
       contact        = "",
@@ -117,13 +117,13 @@ setClass("annotatedDataset",
 # of columns in the data slot equals the number of rows in the
 # metadata slot.
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setClass("AnnotatedDataFrame",
+.AnnotatedDataFrame <- setClass("AnnotatedDataFrame",
          representation(varMetadata = "data.frame",
                         data = "data.frame",
                         dimLabels = "character"),
          contains=c("Versioned"),
          prototype = prototype(
-           new("Versioned", versions=list(AnnotatedDataFrame="1.1.0")),
+           .Versioned(versions=list(AnnotatedDataFrame="1.1.0")),
            varMetadata = new( "data.frame" ),
            data = new( "data.frame" ),
            dimLabels=c("rowNames", "columnNames")))
@@ -142,7 +142,7 @@ setClassUnion("AssayData", c("list", "environment"))
 # representing samples, all assayData members providing information
 # for the same number of genes and samples).
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setClass("eSet",
+.eSet <- setClass("eSet",
          representation(assayData = "AssayData",
                         phenoData = "AnnotatedDataFrame",
                         featureData = "AnnotatedDataFrame",
@@ -152,41 +152,43 @@ setClass("eSet",
                         "VIRTUAL"),
          contains="VersionedBiobase",
          prototype = prototype(
-           new("VersionedBiobase", versions=c(eSet="1.3.0")),
-               assayData = list(), # use initialize to set as env, so different instances have different envs
-               phenoData = new("AnnotatedDataFrame",
+           .VersionedBiobase(versions=c(eSet="1.3.0")),
+               assayData = list(), # use initialize to set as env, so
+                                   # different instances have
+                                   # different envs
+               phenoData = .AnnotatedDataFrame(
                  dimLabels=c("sampleNames", "sampleColumns")),
-               featureData = new("AnnotatedDataFrame",
+               featureData = .AnnotatedDataFrame(
                  dimLabels=c("featureNames", "featureColumns")),
                annotation = character(),
-               protocolData = new("AnnotatedDataFrame",
+               protocolData = .AnnotatedDataFrame(
                  dimLabels=c("sampleNames", "sampleColumns"))))
-setClass("ExpressionSet",
+.ExpressionSet <- setClass("ExpressionSet",
          representation(experimentData="MIAME"),
          contains = "eSet",
          prototype = prototype(
-           new("VersionedBiobase",
+           .VersionedBiobase(
                versions=c(classVersion("eSet"), ExpressionSet="1.0.0")),
-               experimentData=new("MIAME")))
-setClass("NChannelSet",
+               experimentData=.MIAME()))
+.NChannelSet <- setClass("NChannelSet",
          contains = "eSet",
          prototype = prototype(
-           new("VersionedBiobase",
+           .VersionedBiobase(
                versions=c(classVersion("eSet"), NChannelSet="1.0.0")),
-           phenoData = new("AnnotatedDataFrame",
+           phenoData = .AnnotatedDataFrame(
              data=data.frame(),
              varMetadata=data.frame(
                labelDescription=character(0),
                channelDescription=factor()))))
-setClass("MultiSet",                    # any element in assayData slot
+.MultiSet <- setClass("MultiSet",      # any element in assayData slot
          contains = "eSet",
          prototype = prototype(
-           new("VersionedBiobase",
+           .VersionedBiobase(
                versions=c(classVersion("eSet"), MultiSet="1.0.0"))))
-setClass("SnpSet",                      # call, callProbability
+.SnpSet <- setClass("SnpSet",                      # call, callProbability
          contains = "eSet",
          prototype = prototype(
-           new("VersionedBiobase",
+           .VersionedBiobase(
                versions=c(classVersion("eSet"), SnpSet="1.0.0"))))
 # ==========================================================================
 # exprSet (DEFUNCT)
@@ -206,7 +208,7 @@ setClass("exprSet",
 )
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-setClass("ScalarObject", contains="VIRTUAL",
+.ScalarObject <- setClass("ScalarObject", contains="VIRTUAL",
          validity=function(object) {
              if (length(object) != 1L)
                paste(class(object), "must have length one")
@@ -214,14 +216,18 @@ setClass("ScalarObject", contains="VIRTUAL",
                TRUE
          })
 
-setClass("ScalarLogical", contains=c("ScalarObject", "logical"),
-         prototype=NA)
+.ScalarLogical <- setClass("ScalarLogical",
+    contains=c("ScalarObject", "logical"),
+    prototype=NA)
 
-setClass("ScalarCharacter", contains=c("ScalarObject", "character"),
-         prototype="")
+.ScalarCharacter <- setClass("ScalarCharacter",
+    contains=c("ScalarObject", "character"),
+    prototype="")
 
-setClass("ScalarInteger", contains=c("ScalarObject", "integer"),
-         prototype=NA_integer_)
+.ScalarInteger <- setClass("ScalarInteger",
+    contains=c("ScalarObject", "integer"),
+    prototype=NA_integer_)
 
-setClass("ScalarNumeric", contains=c("ScalarObject", "numeric"),
-         prototype=NA_real_)
+.ScalarNumeric <- setClass("ScalarNumeric",
+    contains=c("ScalarObject", "numeric"),
+    prototype=NA_real_)

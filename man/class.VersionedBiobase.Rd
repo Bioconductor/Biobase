@@ -33,21 +33,20 @@ classVersion(obj)
 obj <- new("VersionedBiobase", versions=list(A="1.0.0"))
 classVersion(obj)
 
-setClass("A", contains="VersionedBiobase")
+A <- setClass("A", contains="VersionedBiobase")
 
 classVersion("A")
-a <- new("A")
+a <- A()
 classVersion(a)
 
 obj <- new("VersionedBiobase", versions=c(MyVersion="1.0.0"))
 classVersion(obj)
 
-setClass("B",
-         contains="VersionedBiobase",
+B <- setClass("B", contains="VersionedBiobase",
          prototype=prototype(new("VersionedBiobase",versions=list(B="1.0.0"))))
 
 classVersion("B")
-b <- new("B")
+b <- B()
 classVersion(b)
 
 removeClass("A")

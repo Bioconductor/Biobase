@@ -21,10 +21,10 @@ channel(object, name, ...)
 \author{Biocore}
 
 \examples{
-obj <- new("NChannelSet",
+obj <- NChannelSet(
            R=matrix(runif(100), 20, 5),
            G=matrix(runif(100), 20, 5))
 ## G channel as ExpressionSet
 channel(obj, "G")
-  }
+}
 \keyword{manip}

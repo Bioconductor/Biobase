@@ -62,8 +62,10 @@ setAs("exprSet", "ExpressionSet", function(from) {
   desc <- from@description
   desc <- 
     if (class(desc)!="MIAME") {
-        warning("missing or mis-formed MIAME 'description' in original object; creating new, empty description")
-        new("MIAME")
+        txt <- "missing or mis-formed MIAME 'description' in original object;
+                creating new, empty description"
+        warning(paste0(strwrap(txt, indent=2), collapse="\n  "))
+        MIAME()
     } else updateObject(desc)
   exprs <- from@exprs
   phenoData <- as(from@phenoData, "AnnotatedDataFrame")
@@ -72,19 +74,14 @@ setAs("exprSet", "ExpressionSet", function(from) {
   if (all(dim(from@se.exprs) == dims)) {
     se.exprs <- from@se.exprs
     colnames(se.exprs) <- colnames(exprs)
-    new("ExpressionSet",
-        phenoData=phenoData,
-        experimentData=desc,
-        annotation=annotation,
-        exprs=exprs,
-        se.exprs=se.exprs)
+    .ExpressionSet(phenoData=phenoData, experimentData=desc,
+        annotation=annotation, exprs=exprs, se.exprs=se.exprs)
   } else {
-    warning("missing or mis-shaped 'se.exprs' in original object; creating ExpressionSet without se.exprs")
-    new("ExpressionSet",
-        phenoData=phenoData,
-        experimentData=desc,
-        annotation=annotation,
-        exprs=exprs)
+    txt <- "missing or mis-formed 'se.exprs' in original object;
+            creating ExpressionSet without se.exprs"
+    warning(paste0(strwrap(txt, indent=2), collapse="\n  "))
+    .ExpressionSet(phenoData=phenoData, experimentData=desc,
+                   annotation=annotation, exprs=exprs)
   }
 })
 
@@ -201,7 +198,7 @@ readExpressionSet <- function(exprsFile,
         pd = annotatedDataFrameFrom(ex, byrow=FALSE)
     }
 
-    obj = new("ExpressionSet", exprs=ex, phenoData=pd)
+    obj = ExpressionSet(ex, phenoData=pd)
 
 
     ## FIXME: these should probably added to obj before, or simultaneously to, exprs;
@@ -222,50 +219,45 @@ readExpressionSet <- function(exprsFile,
     obj
 }
 
-
-setMethod(ExpressionSet,
-          signature=signature(assayData="missing"),
+setMethod(ExpressionSet, "missing",
     function(assayData,
              phenoData=AnnotatedDataFrame(),
              featureData=AnnotatedDataFrame(),
-             experimentData=new("MIAME"), annotation=character(),
+             experimentData=MIAME(), annotation=character(),
              protocolData=AnnotatedDataFrame(),
              ...)
 {
-    new("ExpressionSet",
-        assayData=assayDataNew(exprs=matrix(0, 0, 0)),
+    .ExpressionSet(
+        assayData=assayDataNew(exprs=new("matrix")),
         phenoData=phenoData,
         featureData=featureData, experimentData=experimentData,
         annotation=annotation, protocolData=protocolData, ...)
 })
 
-setMethod(ExpressionSet,
-          signature=signature(assayData="environment"),
+setMethod(ExpressionSet, "environment",
     function(assayData,
              phenoData=annotatedDataFrameFrom(assayData, byrow=FALSE),
              featureData=annotatedDataFrameFrom(assayData, byrow=TRUE),
-             experimentData=new("MIAME"), annotation=character(),
+             experimentData=MIAME(), annotation=character(),
              protocolData=annotatedDataFrameFrom(assayData, byrow=FALSE),
              ...)
 {
-    new("ExpressionSet", assayData=assayData, phenoData=phenoData,
+    .ExpressionSet(assayData=assayData, phenoData=phenoData,
         featureData=featureData, experimentData=experimentData,
         annotation=annotation, protocolData=protocolData, ...)
 })
 
 
-setMethod(ExpressionSet,
-          signature=signature(assayData="matrix"),
+setMethod(ExpressionSet, "matrix",
     function(assayData,
              phenoData=annotatedDataFrameFrom(assayData, byrow=FALSE),
              featureData=annotatedDataFrameFrom(assayData, byrow=TRUE),
-             experimentData=new("MIAME"), annotation=character(),
+             experimentData=MIAME(), annotation=character(),
              protocolData=annotatedDataFrameFrom(assayData, byrow=FALSE),
              ...)
 {
     assayData <- assayDataNew(exprs=assayData)
-    new("ExpressionSet", assayData=assayData,
-        phenoData=phenoData,
+    .ExpressionSet(assayData=assayData, phenoData=phenoData,
         featureData=featureData, experimentData=experimentData,
         annotation=annotation, protocolData=protocolData, ...)
 })

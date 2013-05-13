@@ -1,40 +1,41 @@
-setMethod("initialize",
-          signature(.Object="NChannelSet"),
-          function(.Object, assayData, phenoData,
-                   ...) {
-              mySlots <- slotNames(.Object)
-              dotArgs <- list(...)
-              isSlot <- names(dotArgs) %in% mySlots
-              if (missing(assayData)) {
-                  assayData <- do.call(assayDataNew, dotArgs[!isSlot],
-                                       envir=parent.frame())
-              }
-              if (missing(phenoData)) {
-                  phenoData <- annotatedDataFrameFrom(assayData, byrow=FALSE)
-              }
-              if (is.null(varMetadata(phenoData)[["channel"]])) {
-                  varMetadata(phenoData)[["channel"]] <- 
-                      factor(rep("_ALL_", nrow(varMetadata(phenoData))),
-                             levels=c(assayDataElementNames(assayData), "_ALL_"))
-              }
-              ## ensure sample names OK -- all assayData with names;
-              ## phenoData with correct names from assayData
-              appl <-
-                  if (storageMode(assayData)=="list") lapply
-                  else eapply
-              assaySampleNames <-
-                  appl(assayData, function(elt) {
-                      cnames <- colnames(elt)
-                      if (is.null(cnames)) sampleNames(phenoData)
-                      else cnames
-                  })
-              sampleNames(assayData) <- assaySampleNames
-              sampleNames(phenoData) <- sampleNames(assayData)
-              do.call(callNextMethod,
-                      c(.Object,
-                        assayData = assayData, phenoData = phenoData,
-                        dotArgs[isSlot]))
-          })
+NChannelSet <- .NChannelSet
+
+setMethod("initialize", "NChannelSet",
+    function(.Object, assayData, phenoData, ...)
+{
+    mySlots <- slotNames(.Object)
+    dotArgs <- list(...)
+    isSlot <- names(dotArgs) %in% mySlots
+    if (missing(assayData)) {
+        assayData <- do.call(assayDataNew, dotArgs[!isSlot],
+                             envir=parent.frame())
+    }
+    if (missing(phenoData)) {
+        phenoData <- annotatedDataFrameFrom(assayData, byrow=FALSE)
+    }
+    if (is.null(varMetadata(phenoData)[["channel"]])) {
+        varMetadata(phenoData)[["channel"]] <- 
+            factor(rep("_ALL_", nrow(varMetadata(phenoData))),
+                   levels=c(assayDataElementNames(assayData), "_ALL_"))
+    }
+    ## ensure sample names OK -- all assayData with names;
+    ## phenoData with correct names from assayData
+    appl <-
+        if (storageMode(assayData)=="list") lapply
+        else eapply
+    assaySampleNames <-
+        appl(assayData, function(elt) {
+            cnames <- colnames(elt)
+            if (is.null(cnames)) sampleNames(phenoData)
+            else cnames
+        })
+    sampleNames(assayData) <- assaySampleNames
+    sampleNames(phenoData) <- sampleNames(assayData)
+    do.call(callNextMethod,
+            c(.Object,
+              assayData = assayData, phenoData = phenoData,
+              dotArgs[isSlot]))
+})
 
 setValidity("NChannelSet",
     function(object) 
@@ -54,7 +55,7 @@ setValidity("NChannelSet",
             phenoChannels <- unique(channel)
             phenoChannels <- phenoChannels[!is.na(phenoChannels)]
             okChannels <-
-                phenoChannels %in% c("_ALL_", channelNames(object))
+                phenoChannels %in% c("_ALL_", assayDataElementNames(object))
             if (!all(okChannels)) {
                 txt0 <- paste0(phenoChannels[!okChannels], collapse="', '")
                 txt <- paste0("\n  'NChannelSet' varMetadata ",
@@ -72,10 +73,61 @@ setValidity("NChannelSet",
     if (is.null(msg)) TRUE else msg
 })
 
-setMethod("channelNames",
-          signature = signature(
-            object = "NChannelSet"),
-          assayDataElementNames)
+setMethod("channelNames", "NChannelSet",
+    function(object, ...)
+{
+    lvls <- levels(varMetadata(object)$channel)
+    lvls[lvls != "_ALL_"]
+    
+})
+
+setGeneric("channelNames<-",
+    function(object, ..., value) standardGeneric("channelNames<-"))
+
+setReplaceMethod("channelNames", c("NChannelSet", "character"),
+    function(object, ..., value)
+{
+    if (!is.null(names(value))) {
+        ## re-name & re-order
+        channelNames(object) <- as.list(value)
+    } else {
+        ## re-order
+        if (!all(sort(value) == sort(channelNames(object))))
+            stop("'value' elements must include all channelNames()")
+        varMetadata(object)$channel <-
+            factor(varMetadata(object)$channel, levels=c(value, "_ALL_"))
+        validObject(object)
+    }
+    object
+})
+
+setReplaceMethod("channelNames", c("NChannelSet", "list"),
+    function(object, ..., value)
+{
+    from <- unlist(value, use.names=FALSE)
+    if (!all(sort(from) == sort(channelNames(object))))
+       stop("'value' elements must include all channelNames()")
+    to <- names(value)
+    if (any(duplicated(to)))
+        stop("duplicated channelNames are not allowed")
+
+    assayData <- assayData(object)
+    levels(varMetadata(object)$channel) <- c(value, list("_ALL_" = "_ALL"))
+    if (is.list(assayData)) {
+        idx <- match(from, names(assayData))
+        names(assayData)[idx] <- to
+    } else {
+        env <- new.env(parent=emptyenv())
+        for (i in seq_along(value))
+            env[[ to[i] ]] = assayData[[ from[i] ]]
+        if (storageMode(object) == "lockedEnvironment")
+            assayDataEnvLock(env)
+        assayData <- env
+    }
+    assayData(object) <- assayData
+    validObject(object)
+    object
+})
 
 setMethod("channel",
           signature = signature(
@@ -87,13 +139,12 @@ setMethod("channel",
                        "\n    was: '", paste0(name, collapse="', '"), "'")
               obj <- selectChannels(object, name) # subset phenoData appropriately
               sampleNames(phenoData(obj)) <- sampleNames(assayData(obj))
-              new("ExpressionSet",
+              ExpressionSet(assayData(obj)[[name]],
                   phenoData = phenoData(obj),
                   featureData = featureData(obj),
                   experimentData = experimentData(obj),
                   annotation=annotation(obj),
                   protocolData=protocolData(obj),
-                  exprs = assayData(obj)[[name]],
                   ...)
           })
 

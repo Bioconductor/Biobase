@@ -47,8 +47,8 @@
 \examples{
 
 # Create a new class
-setClass("MyData", contains="MIAxE")
-new("MyData")
+MyData <- setClass("MyData", contains="MIAxE")
+MyData()
 
 # MIAxE objects cannot be instantiated directly
 try(new("MIAxE"))

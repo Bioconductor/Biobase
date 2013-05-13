@@ -1,9 +1,9 @@
 mkScalar <- function(obj) {
     switch(typeof(obj),
-           character=new("ScalarCharacter", obj),
-           logical=new("ScalarLogical", obj),
-           integer=new("ScalarInteger", obj),
-           double=new("ScalarNumeric", obj),
+           character=.ScalarCharacter(obj),
+           logical=.ScalarLogical(obj),
+           integer=.ScalarInteger(obj),
+           double=.ScalarNumeric(obj),
            stop("no scalar class implemented for type: ", typeof(obj)))
 }
 

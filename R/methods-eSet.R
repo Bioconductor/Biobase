@@ -7,7 +7,7 @@ setMethod("initialize",
                    assayData,
                    phenoData = annotatedDataFrameFrom(assayData, byrow=FALSE),
                    featureData = annotatedDataFrameFrom(assayData, byrow=TRUE),
-                   experimentData = new("MIAME"),
+                   experimentData = MIAME(),
                    annotation = character(0),
                    protocolData = phenoData[,integer(0)],
                    ...) {
@@ -91,7 +91,7 @@ updateOldESet <- function(from, toClass, ...) {  # to MultiExpressionSet
   }
   ## phenoData
   pData <- ophenoData@pData
-  phenoData <- new("AnnotatedDataFrame", data=pData, varMetadata=metadata)
+  phenoData <- AnnotatedDataFrame(data=pData, varMetadata=metadata)
   ## sampleNames
   if (any(sampleNames(assayData(from))!=sampleNames(phenoData))) {
     warning("creating assayData colnames from phenoData sampleNames")
@@ -179,7 +179,7 @@ setMethod("updateObject", signature(object="eSet"),
                   do.call(new,
                           c(list(class(object),
                                  assayData = updateObject(assayData(object), ..., verbose=verbose),
-                                 phenoData = new("AnnotatedDataFrame", data=pData(object),
+                                 phenoData = AnnotatedDataFrame(data=pData(object),
                                                  varMetadata=varMetadata(object)),
                                  featureData = annotatedDataFrameFrom(assayData(object), byrow=TRUE),
                                  experimentData = updateObject(experimentData(object), ..., verbose=verbose),

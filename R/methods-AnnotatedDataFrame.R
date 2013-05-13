@@ -82,7 +82,7 @@ annotatedDataFrameFromMatrix <- function(object, byrow=FALSE, ...) {
         dimLabels <-
             if (byrow) c("featureNames", "featureColumns")
             else c("sampleNames", "sampleColumns")
-        new("AnnotatedDataFrame", data=data, dimLabels=dimLabels)
+        AnnotatedDataFrame(data=data, dimLabels=dimLabels)
     }
 }
 
@@ -94,7 +94,7 @@ annotatedDataFrameFromNull <- function(object, byrow=FALSE, ...) {
     dimLabels <-
         if (byrow) c("featureNames", "featureColumns")
         else c("sampleNames", "sampleColumns")
-    new("AnnotatedDataFrame", data=data.frame(), dimLabels=dimLabels)
+    AnnotatedDataFrame(data=data.frame(), dimLabels=dimLabels)
 }
 
 setMethod("annotatedDataFrameFrom",
@@ -276,14 +276,14 @@ setAs("phenoData", "AnnotatedDataFrame", function(from) {
     warning("contents of varLabels ignored\n", call.=FALSE)
   else
     varMetadata[["labelDescription"]] <- as.character(rep(NA, nrow(varLabels)))
-  new("AnnotatedDataFrame",
+  AnnotatedDataFrame(
       data=data,
       varMetadata=varMetadata,
       dimLabels=c("sampleNames", "sampleColumns"))
 })
 
 setAs("data.frame", "AnnotatedDataFrame",
-      function(from) new("AnnotatedDataFrame", data=from))
+      function(from) AnnotatedDataFrame(data=from))
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 selectSome <- function(obj, maxToShow=5) {
   len <- length(obj)
@@ -452,17 +452,17 @@ read.AnnotatedDataFrame <-
       filename, Sys.info()["nodename"], date())
     attr(vmd, "provenance") = provenance
     
-    new("AnnotatedDataFrame", data=pData, varMetadata=vmd)
+    AnnotatedDataFrame(data=pData, varMetadata=vmd)
     
 }
 
 setMethod("AnnotatedDataFrame",
           signature(data="missing", varMetadata="missing"),
 
-      function(data, varMetadata, dimLabels=c("rowNames", "columnNames"), ...)
+    function(data, varMetadata, dimLabels=c("rowNames", "columnNames"), ...)
 {
-    AnnotatedDataFrame(data=data.frame(), varMetadata=data.frame(),
-                   dimLabels=dimLabels, ...)
+    .AnnotatedDataFrame(data=data.frame(), varMetadata=data.frame(),
+                        dimLabels=dimLabels, ...)
 })
 
 setMethod("AnnotatedDataFrame",
@@ -472,8 +472,8 @@ setMethod("AnnotatedDataFrame",
 {
     varMetadata <- data.frame(labelDescription = rep(NA, ncol(data)))
     row.names(varMetadata) <- names(data)
-    AnnotatedDataFrame(data=data, varMetadata=varMetadata,
-                       dimLabels=dimLabels,...)
+    .AnnotatedDataFrame(data=data, varMetadata=varMetadata,
+                        dimLabels=dimLabels,...)
 })
 
 setMethod("AnnotatedDataFrame",
@@ -486,8 +486,8 @@ setMethod("AnnotatedDataFrame",
     row.names(varMetadata) <- names(data)
     varMetadata[["labelDescription"]] <-
         as.character(varMetadata[["labelDescription"]])
-    new("AnnotatedDataFrame", data=data, varMetadata=varMetadata,
-        dimLabels=dimLabels, ...)
+    .AnnotatedDataFrame(data=data, varMetadata=varMetadata,
+                        dimLabels=dimLabels, ...)
 })
 
 

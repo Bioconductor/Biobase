@@ -37,7 +37,7 @@
 ExpressionSet(assayData,
     phenoData=annotatedDataFrameFrom(assayData, byrow=FALSE),
     featureData=annotatedDataFrameFrom(assayData, byrow=TRUE),
-    experimentData=new("MIAME"), annotation=character(),
+    experimentData=MIAME(), annotation=character(),
     protocolData=annotatedDataFrameFrom(assayData, byrow=FALSE),
     ...)
 

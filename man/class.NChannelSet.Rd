@@ -4,6 +4,8 @@
 \alias{NChannelSet}
 \alias{class.NChannelSet}
 \alias{channelNames,NChannelSet-method}
+\alias{channelNames<-,NChannelSet,character-method}
+\alias{channelNames<-,NChannelSet,list-method}
 \alias{channel,NChannelSet,character-method}
 \alias{sampleNames,NChannelSet-method}
 \alias{sampleNames<-,NChannelSet,list-method}
@@ -30,7 +32,7 @@
   phenotypic data is maintained by the selection or subset.}
 
 \section{Objects from the Class}{
-  Objects can be created by calls of the form \code{new("NChannelSet",
+  Objects can be created by calls of the form \code{NChannelSet(
     assayData, phenoData, ...)}. See the examples below.
 }
 
@@ -118,10 +120,13 @@
       passed to the \code{ExpressionSet} constructor, for instance
       to influence \code{storage.mode}.
     }
-    \item{\code{channelNames(object)}}{
+
+    \item{\code{channelNames(object)}, \code{channelNames(object) <- value}}{
       \code{signature(object = "NChannelSet")}.
-      Obtain names of channels contained in \code{object}.
+      Obtain, reorder, or rename channels contained in
+      \code{object}. See \code{\link{channelNames}}.
     }
+
     \item{\code{selectChannels(object, names, ...}}{
       \code{signature(object = "NChannelSet", names = "character")}.
       Create a new \code{NChannelSet} from \code{object}, containing
@@ -168,11 +173,11 @@
 }
 \examples{
 ## An empty NChannelSet
-obj <- new("NChannelSet")
+obj <- NChannelSet()
 
 ## An NChannelSet with two channels (R, G) and no phenotypic data
-obj <- new("NChannelSet",
-           R=matrix(0,10,5), G=matrix(0,10,5))
+obj <- NChannelSet(R=matrix(0,10,5), G=matrix(0,10,5))
+
 ## An NChannelSet with two channels and channel-specific phenoData
 R <- matrix(0, 10, 3, dimnames=list(NULL, LETTERS[1:3]))
 G <- matrix(1, 10, 3, dimnames=list(NULL, LETTERS[1:3]))
@@ -185,10 +190,8 @@ varMetadata <- data.frame(labelDescription=c(
                             "G-specific phenoData",
                             "Both channel phenoData"),
                           channel=factor(c("R", "G", "_ALL_")))
-phenoData <- new("AnnotatedDataFrame",
-                 data=data, varMetadata=varMetadata)
-obj <- new("NChannelSet",
-           assayData=assayData, phenoData=phenoData)
+phenoData <- AnnotatedDataFrame(data=data, varMetadata=varMetadata)
+obj <- NChannelSet(assayData=assayData, phenoData=phenoData)
 obj
 
 ## G channel as NChannelSet

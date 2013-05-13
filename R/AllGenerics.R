@@ -120,7 +120,7 @@ setGeneric("ExpressionSet",
            function(assayData,
                     phenoData=annotatedDataFrameFrom(assayData, byrow=FALSE),
                     featureData=annotatedDataFrameFrom(assayData, byrow=TRUE),
-                    experimentData=new("MIAME"),
+                    experimentData=MIAME(),
                     annotation=character(),
                     protocolData=annotatedDataFrameFrom(assayData, byrow=FALSE),
                     ...)

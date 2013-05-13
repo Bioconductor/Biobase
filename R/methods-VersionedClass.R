@@ -54,7 +54,7 @@ setMethod("isVersioned", signature(object="Versioned"),
 ## classVersion
 
 setMethod("classVersion", signature(object="ANY"),
-          function(object) new("VersionsNull"))
+          function(object) .VersionsNull())
 
 setMethod("classVersion", signature(object="character"),
           function(object) {

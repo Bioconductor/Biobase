@@ -4,7 +4,7 @@
 setMethod("initialize", signature(.Object="VersionsNull"),
           function(.Object, ...) {
               if (length(list(...)))
-                warning("ignoring arguments to new('VersionsNull')")
+                warning("ignoring arguments to '.VersionsNull()')")
               .Object
           })
 

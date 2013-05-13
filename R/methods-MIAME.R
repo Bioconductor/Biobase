@@ -114,18 +114,11 @@ MIAME <-
              pubMedIds = "", samples = list(),
              hybridizations = list(), normControls = list(),
              preprocessing = list(), other = list()) {
-        new("MIAME", name=name, 
-                     lab=lab,
-                     contact=contact,
-                     title=title,
-                     abstract=abstract,
-                     url=url,
-                     pubMedIds=pubMedIds,
-                     samples=samples,
-                     hybridizations=hybridizations,
-                     normControls=normControls,
-                     preprocessing=preprocessing,
-                     other=other)
+        .MIAME(name=name, lab=lab, contact=contact, title=title,
+               abstract=abstract, url=url, pubMedIds=pubMedIds,
+               samples=samples, hybridizations=hybridizations,
+               normControls=normControls, preprocessing=preprocessing,
+               other=other)
     }
 
 
@@ -133,22 +126,19 @@ MIAME <-
 read.MIAME <- function(filename=NULL,widget=getOption("BioC")$Base$use.widgets,...) {
    if(!is.null(filename)) {
       miame <- scan(filename,what="c",quiet=TRUE,sep="\n",...)
-      return(new("MIAME",name=miame[1],lab=miame[2],contact=miame[3],title=miame[4],abstract=miame[5],url=miame[6]))
+      MIAME(name=miame[1], lab=miame[2], contact=miame[3],
+            title=miame[4], abstract=miame[5], url=miame[6])
    }
    else
       if(widget) {
          require(tkWidgets) || stop("Requires tkWidgets")
          tmp <- tkMIAME()
-         return(new("MIAME",
-                name=tmp$ExperimentName,
-                lab=tmp$LabName,
-                contact=tmp$ContactInfo,
-                title=tmp$ExperimentTitle,
-                abstract=tmp$Description,
-                url=tmp$URL))
+         MIAME(name=tmp$ExperimentName, lab=tmp$LabName,
+               contact=tmp$ContactInfo, title=tmp$ExperimentTitle,
+               abstract=tmp$Description, url=tmp$URL)
       }
       else
-         return(new("MIAME"))
+         MIAME()
 }
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("combine", c("MIAME", "MIAME"), function(x, y, ...) {

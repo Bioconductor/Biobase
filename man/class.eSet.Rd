@@ -269,43 +269,33 @@
 
 # create a new, ad hoc, class, for personal use
 # all methods outlined above are available automatically
-setClass("MySet", contains="eSet")
-new("MySet")
+.MySet <- setClass("MySet", contains="eSet")
+.MySet()
 
-# Create a more robust class, with initialization and validation methods
+# Create a more robust class, with constructor and validation methods
 # to ensure assayData contains specific matricies
-setClass("TwoColorSet", contains="eSet")
+.TwoColorSet <- setClass("TwoColorSet", contains="eSet")
 
-setMethod("initialize", "TwoColorSet",
-          function(.Object,
-                   phenoData = new("AnnotatedDataFrame"),
-                   experimentData = new("MIAME"),
-                   annotation = character(),
-                   R = new("matrix"),
-                   G = new("matrix"),
-                   Rb = new("matrix"),
-                   Gb = new("matrix"),
-                   ... ) {
-            callNextMethod(.Object,
-                           phenoData = phenoData,
-                           experimentData = experimentData,
-                           annotation = annotation,
-                           R=R, G=G, Rb=Rb, Gb=Gb,
-                           ...)
-          })
+TwoColorSet <-
+    function(phenoData=AnnotatedDataFrame(), experimentData=MIAME(),
+             annotation=character(), R=new("matrix"), G=new("matrix"),
+             Rb=new("matrix"), Gb=new("matrix"), ...)
+{
+    .TwoColorSet(phenoData=phenoData, experimentData=experimentData,
+                 annotation=annotation, R=R, G=G, Rb=Rb, Gb=Gb, ...)
+}
 
 setValidity("TwoColorSet", function(object) {
   assayDataValidMembers(assayData(object), c("R", "G", "Rb", "Gb"))
 })
 
-new("TwoColorSet")
+TwoColorSet()
 
 # eSet objects cannot be instantiated directly, only derived objects
 try(new("eSet"))
 
 removeClass("MySet")
 removeClass("TwoColorSet")
-removeMethod("initialize", "TwoColorSet")
 }
 
 \keyword{classes}

@@ -5,7 +5,7 @@ setMethod("locked", "container", function(object) object@locked)
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("[", "container",
    def = function(x, i, j, ..., drop = F) {
-      new("container", content = content(x), x = x@x[i], locked = locked(x))
+      .container(content = content(x), x = x@x[i], locked = locked(x))
    }
 )
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

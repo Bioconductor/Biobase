@@ -50,19 +50,18 @@ obj <- new("Versioned", versions=list(A="1.0.0"))
 obj
 classVersion(obj)
 
-setClass("A", contains="Versioned")
+A <- setClass("A", contains="Versioned")
 
 classVersion("A")
-a <- new("A")
+a <- A()
 a # 'show' nothing by default
 classVersion(a)
 
-setClass("B",
-         contains="Versioned",
+B <- setClass("B", contains="Versioned",
          prototype=prototype(new("Versioned",versions=list(B="1.0.0"))))
 
 classVersion("B")
-b <- new("B")
+b <- B()
 classVersion(b)
 
 classVersion(b)["B"] <- "1.0.1"
@@ -72,7 +71,7 @@ classVersion("B")
 classVersion("B") < classVersion(b)
 classVersion(b) == "1.0.1"
 
-setClass("C",
+C <- setClass("C",
          representation(x="numeric"),
          contains=("VersionedBiobase"),
          prototype=prototype(new("VersionedBiobase", versions=c(C="1.0.1"))))
@@ -80,8 +79,7 @@ setClass("C",
 setMethod("show", signature(object="C"),
           function(object) print(object@x))
 
-c <- new("C", x=1:10)
-
+c <- C(x=1:10)
 c
 
 classVersion(c)
