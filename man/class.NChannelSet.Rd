@@ -3,6 +3,8 @@
 \alias{NChannelSet-class}
 \alias{NChannelSet}
 \alias{class.NChannelSet}
+\alias{assayData<-,NChannelSet,environment-method}
+\alias{assayData<-,NChannelSet,list-method}
 \alias{channelNames,NChannelSet-method}
 \alias{channelNames<-,NChannelSet,character-method}
 \alias{channelNames<-,NChannelSet,list-method}

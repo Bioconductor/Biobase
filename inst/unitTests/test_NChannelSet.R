@@ -106,6 +106,20 @@ testNew6 <- function() {
     checkTrue(validObject(obj))
 }
 
+testAssayDataGets <- function() {
+    assayData <- assayDataNew(R = matrix(0, 10, 5), G = matrix(1,10,5))
+    obj <- NChannelSet(assayData = assayData)
+    exp <- -1 * assayData(obj)[["G"]]
+    assayDataElement(obj, "G") <- exp
+    checkIdentical(exp, assayData(obj)[["G"]])
+
+    exp <- assayData(obj)[["R"]]
+    assayDataElement(obj, "G") <- NULL
+    checkIdentical("R", channelNames(obj))
+    checkIdentical("R", assayDataElementNames(obj))
+    checkIdentical(exp, assayData(obj)[["R"]])
+}
+
 testDifferentSampleNames <- function() {
     ## channels have different identifiers
     assayData <- assayDataNew(R = matrix(0,10,5,
@@ -126,8 +140,7 @@ testSampleNamesUpdate <- function() {
     checkTrue(validObject(obj))
     checkTrue(all(sampleNames(obj)[["R"]] == LETTERS[1:5]))
 
-    sampleNames(obj) <- list(R=LETTERS[5:1],
-                             G=letters[5:1])
+    sampleNames(obj) <- list(R=LETTERS[5:1], G=letters[5:1])
     checkTrue(validObject(obj))
     checkTrue(all(sampleNames(obj)[["R"]] == LETTERS[5:1]) &&
               all(sampleNames(obj)[["G"]] == letters[5:1]))

@@ -1,5 +1,8 @@
 NChannelSet <- .NChannelSet
 
+.init_NChannelSet <-              # copy constructor, validation
+    selectMethod(initialize, "ANY")
+
 setMethod("initialize", "NChannelSet",
     function(.Object, assayData, phenoData, ...)
 {
@@ -73,12 +76,31 @@ setValidity("NChannelSet",
     if (is.null(msg)) TRUE else msg
 })
 
+.assayDataGets_NChannelSet <-
+    function(object, value)
+{
+    phenoData <- phenoData(object)
+    ## update channel names, making some attempt to preserve order
+    from <- channelNames(object)
+    to <- assayDataElementNames(value)
+    lvls <- c(from[from %in% to], to[!to %in% from], "_ALL_")
+    varMetadata(phenoData)$channel <- 
+        factor(as.character(varMetadata(phenoData)$channel), levels=lvls)
+
+    .init_NChannelSet(object, assayData=value, phenoData=phenoData)
+}
+
+setReplaceMethod("assayData", c("NChannelSet", "environment"),
+    .assayDataGets_NChannelSet)
+
+setReplaceMethod("assayData", c("NChannelSet", "list"),
+    .assayDataGets_NChannelSet)
+
 setMethod("channelNames", "NChannelSet",
     function(object, ...)
 {
     lvls <- levels(varMetadata(object)$channel)
     lvls[lvls != "_ALL_"]
-    
 })
 
 setGeneric("channelNames<-",
@@ -125,7 +147,6 @@ setReplaceMethod("channelNames", c("NChannelSet", "list"),
         assayData <- env
     }
     assayData(object) <- assayData
-    validObject(object)
     object
 })
 
@@ -195,15 +216,16 @@ setMethod("sampleNames",
               else res
           })
 
-setReplaceMethod("sampleNames",
-                 signature=signature(
-                   object="NChannelSet",
-                   value="list"),
-                 function(object, value) {
-                     sampleNames(assayData(object)) <- value
-                     sampleNames(phenoData(object)) <-
-                         sampleNames(assayData(object))
-                     sampleNames(protocolData(object)) <-
-                         sampleNames(assayData(object))
-                     object
-                 })
+setReplaceMethod("sampleNames", c("NChannelSet", "list"),
+    function(object, value)
+{
+    assayData <- assayData(object)
+    sampleNames(assayData) <- value
+    phenoData <- phenoData(object)
+    sampleNames(phenoData) <- sampleNames(assayData)
+    protocolData <- protocolData(object)
+    sampleNames(protocolData) <- sampleNames(assayData)
+
+    .init_NChannelSet(object, assayData=assayData,
+                      phenoData=phenoData, protocolData=protocolData)
+})

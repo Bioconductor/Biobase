@@ -1,3 +1,10 @@
+CHANGES IN VERSION 2.21
+-----------------------
+
+USER VISIBLE CHANGES
+
+    o channelNames<-,NChannelSet,*-methods allow re-naming channels
+
 CHANGES IN VERSION 2.19
 -----------------------
 
