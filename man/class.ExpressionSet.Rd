@@ -64,17 +64,17 @@ ExpressionSet(assayData,
 
   }
 
-  \item{phenoData}{An optional \code{data.frame} or
-    \code{AnnotatedDataFrame} containing information about each
-    sample. The number of rows in \code{phenoData} must match the number
-    of columns in \code{assayData}. Row names of \code{phenoData} must
-    match column names of the matrix / matricies in \code{assayData}.}
+  \item{phenoData}{An optional \code{AnnotatedDataFrame} containing
+    information about each sample. The number of rows in
+    \code{phenoData} must match the number of columns in
+    \code{assayData}. Row names of \code{phenoData} must match column
+    names of the matrix / matricies in \code{assayData}.}
 
-  \item{featureData}{An optional \code{data.frame} or
-    \code{AnnotatedDataFrame} containing information about each
-    feature. The number of rows in \code{featureData} must match the
-    number of rows in \code{assayData}. Row names of \code{featureData}
-    must match row names of the matrix / matricies in \code{assayData}.}
+  \item{featureData}{An optional \code{AnnotatedDataFrame} containing
+    information about each feature. The number of rows in
+    \code{featureData} must match the number of rows in
+    \code{assayData}. Row names of \code{featureData} must match row
+    names of the matrix / matricies in \code{assayData}.}
 
   \item{experimentData}{An optional \code{MIAME} instance with meta-data
     (e.g., the lab and resulting publications from the analysis) about
