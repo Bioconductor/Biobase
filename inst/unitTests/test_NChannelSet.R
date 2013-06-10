@@ -62,7 +62,8 @@ testNew5 <- function() {
                        y=numeric(ncol(R)),
                        z=numeric(ncol(R)))
     varMetadata <- data.frame(labelDescription=character(ncol(data)),
-                              channel=factor(rep("_ALL_", ncol(data))))
+                              channel=factor(rep("_ALL_", ncol(data)),
+                                levels=c("R", "G", "_ALL_")))
     phenoData <- new("AnnotatedDataFrame",
                      data=data, varMetadata=varMetadata)
 

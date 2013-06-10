@@ -40,6 +40,14 @@ setMethod("initialize", "NChannelSet",
               dotArgs[isSlot]))
 })
 
+.invalid_NChannelAssayNames <- function(object)
+{
+    phenoChannels <- levels(varMetadata(object)[["channel"]])
+    assayChannels <- c("_ALL_", assayDataElementNames(object))
+    setdiff(union(assayChannels, phenoChannels),
+            intersect(assayChannels, phenoChannels))
+}
+
 setValidity("NChannelSet",
     function(object) 
 {
@@ -54,16 +62,12 @@ setValidity("NChannelSet",
             txt <- paste("\n  'NChannelSet' varMetadata column 'channel'",
                          "must be class 'factor'")
             msg <- validMsg(msg, txt)
-        } else if (0 < length(channel)) {
-            phenoChannels <- unique(channel)
-            phenoChannels <- phenoChannels[!is.na(phenoChannels)]
-            okChannels <-
-                phenoChannels %in% c("_ALL_", assayDataElementNames(object))
-            if (!all(okChannels)) {
-                txt0 <- paste0(phenoChannels[!okChannels], collapse="', '")
-                txt <- paste0("\n  'NChannelSet' varMetadata ",
-                              "'channel' entries not in assayData: '",
-                              txt0, "'")
+        } else if (0 < length(levels(channel))) {
+            if (length(.invalid_NChannelAssayNames(object))) {
+                txt <- 'NChannelSet levels(varMetadata(object)$channel) /
+                        assayDataElementNames() mismatch; see
+                        ?"channelNames<-,NChannelSet,character-method"'
+                txt <- paste(strwrap(c("\n", txt), exdent=2), collapse="\n  ")
                 msg <- validMsg(msg, txt)
             }
         }
@@ -96,11 +100,14 @@ setReplaceMethod("assayData", c("NChannelSet", "environment"),
 setReplaceMethod("assayData", c("NChannelSet", "list"),
     .assayDataGets_NChannelSet)
 
-setMethod("channelNames", "NChannelSet",
-    function(object, ...)
-{
+setMethod("channelNames", "NChannelSet", function(object, ...) {
+    nms <- assayDataElementNames(object)
     lvls <- levels(varMetadata(object)$channel)
-    lvls[lvls != "_ALL_"]
+    if (all(nms %in% lvls))
+        ## FIXME: this accomodates invalid (previous) NChannelSet instances
+        ## order to match channelNames
+        nms <- lvls[lvls %in% nms]
+    nms
 })
 
 setGeneric("channelNames<-",
