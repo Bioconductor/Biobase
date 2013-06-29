@@ -1,17 +1,25 @@
-setGeneric("rowMedians", function(imat, na.rm=FALSE) {
+setGeneric("rowMedians", function(x, na.rm=FALSE, ...) {
+  # Backward compatibility for rowMedians(imat=...)
+  if (missing(x)) {
+    args <- list(...);
+    if (is.element("imat", names(args))) {
+      x <- args$imat;
+      .Deprecated(msg="The name of the matrix argument for Biobase::rowMedians() has been changed from 'imat' to 'x'.");
+    }
+  }
   standardGeneric("rowMedians")
 })
 
 
-setMethod("rowMedians", signature(imat="matrix"), function(imat, na.rm=FALSE) {
+setMethod("rowMedians", signature(x="matrix"), function(x, na.rm=FALSE, ...) {
   na.rm <- as.logical(na.rm);
   hasNAs <- TRUE;  # Add as an argument? /2007-08-24
-  .Call("rowMedians", imat, na.rm, hasNAs, TRUE, PACKAGE="Biobase");
+  .Call("rowMedians", x, na.rm, hasNAs, TRUE, PACKAGE="Biobase");
 })
 
 
-setMethod("rowMedians", signature(imat="ExpressionSet"), function(imat, na.rm=FALSE) {
-  rowMedians(exprs(imat), na.rm=na.rm);
+setMethod("rowMedians", signature(x="ExpressionSet"), function(x, na.rm=FALSE, ...) {
+  rowMedians(exprs(x), na.rm=na.rm, ...);
 })
 
 

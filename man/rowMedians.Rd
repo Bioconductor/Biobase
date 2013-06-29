@@ -9,28 +9,33 @@
   Calculates the median for each row in a matrix.
 }
 
-\usage{rowMedians(imat, na.rm=FALSE)}
+\usage{rowMedians(x, na.rm=FALSE, ...)}
 
 \arguments{
- \item{imat}{A \code{\link[base]{numeric}} \code{\link[base]{matrix}}.}
- \item{na.rm}{If \code{\link[base:logical]{TRUE}}, \code{\link[base]{NA}}s are excluded before calculating the medians, otherwise not.}
+ \item{x}{A \code{\link[base]{numeric}} NxK \code{\link[base]{matrix}}.}
+ \item{na.rm}{If \code{\link[base:logical]{TRUE}},
+   \code{\link[base]{NA}}s are excluded first, otherwise not.}
  \item{...}{Not use.}
 }
 
 \value{
-  Returns a \code{\link[base]{double}} \code{\link[base]{vector}} of length equal to number of rows in \code{x}.
+  Returns a \code{\link[base]{numeric}} \code{\link[base]{vector}} of
+  length N.
 }
 
 \section{Missing values}{
   Missing values are excluded before calculating the medians.
 }
 
-\section{Benchmarking}{
-  This implementation is optimized for speed and memory to calculate.
-  As the example shows, this implementation is roughly 3-10 times faster
-  than using \code{apply(x, MARGIN=1, FUN=medians)}.
-  As the example might show, the \code{\link{rowQ}()} does not (have to)
-  handle missing values, and is therefore in some cases faster.
+\details{
+  The implementation of \code{rowMedians()}
+  is optimized for both speed and memory.
+  To avoid coercing to \code{\link[base]{double}}s (and hence memory
+  allocation), there is a special implementation for
+  \code{\link[base]{integer}} matrices.  That is, if \code{x} is an
+  \code{\link[base]{integer}} \code{\link[base]{matrix}}, then 
+  \code{rowMedians(as.double(x))} would require three times the memory
+  of \code{rowMedians(x)}, but all this is avoided.
 }
 
 \author{Henrik Bengtsson}
