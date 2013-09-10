@@ -43,13 +43,6 @@ exportMethods("[", "[[", "$", abstract, aggenv, aggfun,
               updateObject, updateObjectTo,
               initialize, show, Compare,
 
-              counts, "counts<-",
-              design, "design<-",
-              dispTable, "dispTable<-",
-              sizeFactors, "sizeFactors<-",
-              conditions, "conditions<-",
-              estimateSizeFactors, 
-              estimateDispersions,
               AnnotatedDataFrame,
               ExpressionSet)
 
