@@ -285,3 +285,21 @@ testAnnotatedDataFrameFrom <- function() {
     a <- annotatedDataFrameFrom(ad, byrow=FALSE)
     checkIdentical(LETTERS[1:10], sampleNames(a))
 }
+
+testAnnotatedDataFrameDimnames <- function() {
+    adf0 <- AnnotatedDataFrame(data.frame(x=1:5, y=5:1, row.names=letters[1:5]),
+                              data.frame(foo=1:2, row.names=c("x", "y")))
+    adf <- adf0
+    dimnames(adf) <- dimnames(adf)
+    checkIdentical(adf0, adf)
+
+    adf <- adf0
+    exp <- list(LETTERS[seq_len(nrow(adf0))], letters[seq_len(ncol(adf0))])
+    dimnames(adf) <- exp
+    checkIdentical(exp, dimnames(adf))
+
+    df0 <- varMetadata(adf0)
+    rownames(df0) <- exp[[2]]
+    checkIdentical(df0, varMetadata(adf))
+}
+    

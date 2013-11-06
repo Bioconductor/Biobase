@@ -115,6 +115,16 @@ setMethod("annotatedDataFrameFrom",
           signature(object="AssayData"),
           annotatedDataFrameFromAssayData)
 
+setMethod("dimnames", "AnnotatedDataFrame", function(x) {
+    dimnames(pData(x))
+})
+
+setReplaceMethod("dimnames", "AnnotatedDataFrame", function(x, value) {
+    sampleNames(x) <- value[[1]]
+    varLabels(x) <- value[[2]]
+    x
+})
+
 setMethod("dim", "AnnotatedDataFrame", function( x ) {
   d <- dim(pData(x))
   names(d) <- dimLabels(x)

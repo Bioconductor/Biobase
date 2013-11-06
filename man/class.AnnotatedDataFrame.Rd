@@ -21,6 +21,8 @@
 \alias{coerce,data.frame,AnnotatedDataFrame-method}
 \alias{coerce,phenoData,AnnotatedDataFrame-method}
 \alias{dim,AnnotatedDataFrame-method}
+\alias{dimnames,AnnotatedDataFrame-method}
+\alias{dimnames<-,AnnotatedDataFrame-method}
 \alias{dimLabels,AnnotatedDataFrame-method}
 \alias{dimLabels<-,AnnotatedDataFrame,character-method}
 \alias{ncol,AnnotatedDataFrame-method}
@@ -163,6 +165,9 @@ an \code{AnnotatedDataFrame} from \code{\link{AssayData-class}}.
       \code{ncol(<AnnotatedDataFrame>)}:}{Number of samples and
       variables (\code{dim}) and variables (\code{ncol}) in the
       argument.}
+    \item{\code{dimnames(<AnnotatedDataFrame>)},
+      \code{rownames(<AnnotatedDataFrame>)},
+      \code{colnames(<AnnotatedDataFrame>)}:}{row and column names.}
   }
 }
 \author{V.J. Carey, after initial design by R. Gentleman }
