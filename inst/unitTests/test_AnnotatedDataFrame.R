@@ -4,7 +4,8 @@ obj1 <- new("AnnotatedDataFrame",
               row.names=LETTERS[1:10]),
             varMetadata=data.frame(
               labelDescription=names(dat),
-              class=sapply(dat, class), typeof=sapply(dat, typeof), mode=sapply(dat, mode),
+              class=sapply(dat, class), typeof=sapply(dat, typeof),
+              mode=sapply(dat, mode),
               row.names=c("x","y","z")))
 
 obj2 <- local({
@@ -14,9 +15,10 @@ obj2 <- local({
 })
 
 checkAsp <- function(obj1, obj) {
-    checkTrue(all(sapply(obj[,colnames(obj1), drop=FALSE], typeof)==sapply(obj1, typeof)))
-    checkTrue(all(sapply(obj[,colnames(obj1), drop=FALSE], class)==sapply(obj1, class)))
-    checkTrue(all(sapply(obj[,colnames(obj1), drop=FALSE], mode)==sapply(obj1, mode)))
+    cidx <- colnames(obj1)
+    checkTrue(all(sapply(obj[,cidx, drop=FALSE], typeof)==sapply(obj1, typeof)))
+    checkTrue(all(sapply(obj[,cidx, drop=FALSE], class)==sapply(obj1, class)))
+    checkTrue(all(sapply(obj[,cidx, drop=FALSE], mode)==sapply(obj1, mode)))
 }
 checkData <- function(obj1, obj2, obj) {
     checkTrue(all(colnames(obj1) %in% colnames(obj)))
@@ -158,8 +160,8 @@ testPhenoDataFactors <- function() {
     obj <- combine(obj1, obj2)
     checkTrue(all(pData(obj)[1:nrow(obj1),colnames(pData(obj1)),drop=FALSE]==
                   pData(obj1)))
-    checkTrue(all(pData(obj)[nrow(obj1)+1:nrow(obj2),colnames(pData(obj2)),drop=FALSE]==
-                  pData(obj2)))
+    checkTrue(all(pData(obj)[nrow(obj1)+1:nrow(obj2),colnames(pData(obj2)),
+                             drop=FALSE] == pData(obj2)))
 }
 
 testDimLabels <- function() {
@@ -301,5 +303,10 @@ testAnnotatedDataFrameDimnames <- function() {
     df0 <- varMetadata(adf0)
     rownames(df0) <- exp[[2]]
     checkIdentical(df0, varMetadata(adf))
+
+    adf <- adf0
+    dimnames(adf) <- NULL
+    checkTrue(validObject(adf))
+    checkIdentical(list(as.character(1:5), colnames(adf0)), dimnames(adf))
 }
     

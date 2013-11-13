@@ -164,7 +164,7 @@ setReplaceMethod("sampleNames",
     signature(object="AnnotatedDataFrame", value="ANY"),
     function(object, value) 
 {
-    if (length(value) != dim(object@data)[[1]])
+    if (!is.null(value) && (length(value) != dim(object@data)[[1]]))
         stop("number of new names (", length(value), ") ",
              "should equal number of rows in AnnotatedDataFrame (",
              dim( object )[[1]], ")")
@@ -189,12 +189,15 @@ setReplaceMethod("varLabels",
     signature("AnnotatedDataFrame", "ANY"),
     function(object, value) 
 {
-    if (length(value) != dim(object@data)[[2]])
+    if (!is.null(value) && (length(value) != dim(object@data)[[2]]))
         stop("number of new varLabels (", length(value), ") ",
              "should equal number of columns in AnnotatedDataFrame (",
              dim(object)[[2]], ")")
-    colnames(object@data) <- value
-    row.names(object@varMetadata) <- value
+    if (!is.null(value)) {
+        ## silently ignore attempts to set colnames to NULL
+        colnames(object@data) <- value
+        row.names(object@varMetadata) <- value
+    }
     object
 })
 
