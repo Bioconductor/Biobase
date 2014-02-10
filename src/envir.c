@@ -44,7 +44,8 @@ SEXP copyEnv(SEXP e1, SEXP e2, SEXP all)
         /* no inheritance in lookup */
         PROTECT(sym = install(CHAR(STRING_ELT(nms, i))));
         val = findVarInFrame3(e1, sym, TRUE);
-        defineVar(sym, NAMED(val) ? duplicate(val) : val, e2);
+        INCREMENT_NAMED(val);
+        defineVar(sym, val, e2);
         UNPROTECT(1);
     }
     UNPROTECT(1);
