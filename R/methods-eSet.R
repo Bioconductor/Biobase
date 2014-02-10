@@ -1,75 +1,68 @@
 # ==========================================================================
 # eSet Class Validator
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setMethod("initialize",
-          signature(.Object="eSet"),
-          function(.Object,
-                   assayData,
-                   phenoData = annotatedDataFrameFrom(assayData, byrow=FALSE),
-                   featureData = annotatedDataFrameFrom(assayData, byrow=TRUE),
-                   experimentData = MIAME(),
-                   annotation = character(0),
-                   protocolData = phenoData[,integer(0)],
-                   ...) {
-              ## NB: Arguments provided in '...' are used to initialize
-              ## slots if possible (when called from some subclass).
-              ## Otherwise, extra args in '...' are added as elements
-              ## to assayData.  We do this to allow subclasses to
-              ## rely on default contructor behavior for initializing
-              ## slots.
-              ##
-              ## NB2: Extra args to the assayData constructor will
-              ## be passed along as long as current class doesn't
-              ## have a slot with a matching name.
-              mySlots <- slotNames(.Object)
-              dotArgs <- list(...)
-              isSlot <- names(dotArgs) %in% mySlots
-              if (missing(assayData))
-                assayData <- do.call(assayDataNew, dotArgs[!isSlot], envir=parent.frame())
-              else {
-                  checkClass(assayData, "AssayData", class(.Object))
-                  nms <-
-                    if (storageMode(assayData)=="list") names(assayData)
-                    else ls(assayData)
-                  dupNames <- nms %in% names(dotArgs[!isSlot])
-                  if (any(dupNames))
-                    warning("initialize argument(s) '",
-                            paste(nms[dupNames], collapse="' '"),
-                            "' also present in 'assayData'; argument(s) ignored")
-              }
-              if (!missing(phenoData))
-                checkClass(phenoData, "AnnotatedDataFrame", class(.Object))
-              dimLabels(phenoData) <- c("sampleNames", "sampleColumns")
-              if (!missing(featureData))
-                checkClass(featureData, "AnnotatedDataFrame", class(.Object))
-              dimLabels(featureData) <- c("featureNames", "featureColumns")
-              ## create the protocolData, if necessary
-              if (!missing(protocolData)) {
-                checkClass(protocolData, "AnnotatedDataFrame", class(.Object))
-                dimLabels(protocolData) <- c("sampleNames", "sampleColumns")
-              }
-              ## coordinate sample names
-              adSampleNames <- sampleNames(assayData)
-              if (all(sapply(adSampleNames, is.null)))
-                sampleNames(assayData) <- sampleNames(phenoData)
-              pdSampleNames <- sampleNames(protocolData)
-              if (all(sapply(pdSampleNames, is.null)))
-                sampleNames(protocolData) <- sampleNames(phenoData)
-              ## where do feature names come from? assayData or featureData
-              adFeatureNames <- featureNames(assayData)
-              if (all(sapply(adFeatureNames, is.null)))
-                featureNames(assayData) <- featureNames(featureData)
-              ## create new instance from 'extra' dotArgs, and from instance
-              for (s in names(dotArgs)[isSlot])
-                slot(.Object, s) <- dotArgs[[s]]
-              callNextMethod(.Object,
-                             assayData=assayData,
-                             phenoData=phenoData,
-                             featureData=featureData,
-                             experimentData=experimentData,
-                             annotation=annotation,
-                             protocolData=protocolData)
-          })
+setMethod("initialize", signature(.Object="eSet"),
+    function(.Object, assayData,
+        phenoData=annotatedDataFrameFrom(assayData, byrow=FALSE),
+        featureData=annotatedDataFrameFrom(assayData, byrow=TRUE),
+        experimentData=MIAME(), annotation=character(0),
+        protocolData=phenoData[,integer(0)], ...)
+{
+    ## NB: Arguments provided in '...' are used to initialize
+    ## slots if possible (when called from some subclass).
+    ## Otherwise, extra args in '...' are added as elements
+    ## to assayData.  We do this to allow subclasses to
+    ## rely on default contructor behavior for initializing
+    ## slots.
+    ##
+    ## NB2: Extra args to the assayData constructor will
+    ## be passed along as long as current class doesn't
+    ## have a slot with a matching name.
+    mySlots <- slotNames(.Object)
+    dotArgs <- list(...)
+    isSlot <- names(dotArgs) %in% mySlots
+    if (missing(assayData))
+        assayData <- do.call(assayDataNew, dotArgs[!isSlot], envir=parent.frame())
+    else {
+        checkClass(assayData, "AssayData", class(.Object))
+        nms <-
+            if (storageMode(assayData)=="list") names(assayData)
+            else ls(assayData)
+        dupNames <- nms %in% names(dotArgs[!isSlot])
+        if (any(dupNames))
+            warning("initialize argument(s) '",
+                    paste(nms[dupNames], collapse="' '"),
+                    "' also present in 'assayData'; argument(s) ignored")
+    }
+    if (!missing(phenoData))
+        checkClass(phenoData, "AnnotatedDataFrame", class(.Object))
+    dimLabels(phenoData) <- c("sampleNames", "sampleColumns")
+    if (!missing(featureData))
+        checkClass(featureData, "AnnotatedDataFrame", class(.Object))
+    dimLabels(featureData) <- c("featureNames", "featureColumns")
+    ## create the protocolData, if necessary
+    if (!missing(protocolData)) {
+        checkClass(protocolData, "AnnotatedDataFrame", class(.Object))
+        dimLabels(protocolData) <- c("sampleNames", "sampleColumns")
+    }
+    ## coordinate sample names
+    adSampleNames <- sampleNames(assayData)
+    if (all(sapply(adSampleNames, is.null)))
+        sampleNames(assayData) <- sampleNames(phenoData)
+    pdSampleNames <- sampleNames(protocolData)
+    if (all(sapply(pdSampleNames, is.null)))
+        sampleNames(protocolData) <- sampleNames(phenoData)
+    ## where do feature names come from? assayData or featureData
+    adFeatureNames <- featureNames(assayData)
+    if (all(sapply(adFeatureNames, is.null)))
+        featureNames(assayData) <- featureNames(featureData)
+    ## create new instance from 'extra' dotArgs, and from instance
+    for (s in names(dotArgs)[isSlot])
+        slot(.Object, s) <- dotArgs[[s]]
+    callNextMethod(.Object, assayData=assayData, phenoData=phenoData,
+                   featureData=featureData, experimentData=experimentData,
+                   annotation=annotation, protocolData=protocolData)
+})
 
 updateOldESet <- function(from, toClass, ...) {  # to MultiExpressionSet
   from <- asS4(from)
