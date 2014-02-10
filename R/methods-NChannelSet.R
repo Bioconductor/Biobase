@@ -23,15 +23,19 @@ setMethod("initialize", "NChannelSet",
     }
     ## ensure sample names OK -- all assayData with names;
     ## phenoData with correct names from assayData
-    appl <-
-        if (storageMode(assayData)=="list") lapply
-        else eapply
-    assaySampleNames <-
-        appl(assayData, function(elt) {
-            cnames <- colnames(elt)
-            if (is.null(cnames)) sampleNames(phenoData)
-            else cnames
-        })
+    nms <- if (storageMode(assayData) == "list")
+        names(assayData)
+    else
+        ls(assayData)
+    assaySampleNames <- vector("list", length(nms))
+    names(assaySampleNames) <- nms
+    for (nm in nms) {
+        cnames <- colnames(assayData[[nm]])
+        assaySampleNames[[nm]] <- if (is.null(cnames)) {
+            sampleNames(phenoData)
+        } else cnames
+    }
+
     sampleNames(assayData) <- assaySampleNames
     sampleNames(phenoData) <- sampleNames(assayData)
     do.call(callNextMethod,
@@ -213,10 +217,15 @@ setMethod("selectChannels",
 setMethod("sampleNames",
           signature=signature(object="NChannelSet"),
           function(object) {
-              appl <- 
-                if (storageMode(object)=="list") lapply
-                else eapply
-              res <- appl(assayData(object), colnames)
+              assayData <- assayData(object)
+              nms <- if (storageMode(object) == "list")
+                  names(assayData)
+              else
+                  ls(assayData)
+              res <- vector("list", length(nms))
+              names(res) <- nms
+              for (nm in nms)
+                  res[[nm]] <- colnames(assayData[[nm]])
               ident <- sapply(res[-1], function(elt, ref) all(elt==ref),
                               res[[1]])
               if (all(ident)) res[[1]]
