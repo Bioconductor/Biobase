@@ -122,10 +122,13 @@ setMethod("assayData",
           function(object) object)
 
 .assayDataDimnames <- function(assayData) {
-    switch(storageMode(assayData),
-           lockedEnvironment=,
-           environment=eapply(assayData, dimnames),
-           list=lapply(assayData, dimnames))
+    switch(storageMode(assayData), lockedEnvironment=, environment = {
+        result <- vector("list", length(assayData))
+        names(result) <- ls(assayData)
+        for (nm in ls(assayData))
+            result[[nm]] <- dimnames(assayData[[nm]])
+        result
+    }, list=lapply(assayData, dimnames))
 }
 
 setMethod("sampleNames", signature(object="AssayData"),
@@ -139,72 +142,79 @@ setMethod("sampleNames", signature(object="AssayData"),
                      safe.colnames(object[[ls(object)[1]]]))
           })
 
-setReplaceMethod("sampleNames",
-                 signature=signature(
-                   object="AssayData",
-                   value="list"),
-                 function(object, value) 
+setReplaceMethod("sampleNames", signature(object="AssayData", value="list"),
+    function(object, value) 
 {
     .names_found_unique <- function(names, table)
     {
         ok <- !is.null(names) && all(names %in% table) && 
               !any(duplicated(names))
-        if (!ok)
-            stop("'sampleNames' replacement list must have unique named elements corresponding to assayData element names")
+        if (!ok) {
+            txt <- "'sampleNames' replacement list must have unique named elements
+                    corresponding to assayData element names"
+            stop(paste(strwrap(txt, exdent=2), colapse="\n"))
+        }
     }
-    switch(assayDataStorageMode(object),
-           lockedEnvironment = {
-               .names_found_unique(names(value), ls(object))
-               object <- copyEnv(object)
-               for (nm in names(value))
-                   colnames(object[[nm]]) <- value[[nm]]
-               assayDataEnvLock(object)
-           }, environment = {
-               .names_found_unique(names(value), ls(object))
-               for (nm in names(value))
-                   colnames(object[[nm]]) <- value[[nm]]
-           }, list= {
-               .names_found_unique(names(value), names(object))
-               for (nm in names(value))
-                   colnames(object[[nm]]) <- value[[nm]]
-           })
+    mode <- assayDataStorageMode(object)
+    switch(mode, lockedEnvironment = {
+        .names_found_unique(names(value), ls(object))
+        object <- copyEnv(object)
+    }, environment = {
+        .names_found_unique(names(value), ls(object))
+    }, list= {
+        .names_found_unique(names(value), names(object))
+    })
+    for (nm in names(value)) {
+        dn <- dimnames(object[[nm]])
+        if (is.null(dn))
+            dn <- vector("list", length(dim(object[[nm]])))
+        dn[[2]] <- value[[nm]]
+        dimnames(object[[nm]]) <- dn
+    }
+    if (mode == "lockedEnvironment")
+        assayDataEnvLock(object)
     object
 })
 
-setReplaceMethod("sampleNames",
-    signature(object="AssayData", value="ANY"),
+setReplaceMethod("sampleNames", signature(object="AssayData", value="ANY"),
     function(object, value)
 {
-    dims <- 
-      switch(assayDataStorageMode(object),
-             lockedEnvironment=,
-             environment = eapply(object, ncol),
-             list = lapply(object, ncol))
+    mode <- assayDataStorageMode(object)
+    dims <- switch(mode, lockedEnvironment=, environment = {
+        result <- vector("list", length(object))
+        names(result) <- ls(object)
+        for (nm in ls(object))
+            result[[nm]] <- ncol(object[[nm]])
+        result
+    }, list = {
+        lapply(object, ncol)
+    })
+    
     if (length(dims)==0 && length(value) !=0)
-      return(object)                    # early exit; no samples to name
-    if (!all(dims==length(value)))
-      stop("'value' length (", length(value),
-           ") must equal sample number in AssayData (",dims[[1]], ")")
-    switch(assayDataStorageMode(object),
-           lockedEnvironment = {
-               object <- copyEnv(object)
-               for (nm in ls(object))
-                   colnames(object[[nm]]) <- value
-               assayDataEnvLock(object)
-           },
-           environment = {
-               for (nm in ls(object))
-                   colnames(object[[nm]]) <- value
-           },
-           list = {
-               for (nm in names(object))
-                   colnames(object[[nm]]) <- value
-           })
+        return(object)                    # early exit; no samples to name
+    if (!all(dims==length(value))) {
+        txt <- sprintf("'value' length (%d) must equal sample number in AssayData (%d)",
+                       length(value), dims[[1]])
+        stop(paste(strwrap(txt, exdent=2), collapse="\n"))
+    }
+
+    nms <- switch(mode, lockedEnvironment = {
+        object <- copyEnv(object)
+        ls(object)
+    }, environment = ls(object), list = names(object))
+
+    for (nm in nms) {
+        dn <- dimnames(object[[nm]])
+        if (is.null(dn))
+            dn <- vector("list", length(dim(object[[nm]])))
+        dn[[2]] <- value
+        dimnames(object[[nm]]) <- dn
+    }
+
+    if (mode == "lockedEnvironment")
+        assayDataEnvLock(object)
     object
 })
-
-
-
 
 setMethod("featureNames", signature(object="AssayData"),
           function(object) {
@@ -217,29 +227,40 @@ setMethod("featureNames", signature(object="AssayData"),
                      safe.rownames(object[[ls(object)[1]]]))
           })
 
-
 setReplaceMethod("featureNames", signature(object="AssayData", value="ANY"),
-                 function(object, value) {
-    dims <- 
-      switch(assayDataStorageMode(object),
-             lockedEnvironment=,
-             environment = eapply(object, nrow),
-             list = lapply(object, nrow))
+    function(object, value) 
+{
+    mode <- assayDataStorageMode(object)
+    dims <- switch(mode, lockedEnvironment=, environment = {
+        result <- vector("list", length(object))
+        names(result) <- ls(object)
+        for (nm in ls(object)) result[[nm]] <- nrow(object[[nm]])
+        result
+    }, list = lapply(object, nrow))
     if (length(dims)==0 && length(value) !=0)
-      return(object)                    # early exit; no features to name
-    if (!all(dims==length(value)))
-      stop("'value' length (", length(value),
-           ") must equal feature number in AssayData (",dims[[1]], ")")
-    switch(assayDataStorageMode(object),
-         lockedEnvironment = {
-           object <- copyEnv(object)
-           for (nm in ls(object)) rownames(object[[nm]]) <- value
-           assayDataEnvLock(object)
-         },
-         environment = for (nm in ls(object)) rownames(object[[nm]]) <- value,
-         list = for (nm in names(object)) rownames(object[[nm]]) <- value,
-         )
-  object
+        return(object)                    # early exit; no features to name
+    if (!all(dims==length(value))) {
+        txt <- sprintf("'value' length (%d) must equal feature number in AssayData (%d)",
+                       length(value), dims[[1]])
+        stop(paste(strwrap(txt, exdent=2), collapse="\n"))
+    }
+
+    nms <- switch(mode, lockedEnvironment = {
+        object <- copyEnv(object)
+        ls(object)
+    }, environment = ls(object), list=names(object))
+
+    for (nm in nms) {
+        dn <- dimnames(object[[nm]])
+        if (is.null(dn))
+            dn <- vector("list", length(dim(object[[nm]])))
+        dn[[1]] <- value
+        dimnames(object[[nm]]) <- dn
+    }
+
+    if (mode == "lockedEnvironment")
+        assayDataEnvLock(object)
+    object
 })
 
 setMethod("combine", c("AssayData", "AssayData"), function(x, y, ...) {
