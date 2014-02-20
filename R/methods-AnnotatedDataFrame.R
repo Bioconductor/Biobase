@@ -151,8 +151,8 @@ setReplaceMethod("pData",
                    object="AnnotatedDataFrame",
                    value="data.frame"),
                  function(object, value) {
-                     varMetadata <-
-                         varMetadata(object)[names(value),,drop=FALSE]
+                     idx <- match(names(value), rownames(varMetadata(object)))
+                     varMetadata <- varMetadata(object)[idx,,drop=FALSE]
                      row.names(varMetadata) <- names(value)
                      initialize(object, data=value, varMetadata=varMetadata)
                  })

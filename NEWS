@@ -1,6 +1,14 @@
 CHANGES IN VERSION 2.21
 -----------------------
 
+BUG FIXES
+
+    o Updating an AnnotatedDataFrame no longer duplicates metadata
+      from partially matching column names.
+
+CHANGES IN VERSION 2.21
+-----------------------
+
 USER VISIBLE CHANGES
 
     o channelNames<-,NChannelSet,*-methods allow re-naming channels

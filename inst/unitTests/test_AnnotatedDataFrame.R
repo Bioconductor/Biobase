@@ -117,6 +117,13 @@ testVarMetadataAssign <- function() {
     df <- data.frame(labelDescription="foo", row.names="Sample")
     varMetadata(to) <- df
     checkTrue(validObject(to))
+
+    ## avoid varMetatadata duplication via partial match
+    ## https://stat.ethz.ch/pipermail/bioconductor/2014-February/057883.html
+    adf <- AnnotatedDataFrame(data.frame(xx=1:5))
+    varMetadata(adf)["xx", "labelDescription"] <- "lbl"
+    adf$x <- 1:5
+    checkIdentical(c("lbl", NA), varMetadata(adf)$labelDescription)
 }
 
 testMetadataFactors <- function() {
