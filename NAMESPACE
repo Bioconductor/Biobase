@@ -57,4 +57,4 @@ export(Aggregate, addVigs2WinMenu, anyMissing,
        readExpressionSet, read.AnnotatedDataFrame, read.MIAME, MIAME,
        selectSome, strbreak, subListExtract, testBioCConnection,
        lcSuffix, lcPrefix, lcPrefixC, updateOldESet, userQuery,
-       validMsg)
+       validMsg, write.AnnotatedDataFrame)

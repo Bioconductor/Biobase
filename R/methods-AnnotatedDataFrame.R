@@ -448,7 +448,7 @@ read.AnnotatedDataFrame <-
     ## read varMetadata section (the lines with leading "#")
     vmd = grep(paste0("^",  varMetadata.char),
       readLines(filename), value=TRUE)
-    svmd = strsplit(vmd, ":")
+    svmd = strsplit(vmd, ": *")
     varNames = sub("^# *", "", sapply(svmd, "[", 1L))
     varMetad = sapply(svmd, "[", 2L)
 
@@ -467,6 +467,32 @@ read.AnnotatedDataFrame <-
     
     AnnotatedDataFrame(data=pData, varMetadata=vmd)
     
+}
+
+write.AnnotatedDataFrame <-
+    function(x, file="", varMetadata.char="#", ..., append=FALSE,
+             fileEncoding="")
+{
+    ## file handling from write.table
+    if (file == "") 
+        file <- stdout()
+    else if (is.character(file)) {
+        file <- if (nzchar(fileEncoding)) 
+            file(file, ifelse(append, "a", "w"), encoding = fileEncoding)
+        else file(file, ifelse(append, "a", "w"))
+        on.exit(close(file))
+    } else if (!isOpen(file, "w")) {
+        open(file, "w")
+        on.exit(close(file))
+    }
+    if (!inherits(file, "connection")) 
+        stop("'file' must be a character string or connection")
+
+    writeLines(sprintf("%s %s: %s", varMetadata.char, varLabels(x),
+                       varMetadata(x)$labelDescription),
+               file)
+    write.table(pData(x), file, append=append, fileEncoding=fileEncoding,
+                ...)
 }
 
 setMethod("AnnotatedDataFrame",
