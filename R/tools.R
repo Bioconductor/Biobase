@@ -232,18 +232,9 @@ matchpt <- function(x, y) {
 }
 
 ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-cache <- function(expr, dir=".", prefix="tmp_R_cache_", name) {
+cache <- function(expr, dir=".", prefix="tmp_R_cache_") {
     pexpr <- parse(text=deparse(substitute(expr)))
     pexpr <- as.list(pexpr[[1]])
-    useOld <- (pexpr[[1]] != "<-" || !missing(name))
-    if  (useOld) { ## compatibility layer
-        if (missing(name))
-          name <- expr
-        if (pexpr[[1]] != "<-" && !missing(dir))
-          expr <- dir
-        cache__usage <- cache_old
-        return(cache__usage(name, expr))
-    }
     name <- as.character(pexpr[[2]])
     RHS <- pexpr[[3]]
     cachefile <- file.path(dir, paste0(prefix, name, ".RData"))

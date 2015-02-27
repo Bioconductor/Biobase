@@ -2,7 +2,6 @@
 ## uses tools.R
 
 getPkgVigs = function(package=NULL) {
-  require("tools", quietly=TRUE) || stop("Requires the tools package")
   pkgs <- .packages()
   if( !is.null(package) ) {
     if( !is.character(package) )

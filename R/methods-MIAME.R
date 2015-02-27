@@ -131,8 +131,9 @@ read.MIAME <- function(filename=NULL,widget=getOption("BioC")$Base$use.widgets,.
    }
    else
       if(widget) {
-         require(tkWidgets) || stop("Requires tkWidgets")
-         tmp <- tkMIAME()
+         requireNamespace("tkWidgets", quietly=TRUE) ||
+             stop("Requires tkWidgets")
+         tmp <- tkWidgets::tkMIAME()
          MIAME(name=tmp$ExperimentName, lab=tmp$LabName,
                contact=tmp$ContactInfo, title=tmp$ExperimentTitle,
                abstract=tmp$Description, url=tmp$URL)
