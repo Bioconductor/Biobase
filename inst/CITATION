@@ -1,14 +1,14 @@
-citEntry(entry="Article",
-  author ="Robert C Gentleman and Vincent J. Carey and Douglas M. Bates and others",
-title ="Bioconductor: Open software development for computational biology and bioinformatics",
-  journal =      "Genome Biology",
-  volume =       "5",
-  year =         "2004", 
-  pages =        "R80",
-  url =          "http://genomebiology.com/2004/5/10/R80",
+citEntry(entry="Bioconductor:2015",
+  author = "Huber, W.  and Carey, V. J.  and Gentleman, R.  and Anders, S.  and Carlson, M.  and Carvalho, B. S.  and Bravo, H. C.  and Davis, S.  and Gatto, L.  and Girke, T.  and Gottardo, R.  and Hahne, F.  and Hansen, K. D.  and Irizarry, R. A.  and Lawrence, M.  and Love, M. I.  and MacDonald, J.  and Obenchain, V.  and {Ole\'s}, A. K.  and {Pag\`es}, H.  and Reyes, A.  and Shannon, P.  and Smyth, G. K.  and Tenenbaum, D.  and Waldron, L.  and Morgan, M. ",
+  title = "{O}rchestrating high-throughput genomic analysis with {B}ioconductor",
+  journal = "Nature Methods",
+  year = "2015",
+  volume = "12",
+  number = "2",
+  pages = "115--121",
+  url = "http://www.nature.com/nmeth/journal/v12/n2/full/nmeth.3252.html",
   textVersion = paste(
- "Bioconductor: Open software development for computational biology",
- "and bioinformatics", "R. Gentleman, V. J. Carey, D. M. Bates, B.Bolstad, 
-  M. Dettling, S. Dudoit, B. Ellis, L. Gautier, Y. Ge, and others",
-  "2004, Genome Biology, Vol. 5, R80")
+   "Orchestrating high-throughput genomic analysis with Bioconductor.",
+   "W. Huber, V.J. Carey, R. Gentleman, ..., M. Morgan",
+   "Nature Methods, 2015:12, 115.")
 )
