@@ -355,7 +355,7 @@ setMethod("[", "eSet", function(x, i, j, ..., drop = FALSE) {
   if (missing(drop))
     drop <- FALSE
   if (missing(i) && missing(j)) {
-      if (length(list(...))!=0)
+      if (!missing(...))
         stop("specify genes or samples to subset; use '",
              substitute(x), "$", names(list(...))[[1]],
              "' to access phenoData variables")

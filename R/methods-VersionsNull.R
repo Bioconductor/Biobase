@@ -3,7 +3,7 @@
 
 setMethod("initialize", signature(.Object="VersionsNull"),
           function(.Object, ...) {
-              if (length(list(...)))
+              if (!missing(...))
                 warning("ignoring arguments to '.VersionsNull()')")
               .Object
           })
