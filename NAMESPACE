@@ -46,7 +46,8 @@ exportMethods("[", "[[", "$", abstract, aggenv, aggfun,
               AnnotatedDataFrame,
               ExpressionSet)
 
-export(Aggregate, addVigs2WinMenu, anyMissing,
+export(.DollarNames.eSet,
+       Aggregate, addVigs2WinMenu, anyMissing,
        as.data.frame.ExpressionSet, assayDataNew,
        assayDataValidMembers, assayDataElementNames, assayDataElement,
        assayDataElementReplace, "assayDataElement<-", cache, copyEnv,
