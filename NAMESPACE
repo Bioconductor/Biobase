@@ -8,6 +8,8 @@ importFrom(BiocGenerics,
     annotation, "annotation<-"
 )
 
+importFrom(utils, head)
+
 exportClasses(aggregator, container, eSet,
               MIAxE, MIAME, characterORMIAME,
               annotatedDataset, AssayData, data.frameOrNULL,
@@ -59,3 +61,4 @@ export(.DollarNames.eSet,
        selectSome, strbreak, subListExtract, testBioCConnection,
        lcSuffix, lcPrefix, lcPrefixC, updateOldESet, userQuery,
        validMsg, write.AnnotatedDataFrame)
+S3method(head, "AnnotatedDataFrame")

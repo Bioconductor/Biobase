@@ -115,6 +115,16 @@ setMethod("annotatedDataFrameFrom",
           signature(object="AssayData"),
           annotatedDataFrameFromAssayData)
 
+head.AnnotatedDataFrame <-
+    function(x, n=6L, ...)
+{
+    stopifnot(length(x) == 1L)
+    n <- if (n < 0L) {
+        max(nrow(x) + n, 0L)
+    } else min(n, nrow(x))
+    x[seq_len(n), ]
+}
+
 setMethod("dimnames", "AnnotatedDataFrame", function(x) {
     dimnames(pData(x))
 })
