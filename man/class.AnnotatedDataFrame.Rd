@@ -21,6 +21,7 @@
 \alias{coerce,data.frame,AnnotatedDataFrame-method}
 \alias{coerce,phenoData,AnnotatedDataFrame-method}
 \alias{head.AnnotatedDataFrame}
+\alias{tail.AnnotatedDataFrame}
 \alias{dim,AnnotatedDataFrame-method}
 \alias{dimnames,AnnotatedDataFrame-method}
 \alias{dimnames<-,AnnotatedDataFrame-method}
@@ -162,9 +163,10 @@ an \code{AnnotatedDataFrame} from \code{\link{AssayData-class}}.
       \code{$<variable> <- <new_value>}:}{Replace or add a variable to
       \code{pData}. ... can include named arguments (especially
       \code{labelDescription}) to be added to \code{varMetadata}.}
-    \item{\code{head(<AnnotatedDataFrame>), n = 6L}}{Subset up to
-      \code{n} rows; negative \code{n} returns the first \code{nrow() -
-      n} rows.}
+    \item{\code{head(<AnnotatedDataFrame>, n = 6L, ...)},
+      \code{tail(<AnnotatedDataFrame>, n=6L, ...)}}{Select the first
+      (last for tail) \code{n} rows; negative \code{n} returns the first
+      (last) \code{nrow() - n} rows.}
     \item{\code{dim(<AnnotatedDataFrame>)},
       \code{ncol(<AnnotatedDataFrame>)}:}{Number of samples and
       variables (\code{dim}) and variables (\code{ncol}) in the

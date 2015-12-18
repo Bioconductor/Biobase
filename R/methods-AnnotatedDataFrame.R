@@ -115,14 +115,23 @@ setMethod("annotatedDataFrameFrom",
           signature(object="AssayData"),
           annotatedDataFrameFromAssayData)
 
-head.AnnotatedDataFrame <-
-    function(x, n=6L, ...)
-{
+head.AnnotatedDataFrame <- function(x, n=6L, ...) {
+    ## essentially, utils:::head.data.frame
     stopifnot(length(x) == 1L)
     n <- if (n < 0L) {
         max(nrow(x) + n, 0L)
     } else min(n, nrow(x))
     x[seq_len(n), ]
+}
+
+tail.AnnotatedDataFrame <- function(x, n=6L, ...) {
+    ## essentially, utils:::tail.data.frame
+    stopifnot(length(x) == 1L)
+    nrx <- nrow(x)
+    n <- if (n < 0L) 
+        max(nrx + n, 0L)
+    else min(n, nrx)
+    x[seq.int(to = nrx, length.out = n), , drop = FALSE]
 }
 
 setMethod("dimnames", "AnnotatedDataFrame", function(x) {

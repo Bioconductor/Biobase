@@ -4,7 +4,7 @@ CHANGES IN VERSION 2.31
 NEW FEATURES
 
     o tab completion implemented for eSet classes
-    o head.AnnotatedDataFrame method introduced
+    o head and tail.AnnotatedDataFrame methods introduced
 
 CHANGES IN VERSION 2.27
 -----------------------
