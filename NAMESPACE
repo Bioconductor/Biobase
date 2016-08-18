@@ -8,7 +8,8 @@ importFrom(BiocGenerics,
     annotation, "annotation<-"
 )
 
-importFrom(utils, head, tail)
+importFrom(utils, head, tail, menu, packageDescription, read.table,
+           write.table)
 
 exportClasses(aggregator, container, eSet,
               MIAxE, MIAME, characterORMIAME,
