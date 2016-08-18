@@ -443,6 +443,26 @@ assayDataElementNames <- function(object) {
 assayDataElement <- function(object, elt) assayData(object)[[elt]]
 
 assayDataElementReplace <- function(obj, elt, value) {
+    if (!is.null(value) && !identical(unname(dim(obj)), unname(dim(value))))
+        stop("object and replacement value have different dimensions")
+    
+    if (!is.null(value)) {
+        if (!is.null(dimnames(value))) {
+            ## validate and harmonize dimnames
+            vd <- Map(function(od, vd) {
+                if (is.null(vd))
+                    ## update vd to contain indexes into matrix
+                    od <- seq_along(od)
+                else if (!setequal(od, vd))
+                    stop("object and replacement value dimnames differ")
+                od
+            }, dimnames(obj), dimnames(value))
+            ## re-arrange value to have dimnames in same order as obj
+            value <- do.call(`[`, c(list(value), vd, drop=FALSE))
+        }
+        dimnames(value) <- dimnames(obj)
+    }
+
     storage.mode <- storageMode(obj)
     switch(storageMode(obj),
            "lockedEnvironment" = {

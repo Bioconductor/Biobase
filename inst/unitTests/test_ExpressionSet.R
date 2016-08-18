@@ -173,3 +173,17 @@ testHarmonizeAssayDataDimnames <- function() {
     dimnames(se.exprs) <- list(letters[1:5], LETTERS[1:2])
     checkException(checkCreation(exprs, se.exprs), silent=TRUE)
 }
+
+testExprsReplacement <- function() {
+    exprs <- se.exprs <- matrix(1:50, 10, 5)
+    eset <- ExpressionSet(list2env(list(exprs=exprs, se.exprs=se.exprs)))
+    exprs(eset) <- exprs(eset)
+    checkTrue(validObject(eset))
+
+    ## shuffled names ok
+    exprs(eset) <- exprs(eset)[sample(rownames(eset)), sample(colnames(eset))]
+    checkTrue(validObject(eset))
+
+    checkException({ exprs(eset) <- exprs(eset)[, 1:3] }, silent=TRUE)
+    checkException({ exprs(eset) <- exprs(eset)[, c(1:4, 1)] }, silent=TRUE)
+}

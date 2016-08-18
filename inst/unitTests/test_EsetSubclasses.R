@@ -209,10 +209,9 @@ testAssayDataReplacement <- function() {
 
 testAssayDataElement <- function() {
     checkObj <- function(obj) {
+        m <- new("matrix",0, nr=0, nc=0, dimnames=list(list(),list()))
         checkTrue(identical(assayDataElementNames(obj), "exprs"))
-        checkTrue(identical(assayDataElement(obj, "exprs"),
-                            new("matrix",0,dimnames=list(list(),list()))[FALSE,FALSE,drop=FALSE]))
-        m <- matrix(1:10, nrow=2)
+        checkTrue(identical(assayDataElement(obj, "exprs"), m))
         obj <- assayDataElementReplace(obj, "exprs", m)
         checkTrue(identical(assayDataElement(obj, "exprs"), m))
     }
@@ -295,7 +294,7 @@ testExprs <- function() {
     sNames <- sampleNames(obj)
     oldExprs <- exprs(obj)
     exprs(obj) <- newExprs
-    checkTrue( identical(exprs(obj), newExprs))
+    checkTrue( identical(unname(exprs(obj)), newExprs))
     if (storageMode(obj)!="environment")
       checkTrue(!identical(exprs(obj), oldExprs))
     sampleNames(assayData(obj)) <- sNames
