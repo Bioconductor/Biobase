@@ -442,7 +442,7 @@ assayDataElementNames <- function(object) {
 
 assayDataElement <- function(object, elt) assayData(object)[[elt]]
 
-assayDataElementReplace <- function(obj, elt, value) {
+.validate_assayDataElementReplace <- function(obj, value) {
     if (!is.null(value) && !identical(unname(dim(obj)), unname(dim(value))))
         stop("object and replacement value have different dimensions")
     
@@ -462,6 +462,13 @@ assayDataElementReplace <- function(obj, elt, value) {
         }
         dimnames(value) <- dimnames(obj)
     }
+    value
+}
+
+assayDataElementReplace <- function(obj, elt, value, validate=TRUE) {
+    ## 'validate' added later, needs to be last for position matching
+    if (validate)
+        value <- .validate_assayDataElementReplace(obj, value)
 
     storage.mode <- storageMode(obj)
     switch(storageMode(obj),
@@ -480,7 +487,10 @@ assayDataElementReplace <- function(obj, elt, value) {
     obj
 }
 
-`assayDataElement<-` <- assayDataElementReplace
+`assayDataElement<-` <- function(obj, elt, ..., value)
+    ## 'value' is always the last argument, but needs to be 3rd for
+    ## assayDataElementReplace
+    assayDataElementReplace(obj, elt, value, ...)
 
 setMethod("phenoData", "eSet", function(object) object@phenoData)
 

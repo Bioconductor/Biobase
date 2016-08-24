@@ -240,10 +240,15 @@
    \describe{
     \item{assayDataElement(object, element)}{Return matrix
       \code{element} from \code{assayData} slot of \code{object}.}
-    \item{assayDataElement(object, element) <- value)}{Set element
-      \code{element} in \code{assayData} slot of \code{object} to matrix \code{value}}
-    \item{assayDataElementReplace(object, element, value)}{Set element
-      \code{element} in \code{assayData} slot of \code{object} to matrix \code{value}}
+    \item{assayDataElement(object, element, validate=TRUE) <-
+       value)}{Set element \code{element} in \code{assayData} slot of
+       \code{object} to matrix \code{value}. If \code{validate=TRUE},
+       check that value row and column names of conform to object.}
+    \item{assayDataElementReplace(object, element, value,
+      validate=TRUE)}{Set element \code{element} in \code{assayData}
+      slot of \code{object} to matrix \code{value}. If
+      \code{validate=TRUE}, check that row and column names of value
+      conform to object.}
     \item{assayDataElementNames(object)}{Return element names in
       \code{assayData} slot of \code{object}}
      \item{\code{updateOldESet}}{Update versions of \code{eSet}
