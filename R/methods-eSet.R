@@ -443,8 +443,12 @@ assayDataElementNames <- function(object) {
 assayDataElement <- function(object, elt) assayData(object)[[elt]]
 
 .validate_assayDataElementReplace <- function(obj, value) {
-    if (!is.null(value) && !identical(unname(dim(obj)), unname(dim(value))))
-        stop("object and replacement value have different dimensions")
+    if (!is.null(value)) {
+        dimvalue <- dim(value)
+        dimobj <- dim(obj)[seq_along(dimvalue)]
+        if (!identical(unname(dimvalue), unname(dimobj)))
+            stop("object and replacement value have different dimensions")
+    }
     
     if (!is.null(value)) {
         if (!is.null(dimnames(value))) {
