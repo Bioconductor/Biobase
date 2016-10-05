@@ -446,7 +446,7 @@ assayDataElement <- function(object, elt) assayData(object)[[elt]]
     if (!is.null(value)) {
         dimvalue <- dim(value)
         dimobj <- dim(obj)[seq_along(dimvalue)]
-        if (!identical(unname(dimvalue), unname(dimobj)))
+        if (!isTRUE(all.equal(unname(dimvalue), unname(dimobj))))
             stop("object and replacement value have different dimensions")
     }
     

@@ -37,7 +37,7 @@ setMethod("initialize", "ExpressionSet",
     dimConflict <- function(dimNames, okNames, dim) {
         nm <- lapply(dimNames, "[[", dim)
         isConflict <- !sapply(nm, function(x, y) {
-            is.null(x) || all.equal(x, y, check.attr=FALSE)
+            is.null(x) || isTRUE(all.equal(x, y, check.attr=FALSE))
         }, okNames[[dim]])
         isNamed <- sapply(lapply(nm, names), length) > 0
         isNull <- sapply(nm, is.null)
