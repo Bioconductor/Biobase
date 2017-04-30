@@ -407,7 +407,7 @@ setMethod("$", "eSet", function(x, name) {
     eval(substitute(phenoData(x)$NAME_ARG, list(NAME_ARG=name)))
 })
 
-.DollarNames.eSet <- function(x, pattern)
+.DollarNames.eSet <- function(x, pattern = "")
     grep(pattern, names(pData(x)), value=TRUE)
 
 setReplaceMethod("$", "eSet", function(x, name, value) {

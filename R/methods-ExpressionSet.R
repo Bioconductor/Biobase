@@ -258,3 +258,5 @@ setMethod(ExpressionSet, "matrix",
         featureData=featureData, experimentData=experimentData,
         annotation=annotation, protocolData=protocolData, ...)
 })
+
+.DollarNames.ExpressionSet <- .DollarNames.eSet

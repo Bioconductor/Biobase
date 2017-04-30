@@ -1,3 +1,10 @@
+CHANGES IN VERSION 2.37
+-----------------------
+
+BUG FIXES
+
+    o '$' completion on eSet and ExpressionSet works in RStudio.
+
 CHANGES IN VERSION 2.33
 -----------------------
 
