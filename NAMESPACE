@@ -49,8 +49,7 @@ exportMethods("[", "[[", "$", abstract, aggenv, aggfun,
               AnnotatedDataFrame,
               ExpressionSet)
 
-export(.DollarNames.eSet,
-       Aggregate, addVigs2WinMenu, anyMissing,
+export(Aggregate, addVigs2WinMenu, anyMissing,
        as.data.frame.ExpressionSet, assayDataNew,
        assayDataValidMembers, assayDataElementNames, assayDataElement,
        assayDataElementReplace, "assayDataElement<-", cache, copyEnv,
@@ -62,5 +61,7 @@ export(.DollarNames.eSet,
        selectSome, strbreak, subListExtract, testBioCConnection,
        lcSuffix, lcPrefix, lcPrefixC, updateOldESet, userQuery,
        validMsg, write.AnnotatedDataFrame)
+S3method(.DollarNames, "eSet")
+S3method(.DollarNames, "ExpressionSet")
 S3method(head, "AnnotatedDataFrame")
 S3method(tail, "AnnotatedDataFrame")
