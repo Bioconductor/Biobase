@@ -9,7 +9,7 @@ importFrom(BiocGenerics,
 )
 
 importFrom(utils, head, tail, menu, packageDescription, read.table,
-           write.table)
+           write.table, .DollarNames)
 
 exportClasses(aggregator, container, eSet,
               MIAxE, MIAME, characterORMIAME,
