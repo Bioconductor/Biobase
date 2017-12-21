@@ -135,7 +135,7 @@ SEXP unsafe_set_slot(SEXP obj, SEXP slot, SEXP value)
 
        This is unsafe because it changes obj in place.
     */
-    if (NAMED(value))
+    if (MAYBE_REFERENCED(value))
         value = duplicate(value);
     SET_SLOT(obj, slot, value);
     return obj;
