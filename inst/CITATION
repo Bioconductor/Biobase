@@ -1,5 +1,5 @@
 citEntry(entry="Article",
-  author = "Huber, W.  and Carey, V. J.  and Gentleman, R.  and Anders, S.  and Carlson, M.  and Carvalho, B. S.  and Bravo, H. C.  and Davis, S.  and Gatto, L.  and Girke, T.  and Gottardo, R.  and Hahne, F.  and Hansen, K. D.  and Irizarry, R. A.  and Lawrence, M.  and Love, M. I.  and MacDonald, J.  and Obenchain, V.  and {Ole\'s}, A. K.  and {Pag\`es}, H.  and Reyes, A.  and Shannon, P.  and Smyth, G. K.  and Tenenbaum, D.  and Waldron, L.  and Morgan, M. ",
+  author = "W. Huber, V. J. Carey, R. Gentleman, S. Anders,  M. Carlson, B. S. Carvalho,  H. C.  Bravo, S. Davis, L. Gatto, T.  Girke, R. Gottardo,  F. Hahne, K. D.  Hansen, R. A. Irizarry, M. Lawrence,  M. I. Love, J. MacDonald, V. Obenchain, A. K. {Ole\'s}, H. {Pag\`es}, A. Reyes, P. Shannon, G. K. Smyth, D. Tenenbaum, L. Waldron, M. Morgan",
   title = "{O}rchestrating high-throughput genomic analysis with {B}ioconductor",
   journal = "Nature Methods",
   year = "2015",
