@@ -27,6 +27,7 @@
 \alias{dimnames,eSet-method}
 \alias{dimnames<-,eSet-method}
 \alias{dim,eSet-method}
+\alias{dims}
 \alias{dims,eSet-method}
 \alias{experimentData,eSet-method}
 \alias{experimentData<-,eSet,MIAME-method}

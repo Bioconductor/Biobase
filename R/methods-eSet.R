@@ -349,7 +349,7 @@ setReplaceMethod("dimnames", "eSet", function(x, value) {
 
 setMethod("dim", "eSet", function(x) assayDataDim(assayData(x)))
 
-setMethod("dims", "eSet", function(object) assayDataDims(assayData(object)))
+setMethod("dims", "eSet", function(x) assayDataDims(assayData(x)))
 
 setMethod("[", "eSet", function(x, i, j, ..., drop = FALSE) {
   if (missing(drop))

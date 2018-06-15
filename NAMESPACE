@@ -3,6 +3,7 @@ useDynLib(Biobase, copyEnv_sym=copyEnv, sublist_extract)
 import(methods)
 
 importFrom(BiocGenerics,
+    dims,
     combine,
     updateObject, updateObjectFromSlots, getObjectSlots,
     annotation, "annotation<-"
