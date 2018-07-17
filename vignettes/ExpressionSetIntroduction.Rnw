@@ -95,8 +95,9 @@ this document. In the future, you might find that you need to install
 one or more additional packages. The best way to do this is to start
 an \R{} session and evaluate commands like
 <<install-pkg, eval=false>>=
-source("http://bioconductor.org/biocLite.R")
-biocLite(c("Biobase"))
+if (!require("BiocManager"))
+    install.packages("BiocManager")
+BiocManager::install("Biobase")
 @ 
 %% 
 
