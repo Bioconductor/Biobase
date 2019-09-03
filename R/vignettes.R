@@ -20,7 +20,7 @@ getPkgVigs = function(package=NULL) {
   
   ## construct data frame with: package, path, title
   pkgVigs = vector(mode="list", length=length(vigrds))
-  for(j in seq(along=vigrds)) {
+  for(j in seq(along.with=vigrds)) {
     if (file.exists(vigrds[j])) {
       v = readRDS(vigrds[j])
       f = v[, "PDF"]
@@ -98,7 +98,7 @@ addVigs2WinMenu = function(pkgName) {
       pkgMenu = paste("Vignettes", pkgName, sep="/")
       winMenuAdd(pkgMenu)
 
-      for (i in seq(along=vigs))
+      for (i in seq(along.with=vigs))
         winMenuAddItem(pkgMenu, names(vigs)[i],
                        paste0("shell.exec(\"", vigs[i], "\")"))
 

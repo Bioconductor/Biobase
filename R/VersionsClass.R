@@ -18,7 +18,7 @@ setMethod("initialize", signature(.Object="Versions"),
 
 .asValidVersions <- function(versions) {
     res <- list()
-    for (i in seq(along=versions))
+    for (i in seq(along.with=versions))
       res[i] <-
         if (!is.character(versions[[i]]) &&
             .isValidVersion(versions[[i]]))
