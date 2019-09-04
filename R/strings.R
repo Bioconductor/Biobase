@@ -13,7 +13,7 @@ strbreak <- function(x, width=getOption("width"), exdent=2, collapse="\n") {
    ww <- width-exdent
    lb <- paste0(collapse, paste(rep(" ", exdent), collapse=""))
    rv <- character(length(x))
-   for(i in seq(along=x)) {
+   for(i in seq(along.with=x)) {
       first <- 1
       last  <- width
       if(nchar(x[i])>width) {

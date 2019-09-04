@@ -92,7 +92,7 @@ copySubstitute = function(src, dest, symbolValues,
    ## cin and cout are single files or connections
    cpSubsCon = function(cin, cout) {
       txt = readLines(cin)
-      for (i in seq(along=symbolValues)) {
+      for (i in seq(along.with=symbolValues)) {
           txt = gsub(nm[i], symbolValues[[i]], txt, fixed=TRUE)
           if (any(is.na(txt)))
               stop("trying to replace ", nm[i], " by an NA")
@@ -116,7 +116,7 @@ copySubstitute = function(src, dest, symbolValues,
    ## Substitution on filenames
    subsFileName = function(x) {
       res = gsub(removeExtension, "", x)
-      for (i in seq(along=symbolValues)) {
+      for (i in seq(along.with=symbolValues)) {
          res = gsub(nm[i], symbolValues[[i]], res)
          if (any(is.na(res)))
              stop("trying to replace ", nm[i], " by an NA")
@@ -155,7 +155,7 @@ copySubstitute = function(src, dest, symbolValues,
             }
             ## process src
             isdir = file.info(src)$isdir
-            for (k in seq(along=src)) {
+            for (k in seq(along.with=src)) {
                ## name of source file or directory (without path)
                tmp  = unlist(strsplit(src[k], .Platform$file.sep))
                tmp  = subsFileName(tmp[length(tmp)])
