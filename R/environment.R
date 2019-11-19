@@ -102,6 +102,8 @@ copyEnv <- function(oldEnv, newEnv, all.names=FALSE) {
     nms <- ls(oldEnv, all.names = all.names)
     for (nm in nms)
         newEnv[[nm]] <- oldEnv[[nm]]
+
+    newEnv
 }
 
 

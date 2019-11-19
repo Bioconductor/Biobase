@@ -1,4 +1,4 @@
-useDynLib(Biobase, copyEnv_sym=copyEnv, sublist_extract)
+useDynLib(Biobase, sublist_extract)
 
 import(methods)
 
