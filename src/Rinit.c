@@ -5,7 +5,6 @@
 SEXP anyMissing(SEXP);
 SEXP copyEnv(SEXP e1, SEXP e2, SEXP all);
 SEXP listToEnv(SEXP, SEXP);
-SEXP listLen(SEXP);
 SEXP rowQ(SEXP, SEXP);
 SEXP rowMedians(SEXP, SEXP, SEXP, SEXP);
 SEXP rowQuantiles(SEXP, SEXP);
@@ -22,7 +21,6 @@ __declspec(dllexport)
         {"anyMissing", (DL_FUNC)&anyMissing, 1},
         {"copyEnv", (DL_FUNC)&copyEnv, 3},
         {"listToEnv", (DL_FUNC)&listToEnv, 2},
-        {"listLen", (DL_FUNC)&listLen, 1},
         {"rowQ", (DL_FUNC)&rowQ, 2},
         {"rowMedians", (DL_FUNC)&rowMedians, 4},
         {"unsafe_set_slot", (DL_FUNC)&unsafe_set_slot, 3},

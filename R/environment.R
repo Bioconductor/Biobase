@@ -85,7 +85,7 @@ multiassign <- function (x, value, envir = parent.frame(), inherits = FALSE) {
 #### Functions for lists and environments
 
 listLen <- function(x)
-   .Call("listLen", x, PACKAGE="Biobase")
+    lengths(x)
 
 
 .new_env_size <- function(n) {
