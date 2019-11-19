@@ -5,41 +5,6 @@
 #include <R_ext/Utils.h>
 #include <ctype.h>
 
-SEXP listToEnv(SEXP x, SEXP env)
-{
-  SEXP name, nm, nx, sym;
-  int i;
-
-  if( !Rf_isNewList(x) )
-      error("first argument must be a list, found %s",
-            type2char(TYPEOF(x)));
-
-  if( !isEnvironment(env) )
-      error("second argument must be an environment, found %s",
-            type2char(TYPEOF(env)));
-
-  PROTECT(nm = getAttrib(x, R_NamesSymbol));
-  if( length(nm) != length(x) )
-    error("all elements must have names");
-
-  for( i=0; i<length(nm); i++) {
-    name = STRING_ELT(nm, i);
-    if (name == NA_STRING)
-        error("list element %d has NA as name", i + 1);
-    if (length(name) == 0)
-        error("list element %d has \"\" as name", i + 1);
-    sym = Rf_install(CHAR(name));
-    PROTECT(nx = Rf_duplicate(VECTOR_ELT(x, i)));
-    Rf_defineVar(sym, nx, env);
-    UNPROTECT(1);
-  }
-
-  UNPROTECT(1);
-  if (length(nm) != length(env))
-      warning("encountered duplicate names in input list");
-  return(env);
-}
-
 /* fast computation of row order statistics */
 
 SEXP rowQ(SEXP inmat, SEXP which)
