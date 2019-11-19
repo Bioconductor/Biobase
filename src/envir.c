@@ -4,36 +4,6 @@
 #include <Rdefines.h>
 #include <R_ext/Utils.h>
 #include <ctype.h>
-/* 
-   speed up the conversion, this could become as.environment at some
-   time
-   we might want to check the names though
-
-*/
-
-SEXP copyEnv(SEXP e1, SEXP e2, SEXP all)
-{
-    SEXP nms, sym, val;
-    int i, all_nms;
-
-    if (!(isEnvironment(e1) && isEnvironment(e2) && isLogical(all)))
-        error("invalid arguments");
-    all_nms = INTEGER(all)[0];
-    if (all_nms == NA_LOGICAL)
-        error("arg 'all' must be TRUE or FALSE, not NA");
-
-    PROTECT(nms = R_lsInternal(e1, all_nms));
-    for (i = 0; i < length(nms); i++) {
-        /* no inheritance in lookup */
-        PROTECT(sym = install(CHAR(STRING_ELT(nms, i))));
-        val = findVarInFrame3(e1, sym, TRUE);
-        INCREMENT_NAMED(val);
-        defineVar(sym, val, e2);
-        UNPROTECT(1);
-    }
-    UNPROTECT(1);
-    return(e2);
-}
 
 SEXP listToEnv(SEXP x, SEXP env)
 {
