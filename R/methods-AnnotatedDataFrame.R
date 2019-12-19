@@ -5,13 +5,16 @@ setMethod("initialize", signature(.Object="AnnotatedDataFrame"),
     tryCatch({
         if (missing(varMetadata)) {
             if (!missing(data)) checkClass(data, "data.frame", class(.Object))
-            varMetadata <- data.frame(labelDescription = rep(NA, ncol(data)))
+            varMetadata <- data.frame(
+                labelDescription = rep.int(NA_character_, ncol(data)),
+                stringsAsFactors = FALSE
+            )
             row.names(varMetadata) <- as.character(colnames(data))
         } else {
             checkClass(varMetadata, "data.frame", class(.Object))
             if (!"labelDescription" %in% colnames(varMetadata))
                 varMetadata[["labelDescription"]] <-
-                    rep(NA, nrow(varMetadata))
+                    rep.int(NA_character_, nrow(varMetadata))
             row.names(varMetadata) <- names(data)
         }
         varMetadata[["labelDescription"]] <-
@@ -307,7 +310,7 @@ setAs("phenoData", "AnnotatedDataFrame", function(from) {
   else if (length(varLabels)>0)
     warning("contents of varLabels ignored\n", call.=FALSE)
   else
-    varMetadata[["labelDescription"]] <- as.character(rep(NA, nrow(varLabels)))
+    varMetadata[["labelDescription"]] <- rep.int(NA_character_, nrow(varLabels))
   AnnotatedDataFrame(
       data=data,
       varMetadata=varMetadata,
@@ -528,10 +531,13 @@ setMethod("AnnotatedDataFrame",
     function(data, varMetadata,
              dimLabels=c("rowNames", "columnNames"), ...)
 {
-    varMetadata <- data.frame(labelDescription = rep(NA, ncol(data)))
+    varMetadata <- data.frame(
+        labelDescription = rep.int(NA_character_, ncol(data)),
+        stringsAsFactors = FALSE
+    )
     row.names(varMetadata) <- names(data)
     .AnnotatedDataFrame(data=data, varMetadata=varMetadata,
-                        dimLabels=dimLabels,...)
+                        dimLabels=dimLabels, ...)
 })
 
 setMethod("AnnotatedDataFrame",
@@ -540,7 +546,8 @@ setMethod("AnnotatedDataFrame",
              dimLabels=c("rowNames", "columnNames"), ...)
 {
     if (!"labelDescription" %in% colnames(varMetadata))
-        varMetadata[["labelDescription"]] <- rep(NA, nrow(varMetadata))
+        varMetadata[["labelDescription"]] <-
+            rep.int(NA_character_, nrow(varMetadata))
     row.names(varMetadata) <- names(data)
     varMetadata[["labelDescription"]] <-
         as.character(varMetadata[["labelDescription"]])
