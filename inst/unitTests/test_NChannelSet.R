@@ -128,8 +128,10 @@ testDifferentSampleNames <- function() {
                               G = matrix(1,10,5,
                                 dimnames=list(NULL, letters[1:5])))
     obj <- new("NChannelSet", assayData = assayData)
-    checkTrue(sampleNames(obj)[["R"]] == LETTERS[1:5] &&
-              sampleNames(obj)[["G"]] == letters[1:5])
+    checkTrue(
+        all(sampleNames(obj)[["R"]] == LETTERS[1:5]) &&
+        all(sampleNames(obj)[["G"]] == letters[1:5])
+    )
 }
 
 testSampleNamesUpdate <- function() {
