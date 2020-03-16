@@ -127,8 +127,8 @@ testVarMetadataAssign <- function() {
 }
 
 testMetadataFactors <- function() {
-    pd  = data.frame(covar="Z")
-    vmd = data.frame(labelDescription=I("Meta 'covar'"))
+    pd  = data.frame(covar="Z", stringsAsFactors = TRUE)
+    vmd = data.frame(labelDescription=I("Meta 'covar'"), stringsAsFactors = TRUE)
     rownames(vmd) = colnames(pd)
     rownames(pd) = "Z"
     a = new("AnnotatedDataFrame", data=pd,  varMetadata=vmd)
