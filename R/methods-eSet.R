@@ -378,24 +378,36 @@ setMethod("[", "eSet", function(x, i, j, ..., drop = FALSE) {
            lockedEnvironment = {
              aData <- new.env(parent=emptyenv())
              if (missing(i))                     # j must be present
-               for(nm in ls(orig)) aData[[nm]] <- orig[[nm]][, j, ..., drop = drop]
+               for(nm in ls(orig)) {
+                   aData[[nm]] <- orig[[nm]][, j, ..., drop = drop]
+                   colnames(aData[[nm]]) <- sampleNames(x)
+                   }
              else {                              # j may or may not be present
                if (missing(j))
                  for(nm in ls(orig)) aData[[nm]] <- orig[[nm]][i,, ..., drop = drop]
                else
-                 for(nm in ls(orig)) aData[[nm]] <- orig[[nm]][i, j, ..., drop = drop]
+                 for(nm in ls(orig)) {
+                     aData[[nm]] <- orig[[nm]][i, j, ..., drop = drop]
+                     colnames(aData[[nm]]) <- sampleNames(x)
+                     }
              }
              if ("lockedEnvironment" == storage.mode) assayDataEnvLock(aData)
              aData
            },
            list = {
              if (missing(i))                     # j must be present
-               lapply(orig, function(obj) obj[, j, ..., drop = drop])
+               lapply(orig, function(obj) {
+                   obj <- obj[, j, ..., drop = drop]
+                   colnames(obj) <- sampleNames(x)
+               })
              else {                              # j may or may not be present
                if (missing(j))
                  lapply(orig, function(obj) obj[i,, ..., drop = drop])
                else
-                 lapply(orig, function(obj) obj[i, j, ..., drop = drop])
+                 lapply(orig, function(obj) {
+                     obj[i, j, ..., drop = drop]
+                     colnames(obj) <- sampleNames(x)
+                 })
              }
            })
   x
