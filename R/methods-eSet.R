@@ -143,7 +143,7 @@ updateESetTo <- function(object, template, ..., verbose=FALSE) {
     eval(parse(text=paste(funcs,"(template)<-",
                  "updateObject(", funcs, "(object), ..., verbose=verbose)")))
     result <- try(featureData(template) <- featureData(object), silent=TRUE)
-    if (class(result)=="try-error")
+    if (inherits(result, "try-error"))
       featureData(template) <- annotatedDataFrameFrom(assayData(object), byrow=TRUE)
     vers <- classVersion("eSet")
     classVersion(template)[names(vers)] <- vers # current class version, eSet & 'below' only
@@ -690,7 +690,8 @@ setReplaceMethod("protocolData",
                    object="eSet",
                    value="AnnotatedDataFrame"),
                  function(object, value) {
-                     if (class(try(object@protocolData, silent = TRUE)) == "try-error")
+                     test <- try(object@protocolData, silent = TRUE)
+                     if (inherits(test, "try-error"))
                        object <- updateObject(object)
                      object@protocolData <- value
                      object
