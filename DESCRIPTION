@@ -5,7 +5,7 @@ Description: Functions that are needed by many other packages or which
 biocViews: Infrastructure
 URL: https://bioconductor.org/packages/Biobase
 BugReports: https://github.com/Bioconductor/Biobase/issues
-Version: 2.56.0
+Version: 2.57.0
 License: Artistic-2.0
 Author: R. Gentleman, V. Carey, M. Morgan, S. Falcon
 Maintainer: Bioconductor Package Maintainer
