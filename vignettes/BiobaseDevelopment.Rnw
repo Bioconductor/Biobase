@@ -31,12 +31,11 @@
 \newcommand{\Biobase}{\Rpackage{Biobase}}
 
 \newcommand{\term}[1]{\emph{#1}}
-\newcommand{\mref}[2]{\htmladdnormallinkfoot{#2}{#1}}
 
 \begin{document}
 
 \title{\Biobase{} development and the new \eSet}
-\author{\mref{mailto:mtmorgan@fhcrc.org}{Martin T. Morgan}}
+\author{Martin T. Morgan}
 \date{7 August, 2006}
 \maketitle
 
