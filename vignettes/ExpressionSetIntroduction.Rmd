@@ -73,7 +73,7 @@ As mentioned in the introduction, the data from many high-throughput enomic expe
 One important part of the experiment is a matrix of 'expression' values.  The values are usually derived from microarrays of one sort or another, perhaps after initial processing by manufacturer software or Bioconductor packages. The matrix has $F$ rows and $S$ columns, where $F$ is the number of features on the chip and $S$ is the number
 of samples.
 
-A likely scenario is that your assay data is in a 'tab-delimited' text file (as exported from a spreadsheet, for instance) with rows corresponding to features and columns to samples.  The strategy is to read this file into **R** using the `read.table` command, converting the result to a `matrix`. A typical command to read a tab-delimited file that includes column `headers' is
+A likely scenario is that your assay data is in a 'tab-delimited' text file (as exported from a spreadsheet, for instance) with rows corresponding to features and columns to samples.  The strategy is to read this file into **R** using the `read.table` command, converting the result to a `matrix`. A typical command to read a tab-delimited file that includes column 'headers' is
 
 ```{r read-table-geneData}
 dataDirectory <- system.file("extdata", package="Biobase")
