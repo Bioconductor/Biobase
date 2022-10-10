@@ -1,1 +1,3 @@
 debian
+^.*\.Rproj$
+^\.Rproj\.user$

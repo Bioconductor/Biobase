@@ -12,7 +12,8 @@ Maintainer: Bioconductor Package Maintainer
         <maintainer@bioconductor.org>
 Depends: R (>= 2.10), BiocGenerics (>= 0.27.1), utils
 Imports: methods
-Suggests: tools, tkWidgets, ALL, RUnit, golubEsets
+Suggests: tools, tkWidgets, ALL, RUnit, golubEsets,BiocStyle, knitr
+VignetteBuilder: knitr
 LazyLoad: yes
 Collate: tools.R strings.R environment.R vignettes.R packages.R
         AllGenerics.R VersionsClass.R VersionedClasses.R
