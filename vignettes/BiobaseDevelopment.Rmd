@@ -1,10 +1,10 @@
 ---
 title: "*Biobase* development and the new `eSet`"
-author: R. Gentleman, V. Carey, M. Morgan, S. Falcon
+author: Martin T. Morgan*
 date:  "`r format(Sys.time(), '%d %B, %Y')`"
 package: Biobase
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{*Biobase* development and the new `eSet`}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 output:
@@ -149,15 +149,13 @@ Purpose.
 
 Structure: *MIAxE* virtual class
 
--   In Biobase version 2.11 the *MIAxE* virtual class was introduced as a general container for experiment meta-data. The *MIAME* class is now a subclass of *MIAxE*. See `?"MIAxE-class"`. The *MIAME* class structure is as follows
-
-<!-- -->
+In Biobase version 2.11 the *MIAxE* virtual class was introduced as a general container for experiment meta-data. The *MIAME* class is now a subclass of *MIAxE*. See `?"MIAxE-class"`. The *MIAME* class structure is as follows
 
 -   `title`: experiment title.
 
 -   `name`: experimenter name(s).
 
--   `preprocessing`: `list` of pre-processing steps.
+-   `preprocessing: list` of pre-processing steps.
 
 -   Additional slots.
 
@@ -232,7 +230,7 @@ Important methods.
 -   Initialization (additional details below):
 
     ```{r eval=FALSE}
-obj <- new("ExpressionSet", phenoData = new("AnnotatedDataFrame"), experimentData = new("MIAME"), annotation = character(),        exprs = new("matrix"))
+    obj <- new("ExpressionSet", phenoData = new("AnnotatedDataFrame"), experimentData = new("MIAME"), annotation = character(),        exprs = new("matrix"))
     ```
 
 -   `exprs(obj), exprs(obj) <- value`: get or set `exprs`; methods defined for *ExpressionSet*, *AssayData*.
@@ -294,7 +292,7 @@ The data structure of an `ExpressionSet` is identical to that of `eSet`, and in 
 
 ## Implementing a new class: a *SwirlSet* example
 
-We want the *Swirl* data set (see the `SW` two color data set that motivates this class) to contain four elements in the `assayData` slot: `R`, `G`, `Rb`, `Gb`. To derive a class from `eSet` for this data, we create a class, and provide initialization and validation methods.
+We want the *Swirl* data set (see the `SW` two color data set that motivates this class) to contain four elements in the `assayData` slot: `R, G, Rb, Gb`. To derive a class from `eSet` for this data, we create a class, and provide initialization and validation methods.
 
 We create a class as follows:
 
@@ -499,6 +497,25 @@ This document summarizes *Biobase*, outlining strategies that developers using *
 
 The version number of [R]{.sans-serif} and packages loaded for generating the vignette were:
 
-```{r}
-sessionInfo()
-```
+-   R version 4.2.0 RC (2022-04-21 r82224), `x86_64-pc-linux-gnu`
+
+-    Locale:
+
+    `LC_CTYPE=en_US.UTF-8, LC_NUMERIC=C, LC_TIME=en_GB, LC_COLLATE=C,
+    LC_MONETARY=en_US.UTF-8, LC_MESSAGES=en_US.UTF-8, LC_PAPER=en_US.UTF-8,
+    LC_NAME=C, LC_ADDRESS=C, LC_TELEPHONE=C, LC_MEASUREMENT=en_US.UTF-8,
+    LC_IDENTIFICATION=C`
+
+-    Running under: `Ubuntu 20.04.4 LTS`
+
+-    Matrix products: default
+
+-   BLAS: `/home/biocbuild/bbs-3.16-bioc/R/lib/libRblas.so`
+
+-    LAPACK: `/home/biocbuild/bbs-3.16-bioc/R/lib/libRlapack.so`
+
+-   Base packages: base, datasets, grDevices, graphics, methods, stats, utils
+
+-   Other packages: Biobase 2.57.0, BiocGenerics 0.43.
+
+-    Loaded via a namespace (and not attached): compiler 4.2.0, tools 4.2.0
