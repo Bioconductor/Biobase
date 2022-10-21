@@ -19,9 +19,9 @@ Abstractly, we are often interested in evaluating functions $f(y;x)$ where $y$ i
 
 As an example, let's consider `sample.ExpressionSet`, which is an *ExpressionSet* supplied with Biobase. We will print a little report, then the first $N$-vector of gene expressions and some covariate data:
 
-```{r}
+```{r message=FALSE, echo=FALSE}
 library(Biobase)
-print(sample.ExpressionSet)
+data(sample.ExpressionSet)
 
 ```
 
