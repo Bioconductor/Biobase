@@ -5,9 +5,14 @@ Description: Functions that are needed by many other packages or which
 biocViews: Infrastructure
 URL: https://bioconductor.org/packages/Biobase
 BugReports: https://github.com/Bioconductor/Biobase/issues
-Version: 2.57.1
+Version: 2.57.2
 License: Artistic-2.0
-Author: R. Gentleman, V. Carey, M. Morgan, S. Falcon
+Authors@R: c(
+    person("R.", "Gentleman", role="aut"),
+    person("V.", "Carey", role = "aut"),
+    person("M.", "Morgan", role="aut"),
+    person("S.", "Falcon", role="aut"),
+    person("Haleema", "Khan", role = "ctb"))
 Maintainer: Bioconductor Package Maintainer
         <maintainer@bioconductor.org>
 Depends: R (>= 2.10), BiocGenerics (>= 0.27.1), utils
