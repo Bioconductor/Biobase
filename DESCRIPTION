@@ -7,12 +7,18 @@ URL: https://bioconductor.org/packages/Biobase
 BugReports: https://github.com/Bioconductor/Biobase/issues
 Version: 2.57.1
 License: Artistic-2.0
-Author: R. Gentleman, V. Carey, M. Morgan, S. Falcon
+Authors@R: c(
+    person("R.", "Gentleman", role="aut"),
+    person("V.", "Carey", role = "aut"),
+    person("M.", "Morgan", role="aut"),
+    person("S.", "Falcon", role="aut"),
+    person("Haleema", "Khan", role = "ctb"))
 Maintainer: Bioconductor Package Maintainer
         <maintainer@bioconductor.org>
 Depends: R (>= 2.10), BiocGenerics (>= 0.27.1), utils
 Imports: methods
-Suggests: tools, tkWidgets, ALL, RUnit, golubEsets
+Suggests: tools, tkWidgets, ALL, RUnit, golubEsets, BiocStyle, knitr
+VignetteBuilder: knitr
 LazyLoad: yes
 Collate: tools.R strings.R environment.R vignettes.R packages.R
         AllGenerics.R VersionsClass.R VersionedClasses.R
