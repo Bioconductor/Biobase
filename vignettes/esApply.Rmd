@@ -26,6 +26,7 @@ data(sample.ExpressionSet)
 ```
 
 ```{r}
+print(sample.ExpressionSet)
 print(exprs(sample.ExpressionSet)[1,])
 print(pData(sample.ExpressionSet)[1:2,1:3])
 ```
