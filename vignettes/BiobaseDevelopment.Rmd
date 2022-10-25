@@ -503,22 +503,6 @@ This document summarizes *Biobase*, outlining strategies that developers using *
 
 The version number of [R]{.sans-serif} and packages loaded for generating the vignette were:
 
--   R version 4.2.0 RC (2022-04-21 r82224), `x86_64-pc-linux-gnu`
-
--   Locale:
-
-    `LC_CTYPE=en_US.UTF-8, LC_NUMERIC=C, LC_TIME=en_GB, LC_COLLATE=C,LC_MONETARY=en_US.UTF-8, LC_MESSAGES=en_US.UTF-8, LC_PAPER=en_US.UTF-8, LC_NAME=C, LC_ADDRESS=C, LC_TELEPHONE=C, LC_MEASUREMENT=en_US.UTF-8,LC_IDENTIFICATION=C`
-
--   Running under: `Ubuntu 20.04.4 LTS`
-
--   Matrix products: default
-
--   BLAS: `/home/biocbuild/bbs-3.16-bioc/R/lib/libRblas.so`
-
--   LAPACK: `/home/biocbuild/bbs-3.16-bioc/R/lib/libRlapack.so`
-
--   Base packages: base, datasets, grDevices, graphics, methods, stats, utils
-
--   Other packages: Biobase 2.57.0, BiocGenerics 0.43.
-
--   Loaded via a namespace (and not attached): compiler 4.2.0, tools 4.2.0
+```{r}
+sessionInfo()
+```
