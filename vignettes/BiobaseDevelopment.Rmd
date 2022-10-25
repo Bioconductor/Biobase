@@ -1,6 +1,9 @@
 ---
 title: "*Biobase* development and the new `eSet`"
-author: Martin T. Morgan*
+author:
+- name "Martin T. Morgan*"
+- name: "H. Khan"
+  affiliation: "Vignette translation from Sweave to Rmarkdown / HTML"
 date:  "`r format(Sys.time(), '%d %B, %Y')`"
 package: Biobase
 vignette: >
@@ -446,7 +449,6 @@ setMethod("updateObject", signature(object="MySet"),
           object  
        }
    })
-          
 ```
 
 The code after `if(!isVersioned)` illustrates one way of performing 'radical surgery, creating a new up-to-date instance by updating all slots. The `else` clause represents more modest changes, using methods to update stale information. `updateObject` then returns a new, enhanced object:
