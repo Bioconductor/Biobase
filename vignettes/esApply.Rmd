@@ -1,6 +1,5 @@
 ---
 title: "esApply Introduction"
-author: 
 author:
 - name "R. Gentleman"
 - name "V. Carey"
@@ -35,8 +34,8 @@ data(sample.ExpressionSet)
 sample.ExpressionSet
 exprs(sample.ExpressionSet)[1,]
 pData(sample.ExpressionSet)[1:2,1:3]
-```
 
+```
 Now let's see how expressions and a covariate are related:
 
 ```{r}
