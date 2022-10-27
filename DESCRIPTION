@@ -13,14 +13,13 @@ Authors@R: c(
     person("M.", "Morgan", role="aut"),
     person("S.", "Falcon", role="aut"),
     person("Haleema", "Khan",
-        role = "ctb"
+        role = "ctb",
         comment = "'esApply' vignette translation from Sweave to Rmarkdown / HTML"
-    ))
-    person(
-        "Bioconductor Package Maintainer",
+    ),
+    person("Bioconductor Package Maintainer",
         role = "cre",
         email = "maintainer@bioconductor.org"
-    )
+    ))
 Depends: R (>= 2.10), BiocGenerics (>= 0.27.1), utils
 Imports: methods
 Suggests: tools, tkWidgets, ALL, RUnit, golubEsets, BiocStyle, knitr
