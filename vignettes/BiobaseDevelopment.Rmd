@@ -390,7 +390,7 @@ Assigning `fancyAssaydData` might invalidate the object, but `justAsFancyPhenoDa
 
 One problem encountered in the Bioconductor project is that data objects stored to disk become invalid as the underlying class definition changes. For instance, earlier releases of *Biobase* contain a sample *eSet* object. But under the changes discussed here, `eSet` is virtual and the stored object is no longer valid. The challenge is to easily identify invalid objects, and to provide a mechanism for updating old objects to their new representation.
 
-*Biobase* introduces the *Versioned* and *VersionedBiobase* classes to facilitate this. These classes are incorporated into key *Biobase*class definitions.*Biobase* also defines `updateObject` methods (the `updateObject` generic function is defined in the *BiocGenerics* package) for conveniently updating old objects to their new representation.
+*Biobase* introduces the *Versioned* and *VersionedBiobase* classes to facilitate this. These classes are incorporated into key *Biobase*class definitions.*Biobase* also defines `updateObject` methods (the `updateObject` generic function is defined in the `r Biocpkg("BiocGenerics")` package) for conveniently updating old objects to their new representation.
 
 ```{r}
 data(sample.ExpressionSet) 
