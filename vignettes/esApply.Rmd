@@ -1,10 +1,10 @@
 ---
 title: "esApply Introduction"
 author:
-- name "R. Gentleman"
-- name "V. Carey"
-- name "M. Morgan"
-- name "S. Falcon"
+- name: "R. Gentleman"
+- name: "V. Carey"
+- name: "M. Morgan"
+- name: "S. Falcon"
 - name: "H. Khan"
   affiliation: "Vignette translation from Sweave to Rmarkdown / HTML"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
