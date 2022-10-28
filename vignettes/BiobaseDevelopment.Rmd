@@ -1,7 +1,7 @@
 ---
 title: "*Biobase* development and the new `eSet`"
 author:
-- name "Martin T. Morgan*"
+- name: "Martin T. Morgan"
 - name: "H. Khan"
   affiliation: "Vignette translation from Sweave to Rmarkdown / HTML"
 date:  "`r format(Sys.time(), '%d %B, %Y')`"
@@ -57,9 +57,7 @@ Key features in the redesign.
 # A quick tour
 
 ```{r echo=FALSE, message=FALSE}
-options(width=69)
 library(Biobase)
-
 ```
 
 ## The `eSet` object: high-throughput experiments
@@ -239,7 +237,10 @@ Important methods.
 -   Initialization (additional details below):
 
     ```{r eval=FALSE}
-    obj <- new("ExpressionSet", phenoData = new("AnnotatedDataFrame"), experimentData = new("MIAME"), annotation = character(),        exprs = new("matrix"))
+    obj <- new("ExpressionSet",
+               phenoData = new("AnnotatedDataFrame"),
+               experimentData = new("MIAME"), annotation = character(),
+               exprs = new("matrix"))
     ```
 
 -   `exprs(obj), exprs(obj) <- value`: get or set `exprs`; methods defined for *ExpressionSet*, *AssayData*.
@@ -264,7 +265,9 @@ The `assayData` slot is meant to store high-throughput data. The idea is that th
 
 For technical reasons, creating instance of *AssayData* is slightly different from the way this is usually done in [R]{.sans-serif}. Normally, one creates an instance of a class with an expression like `new("ExpressionSet", ...)`, with the ... representing additional arguments. *AssayData* objects are created with
 
-`> assayDataNew("environment", elt)`
+```{r eval=FALSE}
+assayDataNew("environment", elt)
+```
 
 where `elt` might be a matrix of expression values. For the curious, the reason for this setup stems from our desire to have a class that `is` a list or environment, rather than a class that has a slot that contains a list or environment. The `is` relationship is desirable to avoid unnecessary function calls to access slots, and requires that a class `contain` the base type (e.g., *environment*). Until recently an [R]{.sans-serif} object could not `contain` an *environment*.
 
@@ -318,10 +321,11 @@ setMethod("initialize", "SwirlSet",
                    G = new("matrix"),
                    Rb = new("matrix"),
                    Gb = new("matrix"),
-                   ...) 
+                   ...) {
             callNextMethod(.Object,
                            R=R, G=G, Rb=Rb, Gb=Gb,
-                           ...) ) 
+                           ...) 
+            }) 
 ```
 
 A slightly different `initialize` method allows the user to specify either the `assayData` or the `assayData` content. In advanced use, this has the advantage that `initialize` can be used as a 'copy constructor' to update several slots simultaneously.
@@ -338,15 +342,15 @@ setMethod("initialize", "SwirlSet",
                    ...) {
             if (!missing(assayData) &&
                 any(!missing(R), !missing(G), !missing(Rb), !missing(Gb))) {
-              warning("using 'assayData'; ignoring 'R', 'G', 'Rb', 'Gb'")
-              } 
+                warning("using 'assayData'; ignoring 'R', 'G', 'Rb', 'Gb'")
+             } 
             callNextMethod(.Object, assayData=assayData, ...) 
-})
+            })
 ```
 
 The structure of the `initialize` method is a bit different from those often seen in [R]{.sans-serif}. Often, `initialize` has only `.Object` as a named argument, or, if there are other named arguments, they correspond to slot names. Here our initialize method accepts four arguments, named after the `assayData` elements. Inside the `initialize` method, the named arguments are passed to the next initialization method in the hierarchy (i.e., `initialize` defined for `eSet`). The `eSet` `initialize` method then uses these arguments to populate the data slots in `.Object`. In particular, `eSet` places all arguments other `phenoData`, `experimentData`, and `annotation` into the `assayData` slot. The `eSet` `initialize` method then returns the result to the `initialize` method of *SwirlSet*, which returns a *SwirlSet* object to the user:
 
-```{r}
+```{r eval=FALSE}
 new("SwirlSet")
 ```
 

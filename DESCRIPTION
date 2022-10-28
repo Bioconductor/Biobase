@@ -12,12 +12,17 @@ Authors@R: c(
     person("V.", "Carey", role = "aut"),
     person("M.", "Morgan", role="aut"),
     person("S.", "Falcon", role="aut"),
-    person("Haleema", "Khan", role = "ctb"))
-Maintainer: Bioconductor Package Maintainer
-        <maintainer@bioconductor.org>
+    person("Haleema", "Khan",
+        role = "ctb"
+        comment = "'BiobaseDevelopment' vignette translation from Sweave to Rmarkdown / HTML"
+    ),
+   person(
+        "Bioconductor Package Maintainer",
+        role = "cre",
+        email = "maintainer@bioconductor.org"
+    ))
 Depends: R (>= 2.10), BiocGenerics (>= 0.27.1), utils
 Imports: methods
-Suggests: tools, tkWidgets, ALL, RUnit, golubEsets, BiocStyle, Knitr 
 VignetteBuilder: knitr
 LazyLoad: yes
 Collate: tools.R strings.R environment.R vignettes.R packages.R
