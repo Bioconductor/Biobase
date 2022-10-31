@@ -7,14 +7,18 @@ author:
 date:  "`r format(Sys.time(), '%d %B, %Y')`"
 package: Biobase
 vignette: >
-  %\VignetteIndexEntry{*Biobase* development and the new `eSet`}
+  %\VignetteIndexEntry{Notes for eSet developers}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 output:
   BiocStyle::html_document
 ---
 
-Revised 4 September, 2006 -- `featureData` slot. Revised 20 April 2007 -- minor wording changes; `verbose` and other arguments passed through `updateObject` example; introduce a second variant of `initialize` illustrating its use as a copy constructor. Revised 4 November, 2010 -- `experimentData` slot as *MIAxE* class. *MIAME* class is now subclass of *MIAxE*.
+Revised 4 September, 2006 -- `featureData` slot. Revised 20 April 2007 -- minor wording
+changes; `verbose` and other arguments passed through `updateObject` example; introduce
+a second variant of `initialize` illustrating its use as a copy constructor. Revised 4
+November, 2010 -- `experimentData` slot as *MIAxE* class. *MIAME* class is now subclass
+of *MIAxE*.
 
 # Introduction
 
@@ -29,29 +33,21 @@ The document starts with a brief description of the motivation for change, and a
 What is an `eSet`?
 
 -   Coordinate high through-put (e.g., gene expression) and phenotype data.
-
 -   Provide common data container for diverse Bioconductor packages.
 
 Motivation for change (August, 2006).
 
 -   What was broken? Complex data structure. Inconsistent object validity. No straight-forward way to extend `eSet` to new data types.
-
 -   What forward-looking design goals did we have? Flexible storage model. Class hierarchy to promote code reuse and facilitate extension to new data objects. Methods for updating serialized instances.
 
 Key features in the redesign.
 
 -   Simplified data content.
-
--   Structured class hierarchy .
-
+-   Structured class hierarchy.
 -   Alternative storage modes.
-
 -   More validity checking.
-
 -   Conversion of example data in *Biobase*, and many other data sets elsewhere in Bioconductor, to *ExpressionSet*.
-
 -   *Versioned* class information (in the development branch).
-
 -   `updateObject` methods (in the development branch).
 
 # A quick tour
@@ -73,15 +69,10 @@ getClass("eSet")
 ```
 
 -   `assayData`: high-throughput data.
-
 -   `phenoData`: sample covariates.
-
 -   `featureData`: feature covariates.
-
 -   `experimentData`: experimental description.
-
 -   `annotation`: assay description.
-
 -   See below, and `?"eSet-class"`
 
 ### `assayData`: high-throughput data
@@ -93,15 +84,10 @@ Purpose.
 Structure: *list*, *environment*, or *lockEnvironment* class union.
 
 -   Each element of *list* / *environment* / *lockEnvironment* is a matrix
-
 -   Rows: *features*, e.g., gene names.
-
 -   Columns: *samples* represented on each chip.
-
 -   All matrices must have the same dimensions, row names, and column names.
-
 -   Subclasses determine which matrices *must* be present.
-
 -   See `?"AssayData-class"`
 
 ### `phenoData`: sample covariates
@@ -113,17 +99,11 @@ Purpose.
 Structure: *AnnotatedDataFrame*.
 
 -   `data`: *data.frame*.
-
     -   Rows: sample identifiers.
-
     -   Columns: measured covariates.
-
 -   `varMetadata`: *data.frame*.
-
     -   Rows: measured covariate labels.
-
     -   Columns: covariate descriptors.
-
 -   See `?"AnnotatedDataFrame-class"`
 
 ### `featureData`: feature covariates
@@ -135,17 +115,11 @@ Purpose.
 Structure: *AnnotatedDataFrame*.
 
 -   `data`: *data.frame*.
-
     -   Rows: feature identifiers. These match row names of `assayData`.
-
     -   Columns: measured covariates.
-
 -   `varMetadata`: *data.frame*.
-
     -   Rows: measured covariate labels.
-
     -   Columns: covariate descriptors.
-
 -   See `?"AnnotatedDataFrame-class"`
 
 ### `experimentData`: experiment description
@@ -159,13 +133,9 @@ Structure: *MIAxE* virtual class
 In Biobase version 2.11 the *MIAxE* virtual class was introduced as a general container for experiment meta-data. The *MIAME* class is now a subclass of *MIAxE*. See `?"MIAxE-class"`. The *MIAME* class structure is as follows
 
 -   `title`: experiment title.
-
 -   `name`: experimenter name(s).
-
 -   `preprocessing: list` of pre-processing steps.
-
 -   Additional slots.
-
 -   See `?"MIAME-class"`.
 
 ### `annotation`: assay description
@@ -187,27 +157,20 @@ Initialization.
 Accessors (get, set).
 
 -   `assayData(obj); assayData(obj) <- value`: access or assign `assayData`
-
 -   `phenoData(obj); phenoData(obj) <- value`: access or assign `phenoData`
-
 -   `experimentData(obj); experimentData(obj) <- value`: access or assign `experimentData`
-
 -   `annotation(obj); annotation(obj) <- value`: access or assign `annotation`
 
 Subsetting.
 
 -   `obj[i, j]`: select genes $i$ and samples $j$.
-
 -   `obj$name; obj$name <- value`: retrieve or assign covariate `name` in `phenoData`
 
 ### Additional `eSet` methods
 
 -   `show`.
-
 -   `storageMode`: influence how `assayData` is stored.
-
 -   `updateObject`: update `eSet` objects to their current version.
-
 -   `validObject`: ensure that `eSet` is valid.
 
 The `validObject` method is particularly important to `eSet`, ensuring that `eSet` contains consistent structure to data.
@@ -235,7 +198,6 @@ Required `assayData` members.
 Important methods.
 
 -   Initialization (additional details below):
-
     ```{r eval=FALSE}
     obj <- new("ExpressionSet",
                phenoData = new("AnnotatedDataFrame"),
@@ -250,13 +212,11 @@ Important methods.
 *MultiSet*.
 
 -   Purpose: flexibly contain a collection of expression data matricies.
-
 -   Required `assayData` members: none.
 
 *SnpSet*.
 
 -   Purpose: contain genomic SNP calls.
-
 -   Required `assayData` members: `call`, `callProbability`.
 
 # Comments on `assayData`: high-throughput data storage
@@ -275,17 +235,16 @@ The `assayData` slot of `ExpressionSet` objects must contain a matrix named `exp
 
 The *AssayData* class allows for data elements to be stored in three different ways (see `?storageMode` and `?"storageMode<-"` for details): as a `list`, `environment`, or `lockedEnvironment`. Developers are probably familiar with `list` objects; a drawback is that `exprs` elements may be large, and some operations on lists in [R]{.sans-serif} may trigger creation of many copies of the the `exprs` element. This can be expensive in both space and time. Environments are nearly unique in [R]{.sans-serif}, in that they are passed by reference rather than value. This eliminates some copying, but has the unfortunate consequence that side-effects occur -- modifications to an environment inside a function influence the value of elements outside the function. For these reasons, environments can be useful as 'read only' arguments to functions, but can have unexpected consequences when functions modify their arguments. Locked environments implemented in *Biobase* try to strike a happy medium, allowing pass by reference for most operations but triggering (whole-environment) copying when elements in the environment are modified. The locking mechanism is enforced by only allowing known 'safe' operations to occur, usually by channeling user actions through the accessor methods:
 
-```{r}
+```{r warning=FALSE}
 data(sample.ExpressionSet)
 storageMode(sample.ExpressionSet) 
-```
-
-```{r warning=FALSE}
 tryCatch(assayData(sample.ExpressionSet)$exprs <- log(exprs(sample.ExpressionSet)), 
     error=function(err) cat(conditionMessage(err))) 
 ```
 
-`> exprs(sample.ExpressionSet) <- log(exprs(sample.ExpressionSet))`
+```{r eval=FALSE}
+exprs(sample.ExpressionSet) <- log(exprs(sample.ExpressionSet))`
+```
 
 The `setReplaceMethod` for `exprs` (and `assayData`) succeeds by performing a deep copy of the entire environment. Because this is very inefficient, the recommended paradigm to update an element in a `lockedEnvironment` is to extract it, make many changes, and then reassign it. Developers can study `assayData` methods to learn more about how to lock and unlock environment bindings. *Biobase* allows the experienced user to employ (and run the risks of) environments, but the expectation is that most user objects are constructed with the default `lockedEnvironment` or `list`.
 
@@ -334,18 +293,18 @@ A slightly different `initialize` method allows the user to specify either the `
 setMethod("initialize", "SwirlSet",
           function(.Object,
                    assayData=assayDataNew(
-                     R=R, G=G, Rb=Rb, Gb=Gb),
+                   R=R, G=G, Rb=Rb, Gb=Gb),
                    R = new("matrix"),
                    G = new("matrix"),
                    Rb = new("matrix"),
                    Gb = new("matrix"),
                    ...) {
-            if (!missing(assayData) &&
-                any(!missing(R), !missing(G), !missing(Rb), !missing(Gb))) {
-                warning("using 'assayData'; ignoring 'R', 'G', 'Rb', 'Gb'")
-             } 
-            callNextMethod(.Object, assayData=assayData, ...) 
-            })
+              if (!missing(assayData) &&
+                  any(!missing(R), !missing(G), !missing(Rb), !missing(Gb))) {
+                  warning("using 'assayData'; ignoring 'R', 'G', 'Rb', 'Gb'")
+              }
+              callNextMethod(.Object, assayData=assayData, ...)
+          })
 ```
 
 The structure of the `initialize` method is a bit different from those often seen in [R]{.sans-serif}. Often, `initialize` has only `.Object` as a named argument, or, if there are other named arguments, they correspond to slot names. Here our initialize method accepts four arguments, named after the `assayData` elements. Inside the `initialize` method, the named arguments are passed to the next initialization method in the hierarchy (i.e., `initialize` defined for `eSet`). The `eSet` `initialize` method then uses these arguments to populate the data slots in `.Object`. In particular, `eSet` places all arguments other `phenoData`, `experimentData`, and `annotation` into the `assayData` slot. The `eSet` `initialize` method then returns the result to the `initialize` method of *SwirlSet*, which returns a *SwirlSet* object to the user:
@@ -356,11 +315,11 @@ new("SwirlSet")
 
 General programming guidelines emerge from experience with the `initialize` method of `eSet` and derived classes. First, an appropriate strategy is to name only those data elements that will be manipulated directly by the `initialize` method. For instance, the definition above did *not* name `phenoData` and other `eSet` slots by name. To do so is not incorrect, but would require that they be explicitly named (e.g., `phenoData=phenoData`) in the `callNextMethod` code. Second, the arguments `R, G, Rb, Rg` are present in the `initialize` method to provide defaults consistent with object construction; the 'full' form of `callNextMethod`, replicating the named arguments, is required in the version of [R]{.sans-serif} in which this class was developed. Third, named arguments can be manipulated before `callNextMethod` is invoked. Fourth, the return value of `callNextMethod` can be captured...
 
-```{r}
+```{r eval=FALSE}
 setMethod("initialize", "MySet",
           function(.Object, ...) {
-            .Object <- callNextMethod(.Object, ...) 
-            }) 
+              .Object <- callNextMethod(.Object, ...)
+          })
 ```
 
 and manipulated before being returned to the user. Finally, it is the responsibility of the developer to ensure that a valid object is created; `callNextMethod` is a useful way to exploit correctly designed `initialize` methods for classes that the object extends, but the developer is free to use other techniques to create valid versions of their class.
@@ -369,7 +328,7 @@ A validity method might complete our new class. A validity method is essential t
 
 ```{r}
 setValidity("SwirlSet", function(object) {
-  assayDataValidMembers(assayData(object), c("R", "G", "Rb", "Gb"))
+    assayDataValidMembers(assayData(object), c("R", "G", "Rb", "Gb"))
 })
 ```
 
@@ -377,10 +336,10 @@ Notice that we do not have to explicitly request that the validity of other part
 
 ```{r eval=FALSE}
 myFancyFunction <- function(obj) {
-  assayData(obj) <- fancyAssaydData # obj invalid...
-  phenoData(obj) <- justAsFancyPhenoData # but now valid 
-  validObject(obj) 
-  (obj)
+    assayData(obj) <- fancyAssaydData # obj invalid...
+    phenoData(obj) <- justAsFancyPhenoData # but now valid
+    validObject(obj)
+    (obj)
 }
 ```
 
@@ -409,10 +368,10 @@ Versioned classes, `updateObject` and related methods simplify the long-term mai
 ```{r}
 setClass("MySet",
          contains = "eSet",
-         prototype = prototype( new("VersionedBiobase",
-                                    versions=c(classVersion("eSet"), MySet="1.0.0")))) 
-obj <- new("MySet") 
-classVersion(obj) 
+         prototype = prototype(new("VersionedBiobase",
+                               versions=c(classVersion("eSet"), MySet="1.0.0"))))
+obj <- new("MySet")
+classVersion(obj)
 ```
 
 This is a new class, and might undergo changes in its structure at some point in the future. When these changes are introduced, the developer will change the version number of the class in its prototype (the last line, below):
@@ -421,8 +380,8 @@ This is a new class, and might undergo changes in its structure at some point in
  setClass("MySet",
           contains = "eSet",
           prototype = prototype( 
-            new("VersionedBiobase",
-                  versions=c(classVersion("eSet"), MySet="1.0.1")))) 
+              new("VersionedBiobase",
+                  versions=c(classVersion("eSet"), MySet="1.0.1"))))
 isCurrent(obj)
 ```
 
@@ -431,34 +390,34 @@ and add code to update to the new version
 ```{r}
 setMethod("updateObject", signature(object="MySet"),
           function(object, ..., verbose=FALSE) {
-          if (verbose) message("updateObject(object = 'MySet')")
-          object <- callNextMethod()
-          if (isCurrent(object) ["MySet"]) return(object) 
-          ## Create an updated instance.
-          if (!isVersioned(object)) 
-            ## Radical surgery – create a new, up-to-date instance 
-            new("MySet",
-                assayData = updateObject(assayData(object),
-                 ..., verbose=verbose),
-                phenoData = updateObject(phenoData(object),
-                  ..., verbose=verbose),
-                experimentData = updateObject(experimentData(object),
-                  ..., verbose=verbose),
-                annotation = updateObject(annotation(object),
-                 ..., verbose=verbose)) 
-          else {
-            ## Make minor changes, and update version by consulting class definition   
-            classVersion(object)["MySet"] <-
-            classVersion("MySet")["MySet"] 
-          object  
-       }
-   })
+              if (verbose) message("updateObject(object = 'MySet')")
+                  object <- callNextMethod()
+              if (isCurrent(object) ["MySet"]) return(object)
+              ## Create an updated instance.
+              if (!isVersioned(object))
+                  ## Radical surgery – create a new, up-to-date instance
+                  new("MySet",
+                      assayData = updateObject(assayData(object),
+                          ..., verbose=verbose),
+                      phenoData = updateObject(phenoData(object),
+                          ..., verbose=verbose),
+                      experimentData = updateObject(experimentData(object),
+                          ..., verbose=verbose),
+                      annotation = updateObject(annotation(object),
+                          ..., verbose=verbose))
+              else {
+                  ## Make minor changes, and update version by consulting class definition
+                  classVersion(object)["MySet"]<-
+                  classVersion("MySet")["MySet"]
+                  object
+              }
+          })
 ```
 
 The code after `if(!isVersioned)` illustrates one way of performing 'radical surgery, creating a new up-to-date instance by updating all slots. The `else` clause represents more modest changes, using methods to update stale information. `updateObject` then returns a new, enhanced object:
 
 ```{r}
-classVersion(updateObject(obj)) 
+classVersion(updateObject(obj))
 ```
 
 As in the example, versioning helps in choosing which modifications to perform -- minor changes for a slightly out-of-date object, radical surgery for something more ancient. Version information might also be used in methods, where changing class representation might facilitate more efficient routines.
@@ -480,8 +439,8 @@ The key to versioning your own classes is to define your class to `contain` *Ver
 ```{r}
 setClass("SwirlSet", contains = "eSet",
          prototype = prototype(
-           new("VersionedBiobase",
-               versions=c(classVersion("eSet"), SwirlSet="1.0.0"))))
+             new("VersionedBiobase",
+                 versions=c(classVersion("eSet"), SwirlSet="1.0.0"))))
 classVersion(new("SwirlSet"))
 ```
 
@@ -490,7 +449,7 @@ See additional examples in the *Versioned* help page.
 It is also possible to add arbitrary information to particular instances.
 
 ```{r}
-obj <- new("SwirlSet") 
+obj <- new("SwirlSet")
 classVersion(obj)["MyID"] <- "0.0.1"
 classVersion(obj)
 ```
