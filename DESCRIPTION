@@ -14,15 +14,15 @@ Authors@R: c(
     person("S.", "Falcon", role="aut"),
     person("Haleema", "Khan",
         role = "ctb",
-        comment = "'esApply' vignette translation from Sweave to Rmarkdown / HTML"
+        comment = "'esApply' and 'BiobaseDevelopment' vignette translation from Sweave to Rmarkdown / HTML"
     ),
     person("Bioconductor Package Maintainer",
         role = "cre",
         email = "maintainer@bioconductor.org"
     ))
+Suggests: tools, tkWidgets, ALL, RUnit, golubEsets, BiocStyle, knitr
 Depends: R (>= 2.10), BiocGenerics (>= 0.27.1), utils
 Imports: methods
-Suggests: tools, tkWidgets, ALL, RUnit, golubEsets, BiocStyle, knitr
 VignetteBuilder: knitr
 LazyLoad: yes
 Collate: tools.R strings.R environment.R vignettes.R packages.R
