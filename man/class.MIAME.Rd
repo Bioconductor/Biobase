@@ -38,7 +38,7 @@
 \description{
    Class \code{MIAME} covers MIAME entries that are not covered by other classes
 in Bioconductor. Namely, experimental design, samples, hybridizations,
-normalization controls, and pre-processing information. The \code{MIAME} class 
+normalization controls, and pre-processing information. The \code{MIAME} class
 is derived from \code{\link{MIAxE}}.}
 
 \section{Slots}{
@@ -64,7 +64,7 @@ is derived from \code{\link{MIAxE}}.}
       \item{\code{MIAME()}:}{
       \code{MIAME(name = "", lab = "", contact = "",
                   title = "", abstract = "", url = "",
-                  pubMedIds = "" , samples = "",
+                  pubMedIds = "" , samples = list(),
                   hybridizations = list(), normControls = list(),
                   preprocessing = list(), other = list())}:
       Creates a new \code{MIAME} object with slots as defined above.}
@@ -105,5 +105,12 @@ is derived from \code{\link{MIAxE}}.}
    Rafael A. Irizarry
 }
 
+\examples{
+MIAME(
+    name = "", lab = "", contact = "", title = "", abstract = "", url = "",
+    pubMedIds = "" , samples = list(), hybridizations = list(),
+    normControls = list(), preprocessing = list(), other = list()
+)
+}
 \keyword{classes}
 

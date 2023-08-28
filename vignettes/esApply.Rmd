@@ -55,7 +55,7 @@ medContr <- function( y, x ) {
 We can apply this to a small *ExpressionSet* that gives back the data listed above:
 
 ```{r}
-apply(exprs(sample.ExpressionSet[1,,drop=F]), 1, medContr, pData(sample.ExpressionSet)[["sex"]])
+apply(exprs(sample.ExpressionSet[1,,drop=FALSE]), 1, medContr, pData(sample.ExpressionSet)[["sex"]])
 ```
 
 That's a bit clumsy. This is where `esApply` comes in. We pay for some simplicity by following a strict protocol for the definition of the statistical function to be applied.

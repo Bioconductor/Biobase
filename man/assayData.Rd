@@ -4,7 +4,7 @@
 
 \title{Retrieve assay data from eSets and ExpressionSets.}
 \description{
-This generic function accesses assay data stored in an object derived from 
+This generic function accesses assay data stored in an object derived from
 the \code{\link{eSet}} or \code{\link{ExpressionSet}} class.
 }
 \usage{
@@ -13,7 +13,7 @@ assayData(object) <- value
 }
 \arguments{
   \item{object}{Object derived from class eSet}
-  \item{value}{Named list or environment containing one or more matrices with 
+  \item{value}{Named list or environment containing one or more matrices with
         identical dimensions}
 }
 \value{
@@ -23,7 +23,12 @@ assayData(object) <- value
 }
 \author{Biocore}
 
-\seealso{\code{\link{eSet-class}}, \code{\link{ExpressionSet-class}}, 
+\seealso{\code{\link{eSet-class}}, \code{\link{ExpressionSet-class}},
  \code{\link{SnpSet-class}}}
+
+\examples{
+example("ExpressionSet")
+assayData(expressionSet)
+}
 
 \keyword{manip}

@@ -1,7 +1,8 @@
 Package: Biobase
 Title: Biobase: Base functions for Bioconductor
-Description: Functions that are needed by many other packages or which
-        replace R functions.
+Description: Core Bioconductor functions that are needed by many other packages
+  or which replace R functions. Note that this package has been superceeded by
+  SummarizedExperiment. It will eventually be deprecated.
 biocViews: Infrastructure
 URL: https://bioconductor.org/packages/Biobase
 BugReports: https://github.com/Bioconductor/Biobase/issues
@@ -21,7 +22,7 @@ Authors@R: c(
         email = "maintainer@bioconductor.org"
     ))
 Suggests: tools, tkWidgets, ALL, RUnit, golubEsets, BiocStyle, knitr
-Depends: R (>= 2.10), BiocGenerics (>= 0.27.1), utils
+Depends: R (>= 4.3.0), BiocGenerics (>= 0.27.1), utils
 Imports: methods
 VignetteBuilder: knitr
 LazyLoad: yes

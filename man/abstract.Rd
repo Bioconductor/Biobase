@@ -9,7 +9,7 @@
 
 \description{
   These generic functions access generic data, abstracts, PubMed IDs
- and experiment data from instances of the 
+ and experiment data from instances of the
   \code{\link{eSet-class}} or \code{\link{ExpressionSet-class}}.
 }
 
@@ -21,7 +21,7 @@ experimentData(object)
 experimentData(object) <- value
 }
 \arguments{
-  \item{object}{Object, possibly derived from \code{eSet-class} or 
+  \item{object}{Object, possibly derived from \code{eSet-class} or
     \code{MIAME-class}}
   \item{value}{Value to be assigned; see class of \code{object} (e.g.,
     \code{\link{eSet-class}}) for specifics.}
@@ -38,7 +38,12 @@ experimentData(object) <- value
 }
 \author{Biocore}
 
-\seealso{\code{\link{ExpressionSet-class}}, \code{\link{eSet-class}}, 
+\seealso{\code{\link{ExpressionSet-class}}, \code{\link{eSet-class}},
    \code{\link{MIAME-class}}}
+
+\examples{
+example("ExpressionSet")
+abstract(expressionSet)
+}
 
 \keyword{manip}

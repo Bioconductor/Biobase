@@ -29,4 +29,12 @@
 
 \author{Biocore team}
 
-\keyword{methods} 
+\examples{
+mat <- matrix(
+    data = 1:20,
+    nrow = 5
+)
+annotatedDataFrameFrom(object = mat, byrow = TRUE)
+}
+
+\keyword{methods}

@@ -5,7 +5,7 @@
 \title{Retrieve and set overall experimental information eSet-like classes.}
 \description{
   These generic functions access experimental information
-  associated with \code{\link{eSet-class}}. 
+  associated with \code{\link{eSet-class}}.
 }
 \usage{
 description(object, \dots)
@@ -15,7 +15,7 @@ description(object) <- value
   \item{object}{Object, possibly derived from class \code{\link{eSet-class}}.}
   \item{value}{Structured information describing the experiment, e.g.,
     of \code{\link{MIAME-class}}.}
-  \item{\dots}{Further arguments to be used by other methods. } 
+  \item{\dots}{Further arguments to be used by other methods. }
 }
 \value{
   \code{description} returns an object of \code{\link{MIAME-class}}.
@@ -24,4 +24,8 @@ description(object) <- value
 
 \seealso{\code{\link{eSet-class}}, \code{\link{MIAME-class}}}
 
+\examples{
+example("ExpressionSet")
+description(expressionSet)
+}
 \keyword{manip}

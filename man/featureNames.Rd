@@ -24,10 +24,15 @@ sampleNames(object) <- value
 \value{
   \code{featureNames} returns a (usually long!) character vector
   uniquely identifying each feature.\code{sampleNames} returns a
-  (usually shorter) character vector identifying samples. 
+  (usually shorter) character vector identifying samples.
 }
 \author{Biocore}
 
 \seealso{\code{\link{ExpressionSet-class}}, \code{\link{SnpSet-class}}}
 
+\examples{
+example("ExpressionSet")
+featureNames(expressionSet)
+sampleNames(expressionSet)
+}
 \keyword{manip}

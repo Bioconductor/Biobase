@@ -28,4 +28,9 @@ se.exprs(object) <- value
 
 \seealso{\code{\link{eSet-class}}, \code{\link{ExpressionSet-class}}, \code{\link{SnpSet-class}}}
 
+\examples{
+examples("ExpressionSet")
+exprs(expressionSet)
+}
+
 \keyword{manip}

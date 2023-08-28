@@ -57,8 +57,8 @@ setMethod("initialize", "ExpressionSet",
 setAs("exprSet", "ExpressionSet", function(from) {
   from <- asS4(from)
   desc <- from@description
-  desc <- 
-    if (class(desc)!="MIAME") {
+  desc <-
+    if (!is(desc, "MIAME")) {
         txt <- "missing or mis-formed MIAME 'description' in original object;
                 creating new, empty description"
         warning(paste0(strwrap(txt, indent=2), collapse="\n  "))
@@ -85,8 +85,8 @@ setAs("exprSet", "ExpressionSet", function(from) {
 setValidity("ExpressionSet", function(object) {
     msg <- validMsg(NULL, isValidVersion(object, "ExpressionSet"))
     msg <- validMsg(msg, assayDataValidMembers(assayData(object), c("exprs")))
-    if(class(experimentData(object)) != "MIAME")
-        msg <- validMsg(msg, 
+    if(!is(experimentData(object), "MIAME"))
+        msg <- validMsg(msg,
                "experimentData slot in ExpressionSet must be 'MIAME' object")
     if (is.null(msg)) TRUE else msg
 })
@@ -165,7 +165,7 @@ readExpressionSet <- function(exprsFile,
                               notesFile,
                               path,
                               annotation,
-                              ## arguments to read.* methods 
+                              ## arguments to read.* methods
                               exprsArgs=list(sep=sep, header=header, row.names=row.names, quote=quote, ...),
                               phenoDataArgs=list(sep=sep, header=header, row.names=row.names, quote=quote, stringsAsFactors=stringsAsFactors, ...),
                               experimentDataArgs=list(sep=sep, header=header, row.names=row.names, quote=quote, stringsAsFactors=stringsAsFactors, ...),

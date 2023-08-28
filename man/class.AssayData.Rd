@@ -72,7 +72,7 @@
       are present, matrices are of the same dimension, and \code{featureNames} (rownames) are
       consistent (identical or \code{NULL}) across entries.}
     \item{assayDataElement(object, element)}{See
-      \code{\link{eSet-class}}} 
+      \code{\link{eSet-class}}}
     \item{assayDataElementReplace(object, element, value,
       validate=TRUE)}{
       See \code{\link{eSet-class}}}
@@ -83,5 +83,14 @@
 \seealso{
   \code{\link{eSet-class}}
   \code{\link{ExpressionSet-class}}
+}
+\examples{
+example("ExpressionSet")
+
+assayDataElementNames(expressionSet)
+
+assayData(expressionSet)[["exprs"]]
+
+assayDataElement(expressionSet, "exprs")
 }
 \keyword{classes}

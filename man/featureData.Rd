@@ -13,7 +13,7 @@
 \description{
   These generic functions access feature data (experiment specific
   information about features) and feature meta-data (e.g., descriptions
-  of feature covariates).  
+  of feature covariates).
 }
 \usage{
 featureData(object)
@@ -44,5 +44,11 @@ fvarMetadata(object) <- value
 \seealso{
   \code{\linkS4class{eSet}},
   \code{\linkS4class{ExpressionSet}}
+}
+
+\examples{
+example("ExpressionSet")
+featureData(expressionSet)
+fData(expressionSet)
 }
 \keyword{manip}
