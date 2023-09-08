@@ -37,6 +37,9 @@
       \item{\code{initfun(aggregator)}:}{Used to access the initializer function}
   }
 }
+\value{
+  An instance of class \code{aggregator}.
+}
 \seealso{
    \code{\link{Aggregate}}
 }

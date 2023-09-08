@@ -43,7 +43,7 @@
   \code{new("SnpSet", ...)}. Usually the arguments to \code{new}
   include \code{call} (a matrix of genotypic calls, with features (SNPs)
   corresponding to rows and samples to columns), \code{phenoData},
-  \code{experimentData}, \code{annotation}, and \code{protocolData}. 
+  \code{experimentData}, \code{annotation}, and \code{protocolData}.
   \code{phenoData}, \code{experimentData}, \code{annotation} and
   \code{protocolData} can be missing, in which case they are assigned
   default values.
@@ -60,7 +60,7 @@
 	call. The content of \code{call} and \code{callProbability} are
 	not enforced by the class. Additional matrices of
 	identical size may also be included in
-	\code{assayData}. Class:\code{\link{AssayData-class}}} 
+	\code{assayData}. Class:\code{\link{AssayData-class}}}
       \item{\code{phenoData}:}{See \code{\link{eSet}}}
       \item{\code{experimentData}:}{See \code{\link{eSet}}}
       \item{\code{annotation}:}{See \code{\link{eSet}}}
@@ -82,7 +82,7 @@
 	   \code{snpCallProbability<-(SnpSet,matrix)<-}}{ Access and set
 	   elements named \code{callProbability} in the \code{AssayData}
 	   slot.}  }
-  
+
    Derived from \code{\link{eSet}}:
    \describe{
      \item{\code{updateObject(object, ..., verbose=FALSE)}}{Update instance to current version, if necessary. See \code{\link{updateObject}} and \code{\link{eSet}}}
@@ -117,6 +117,9 @@
 }
 
 \author{Martin Morgan, V.J. Carey, after initial design by R. Gentleman }
+\value{
+  A \code{SnpSet} class instance.
+}
 
 \seealso{
   \code{\link{eSet}}, \code{\link{ExpressionSet}}

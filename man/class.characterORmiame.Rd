@@ -10,5 +10,8 @@
 \section{Methods}{
 No methods defined with class "characterORMIAME" in the signature.
 }
+\value{
+  Internal class union definition of \code{character} and \code{MIAME} classes.
+}
 \seealso{See also \code{\link{MIAME}}}
 \keyword{classes}

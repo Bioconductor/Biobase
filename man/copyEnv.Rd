@@ -27,7 +27,9 @@ copyEnv(oldEnv, newEnv, all.names=FALSE)
 }
 
 \author{Jeff Gentry and R. Gentleman}
-
+\value{
+  An environment copied from the old environment.
+}
 \seealso{\code{\link{environment}}, \code{\link{as.list}}}
 
 \examples{

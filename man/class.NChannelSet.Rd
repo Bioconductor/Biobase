@@ -86,7 +86,7 @@
     \item{\code{annotation}:}{
       Object of class \code{"character"}. Usually a length-1 character
       string identifying the chip technology used during the
-      experiment. The annotation string is used to retrieve information 
+      experiment. The annotation string is used to retrieve information
       about features, e.g., using the \code{annotation} package.}
 
     \item{\code{protocolData}:}{
@@ -148,7 +148,7 @@
       the correspondingly named elements of \code{assayData} in
       \code{object}.
     }
-      
+
   }
 
   Methods with functionality derived from \code{\link{eSet}}:
@@ -169,9 +169,11 @@
 }
 
 \author{Martin Morgan <mtmorgan@fhcrc.org>}
-
+\value{
+  An \code{NChannelSet} class instance.
+}
 \seealso{
-  \code{\linkS4class{eSet}}, \code{\linkS4class{ExpressionSet}}. 
+  \code{\linkS4class{eSet}}, \code{\linkS4class{ExpressionSet}}.
 }
 \examples{
 ## An empty NChannelSet

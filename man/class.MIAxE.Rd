@@ -10,12 +10,12 @@
 \description{
   The \code{MIAxE} virtual class is a general container for storing
   experiment metadata. Information such as experimental design, samples,
-  normalization methods and pre-processing information can be stored in 
-  these objets. 
+  normalization methods and pre-processing information can be stored in
+  these objets.
 
-  The \code{MIAxE} class is virtual and \code{MIAxE} 
+  The \code{MIAxE} class is virtual and \code{MIAxE}
   objects cannot be instantiated directly. The following classes
-  derive directly from the \code{MIAxE} class: MIAME. 
+  derive directly from the \code{MIAxE} class: MIAME.
 }
 
 \section{Slots}{
@@ -34,6 +34,9 @@
    }
 }
 
+\value{
+  A \code{MIAxE} class instance.
+}
 
 \author{Biocore team}
 

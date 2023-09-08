@@ -26,7 +26,9 @@
 }
 
 \author{Biocore}
-
+\value{
+  A \code{VersionsNull} class instance.
+}
 \seealso{
   \code{\link{classVersion}}
 }

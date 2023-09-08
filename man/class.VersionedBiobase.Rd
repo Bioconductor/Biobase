@@ -20,6 +20,9 @@
 }
 
 \author{Biocore}
+\value{
+  A \code{VersionedBiobase} class instance.
+}
 
 \seealso{
   \code{\link{Versioned-class}}

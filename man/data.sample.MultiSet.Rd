@@ -16,6 +16,9 @@ dChip and then exported to R for analysis.
 
 The phenoData, standard error estimates, and description data are fake.
 }
+\value{
+  An example \code{MultiSet} instance with 480 features from 4 samples.
+}
 \examples{
 data(sample.MultiSet)
 }

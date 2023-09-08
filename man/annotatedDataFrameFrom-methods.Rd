@@ -27,6 +27,10 @@
     \code{dimLabels} based on value of \code{byrow}.}
 }}
 
+\value{
+  An \code{annotatedDataFrame} instance generated from the input data.
+}
+
 \author{Biocore team}
 
 \examples{

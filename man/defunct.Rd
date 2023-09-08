@@ -59,10 +59,15 @@
 
 \alias{l2e}
 
+\alias{listLen}
+
 \alias{biocReposList}
 
 \description{
-   The function, class, or data object you have asked for has been deprecated or made defunct. 
+   The function, class, or data object you have asked for has been deprecated or made defunct.
+}
+\value{
+  Unspecified return values.
 }
 
 \keyword{internal}

@@ -24,7 +24,7 @@ mkScalar(obj)
 \description{
   These classes represent scalar quantities, such as a string or a
   number and are useful because they provide their own validity
-  checking.  The classes \code{ScalarCharacter}, \code{ScalarLogical}, 
+  checking.  The classes \code{ScalarCharacter}, \code{ScalarLogical},
   \code{ScalarInteger}, and \code{ScalarNumeric} all extend their
   respective base vector types and can be used interchangeably (except
   they should always have length one).
@@ -35,6 +35,9 @@ mkScalar(obj)
 }
 
 \author{Seth Falcon}
+\value{
+  A \code{ScalarObject} class instance.
+}
 \examples{
 v <- list(mkScalar("a single string"),
           mkScalar(1),

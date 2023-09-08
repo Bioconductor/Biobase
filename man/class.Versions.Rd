@@ -53,7 +53,9 @@
 }
 
 \author{Biocore}
-
+\value{
+  A \code{Versions} class instance.
+}
 \seealso{
   \code{\link{classVersion}}
   \code{\link{isCurrent}}

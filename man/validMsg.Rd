@@ -17,6 +17,9 @@ This function appends \code{result} to \code{msg}, but only if
 \code{result} is a character vector.
 }
 \author{Martin Morgan <mtmorgan@fhcrc.org>}
+\value{
+  A composed \code{character} vector when valid inputs are provided.
+}
 
 \examples{
 msg <- NULL

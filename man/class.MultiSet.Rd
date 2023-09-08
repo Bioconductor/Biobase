@@ -38,7 +38,7 @@
   \code{new("MultiSet", ...)}. The \code{...} arguments to \code{new}
   are matrices of expression data (with features
   corresponding to rows and samples to columns), \code{phenoData},
-  \code{experimentData}, \code{annotation}, and \code{protocolData}. 
+  \code{experimentData}, \code{annotation}, and \code{protocolData}.
   \code{phenoData}, \code{experimentData}, \code{annotation}, and
   \code{protocolData} can be missing, in which case they are assigned
   default values.
@@ -102,7 +102,9 @@
 }
 
 \author{Biocore team}
-
+\value{
+  A \code{MultiSet} class instance.
+}
 \seealso{
   \code{\link{eSet-class}}, \code{\link{ExpressionSet-class}}
 }

@@ -258,7 +258,9 @@
    }
 }
 \author{Biocore team}
-
+\value{
+  An \code{eSet} class instance.
+}
 \seealso{
   Method use in \code{\link{ExpressionSet-class}}.
   Related  classes

@@ -177,7 +177,9 @@ an \code{AnnotatedDataFrame} from \code{\link{AssayData-class}}.
   }
 }
 \author{V.J. Carey, after initial design by R. Gentleman }
-
+\value{
+  An instance of class \code{annotatedDataFrame}.
+}
 \seealso{
   \code{\link{eSet}}, \code{\link{ExpressionSet}},
   \code{\link{read.AnnotatedDataFrame}}

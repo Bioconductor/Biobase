@@ -80,6 +80,9 @@
   }
 }
 \author{Biocore}
+\value{
+  An \code{AssayData} container class of list and environment components.
+}
 \seealso{
   \code{\link{eSet-class}}
   \code{\link{ExpressionSet-class}}

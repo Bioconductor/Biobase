@@ -104,7 +104,9 @@ is derived from \code{\link{MIAxE}}.}
 \author{
    Rafael A. Irizarry
 }
-
+\value{
+  A \code{MIAME} class instance.
+}
 \examples{
 MIAME(
     name = "", lab = "", contact = "", title = "", abstract = "", url = "",

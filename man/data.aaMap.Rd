@@ -18,6 +18,9 @@ The \code{aaMap} data frame has 20 rows and 6 columns. Includes elementary infor
     \item{acidic}{logical: side chain is acidic at pH 7}
   }
 }
+\value{
+  A \code{data.frame} of amino acid names, codes, and descriptions.
+}
 \source{
 Nei M and Kumar S: Molecular evolution and phylogenetics (Oxford 2000), Table 1.2
 }

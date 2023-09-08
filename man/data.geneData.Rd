@@ -20,6 +20,9 @@ also made up.
 \format{
   A 500 by 26 data frame.
 }
+\value{
+  A \code{data.frame} of expression data; details in description.
+}
 \source{
   The J. Ritz Laboratory (S. Chiaretti).
 }

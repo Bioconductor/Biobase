@@ -31,6 +31,9 @@
    }
 }
 
+\value{
+  A \code{container} class instance.
+}
 \section{Methods}{
    Class-specific methods:
    \describe{

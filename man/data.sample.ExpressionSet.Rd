@@ -19,8 +19,11 @@ The data illustrate \code{\link{ExpressionSet-class}}, with
 an additional matrix \code{se.exprs}. \code{se.exprs} has the same
 dimensions as \code{exprs}.
 
-The phenoData and standard error estimates (se.exprs) are made up.  
-The information in the "description" slot is fake.  
+The phenoData and standard error estimates (se.exprs) are made up.
+The information in the "description" slot is fake.
+}
+\value{
+  An example \code{ExpressionSet} of 26 cases and 500 features.
 }
 \examples{
 data(sample.ExpressionSet)

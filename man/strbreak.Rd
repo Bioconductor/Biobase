@@ -18,6 +18,9 @@
   \item{collapse}{a character.  This is inserted to break lines.}
 }
 \author{Wolfgang Huber \url{http://www.ebi.ac.uk/huber}}
+\value{
+  The long input string with carriage return \code{"\n"} insertions.
+}
 \seealso{\code{\link{strwrap}}, \code{\link{substring}}}
 
 \examples{

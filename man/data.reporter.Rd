@@ -30,6 +30,9 @@
     \item \code{_st} SenseTarget
   }
 }
+\value{
+  A \code{data.frame} of probe IDs by \code{probeType}.
+}
 \source{
   Affymetrix GeneChip Expression Analysis Data Analysis Fundamentals (\url{http://www.affymetrix.com/Auth/support/downloads/manuals/data_analysis_fundamentals_manual.pdf})
 }

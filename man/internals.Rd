@@ -21,4 +21,7 @@
 \description{
    Use help.search("your keyword", package="Biobase").
 }
+\value{
+  Unspecified return values.
+}
 \keyword{internal}

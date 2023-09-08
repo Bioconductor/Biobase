@@ -191,6 +191,9 @@ ExpressionSet(assayData,
 
 \author{Biocore team}
 
+\value{
+  An \code{ExpressionSet} class instance.
+}
 \seealso{
   \code{\link{eSet-class}}, \code{\link{ExpressionSet-class}}.
 }
