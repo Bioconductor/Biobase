@@ -14,7 +14,7 @@ importFrom(utils, head, tail, menu, packageDescription, read.table,
 
 exportClasses(aggregator, container, eSet,
               MIAxE, MIAME, characterORMIAME,
-              annotatedDataset, AssayData, data.frameOrNULL,
+              AssayData, data.frameOrNULL,
               AnnotatedDataFrame,
               Versions, VersionsNull, Versioned, VersionedBiobase,
               ExpressionSet, MultiSet, SnpSet, NChannelSet,
