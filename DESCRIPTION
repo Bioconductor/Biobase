@@ -20,7 +20,7 @@ Authors@R: c(
         role = "cre",
         email = "maintainer@bioconductor.org"
     ))
-Suggests: tools, tkWidgets, ALL, RUnit, golubEsets, BiocStyle, knitr
+Suggests: tools, tkWidgets, ALL, RUnit, golubEsets, BiocStyle, knitr, limma
 Depends: R (>= 2.10), BiocGenerics (>= 0.27.1), utils
 Imports: methods
 VignetteBuilder: knitr
