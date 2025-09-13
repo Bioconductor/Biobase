@@ -2,7 +2,6 @@
 #include <Rdefines.h>
 #include <R_ext/Rdynload.h>
 
-SEXP anyMissing(SEXP);
 SEXP rowQ(SEXP, SEXP);
 SEXP rowMedians(SEXP, SEXP, SEXP, SEXP);
 SEXP rowQuantiles(SEXP, SEXP);
@@ -16,7 +15,6 @@ __declspec(dllexport)
 #endif
 
     static const R_CallMethodDef R_CallDef[] = {
-        {"anyMissing", (DL_FUNC)&anyMissing, 1},
         {"rowQ", (DL_FUNC)&rowQ, 2},
         {"rowMedians", (DL_FUNC)&rowMedians, 4},
         {"unsafe_set_slot", (DL_FUNC)&unsafe_set_slot, 3},

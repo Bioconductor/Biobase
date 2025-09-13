@@ -1,10 +1,5 @@
 anyMissing <- function(x=NULL) {
-  .Call("anyMissing", x);
+  .Deprecated(new="anyNA()", old="Biobase::anyMissing()")
+  anyNA(x)
 }
 
-
-############################################################################
-# HISTORY:
-# 2007-08-14
-# o Created. See also R-devel thread "hasNA()/anyNA()?" on 2007-08-13.
-############################################################################
