@@ -19,7 +19,6 @@
 \alias{combine,AnnotatedDataFrame,AnnotatedDataFrame-method}
 \alias{initialize,AnnotatedDataFrame-method}
 \alias{coerce,data.frame,AnnotatedDataFrame-method}
-\alias{coerce,phenoData,AnnotatedDataFrame-method}
 \alias{head.AnnotatedDataFrame}
 \alias{tail.AnnotatedDataFrame}
 \alias{dim,AnnotatedDataFrame-method}
@@ -142,9 +141,6 @@ an \code{AnnotatedDataFrame} from \code{\link{AssayData-class}}.
       by \code{new}; not to be called directly by the user.}
     \item{\code{as(<data.frame>, "AnnotatedDataFrame")}:}{Convert a
       \code{data.frame} to an AnnotatedDataFrame.}
-    \item{\code{as(<phenoData>,<AnnotatedDataFrame>)}:}{Convert
-      old-style \code{phenoData-class} objects to
-      \code{AnnotatedDataFrame}, issuing warnings as appropriate.}
     \item{\code{validObject(<AnnotatedDataFrame>)}:}{Validity-checking
       method, ensuring coordination between \code{data} and
       \code{varMetadata} elements}

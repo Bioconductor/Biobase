@@ -293,30 +293,6 @@ setReplaceMethod("[[",
                      x
                  })
 
-setAs("phenoData", "AnnotatedDataFrame", function(from) {
-  from <- asS4(from)
-  ## data
-  data <- from@pData
-  ## varMetadata
-  cnames <- colnames(data)
-  varMetadata <- from@varMetadata
-  if (all(dim(varMetadata)==0)) {
-    varMetadata <- data.frame(numeric(length(cnames)),row.names=cnames)[,FALSE]
-  }
-  ## varLabels -- as column in varMetadata,or warn
-  varLabels <- from@varLabels
-  if (length(varLabels)>0 && !("labelDescription" %in% colnames(varMetadata)))
-    varMetadata[["labelDescription"]] <- as.character(varLabels[cnames])
-  else if (length(varLabels)>0)
-    warning("contents of varLabels ignored\n", call.=FALSE)
-  else
-    varMetadata[["labelDescription"]] <- rep.int(NA_character_, nrow(varLabels))
-  AnnotatedDataFrame(
-      data=data,
-      varMetadata=varMetadata,
-      dimLabels=c("sampleNames", "sampleColumns"))
-})
-
 setAs("data.frame", "AnnotatedDataFrame",
       function(from) AnnotatedDataFrame(data=from))
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

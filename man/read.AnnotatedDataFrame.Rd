@@ -35,9 +35,7 @@ write.AnnotatedDataFrame(x, file="", varMetadata.char="#", ...,
   \item{sep, header, quote, stringsAsFactors, ...}{further arguments
     that get passed on to \code{\link{read.table}} or \code{write.table}.}
   \item{widget}{logical. Currently this is \emph{not} implemented, and
-    setting this option to \code{TRUE} will result in an error. In a
-    precursor of this function, \code{read.phenoData}, this option could
-    be used to open an interactive GUI widget for entering the data.}
+    setting this option to \code{TRUE} will result in an error.}
   \item{sampleNames}{optional argument that could be used in conjunction
     with \code{widget}; do not use.}
   \item{append, fileEncoding}{Arguments as described in
@@ -70,8 +68,9 @@ write.AnnotatedDataFrame(x, file="", varMetadata.char="#", ...,
 
 }
 
-\author{Martin Morgan <mtmorgan@fhcrc.org> and Wolfgang Huber,
-  based on \code{read.phenoData} by Rafael A. Irizarry.}
+\author{Martin Morgan <mtmorgan@fhcrc.org> and Wolfgang Huber, based on
+  \code{read.phenoData} (a precursor of \code{read.AnnotatedDataFrame})
+  by Rafael A. Irizarry.}
 
 \seealso{\code{\link{AnnotatedDataFrame}} for additional methods,
   \code{\link{read.table}} for details of reading in phenotypic data}

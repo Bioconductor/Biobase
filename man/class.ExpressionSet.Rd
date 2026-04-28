@@ -11,7 +11,6 @@
 \alias{exprs<-,ExpressionSet,matrix-method}
 
 \alias{initialize,ExpressionSet-method}
-\alias{coerce,exprSet,ExpressionSet-method}
 \alias{coerce,eSet,ExpressionSet-method}
 \alias{coerce,ExpressionSet,data.frame-method}
 \alias{esApply,ExpressionSet-method}
@@ -126,8 +125,6 @@ ExpressionSet(assayData,
 
   Class-specific methods.
   \describe{
-    \item{\code{as(exprSet,"ExpressionSet")}}{Coerce objects of
-      \code{\link{exprSet-class}} to \code{ExpressionSet}}
     \item{\code{as(object,"data.frame")}}{Coerce objects of
       \code{\link{ExpressionSet-class}} to \code{data.frame} by
       transposing the expression matrix and concatenating \code{phenoData}}
@@ -179,7 +176,6 @@ ExpressionSet(assayData,
     \item{\code{makeDataPackage(object, author, email, packageName, packageVersion, license, biocViews, filePath, description=paste(abstract(object), collapse="\n\n"), ...)}}{
       Create a data package based on an ExpressionSet object. See
       \code{\link{makeDataPackage}}.}
-     \item{\code{as(exprSet,ExpressionSet)}:}{Coerce \code{exprSet} to \code{ExpressionSet}.}
      \item{\code{as(eSet,ExpressionSet)}:}{Coerce the \code{eSet} portion of an object to \code{ExpressionSet}.}
      \item{\code{show(ExpressionSet)}}{See \code{\link{eSet}}}
      \item{\code{dim(ExpressionSet)}, \code{ncol}}{See \code{\link{eSet}}}

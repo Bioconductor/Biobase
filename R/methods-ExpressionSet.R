@@ -54,34 +54,6 @@ setMethod("initialize", "ExpressionSet",
     object
 }
 
-setAs("exprSet", "ExpressionSet", function(from) {
-  from <- asS4(from)
-  desc <- from@description
-  desc <- 
-    if (class(desc)!="MIAME") {
-        txt <- "missing or mis-formed MIAME 'description' in original object;
-                creating new, empty description"
-        warning(paste0(strwrap(txt, indent=2), collapse="\n  "))
-        MIAME()
-    } else updateObject(desc)
-  exprs <- from@exprs
-  phenoData <- as(from@phenoData, "AnnotatedDataFrame")
-  annotation <- from@annotation
-  dims <- dim(exprs)
-  if (all(dim(from@se.exprs) == dims)) {
-    se.exprs <- from@se.exprs
-    colnames(se.exprs) <- colnames(exprs)
-    .ExpressionSet(phenoData=phenoData, experimentData=desc,
-        annotation=annotation, exprs=exprs, se.exprs=se.exprs)
-  } else {
-    txt <- "missing or mis-formed 'se.exprs' in original object;
-            creating ExpressionSet without se.exprs"
-    warning(paste0(strwrap(txt, indent=2), collapse="\n  "))
-    .ExpressionSet(phenoData=phenoData, experimentData=desc,
-                   annotation=annotation, exprs=exprs)
-  }
-})
-
 setValidity("ExpressionSet", function(object) {
     msg <- validMsg(NULL, isValidVersion(object, "ExpressionSet"))
     msg <- validMsg(msg, assayDataValidMembers(assayData(object), c("exprs")))

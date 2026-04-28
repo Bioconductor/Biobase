@@ -30,21 +30,6 @@
       locked  = FALSE
    )
 )
-# ==========================================================================
-# phenoData (DEFUNCT)
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setClass("phenoData",
-   representation(
-      pData       = "data.frame",
-      varLabels   = "list",
-      varMetadata = "data.frame"
-   ),
-   contains="Versioned",
-   validity = function(object) {
-       paste("class phenoData is defunct,",
-             "convert using as(<<object>>, \"AnnotatedDataFrame\")")
-   }
-)
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setOldClass("data.frame")
 setClassUnion("data.frameOrNULL", c("data.frame", "NULL"))
@@ -98,16 +83,6 @@ setClassUnion("data.frameOrNULL", c("data.frame", "NULL"))
 # trick so that Plobs works
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setClassUnion("characterORMIAME", c("MIAME", "character"))
-# ==========================================================================
-# annotatedDataset (DEFUNCT)
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setClass("annotatedDataset",
-   representation(
-      reporterInfo = "data.frameOrNULL",
-      phenoData    = "phenoData",
-      "VIRTUAL"
-   ),
-   contains=c("VersionedBiobase"))
 # ==========================================================================
 # AnnotatedDataFrame: A data.frame, with annotations about columns named
 # in the data slot contained in the metadata slot. The data slot has
@@ -190,22 +165,6 @@ setClassUnion("AssayData", c("list", "environment"))
          prototype = prototype(
            .VersionedBiobase(
                versions=c(classVersion("eSet"), SnpSet="1.0.0"))))
-# ==========================================================================
-# exprSet (DEFUNCT)
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-setClass("exprSet",
-   representation(
-      exprs       = "matrix",
-      se.exprs    = "matrix",
-      description = "characterORMIAME",
-      annotation  = "character",
-      notes       = "character"
-   ),
-   contains = c("annotatedDataset"), # contains VersionedBiobase implicitly
-   validity = function(object)
-         paste("class exprSet is defunct,",
-               "convert using as(<<object>>, \"ExpressionSet\")")
-)
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 .ScalarObject <- setClass("ScalarObject", contains="VIRTUAL",

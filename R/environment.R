@@ -106,8 +106,3 @@ copyEnv <- function(oldEnv, newEnv, all.names=FALSE) {
     newEnv
 }
 
-
-## Deprecated in v 2.11.2
-l2e <- function(vals, envir) {
-    .Defunct("list2env", package="base")
-}

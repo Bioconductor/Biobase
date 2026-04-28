@@ -72,20 +72,8 @@ testUpdateESetMisc <- function() {
         isS4(eval(parse(text=paste(nm,"(obj)", sep=""))))
 
     load(system.file("unitTests", "VersionedClass_data", "devel",
-                     "sample.exprSet.rda", package="Biobase"))
-    suppressMessages(obj <- as(sample.exprSet, "ExpressionSet"))
-    checkTrue(validObject(obj, complete=TRUE))
-    checkTrue(all(sapply(idx, fun)))
-
-    load(system.file("unitTests", "VersionedClass_data", "devel",
                      "sample.eSet.rda", package="Biobase"))
     obj <- as(sample.eSet, "MultiSet")
-    checkTrue(validObject(obj, complete=TRUE))
-    checkTrue(all(sapply(idx, fun)))
-
-    load(system.file("unitTests", "VersionedClass_data", "devel", "eset.rda",
-                     package="Biobase"))
-    obj <- as(eset, "ExpressionSet")
     checkTrue(validObject(obj, complete=TRUE))
     checkTrue(all(sapply(idx, fun)))
 

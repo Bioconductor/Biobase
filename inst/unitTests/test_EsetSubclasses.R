@@ -375,23 +375,6 @@ testSetAs <- function() {
         assayDataValidMembers(assayData(object), c("R", "G", "Rb", "Gb"))
     }, where=.GlobalEnv)
 
-  checkNewAndOld <- function(new, old) {
-    if (class(old)=="exprSet") {
-        pDataOld <- slot(slot(old, "phenoData"), "pData")
-        exprsOld <- slot(old, "exprs")
-        sampleNamesOld <- as.character(pDataOld$Samples)
-        geneNamesOld <- rownames(exprsOld)
-    } else {
-        pDataOld <- pData(old)
-        exprsOld <- exprs(old)
-        sampleNamesOld <- sampleNames(old)
-        geneNamesOld <- geneNames(old)
-    }
-    checkTrue(identical(pData(new), pDataOld))
-    checkTrue(all.equal(exprs(new),exprsOld,check.attributes=FALSE))
-    checkTrue(identical(sampleNames(new),sampleNamesOld))
-    checkTrue(identical(featureNames(new),geneNamesOld))
-  }
   checkNewGolubMerge <- function(new,old) {
     checkTrue(identical(pData(new),pData(old)))
     checkTrue(all.equal(exprs(new),exprs(old),check.attributes=FALSE))
@@ -419,12 +402,6 @@ testSetAs <- function() {
   }
   opts <- options()
   options(warn=-1)
-  ## would like to be able to specify storage.mode, but how to specify?...
-  fp <- system.file(package="Biobase", "unitTests",
-                    "VersionedClass_data", "devel", "exprSet.Rda")
-  load(fp)
-  suppressMessages(e <- as(exprSet,"ExpressionSet"))
-  checkNewAndOld(e,exprSet)
 
   library(golubEsets)
   data(Golub_Merge)
