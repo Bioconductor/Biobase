@@ -1,5 +1,2 @@
-anyMissing <- function(x=NULL) {
-  .Deprecated(new="anyNA()", old="Biobase::anyMissing()")
-  anyNA(x)
-}
+anyMissing <- function(x=NULL) .Defunct(new="anyNA()")
 
